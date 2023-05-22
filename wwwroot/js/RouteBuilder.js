@@ -6,8 +6,8 @@ let directionsDisplay;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
-            lat: 52.42509,
-            lng: 30.8685096
+            lat: 52.4345,
+            lng: 30.9754
         },
         zoom: 12
     });
@@ -103,6 +103,15 @@ function calculateAndDisplayRoute() {
     directionsService.route(request, function (response, status) {
         if (status === 'OK') {
             directionsDisplay.setDirections(response);
+            let totalDistance = 0, totalDuration = 0;
+            const legs = response.routes[0].legs;
+            for (let i = 0; i < legs.length; i++) {
+                totalDistance += legs[i].distance.value;
+                totalDuration += legs[i].duration.value;
+            }
+            const durationAndDistanceText = getTextOfDurationAndDistance(totalDuration, totalDistance);
+            document.querySelector("#route-length-view").innerHTML = durationAndDistanceText.length;
+            document.querySelector("#route-duration-view").innerHTML = durationAndDistanceText.duration;
         } else {
             window.alert('Directions request failed due to ' + status);
         }
