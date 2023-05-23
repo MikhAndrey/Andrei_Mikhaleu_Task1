@@ -4,7 +4,7 @@
     {
         public int ImageId { get; set; }
 
-        public byte[] Data { get; set; }
+        public string Link { get; set; }
 
         public int TripId { get; set; }
 

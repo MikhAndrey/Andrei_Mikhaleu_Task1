@@ -63,19 +63,14 @@ function getLetterMarkerIcon(label) {
         fillOpacity: 1,
         strokeColor: '#000000',
         strokeWeight: 1,
-        scale: 7,
+        scale: 6,
         labelOrigin: new google.maps.Point(0, 3),
         label: label
     };
 }
 
 function getMarkerIndexByLabel(label) {
-    for (let i = 0; i < markers.length; i++) {
-        if (markers[i].label === label) {
-            return i;
-        }
-    }
-    return -1;
+    return markers.findIndex(el => el.label === label);
 }
 
 function calculateAndDisplayRoute() {
@@ -105,10 +100,8 @@ function calculateAndDisplayRoute() {
             directionsDisplay.setDirections(response);
             let totalDistance = 0, totalDuration = 0;
             const legs = response.routes[0].legs;
-            for (let i = 0; i < legs.length; i++) {
-                totalDistance += legs[i].distance.value;
-                totalDuration += legs[i].duration.value;
-            }
+            totalDistance = legs.reduce((total, current) => total + current.distance.value);
+            totalDuration = legs.reduce((total, current) => total + current.duration.value);
             const durationAndDistanceText = getTextOfDurationAndDistance(totalDuration, totalDistance);
             document.querySelector("#route-length-view").innerHTML = durationAndDistanceText.length;
             document.querySelector("#route-duration-view").innerHTML = durationAndDistanceText.duration;
