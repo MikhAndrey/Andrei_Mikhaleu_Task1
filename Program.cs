@@ -1,7 +1,22 @@
+using Andrei_Mikhaleu_Task1.Models.Entities;
+using Andrei_Mikhaleu_Task1.Models.Repos;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<TripsDBContext>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<CommentRepository>();
+builder.Services.AddScoped<ImageRepository>();
+builder.Services.AddScoped<RoutePointRepository>();
+builder.Services.AddScoped<TripRepository>();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => { 
+        options.LoginPath = "/Login/Index"; 
+        options.LogoutPath = "/Login/Logout"; 
+    });
 
 var app = builder.Build();
 
