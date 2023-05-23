@@ -98,10 +98,9 @@ function calculateAndDisplayRoute() {
     directionsService.route(request, function (response, status) {
         if (status === 'OK') {
             directionsDisplay.setDirections(response);
-            let totalDistance = 0, totalDuration = 0;
             const legs = response.routes[0].legs;
-            totalDistance = legs.reduce((total, current) => total + current.distance.value);
-            totalDuration = legs.reduce((total, current) => total + current.duration.value);
+            const totalDistance = legs.reduce((total, current) => total + current.distance.value, 0);
+            const totalDuration = legs.reduce((total, current) => total + current.duration.value, 0);
             const durationAndDistanceText = getTextOfDurationAndDistance(totalDuration, totalDistance);
             document.querySelector("#route-length-view").innerHTML = durationAndDistanceText.length;
             document.querySelector("#route-duration-view").innerHTML = durationAndDistanceText.duration;
@@ -110,4 +109,3 @@ function calculateAndDisplayRoute() {
         }
     });
 }
-google.maps.event.addDomListener(window, 'load', initMap);

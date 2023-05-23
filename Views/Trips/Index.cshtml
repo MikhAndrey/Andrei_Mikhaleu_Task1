@@ -7,15 +7,15 @@
         <title>Google Maps API</title> 
         <meta name="viewport" content="initial-scale=1.0"> 
         <meta charset="utf-8"> 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI"></script> 
         <style> #map { height: 400px; width: 100%; } </style> 
     </head> 
     <body> 
         <h1>Google Maps API</h1> 
         <div id="map"></div>
         <div>Длина маршрута: <span id="route-length-view"></span></div>
-        <div>Время маршрута: <span id="route-duration-view"></span></div>
-        <script src="@Url.Content("~/js/RouteBuilder.js")" defer></script>
-        <script src="@Url.Content("~/js/DurationAndDistanceToText.js")" defer></script>
+        <div>Время маршрута: <span id="route-duration-view"></span></div>  
+        <script src="@Url.Content("~/js/RouteBuilder.js")"></script>
+        <script src="@Url.Content("~/js/DurationAndDistanceToText.js")"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap" async defer></script> 
     </body> 
 </html>
