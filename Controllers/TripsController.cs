@@ -1,4 +1,5 @@
-﻿using Andrei_Mikhaleu_Task1.Models.Entities;
+﻿using Andrei_Mikhaleu_Task1.Common;
+using Andrei_Mikhaleu_Task1.Models.Entities;
 using Andrei_Mikhaleu_Task1.Models.Repos;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -10,12 +11,12 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         private readonly TripRepository _tripRepository;
 
-		private readonly UserRepository _userRepository;
+		private readonly UserSettings _userSettings;
 
-		public TripsController(TripRepository tripRepository, UserRepository userRepository)
+		public TripsController(TripRepository tripRepository, UserSettings userSettings)
 		{
 			_tripRepository = tripRepository;
-			_userRepository = userRepository;
+			_userSettings = userSettings;
 		}
 
 		[HttpGet]
@@ -58,7 +59,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 					trip.RoutePoints.Add(routePoint);
 				}
 
-				User currentUser = _userRepository.GetByUsername(HttpContext.User.Identity.Name);
+				User currentUser = _userSettings.CurrentUser;
 				trip.User= currentUser;
 				
 				_tripRepository.Add(trip);

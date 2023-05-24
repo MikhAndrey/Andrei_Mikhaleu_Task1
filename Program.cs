@@ -1,3 +1,4 @@
+using Andrei_Mikhaleu_Task1.Common;
 using Andrei_Mikhaleu_Task1.Models.Entities;
 using Andrei_Mikhaleu_Task1.Models.Repos;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -21,6 +22,8 @@ builder.Services.AddScoped<CommentRepository>();
 builder.Services.AddScoped<ImageRepository>();
 builder.Services.AddScoped<RoutePointRepository>();
 builder.Services.AddScoped<TripRepository>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<UserSettings>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => { 
         options.LoginPath = "/Login/Index"; 
