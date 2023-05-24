@@ -1,4 +1,5 @@
 ﻿using Andrei_Mikhaleu_Task1.Common;
+using Andrei_Mikhaleu_Task1.Models;
 using Andrei_Mikhaleu_Task1.Models.Entities;
 using Andrei_Mikhaleu_Task1.Models.Repos;
 using Microsoft.AspNetCore.Mvc;
@@ -69,8 +70,47 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
 		public IActionResult Index()
+		{
+			var userId = _userSettings.CurrentUser.UserId;
+			var trips = _tripRepository.GetTripsByUserId(userId);
+
+			var tripModels = trips.Select(t => new TripViewModel
+			{
+				TripId = t.TripId,
+				Name = t.Name,
+				Description = t.Description,
+				StartTime = t.StartTime,
+				EndTime = t.EndTime,
+				Completed = t.Completed,
+				IsCurrent = DateTime.Now >= t.StartTime && DateTime.Now <= t.EndTime,
+				IsFuture = DateTime.Now < t.StartTime,
+				IsPast = DateTime.Now > t.EndTime
+			}).ToList();
+
+			return View(tripModels);
+		}
+
+		[HttpGet]
+		public IActionResult Public()
         {
-            return View();
+            var userId = _userSettings.CurrentUser.UserId;
+            var trips = _tripRepository.GetOthersPublicTrips(userId);
+
+            var tripModels = trips.Select(t => new TripPublicViewModel
+            {
+                TripId = t.TripId,
+                Name = t.Name,
+				UserName = t.User.UserName,
+                Description = t.Description,
+                StartTime = t.StartTime,
+                EndTime = t.EndTime,
+                Completed = t.Completed,
+                IsCurrent = DateTime.Now >= t.StartTime && DateTime.Now <= t.EndTime,
+                IsFuture = DateTime.Now < t.StartTime,
+                IsPast = DateTime.Now > t.EndTime
+            }).ToList();
+
+            return View(tripModels);
         }
     }
 }

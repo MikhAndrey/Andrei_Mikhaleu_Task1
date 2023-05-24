@@ -41,22 +41,13 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
 
         public List<Trip> GetTripsByUserId(int userId)
         {
-            return _context.Trips
-                .Include(t => t.RoutePoints)
-                .Include(t => t.Images)
-                .Include(t => t.Comments)
-                .Where(t => t.UserId == userId)
-                .ToList();
+            return _context.Trips.Where(t => t.UserId == userId).ToList();
         }
 
-        public List<Trip> GetPublicTrips()
+        public List<Trip> GetOthersPublicTrips(int userId)
         {
-            return _context.Trips
-                .Include(t => t.RoutePoints)
-                .Include(t => t.Images)
-                .Include(t => t.Comments)
-                .Where(t => t.Public)
-                .ToList();
+            return _context.Trips.Where(t => t.UserId != userId && t.Public)
+                .Include(t => t.User).ToList();
         }
     }
 }
