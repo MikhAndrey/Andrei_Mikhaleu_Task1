@@ -1,12 +1,21 @@
 using Andrei_Mikhaleu_Task1.Models.Entities;
 using Andrei_Mikhaleu_Task1.Models.Repos;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = new ConfigurationBuilder()
+	.AddJsonFile("appsettings.json", optional: false)
+	.Build();
+
+string connectionString = configuration.GetConnectionString("DefaultConnection");
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<TripsDBContext>();
+builder.Services.AddDbContext<TripsDBContext>(options =>
+		options.UseSqlServer(connectionString));
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<CommentRepository>();
 builder.Services.AddScoped<ImageRepository>();

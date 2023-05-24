@@ -10,14 +10,9 @@ namespace Andrei_Mikhaleu_Task1.Models.Entities
         public DbSet<Image> Images { get; set; }
         public DbSet<RoutePoint> RoutePoints { get; set; }
 
-        public TripsDBContext()
+        public TripsDBContext(DbContextOptions options):base(options)
         {
             Database.EnsureCreated();
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\mssqllocaldb;Initial Catalog=Mikhaleu_Task_1;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,12 +1,22 @@
-﻿namespace Andrei_Mikhaleu_Task1.Models.Entities
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Andrei_Mikhaleu_Task1.Models.Entities
 {
     public class RoutePoint
     {
+        public RoutePoint() 
+        {
+            Trip = new();
+        }
+        
         public int RoutePointId { get; set; }
 
-        public decimal Longitude { get; set; }
+		[Column(TypeName = "decimal(12,9)")]
+		public decimal Longitude { get; set; }
 
-        public decimal Latitude { get; set; }
+		[Column(TypeName = "decimal(12,9)")]
+		public decimal Latitude { get; set; }
 
         public int Ordinal { get; set; }
 
