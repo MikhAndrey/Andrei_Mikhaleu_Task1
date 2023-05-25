@@ -2,10 +2,7 @@
 using Andrei_Mikhaleu_Task1.Models;
 using Andrei_Mikhaleu_Task1.Models.Entities;
 using Andrei_Mikhaleu_Task1.Models.Repos;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
@@ -38,39 +35,14 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				List<string> newImageFileNames = new();
-				foreach (var image in images)
-				{
-					if (image != null && image.Length > 0)
-					{
-						var extension = Path.GetExtension(image.FileName);
-						var newFileName = $"{Guid.NewGuid()}{extension}";
-						var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newFileName);
-						using (var fileStream = new FileStream(filePath, FileMode.Create))
-						{
-							await image.CopyToAsync(fileStream);
-						}
-						newImageFileNames.Add($"/images/{newFileName}");
-					}
-				}
-
-				foreach (var imageUrl in newImageFileNames)
-				{
-					trip.Images.Add(new Image { Link = imageUrl });
-				}
-
-				List<RoutePoint> parsedRoutePoints = JsonSerializer.Deserialize<List<RoutePoint>>(routePoints);
-
-				foreach (RoutePoint routePoint in parsedRoutePoints)
-				{
-					trip.RoutePoints.Add(routePoint);
-				}
+				UploadImages(trip, images);
+				ParseAndAddRoutePoints(trip, routePoints);
 
 				User currentUser = _userSettings.CurrentUser;
 				trip.User= currentUser;
 				
 				_tripRepository.Add(trip);
-				return RedirectToAction("Index", "Home");
+				return RedirectToAction(nameof(Index));
 			}			
 			return View(trip);
 		}
@@ -130,7 +102,50 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             return RedirectToAction("Index");
         }
 
-		public IActionResult Details(int id)
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var trip = _tripRepository.GetById(id);
+
+            if (trip == null)
+            {
+                return NotFound();
+            }
+
+            return View(trip);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("TripId", "Name", "StartTime", "EndTime", "Public", "Description", "Distance")] Trip t, List<IFormFile> images, string routePoints)
+        {
+            Trip trip = _tripRepository.GetById(id);
+            trip.Description = t.Description;
+            trip.Name = t.Name;
+            trip.StartTime = t.StartTime;
+            trip.EndTime = t.EndTime;
+            trip.Distance = t.Distance;
+            trip.Public = t.Public;
+
+            if (ModelState.IsValid)
+            {
+				foreach (var image in trip.Images)
+					if (System.IO.File.Exists(image.Link))
+						System.IO.File.Delete(image.Link);
+				
+                trip.Images.Clear();
+                await UploadImages(trip, images);
+                
+                trip.RoutePoints.Clear();
+                ParseAndAddRoutePoints(trip, routePoints);
+                _tripRepository.Update(trip);
+                return RedirectToAction(nameof(Index), new { id = trip.TripId });
+            }
+
+            return View(trip);
+        }
+
+        public IActionResult Details(int id)
 		{
 			var trip = _tripRepository.GetById(id);
 			if (trip == null)
@@ -161,8 +176,12 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			if (trip.StartTime > DateTime.Now)
 			{
 				trip.EndTime -= trip.StartTime - DateTime.Now;
-				trip.StartTime = DateTime.Now;
-				_tripRepository.Update(trip);
+                trip.EndTime.AddMilliseconds(-trip.StartTime.Millisecond);
+                trip.EndTime.AddSeconds(-trip.StartTime.Second);
+                trip.StartTime = DateTime.Now;
+				trip.StartTime.AddMilliseconds(-trip.StartTime.Millisecond);
+                trip.StartTime.AddSeconds(-trip.StartTime.Second);
+                _tripRepository.Update(trip);
 			}
 
 			return RedirectToAction(nameof(Details), new { id });
@@ -217,6 +236,40 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 _commentRepository.Delete(commentToDelete);
             }
             return RedirectToAction(nameof(Details), new { id = tripId });
+        }
+
+		private async Task UploadImages(Trip trip, List<IFormFile> images)
+		{
+            List<string> newImageFileNames = new();
+            foreach (var image in images)
+            {
+                if (image != null && image.Length > 0)
+                {
+                    var extension = Path.GetExtension(image.FileName);
+                    var newFileName = $"{Guid.NewGuid()}{extension}";
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(fileStream);
+                    }
+                    newImageFileNames.Add($"/images/{newFileName}");
+                }
+            }
+
+            foreach (var imageUrl in newImageFileNames)
+            {
+                trip.Images.Add(new Image { Link = imageUrl });
+            }
+        }
+
+        private void ParseAndAddRoutePoints(Trip trip, string routePoints)
+        {
+            List<RoutePoint> parsedRoutePoints = JsonSerializer.Deserialize<List<RoutePoint>>(routePoints);
+
+            foreach (RoutePoint routePoint in parsedRoutePoints)
+            {
+                trip.RoutePoints.Add(routePoint);
+            }
         }
     }
 }
