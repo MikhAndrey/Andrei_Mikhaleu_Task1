@@ -69,6 +69,28 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
 		[HttpGet]
+		public IActionResult History()
+		{
+			var userId = _userSettings.CurrentUser.UserId;
+			var trips = _tripRepository.GetTripsByUserId(userId);
+
+			var tripModels = trips.Where(el => el.EndTime < DateTime.Now).Select(t => new TripViewModel
+			{
+				TripId = t.TripId,
+				Name = t.Name,
+				Description = t.Description,
+				StartTime = t.StartTime,
+				EndTime = t.EndTime,
+				Completed = t.Completed,
+				IsCurrent = DateTime.Now >= t.StartTime && DateTime.Now <= t.EndTime,
+				IsFuture = DateTime.Now < t.StartTime,
+				IsPast = DateTime.Now > t.EndTime
+			}).ToList();
+
+			return View(tripModels);
+		}
+
+		[HttpGet]
 		public IActionResult Public()
         {
             var userId = _userSettings.CurrentUser.UserId;
