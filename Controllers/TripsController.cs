@@ -112,5 +112,16 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
             return View(tripModels);
         }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+		{
+            Trip tripToDelete = _tripRepository.GetById(id);
+            if (tripToDelete != null)
+            {
+				_tripRepository.Delete(tripToDelete);
+			}
+            return RedirectToAction("Index");
+        }
     }
 }
