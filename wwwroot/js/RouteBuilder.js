@@ -3,21 +3,27 @@ let markers = [];
 let directionsService;
 let directionsDisplay;
 
-function initMap() {
+function initMap(latitude, longitude, zoom) {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
-            lat: 52.4345,
-            lng: 30.9754
+            lat: latitude,
+            lng: longitude
         },
-        zoom: 12
+        zoom: zoom
     });
 
     directionsService = new google.maps.DirectionsService();
     directionsDisplay = new google.maps.DirectionsRenderer();
     directionsDisplay.setMap(map);
+}
 
+function addClickOnMap() {
     map.addListener('click', function (event) {
         addMarker(event.latLng);
+        calculateAndDisplayRoute(false);
+        const currentMarker = markers[markers.length - 1];
+        addClickOnMarker(currentMarker);
+        makeMarkerDraggable(currentMarker);
     });
 }
 
@@ -39,27 +45,29 @@ function addMarker(location) {
         letterMarker: letterMarker,
         label: label
     });
+}
 
-    letterMarker.addListener('click', function () {
-        const index = getMarkerIndexByLabel(label);
+function addClickOnMarker(marker) {
+    marker.letterMarker.addListener('click', function () {
+        const index = getMarkerIndexByLabel(marker.label);
         if (index > -1) {
             markers[index].marker.setMap(null);
             markers[index].letterMarker.setMap(null);
             markers.splice(index, 1);
-            calculateAndDisplayRoute();
+            calculateAndDisplayRoute(false);
         }
     });
+}
 
-    letterMarker.setDraggable(true);
-    google.maps.event.addListener(letterMarker, 'dragend', function (event) {
-        const index = getMarkerIndexByLabel(label);
+function makeMarkerDraggable(marker){
+    marker.letterMarker.setDraggable(true);
+    google.maps.event.addListener(marker.letterMarker, 'dragend', function (event) {
+        const index = getMarkerIndexByLabel(marker.label);
         if (index > -1) {
             markers[index].marker.setPosition(event.latLng);
             calculateAndDisplayRoute();
         }
     });
-
-    calculateAndDisplayRoute();
 }
 
 function getLetterMarkerIcon(label) {
@@ -79,7 +87,7 @@ function getMarkerIndexByLabel(label) {
     return markers.findIndex(el => el.label === label);
 }
 
-function calculateAndDisplayRoute() {
+function calculateAndDisplayRoute(routeIsReadOnly) {
     if (markers.length < 2) {
         directionsDisplay.setDirections({
             routes: []
@@ -108,17 +116,19 @@ function calculateAndDisplayRoute() {
         if (status === 'OK') {
             directionsDisplay.setDirections(response);
 
-            const legs = response.routes[0].legs;
-            const totalDistance = legs.reduce((total, current) => total + current.distance.value, 0);
-            const totalDuration = legs.reduce((total, current) => total + current.duration.value, 0);
-            const durationAndDistanceText = getTextOfDurationAndDistance(totalDuration, totalDistance);
+            if (!routeIsReadOnly) {
+                const legs = response.routes[0].legs;
+                const totalDistance = legs.reduce((total, current) => total + current.distance.value, 0);
+                const totalDuration = legs.reduce((total, current) => total + current.duration.value, 0);
+                const durationAndDistanceText = getTextOfDurationAndDistance(totalDuration, totalDistance);
 
-            storeDistance(totalDistance);
-            setEndDate(totalDuration);
-            storeRoutePoints();
+                storeDistance(totalDistance);
+                setEndDate(totalDuration);
+                storeRoutePoints();
 
-            $("#route-length-view").text(durationAndDistanceText.length);
-            $("#route-duration-view").text(durationAndDistanceText.duration);
+                $("#route-length-view").text(durationAndDistanceText.length);
+                $("#route-duration-view").text(durationAndDistanceText.duration);
+            }
         } else {
             window.alert('Directions request failed due to ' + status);
         }
@@ -147,3 +157,29 @@ function setEndDate(tripDuration) {
     const endDate = new Date(startDate.getTime() + 1000 * tripDuration - timezoneOffset);
     $("#endTimeInput").val(endDate.toISOString().slice(0, 16));
 }
+
+function getTextOfDurationAndDistance(duration, distance){
+    const distanceText = `${distance / 1000} км`;
+
+    const SECONDS_IN_YEAR = 31536000;
+    const SECONDS_IN_MONTH = 2592000;
+    const SECONDS_IN_DAY = 86400;
+    const SECONDS_IN_HOUR = 3600;
+    const SECONDS_IN_MINUTE = 60;
+
+    const years = Math.floor(duration / SECONDS_IN_YEAR);
+    const months = Math.floor((duration % SECONDS_IN_YEAR) / SECONDS_IN_MONTH);
+    const days = Math.floor((duration % SECONDS_IN_MONTH) / SECONDS_IN_DAY);
+    const hours = Math.floor((duration % SECONDS_IN_DAY) / SECONDS_IN_HOUR);
+    const minutes = Math.floor((duration % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE);
+
+    const yearsText = years > 0 ? years + " г. " : "";
+    const monthsText = months > 0 ? months + " м. " : "";
+    const daysText = days > 0 ? days + " д. " : "";
+    const hoursText = hours > 0 ? hours + " ч. " : "";
+    const minutesText = minutes + " мин.";
+    return {
+        duration: yearsText + monthsText + daysText + hoursText + minutesText,
+        length: distanceText
+    };
+};

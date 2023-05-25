@@ -2,7 +2,10 @@
 using Andrei_Mikhaleu_Task1.Models;
 using Andrei_Mikhaleu_Task1.Models.Entities;
 using Andrei_Mikhaleu_Task1.Models.Repos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
@@ -14,10 +17,13 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		private readonly UserSettings _userSettings;
 
-		public TripsController(TripRepository tripRepository, UserSettings userSettings)
+		private readonly CommentRepository _commentRepository;
+
+		public TripsController(TripRepository tripRepository, UserSettings userSettings, CommentRepository commentRepository)
 		{
 			_tripRepository = tripRepository;
 			_userSettings = userSettings;
+			_commentRepository = commentRepository;
 		}
 
 		[HttpGet]
@@ -122,6 +128,95 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 				_tripRepository.Delete(tripToDelete);
 			}
             return RedirectToAction("Index");
+        }
+
+		public IActionResult Details(int id)
+		{
+			var trip = _tripRepository.GetById(id);
+			if (trip == null)
+			{
+				return NotFound();
+			}
+			var viewModel = new TripDetailsViewModel
+			{
+				Trip= trip,
+				IsCurrent = DateTime.Now >= trip.StartTime && DateTime.Now <= trip.EndTime,
+				IsFuture = DateTime.Now < trip.StartTime,
+				IsPast = DateTime.Now > trip.EndTime,
+				IsCurrentUserTrip = _userSettings.CurrentUser.UserId == trip.User.UserId
+			};
+
+			return View(viewModel);
+		}
+
+		[HttpPost]
+		public IActionResult StartTrip(int id)
+		{
+			var trip = _tripRepository.GetById(id);
+			if (trip == null)
+			{
+				return NotFound();
+			}
+
+			if (trip.StartTime > DateTime.Now)
+			{
+				trip.EndTime -= trip.StartTime - DateTime.Now;
+				trip.StartTime = DateTime.Now;
+				_tripRepository.Update(trip);
+			}
+
+			return RedirectToAction(nameof(Details), new { id });
+		}
+
+		[HttpPost]
+		public IActionResult EndTrip(int id)
+		{
+			var trip = _tripRepository.GetById(id);
+			if (trip == null)
+			{
+				return NotFound();
+			}
+
+			if (trip.StartTime < DateTime.Now && trip.EndTime > DateTime.Now)
+			{
+				trip.EndTime = DateTime.Now;
+				_tripRepository.Update(trip);
+			}
+
+			return RedirectToAction(nameof(Details), new { id });
+		}
+
+        [HttpPost]
+        public IActionResult AddComment(int tripId, string comment)
+		{
+			var user = _userSettings.CurrentUser;
+
+			var trip = _tripRepository.GetById(tripId);
+
+            if (trip != null && user != null)
+            {
+                trip.Comments.Add(new Comment
+                {
+                    User = user,
+					Message = comment,
+                    Date = DateTime.UtcNow
+                });
+
+                _tripRepository.Update(trip);
+            }
+
+            return RedirectToAction(nameof(Details), new { id = tripId });
+        }
+
+        [HttpPost]
+        public IActionResult DeleteComment(int tripId, int commentId)
+        {
+            Comment commentToDelete = _commentRepository.GetById(commentId);
+            if (commentToDelete != null)
+            {
+                _commentRepository.Delete(commentToDelete);
+            }
+            return RedirectToAction(nameof(Details), new { id = tripId });
         }
     }
 }

@@ -24,9 +24,8 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
             _context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(Comment comment)
         {
-            var comment = GetById(id);
             _context.Comments.Remove(comment);
             _context.SaveChanges();
         }

@@ -36,6 +36,7 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
                 .Include(t => t.RoutePoints)
                 .Include(t => t.Images)
                 .Include(t => t.Comments)
+                    .ThenInclude(c => c.User)
                 .FirstOrDefault(t => t.TripId == id);
         }
 

@@ -3,16 +3,6 @@
 @{
     ViewData["Title"] = "New Trip";
 }
-<!DOCTYPE html> 
-<html> 
-    <head> 
-        <title>New trip</title> 
-        <meta name="viewport" content="initial-scale=1.0"> 
-        <meta charset="utf-8"> 
-    </head> 
-    <body> 
-        <h2>New Trip</h2>
-
 <form class="bootstrap-form" asp-action="Create" enctype="multipart/form-data">
 	<div class="form-group">
 		<label for="nameInput">Name:</label> 
@@ -47,9 +37,11 @@
 		<button class="btn btn-primary" type="submit">Create</button>
 	</div>
 </form>
-
+@section Scripts {
         <script src="@Url.Content("~/js/RouteBuilder.js")"></script>
-        <script src="@Url.Content("~/js/DurationAndDistanceToText.js")"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap" async defer></script> 
-    </body> 
-</html>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap"></script> 
+		<script>
+			initMap(52.4345, 30.9754, 12);
+			addClickOnMap();
+		</script>
+}
