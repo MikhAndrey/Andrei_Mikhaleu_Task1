@@ -58,17 +58,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			var userId = _userSettings.CurrentUser.UserId;
 			var trips = _tripRepository.GetTripsByUserId(userId);
 
-			var tripModels = trips.Select(t => new TripViewModel
-			{
-				TripId = t.TripId,
-				Name = t.Name,
-				Description = t.Description,
-				StartTime = t.StartTime.AddSeconds(t.StartTimeZoneOffset),
-				EndTime = t.EndTime.AddSeconds(t.FinishTimeZoneOffset),
-				IsCurrent = DateTime.UtcNow >= t.StartTime && DateTime.UtcNow <= t.EndTime,
-				IsFuture = DateTime.UtcNow < t.StartTime,
-				IsPast = DateTime.UtcNow > t.EndTime
-			}).ToList();
+			var tripModels = trips.Select(t => new TripViewModel(t)).ToList();
 
 			return View(tripModels);
 		}
@@ -80,14 +70,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			var userId = _userSettings.CurrentUser.UserId;
 			var trips = _tripRepository.GetTripsByUserId(userId);
 
-			var tripModels = trips.Where(el => el.EndTime < DateTime.UtcNow).Select(t => new TripViewModel
-			{
-				TripId = t.TripId,
-				Name = t.Name,
-				Description = t.Description,
-				StartTime = t.StartTime.AddSeconds(t.StartTimeZoneOffset),
-				EndTime = t.EndTime.AddSeconds(t.FinishTimeZoneOffset),
-			}).ToList();
+			var tripModels = trips.Where(el => el.EndTime < DateTime.UtcNow)
+				.Select(t => new TripViewModel(t)).ToList();
 
 			return View(tripModels);
 		}
@@ -99,18 +83,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             var userId = _userSettings.CurrentUser.UserId;
             var trips = _tripRepository.GetOthersPublicTrips(userId);
 
-            var tripModels = trips.Select(t => new TripPublicViewModel
-            {
-                TripId = t.TripId,
-                Name = t.Name,
-				UserName = t.User.UserName,
-                Description = t.Description,
-                StartTime = t.StartTime,
-                EndTime = t.EndTime,
-				IsCurrent = DateTime.UtcNow >= t.StartTime && DateTime.UtcNow <= t.EndTime,
-				IsFuture = DateTime.UtcNow < t.StartTime,
-				IsPast = DateTime.UtcNow > t.EndTime
-			}).ToList();
+            var tripModels = trips.Select(t => new TripPublicViewModel(t)).ToList();
 
             return View(tripModels);
         }
@@ -140,6 +113,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 return NotFound();
             }
+			trip.StartTime = trip.StartTime.AddSeconds(trip.StartTimeZoneOffset);
+			trip.EndTime = trip.EndTime.AddSeconds(trip.FinishTimeZoneOffset);
 
             return View(trip);
         }
@@ -151,10 +126,12 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             Trip trip = _tripRepository.GetById(id);
             trip.Description = t.Description;
             trip.Name = t.Name;
-            trip.StartTime = t.StartTime;
-            trip.EndTime = t.EndTime;
+            trip.StartTime = t.StartTime.AddSeconds(-t.StartTimeZoneOffset);
+            trip.EndTime = t.EndTime.AddSeconds(-t.FinishTimeZoneOffset);
             trip.Distance = t.Distance;
             trip.Public = t.Public;
+			trip.StartTimeZoneOffset = t.StartTimeZoneOffset;
+			trip.FinishTimeZoneOffset = t.FinishTimeZoneOffset;
 
             if (ModelState.IsValid)
             {
@@ -183,14 +160,11 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			{
 				return NotFound();
 			}
-			var viewModel = new TripDetailsViewModel
+
+			var viewModel = new TripDetailsViewModel(trip)
 			{
-				Trip= trip,
-				IsCurrent = DateTime.UtcNow >= trip.StartTime && DateTime.UtcNow <= trip.EndTime,
-				IsFuture = DateTime.UtcNow < trip.StartTime,
-				IsPast = DateTime.UtcNow > trip.EndTime,
-				IsCurrentUserTrip = _userSettings.CurrentUser.UserId == trip.User.UserId
-			};
+                IsCurrentUserTrip = _userSettings.CurrentUser.UserId == trip.User.UserId
+            };
 
 			return View(viewModel);
 		}

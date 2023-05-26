@@ -27,8 +27,8 @@ else
 				<td>@trip.UserName</td>
 				<td>@trip.Name</td>
 				<td>@trip.Description</td>
-				<td>@trip.StartTime.ToString("dd.MM.yyyy HH:mm")</td>
-				<td>@trip.EndTime.ToString("dd.MM.yyyy HH:mm")</td>
+				<td>@trip.UtcStartTimeZone</td>
+				<td>@trip.UtcFinishTimeZone</td>
 				<td>
 					@if (trip.IsCurrent)
 					{

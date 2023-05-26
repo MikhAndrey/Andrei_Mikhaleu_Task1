@@ -29,8 +29,8 @@
 	<div>Trip's duration: <span id="route-duration-view"></span></div>
 	<input type="hidden" name="routePoints"/>
 	<input type="hidden" name="Distance" asp-for="Distance"/>
-	<input type="text" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset"/>
-	<input type="text" name="FinishTimeZoneOffset" asp-for="FinishTimeZoneOffset"/>
+	<input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset"/>
+	<input type="hidden" name="FinishTimeZoneOffset" asp-for="FinishTimeZoneOffset"/>
 	<div class="form-group">
 		<label for="imageUpload">Images:</label> 
 		<input class="form-control-file" type="file" id="imageUpload" name="images" accept="image/*" multiple />

@@ -37,8 +37,9 @@
 <div id="map" class="form-group" style="height: 400px; width: 100%; margin-bottom: 20px;"></div>
 <div>Trip's distance: <span id="route-length-view">@Model.Distance</span>km</div>
 <input type="hidden" name="routePoints" id="route-points-input"/>
-<input type="text" name="Distance" asp-for="Distance" value="@Model.Distance" />
-
+<input type="hidden" name="Distance" asp-for="Distance" value="@Model.Distance" />
+<input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset"/>
+<input type="hidden" name="FinishTimeZoneOffset" asp-for="FinishTimeZoneOffset"/>
 <div>
     <button class="btn btn-primary" type="submit">Save</button>
 </div>

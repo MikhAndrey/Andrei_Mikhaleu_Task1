@@ -15,8 +15,8 @@
 					<h5 class="card-title">@trip.Name</h5>
 					<p class="card-text">@trip.Description</p>
 					<ul class="list-group list-group-flush">
-						<li class="list-group-item text-right">Departure time: @trip.StartTime.ToString("dd.MM.yyyy HH:mm")</li>
-						<li class="list-group-item text-right">Arrival time: @trip.EndTime.ToString("dd.MM.yyyy HH:mm")</li>
+						<li class="list-group-item text-right">Departure time: @trip.UtcStartTimeZone</li>
+						<li class="list-group-item text-right">Arrival time: @trip.UtcFinishTimeZone</li>
 						<li class="list-group-item"> Status: 
 						@if (trip.IsCurrent)
 						{

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using Andrei_Mikhaleu_Task1.Models.Entities;
 
 namespace Andrei_Mikhaleu_Task1.Models
 {
@@ -10,18 +11,33 @@ namespace Andrei_Mikhaleu_Task1.Models
 
 		public string Description { get; set; }
 
-		[Display(Name = "Departure Time")]
 		public DateTime StartTime { get; set; }
 
-		[Display(Name = "Arrival Time")]
 		public DateTime EndTime { get; set; }
-
-		public bool Completed { get; set; }
 
 		public bool IsCurrent { get; set; }
 
 		public bool IsFuture { get; set; }
 
 		public bool IsPast { get; set; }
-	}
+
+		public string UtcStartTimeZone { get; set; }
+
+        public string UtcFinishTimeZone { get; set; }
+
+		public TripViewModel(Trip trip)
+		{
+			TripId = trip.TripId;
+			Name = trip.Name;
+			Description = trip.Description;
+			StartTime = trip.StartTime.AddSeconds(trip.StartTimeZoneOffset);
+			EndTime = trip.EndTime.AddSeconds(trip.FinishTimeZoneOffset);
+			IsCurrent = DateTime.UtcNow >= trip.StartTime && DateTime.UtcNow <= trip.EndTime;
+			IsFuture = DateTime.UtcNow < trip.StartTime;
+			IsPast = DateTime.UtcNow > trip.EndTime;
+			UtcStartTimeZone = string.Concat(StartTime.ToString("dd.MM.yyyy HH:mm"), $" UTC{(int)(trip.StartTimeZoneOffset / 3600):+#;-#;+0}");
+			UtcFinishTimeZone = string.Concat(EndTime.ToString("dd.MM.yyyy HH:mm"), $" UTC{(int)(trip.FinishTimeZoneOffset / 3600):+#;-#;+0}");
+		}
+
+    }
 }
