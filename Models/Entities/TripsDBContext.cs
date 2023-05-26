@@ -13,7 +13,7 @@ namespace Andrei_Mikhaleu_Task1.Models.Entities
         public TripsDBContext(DbContextOptions options):base(options)
         {
             Database.EnsureCreated();
-        }
+		}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

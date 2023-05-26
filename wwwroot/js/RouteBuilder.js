@@ -2,6 +2,8 @@
 let markers = [];
 let directionsService;
 let directionsDisplay;
+let startTimeZoneOffset, finishTimeZoneOffset;
+const decimalSeparator = (1.1).toLocaleString().substring(1, 2);
 
 function initMap(latitude, longitude, zoom) {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -65,7 +67,7 @@ function makeMarkerDraggable(marker){
         const index = getMarkerIndexByLabel(marker.label);
         if (index > -1) {
             markers[index].marker.setPosition(event.latLng);
-            calculateAndDisplayRoute();
+            calculateAndDisplayRoute(false);
         }
     });
 }
@@ -87,7 +89,7 @@ function getMarkerIndexByLabel(label) {
     return markers.findIndex(el => el.label === label);
 }
 
-function calculateAndDisplayRoute(routeIsReadOnly) {
+async function calculateAndDisplayRoute(routeIsReadOnly) {
     if (markers.length < 2) {
         directionsDisplay.setDirections({
             routes: []
@@ -112,7 +114,7 @@ function calculateAndDisplayRoute(routeIsReadOnly) {
         travelMode: 'DRIVING'
     };
 
-    directionsService.route(request, function (response, status) {
+    directionsService.route(request, async function (response, status) {
         if (status === 'OK') {
             directionsDisplay.setDirections(response);
 
@@ -123,6 +125,7 @@ function calculateAndDisplayRoute(routeIsReadOnly) {
                 const durationAndDistanceText = getTextOfDurationAndDistance(totalDuration, totalDistance);
 
                 storeDistance(totalDistance);
+                await getAndSaveTimeZoneOffsets(markers[0], markers[markers.length - 1]);
                 setEndDate(totalDuration);
                 storeRoutePoints();
 
@@ -147,14 +150,13 @@ function storeRoutePoints() {
 }
 
 function storeDistance(distance) {
-    const decimalSeparator = (1.1).toLocaleString().substring(1, 2);
     $("input[name='Distance']").val((distance / 1000).toString().replace(".", decimalSeparator));
 }
 
 function setEndDate(tripDuration) {
     const startDate = new Date($("#startTimeInput").val());
-    const timezoneOffset = startDate.getTimezoneOffset() * 60 * 1000;
-    const endDate = new Date(startDate.getTime() + 1000 * tripDuration - timezoneOffset);
+    const localTimezoneOffset = startDate.getTimezoneOffset() * 60 * 1000;
+    const endDate = new Date(startDate.getTime() - localTimezoneOffset + 1000 * (tripDuration - startTimeZoneOffset + finishTimeZoneOffset));
     $("#endTimeInput").val(endDate.toISOString().slice(0, 16));
 }
 
@@ -182,4 +184,36 @@ function getTextOfDurationAndDistance(duration, distance){
         duration: yearsText + monthsText + daysText + hoursText + minutesText,
         length: distanceText
     };
+};
+
+async function getAndSaveTimeZoneOffsets(startMarker, finishMarker) {
+    const apiKey = "AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI";
+    let latitude = startMarker.marker.getPosition().lat();
+    let longitude = startMarker.marker.getPosition().lng();
+    const timestamp = Math.floor(new Date() / 1000);
+    
+    let requestUrl = `https://maps.googleapis.com/maps/api/timezone/json?location=${latitude},${longitude}&timestamp=${timestamp}&key=${apiKey}`;
+
+    try {
+        const response = await fetch(requestUrl)
+        const data = await response.json();
+        startTimeZoneOffset = data.dstOffset + data.rawOffset;
+        $("input[name='StartTimeZoneOffset']").val((startTimeZoneOffset).toString().replace(".", decimalSeparator));
+    } catch(error) {
+        console.log("Failed to retrieve timezone information: " + error);
+    }
+
+    latitude = finishMarker.marker.getPosition().lat();
+    longitude = finishMarker.marker.getPosition().lng();
+
+    requestUrl = `https://maps.googleapis.com/maps/api/timezone/json?location=${latitude},${longitude}&timestamp=${timestamp}&key=${apiKey}`;
+
+    try {
+        const response = await fetch(requestUrl)
+        const data = await response.json();
+        finishTimeZoneOffset = data.dstOffset + data.rawOffset;
+        $("input[name='FinishTimeZoneOffset']").val((finishTimeZoneOffset).toString().replace(".", decimalSeparator));
+    } catch (error) {
+        console.log("Failed to retrieve timezone information: " + error);
+    }
 };

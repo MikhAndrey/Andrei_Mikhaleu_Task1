@@ -2,6 +2,7 @@
 using Andrei_Mikhaleu_Task1.Models;
 using Andrei_Mikhaleu_Task1.Models.Entities;
 using Andrei_Mikhaleu_Task1.Models.Repos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -23,6 +24,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			_commentRepository = commentRepository;
 		}
 
+		[Authorize]
 		[HttpGet]
         public IActionResult Create()
         {
@@ -31,12 +33,15 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Name","StartTime","EndTime","Public","Description", "Distance")] Trip trip, List<IFormFile> images, string routePoints)
+		public async Task<IActionResult> Create([Bind("Name","StartTime","EndTime","Public","Description", "Distance", "StartTimeZoneOffset", "FinishTimeZoneOffset")] Trip trip, List<IFormFile> images, string routePoints)
 		{
 			if (ModelState.IsValid)
 			{
 				UploadImages(trip, images);
 				ParseAndAddRoutePoints(trip, routePoints);
+
+				trip.StartTime = trip.StartTime.AddSeconds(-trip.StartTimeZoneOffset);
+				trip.EndTime = trip.EndTime.AddSeconds(-trip.FinishTimeZoneOffset);
 
 				User currentUser = _userSettings.CurrentUser;
 				trip.User= currentUser;
@@ -47,6 +52,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			return View(trip);
 		}
 
+		[Authorize]
 		public IActionResult Index()
 		{
 			var userId = _userSettings.CurrentUser.UserId;
@@ -57,39 +63,36 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 				TripId = t.TripId,
 				Name = t.Name,
 				Description = t.Description,
-				StartTime = t.StartTime,
-				EndTime = t.EndTime,
-				Completed = t.Completed,
-				IsCurrent = DateTime.Now >= t.StartTime && DateTime.Now <= t.EndTime,
-				IsFuture = DateTime.Now < t.StartTime,
-				IsPast = DateTime.Now > t.EndTime
+				StartTime = t.StartTime.AddSeconds(t.StartTimeZoneOffset),
+				EndTime = t.EndTime.AddSeconds(t.FinishTimeZoneOffset),
+				IsCurrent = DateTime.UtcNow >= t.StartTime && DateTime.UtcNow <= t.EndTime,
+				IsFuture = DateTime.UtcNow < t.StartTime,
+				IsPast = DateTime.UtcNow > t.EndTime
 			}).ToList();
 
 			return View(tripModels);
 		}
 
+		[Authorize]
 		[HttpGet]
 		public IActionResult History()
 		{
 			var userId = _userSettings.CurrentUser.UserId;
 			var trips = _tripRepository.GetTripsByUserId(userId);
 
-			var tripModels = trips.Where(el => el.EndTime < DateTime.Now).Select(t => new TripViewModel
+			var tripModels = trips.Where(el => el.EndTime < DateTime.UtcNow).Select(t => new TripViewModel
 			{
 				TripId = t.TripId,
 				Name = t.Name,
 				Description = t.Description,
-				StartTime = t.StartTime,
-				EndTime = t.EndTime,
-				Completed = t.Completed,
-				IsCurrent = DateTime.Now >= t.StartTime && DateTime.Now <= t.EndTime,
-				IsFuture = DateTime.Now < t.StartTime,
-				IsPast = DateTime.Now > t.EndTime
+				StartTime = t.StartTime.AddSeconds(t.StartTimeZoneOffset),
+				EndTime = t.EndTime.AddSeconds(t.FinishTimeZoneOffset),
 			}).ToList();
 
 			return View(tripModels);
 		}
 
+		[Authorize]
 		[HttpGet]
 		public IActionResult Public()
         {
@@ -104,27 +107,31 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 Description = t.Description,
                 StartTime = t.StartTime,
                 EndTime = t.EndTime,
-                Completed = t.Completed,
-                IsCurrent = DateTime.Now >= t.StartTime && DateTime.Now <= t.EndTime,
-                IsFuture = DateTime.Now < t.StartTime,
-                IsPast = DateTime.Now > t.EndTime
-            }).ToList();
+				IsCurrent = DateTime.UtcNow >= t.StartTime && DateTime.UtcNow <= t.EndTime,
+				IsFuture = DateTime.UtcNow < t.StartTime,
+				IsPast = DateTime.UtcNow > t.EndTime
+			}).ToList();
 
             return View(tripModels);
         }
 
-        [HttpGet]
+		[Authorize]
+		[HttpGet]
         public IActionResult Delete(int id)
 		{
             Trip tripToDelete = _tripRepository.GetById(id);
             if (tripToDelete != null)
             {
+				foreach (var image in tripToDelete.Images)
+					if (System.IO.File.Exists(image.Link))
+						System.IO.File.Delete(image.Link);
 				_tripRepository.Delete(tripToDelete);
 			}
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
+		[Authorize]
+		[HttpGet]
         public IActionResult Edit(int id)
         {
             var trip = _tripRepository.GetById(id);
@@ -139,7 +146,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TripId", "Name", "StartTime", "EndTime", "Public", "Description", "Distance")] Trip t, List<IFormFile> images, string routePoints)
+        public async Task<IActionResult> Edit(int id, [Bind("Name", "StartTime", "EndTime", "Public", "Description", "Distance", "StartTimeZoneOffset", "FinishTimeZoneOffset")] Trip t, List<IFormFile> images, string routePoints)
         {
             Trip trip = _tripRepository.GetById(id);
             trip.Description = t.Description;
@@ -167,7 +174,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             return View(trip);
         }
 
-        public IActionResult Details(int id)
+		[Authorize]
+		[HttpGet]
+		public IActionResult Details(int id)
 		{
 			var trip = _tripRepository.GetById(id);
 			if (trip == null)
@@ -177,9 +186,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			var viewModel = new TripDetailsViewModel
 			{
 				Trip= trip,
-				IsCurrent = DateTime.Now >= trip.StartTime && DateTime.Now <= trip.EndTime,
-				IsFuture = DateTime.Now < trip.StartTime,
-				IsPast = DateTime.Now > trip.EndTime,
+				IsCurrent = DateTime.UtcNow >= trip.StartTime && DateTime.UtcNow <= trip.EndTime,
+				IsFuture = DateTime.UtcNow < trip.StartTime,
+				IsPast = DateTime.UtcNow > trip.EndTime,
 				IsCurrentUserTrip = _userSettings.CurrentUser.UserId == trip.User.UserId
 			};
 
@@ -195,12 +204,12 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 				return NotFound();
 			}
 
-			if (trip.StartTime > DateTime.Now)
+			if (trip.StartTime > DateTime.UtcNow)
 			{
-				trip.EndTime -= trip.StartTime - DateTime.Now;
+				trip.EndTime -= trip.StartTime - DateTime.UtcNow;
                 trip.EndTime.AddMilliseconds(-trip.StartTime.Millisecond);
                 trip.EndTime.AddSeconds(-trip.StartTime.Second);
-                trip.StartTime = DateTime.Now;
+                trip.StartTime = DateTime.UtcNow;
 				trip.StartTime.AddMilliseconds(-trip.StartTime.Millisecond);
                 trip.StartTime.AddSeconds(-trip.StartTime.Second);
                 _tripRepository.Update(trip);
@@ -218,9 +227,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 				return NotFound();
 			}
 
-			if (trip.StartTime < DateTime.Now && trip.EndTime > DateTime.Now)
+			if (trip.StartTime < DateTime.UtcNow && trip.EndTime > DateTime.UtcNow)
 			{
-				trip.EndTime = DateTime.Now;
+				trip.EndTime = DateTime.UtcNow;
 				_tripRepository.Update(trip);
 			}
 

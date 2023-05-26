@@ -17,20 +17,6 @@
 							<ul class="list-group list-group-flush">
 								<li class="list-group-item text-right">Departure time: @trip.StartTime.ToString("dd.MM.yyyy HH:mm")</li>
 								<li class="list-group-item text-right">Arrival time: @trip.EndTime.ToString("dd.MM.yyyy HH:mm")</li>
-								<li class="list-group-item"> Status: 
-								@if (trip.IsCurrent)
-								{
-										<span class="badge badge-pill badge-info">Ongoing</span>
-								}
-								else if (trip.IsFuture)
-								{
-										<span class="badge badge-pill badge-warning">Planned</span>
-								}
-								else if (trip.IsPast)
-								{
-										<span class="badge badge-pill badge-success">Completed</span>
-								} 
-								</li>
 							</ul>
 							<div> 
 								<a href="@Url.Action("Details", new { id = trip.TripId })" class="btn btn-primary mr-2">Details</a> 

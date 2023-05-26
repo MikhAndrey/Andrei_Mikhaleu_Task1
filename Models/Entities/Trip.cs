@@ -28,8 +28,6 @@ namespace Andrei_Mikhaleu_Task1.Models.Entities
 
         public string Description { get; set; }
 
-        public bool Completed { get; set; }
-
         public bool Public { get; set; }
 
         public List<Image> Images { get; set; }
@@ -39,5 +37,9 @@ namespace Andrei_Mikhaleu_Task1.Models.Entities
         public int UserId { get; set; }
 
         public User User { get; set; }
+
+        public int StartTimeZoneOffset { get; set; }
+
+        public int FinishTimeZoneOffset { get; set;}
     }
 }
