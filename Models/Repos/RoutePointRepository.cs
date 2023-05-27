@@ -37,6 +37,12 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
                 .FirstOrDefault(rp => rp.RoutePointId == id);
         }
 
+        public List<RoutePoint> GetRoutePointsByYear(int year) 
+        {
+            return _context.RoutePoints.Where(x => x.Trip.StartTime.Year == year)
+                .Include(rp => rp.Trip.User).ToList();
+        }
+
         public List<RoutePoint> GetRoutePointsByTripId(int tripId)
         {
             return _context.RoutePoints

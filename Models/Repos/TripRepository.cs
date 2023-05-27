@@ -40,6 +40,11 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
                 .FirstOrDefault(t => t.TripId == id);
         }
 
+        public List<Trip> GetAllTripsWithUsers()
+        {
+            return _context.Trips.Include(t => t.User).ToList();
+        }
+
         public List<Trip> GetTripsByUserId(int userId)
         {
             return _context.Trips.Where(t => t.UserId == userId).ToList();
