@@ -28,9 +28,15 @@
 <div class="form-group">
     <label for="imageUpload">Images:</label>
     <input class="form-control-file" type="file" id="imageUpload" name="Images" accept="image/*" multiple />
-        @foreach (var image in Model.Images)
+    <h4>New images:</h4>
+    <div id="imagesList"></div>
+    <h4>Previously loaded images:</h4>    
+    @foreach (var image in Model.Images)
         {
-            <img src="@image.Link" width="300" height="200" />
+            <div> 
+                <img src="@image.Link" width="300" height="200" /> 
+                <button type="button" class="btn btn-danger remove-image" data-image-id="@image.ImageId">Delete</button> 
+            </div>
         }
 </div>
 
@@ -51,19 +57,17 @@
         @{
             var routePoints = Model.RoutePoints.OrderBy(rp => rp.Ordinal);
             var firstRoutePoint = routePoints.First();
-            ViewData["InitLatitude"] = firstRoutePoint.Latitude;
-            ViewData["InitLongitude"] = firstRoutePoint.Longitude;
         }
-                const initLatitude = @Html.Raw(Json.Serialize(ViewData["InitLatitude"]));
-                const initLongitude = @Html.Raw(Json.Serialize(ViewData["InitLongitude"]));
+                const initLatitude = @Html.Raw(Json.Serialize(firstRoutePoint.Latitude));
+                const initLongitude = @Html.Raw(Json.Serialize(firstRoutePoint.Longitude));
                 initMap(initLatitude, initLongitude, 12);
                 addClickOnMap();
         @{
-            ViewData["Latitudes"] = routePoints.Select(rp => rp.Latitude);
-            ViewData["Longitudes"] = routePoints.Select(rp => rp.Longitude);
+            var latitudes = routePoints.Select(rp => rp.Latitude);
+            var longitudes = routePoints.Select(rp => rp.Longitude);
         }
-                const latitudes = @Html.Raw(Json.Serialize(ViewData["Latitudes"]));
-                const longitudes = @Html.Raw(Json.Serialize(ViewData["Longitudes"]));
+                const latitudes = @Html.Raw(Json.Serialize(latitudes));
+                const longitudes = @Html.Raw(Json.Serialize(longitudes));
                 markers = [];
                 for (let i = 0; i < latitudes.length; i++){
                     addMarker({
@@ -78,4 +82,77 @@
                 calculateAndDisplayRoute(false);
                 storeRoutePoints();
             </script>
+            <script> 
+                $(".remove-image").on("click", function () { 
+                    var imageId = $(this).data("image-id");
+                    const tripId = @(Model.TripId);
+                    $.ajax({ 
+                        type: "POST", 
+                        url: '@Url.Action("DeleteImage", "Trips")',
+                            data: { imageId: imageId, tripId: tripId},
+                        success: function () { 
+                            $("div").has("[data-image-id='" + imageId + "']").remove();
+                            window.location.reload();
+                        } 
+                    }); 
+                }); 
+            </script>
+     <script>
+             const fileInput = document.getElementById('imageUpload');
+            const imagesList = document.getElementById('imagesList');
+
+            const files = [];
+            const form = document.querySelector('form');
+            function renderImage(file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const imgContainer = document.createElement('div');
+                    const img = document.createElement('img');
+                    const deleteButton = document.createElement('button');
+
+                    img.src = event.target.result;
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.onclick = function() {
+                        const index = files.indexOf(file);
+                        if (index >= 0) {
+                            files.splice(index, 1);
+                            imgContainer.remove();
+                        }
+                    };
+
+                    imgContainer.appendChild(img);
+                    imgContainer.appendChild(deleteButton);
+                    imagesList.appendChild(imgContainer);
+                }
+                reader.readAsDataURL(file);
+            }
+
+            fileInput.onchange = function() {
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    const file = fileInput.files[i];
+                    if (file.type.startsWith('image/')) {
+                        files.push(file);
+                        renderImage(file);
+                    }
+                }
+                fileInput.value = '';
+            };
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(form);
+                for (const file of files) {
+                    formData.append('images', file, file.name);
+                }
+                fetch(form.action, {
+                    method: form.method,
+                    body: formData
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = response.url;
+                    } else {
+                        alert("An error occured while sending images to server");
+                    }
+                });
+            });
+     </script>
  }

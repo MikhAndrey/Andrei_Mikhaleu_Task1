@@ -17,11 +17,17 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		private readonly CommentRepository _commentRepository;
 
-		public TripsController(TripRepository tripRepository, UserSettings userSettings, CommentRepository commentRepository)
+        private readonly ImageRepository _imageRepository;
+
+        public TripsController(TripRepository tripRepository, 
+			UserSettings userSettings, 
+			CommentRepository commentRepository,
+			ImageRepository imageRepository)
 		{
 			_tripRepository = tripRepository;
 			_userSettings = userSettings;
 			_commentRepository = commentRepository;
+			_imageRepository = imageRepository;
 		}
 
 		[Authorize]
@@ -133,15 +139,12 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
             if (ModelState.IsValid)
             {
-				DeleteTripImages(trip);
-				
-                trip.Images.Clear();
                 await UploadImages(trip, images);
                 
                 trip.RoutePoints.Clear();
                 ParseAndAddRoutePoints(trip, routePoints);
                 _tripRepository.Update(trip);
-                return RedirectToAction(nameof(Index), new { id = trip.TripId });
+                return RedirectToAction(nameof(Index));
             }
 
             return View(trip);
@@ -268,6 +271,29 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             foreach (var image in trip.Images)
                 if (System.IO.File.Exists(image.Link))
                     System.IO.File.Delete(image.Link);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteImage(int imageId, int tripId)
+        {
+            Image image = _imageRepository.GetById(imageId);
+
+            if (image == null)
+            {
+                return NotFound();
+            }
+
+            string path = "wwwroot" + image.Link;
+
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+                _imageRepository.Delete(image);
+                return RedirectToAction(nameof(Edit), new { id = tripId});
+            } else
+            {
+                return NotFound();
+            }
         }
 
         private void ParseAndAddRoutePoints(Trip trip, string routePoints)
