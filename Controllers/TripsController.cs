@@ -95,9 +95,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             Trip tripToDelete = _tripRepository.GetById(id);
             if (tripToDelete != null)
             {
-				foreach (var image in tripToDelete.Images)
-					if (System.IO.File.Exists(image.Link))
-						System.IO.File.Delete(image.Link);
+				DeleteTripImages(tripToDelete);
 				_tripRepository.Delete(tripToDelete);
 			}
             return RedirectToAction("Index");
@@ -135,9 +133,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
             if (ModelState.IsValid)
             {
-				foreach (var image in trip.Images)
-					if (System.IO.File.Exists(image.Link))
-						System.IO.File.Delete(image.Link);
+				DeleteTripImages(trip);
 				
                 trip.Images.Clear();
                 await UploadImages(trip, images);
@@ -265,6 +261,13 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 trip.Images.Add(new Image { Link = imageUrl });
             }
+        }
+
+		private void DeleteTripImages(Trip trip)
+		{
+            foreach (var image in trip.Images)
+                if (System.IO.File.Exists(image.Link))
+                    System.IO.File.Delete(image.Link);
         }
 
         private void ParseAndAddRoutePoints(Trip trip, string routePoints)
