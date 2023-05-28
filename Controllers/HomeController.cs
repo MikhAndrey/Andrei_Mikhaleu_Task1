@@ -1,4 +1,4 @@
-﻿using Andrei_Mikhaleu_Task1.Models;
+﻿using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

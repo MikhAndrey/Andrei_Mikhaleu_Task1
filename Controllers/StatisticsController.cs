@@ -1,9 +1,10 @@
 ﻿using Andrei_Mikhaleu_Task1.Common;
-using Andrei_Mikhaleu_Task1.Models;
+using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using Andrei_Mikhaleu_Task1.Models.Repos;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Andrei_Mikhaleu_Task1.Models.Entities.Special;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
@@ -24,13 +25,38 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         }
 
         [HttpGet]
-        public IActionResult HeatMap()
+        public IActionResult TotalDuration()
         {
-            List<int> years = _tripRepository.GetAllTripsWithUsers()
-                .Where(t => t.UserId == _userSettings.CurrentUser.UserId)
+            List<int> years = _tripRepository
+                .GetAllTripsWithUsers(_userSettings.CurrentUser.UserId)
                 .Select(t => t.StartTime.Year).Distinct().ToList();
             int firstYear = years.FirstOrDefault();
-            var viewModel = new HeatmapViewModel() 
+            var viewModel = new YearStatisticsViewModel()
+            {
+                Years = years,
+                SelectedYear = firstYear
+            };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult TotalDurationData(int year)
+        {
+            List <DurationInMonth> durations = _tripRepository
+                .GetTotalDurationByMonths(year, _userSettings.CurrentUser.UserId);
+
+            return Json(durations);
+        }
+
+
+        [HttpGet]
+        public IActionResult HeatMap()
+        {
+            List<int> years = _tripRepository
+                .GetAllTripsWithUsers(_userSettings.CurrentUser.UserId)
+                .Select(t => t.StartTime.Year).Distinct().ToList();
+            int firstYear = years.FirstOrDefault();
+            var viewModel = new YearStatisticsViewModel() 
             { 
                 Years = years,
                 SelectedYear= firstYear
@@ -41,8 +67,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [HttpPost]
         public IActionResult HeatMapData(int year)
         {
-            var dataPoints = _routePointRepository.GetRoutePointsByYear(year)
-                .Where(rp => rp.Trip.UserId == _userSettings.CurrentUser.UserId)
+            var dataPoints = _routePointRepository
+                .GetRoutePointsByYear(year, _userSettings.CurrentUser.UserId)
                 .Select(rp => new { rp.Latitude, rp.Longitude });
 
             var options = new JsonSerializerOptions

@@ -1,15 +1,15 @@
-﻿namespace Andrei_Mikhaleu_Task1.Models.Entities
+﻿namespace Andrei_Mikhaleu_Task1.Models.Entities.Common
 {
     public class User
     {
-        public User() 
+        public User()
         {
             Trips = new();
             Comments = new();
             UserName = "";
             Password = "";
         }
-        
+
         public int UserId { get; set; }
 
         public string UserName { get; set; }

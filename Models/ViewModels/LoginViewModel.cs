@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Andrei_Mikhaleu_Task1.Models
+namespace Andrei_Mikhaleu_Task1.Models.ViewModels
 {
     public class LoginViewModel
     {

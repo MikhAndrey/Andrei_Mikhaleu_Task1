@@ -1,7 +1,7 @@
 ﻿using Andrei_Mikhaleu_Task1.Common;
-using Andrei_Mikhaleu_Task1.Models.Entities;
+using Andrei_Mikhaleu_Task1.Models.Entities.Common;
 
-namespace Andrei_Mikhaleu_Task1.Models
+namespace Andrei_Mikhaleu_Task1.Models.ViewModels
 {
     public class TripDetailsViewModel
     {
@@ -19,16 +19,16 @@ namespace Andrei_Mikhaleu_Task1.Models
 
         public string UtcFinishTimeZone { get; set; }
 
-        public TripDetailsViewModel(Trip trip) 
+        public TripDetailsViewModel(Trip trip)
         {
             Trip = trip;
             IsCurrent = DateTime.UtcNow >= trip.StartTime && DateTime.UtcNow <= trip.EndTime;
-		    IsFuture = DateTime.UtcNow < trip.StartTime;
-		    IsPast = DateTime.UtcNow > trip.EndTime;
+            IsFuture = DateTime.UtcNow < trip.StartTime;
+            IsPast = DateTime.UtcNow > trip.EndTime;
             Trip.StartTime = Trip.StartTime.AddSeconds(Trip.StartTimeZoneOffset);
             Trip.EndTime = Trip.EndTime.AddSeconds(Trip.FinishTimeZoneOffset);
-			UtcStartTimeZone = string.Concat(Trip.StartTime.ToString("dd.MM.yyyy HH:mm"), $" UTC{(int)(trip.StartTimeZoneOffset / 3600):+#;-#;+0}");
-			UtcFinishTimeZone = string.Concat(Trip.EndTime.ToString("dd.MM.yyyy HH:mm"), $" UTC{(int)(trip.FinishTimeZoneOffset / 3600):+#;-#;+0}");
-		}
+            UtcStartTimeZone = string.Concat(Trip.StartTime.ToString("dd.MM.yyyy HH:mm"), $" UTC{trip.StartTimeZoneOffset / 3600:+#;-#;+0}");
+            UtcFinishTimeZone = string.Concat(Trip.EndTime.ToString("dd.MM.yyyy HH:mm"), $" UTC{trip.FinishTimeZoneOffset / 3600:+#;-#;+0}");
+        }
     }
 }

@@ -1,8 +1,8 @@
-﻿using Andrei_Mikhaleu_Task1.Models.Entities;
-using Andrei_Mikhaleu_Task1.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Andrei_Mikhaleu_Task1.Models.Repos;
+using Andrei_Mikhaleu_Task1.Models.Entities.Common;
+using Andrei_Mikhaleu_Task1.Models.ViewModels;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

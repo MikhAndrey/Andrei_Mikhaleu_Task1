@@ -1,9 +1,9 @@
-﻿using Andrei_Mikhaleu_Task1.Models.Entities;
+﻿using Andrei_Mikhaleu_Task1.Models.Entities.Common;
 using Andrei_Mikhaleu_Task1.Models.Repos;
 
 namespace Andrei_Mikhaleu_Task1.Common
 {
-	public class UserSettings
+    public class UserSettings
 	{
 		private readonly UserRepository _userRepository;
 

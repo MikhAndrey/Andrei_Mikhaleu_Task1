@@ -1,9 +1,9 @@
 ﻿using Andrei_Mikhaleu_Task1.Models.Repos;
-using Andrei_Mikhaleu_Task1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Andrei_Mikhaleu_Task1.Models.ViewModels;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

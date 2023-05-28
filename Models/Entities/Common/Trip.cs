@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Andrei_Mikhaleu_Task1.Models.Entities
+namespace Andrei_Mikhaleu_Task1.Models.Entities.Common
 {
     public class Trip
     {
-		public Trip() 
+        public Trip()
         {
             RoutePoints = new();
-            Images = new(); 
+            Images = new();
             Comments = new();
             User = new();
         }
 
-		public int TripId { get; set; }
+        public int TripId { get; set; }
 
         public string Name { get; set; }
 
@@ -23,8 +23,8 @@ namespace Andrei_Mikhaleu_Task1.Models.Entities
 
         public DateTime EndTime { get; set; }
 
-		[Column(TypeName = "decimal(10,3)")]
-		public decimal Distance { get; set; }
+        [Column(TypeName = "decimal(10,3)")]
+        public decimal Distance { get; set; }
 
         public string Description { get; set; }
 
@@ -40,6 +40,6 @@ namespace Andrei_Mikhaleu_Task1.Models.Entities
 
         public int StartTimeZoneOffset { get; set; }
 
-        public int FinishTimeZoneOffset { get; set;}
+        public int FinishTimeZoneOffset { get; set; }
     }
 }

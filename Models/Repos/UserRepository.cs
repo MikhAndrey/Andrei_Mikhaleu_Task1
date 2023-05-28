@@ -1,4 +1,5 @@
 ﻿using Andrei_Mikhaleu_Task1.Models.Entities;
+using Andrei_Mikhaleu_Task1.Models.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Andrei_Mikhaleu_Task1.Models.Repos

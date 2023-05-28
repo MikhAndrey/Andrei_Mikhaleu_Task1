@@ -1,6 +1,6 @@
 ﻿using Andrei_Mikhaleu_Task1.Common;
-using Andrei_Mikhaleu_Task1.Models;
-using Andrei_Mikhaleu_Task1.Models.Entities;
+using Andrei_Mikhaleu_Task1.Models.ViewModels;
+using Andrei_Mikhaleu_Task1.Models.Entities.Common;
 using Andrei_Mikhaleu_Task1.Models.Repos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

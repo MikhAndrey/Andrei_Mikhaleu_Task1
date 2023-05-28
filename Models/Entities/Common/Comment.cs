@@ -1,13 +1,13 @@
-﻿namespace Andrei_Mikhaleu_Task1.Models.Entities
+﻿namespace Andrei_Mikhaleu_Task1.Models.Entities.Common
 {
     public class Comment
     {
-        public Comment() 
+        public Comment()
         {
             Trip = new();
             User = new();
         }
-        
+
         public int CommentId { get; set; }
 
         public string Message { get; set; }

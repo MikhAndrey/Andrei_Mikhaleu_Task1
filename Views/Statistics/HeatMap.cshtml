@@ -1,4 +1,4 @@
-﻿@model HeatmapViewModel
+﻿@model Andrei_Mikhaleu_Task1.Models.ViewModels.YearStatisticsViewModel
 
 @Html.DropDownListFor(m => m.SelectedYear, new SelectList(Model.Years), new { @class = "form-control" })
 
@@ -14,12 +14,12 @@ function createHeatmapLayer(heatMapData) {
         map: map
     });
     heatmapLayers.push(heatmapLayer);
-}
+};
 
 function clearHeatmapLayers() {
     heatmapLayers.forEach(el => el.setMap(null));
     heatmapLayers = [];
-}
+};
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('heatMap'), {
@@ -29,7 +29,7 @@ function initMap() {
         },
         zoom: 5
     });
-}
+};
 
 function loadDataForProperYear() {
     const year = $('#SelectedYear').val();
@@ -44,7 +44,7 @@ function loadDataForProperYear() {
             alert("Unexpected error occured while building heatmap. Please, try later.")
         }
     });
-}
+};
 
 $('#SelectedYear').change(function () {
     loadDataForProperYear();
@@ -52,7 +52,7 @@ $('#SelectedYear').change(function () {
 
 function transformDataToCoordinates(data) {
     return data.map(el => new google.maps.LatLng(el.Latitude, el.Longitude));
-}
+};
 
 function drawHeatMap(coordinateData) {
     clearHeatmapLayers();
@@ -60,9 +60,9 @@ function drawHeatMap(coordinateData) {
     createHeatmapLayer(heatMapData);
     heatmapLayers[0].set("opacity", 0.8);
     heatmapLayers[0].set("radius", 50);
-}
+};
 
-loadDataForProperYear();
+$(document).ready(loadDataForProperYear);
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&libraries=visualization&callback=initMap">
 </script>

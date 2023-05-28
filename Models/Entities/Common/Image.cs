@@ -1,12 +1,12 @@
-﻿namespace Andrei_Mikhaleu_Task1.Models.Entities
+﻿namespace Andrei_Mikhaleu_Task1.Models.Entities.Common
 {
     public class Image
     {
-        public Image() 
+        public Image()
         {
             Trip = new();
         }
-        
+
         public int ImageId { get; set; }
 
         public string Link { get; set; }

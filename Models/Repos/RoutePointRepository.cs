@@ -1,4 +1,6 @@
-﻿using Andrei_Mikhaleu_Task1.Models.Entities;
+﻿using Andrei_Mikhaleu_Task1.Common;
+using Andrei_Mikhaleu_Task1.Models.Entities;
+using Andrei_Mikhaleu_Task1.Models.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Andrei_Mikhaleu_Task1.Models.Repos
@@ -37,10 +39,10 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
                 .FirstOrDefault(rp => rp.RoutePointId == id);
         }
 
-        public List<RoutePoint> GetRoutePointsByYear(int year) 
+        public List<RoutePoint> GetRoutePointsByYear(int year, int userId) 
         {
             return _context.RoutePoints.Where(x => x.Trip.StartTime.Year == year)
-                .Include(rp => rp.Trip.User).ToList();
+                .Include(rp => rp.Trip.User).Where(rp => rp.Trip.UserId == userId).ToList();
         }
 
         public List<RoutePoint> GetRoutePointsByTripId(int tripId)
