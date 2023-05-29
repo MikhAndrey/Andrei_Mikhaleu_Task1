@@ -46,7 +46,7 @@
     <div class="row">
     @foreach (var image in Model.Images)
         {
-            <div class="col-4 mb-3"> 
+            <div class="col-4 mb-3 preload-image-container"> 
                 <img src="@image.Link" class="img-fluid d-block" style="object-fit: cover; height: 250px"/> 
                 <button type="button" class="btn btn-danger remove-image mt-2" data-image-id="@image.ImageId">Delete</button> 
             </div>
@@ -90,16 +90,16 @@
         storeRoutePoints();
     </script>
     <script> 
-        $(".remove-image").on("click", function () { 
-            var imageId = $(this).data("image-id");
+        $(".remove-image").on("click", function () {
+            const index = $('.remove-image').index(this);
+            const imageId = $(this).data("image-id");
             const tripId = @(Model.TripId);
             $.ajax({ 
                 type: "POST", 
                 url: '@Url.Action("DeleteImage", "Trips")',
                     data: { imageId: imageId, tripId: tripId},
-                success: function () { 
-                    $("div").has("[data-image-id='" + imageId + "']").remove();
-                    window.location.reload();
+                success: function () {
+                    $('.preload-image-container')[index].remove(); 
                 } 
             }); 
         }); 

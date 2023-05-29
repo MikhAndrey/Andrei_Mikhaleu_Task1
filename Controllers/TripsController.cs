@@ -300,7 +300,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 System.IO.File.Delete(path);
                 _imageRepository.Delete(image);
-                return RedirectToAction(nameof(Edit), new { id = tripId});
+                return NoContent();
             } else
             {
                 return NotFound();
