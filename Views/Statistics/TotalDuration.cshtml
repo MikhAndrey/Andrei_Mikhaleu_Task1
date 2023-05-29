@@ -1,10 +1,12 @@
 ﻿@model Andrei_Mikhaleu_Task1.Models.ViewModels.YearStatisticsViewModel
 
-@Html.DropDownListFor(m => m.SelectedYear, new SelectList(Model.Years), new { @class = "form-control" })
+<div class="tp-form">
+    <h5 class="tp-label">Select year for displaying statistics:</h5>
+    @Html.DropDownListFor(m => m.SelectedYear, new SelectList(Model.Years), new { @class = "form-control tp-form-group" })
+    <div id="totalDurationDiagram" style="width:100%; height: 500px"></div>
+</div>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<div id="totalDurationDiagram" style="width:100%; height: 500px"></div>
-
 <script>
 google.charts.load('current', {packages: ['corechart', 'bar']});
 
@@ -53,32 +55,32 @@ function formatDuration(durationInHours){
 
 function drawDiagram(data){
     const dataTable = new google.visualization.DataTable();
-  dataTable.addColumn('string', 'Month');
-  dataTable.addColumn('number', 'Total duration');
-  dataTable.addRows(data.length);
+    dataTable.addColumn('string', 'Month');
+    dataTable.addColumn('number', 'Total duration');
+    dataTable.addRows(data.length);
 
-  for (var i = 0; i < data.length; i++) {
-    // Задаем значение и формат для ячеек
+    for (let i = 0; i < data.length; i++) {
     dataTable.setCell(i, 0, data[i].month);
     dataTable.setCell(i, 1, data[i].totalDuration);
     dataTable.setFormattedValue(i, 1, formatDuration(data[i].totalDuration));
-  }
+    }
 
-  // Опции для диаграммы (заголовок и оси)
-  var options = {
+    const options = {
     title: 'Monthly trip durations',
     hAxis: {title: 'Month'},
     vAxis: {title: 'Total duration (hours)'},
     tooltip: {isHtml: true}
-  };
+    };
 
-      var chart = new google.visualization.ColumnChart(
-        document.getElementById('totalDurationDiagram'));
-
-      chart.draw(dataTable, options);
+    const chart = new google.visualization.ColumnChart(document.getElementById('totalDurationDiagram'));
+    chart.draw(dataTable, options);
 };
 
-$(document).ready(loadDataForProperYear);
+$(document).ready(
+    function(){
+        loadDataForProperYear();
+    }
+);
 </script>
 </script>
 
