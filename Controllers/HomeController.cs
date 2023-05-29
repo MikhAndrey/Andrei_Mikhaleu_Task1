@@ -19,6 +19,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         public IActionResult Index()
         {
             string path = Path.Combine(_environment.WebRootPath, "images");
+
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
