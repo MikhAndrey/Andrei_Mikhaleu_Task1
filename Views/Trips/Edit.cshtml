@@ -30,6 +30,13 @@
     <textarea class="form-control tp-textarea" asp-for="Description" id="descriptionInput"></textarea>
     <div class="tp-input-desc">Enter description of your trip</div>
 </div>
+<div class="tp-label">Click on the map to place trip points</div>
+<div id="map" class="form-group tp-form-group"></div>
+<div class="tp-label">Trip's distance: <span id="route-length-view" class="tp-input-desc">@Model.Distance</span>&nbsp km</div>
+<input type="hidden" name="routePoints" id="route-points-input"/>
+<input type="hidden" name="Distance" asp-for="Distance" value="@Model.Distance" />
+<input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset"/>
+<input type="hidden" name="FinishTimeZoneOffset" asp-for="FinishTimeZoneOffset"/>
 <div class="form-group">
     <label for="imageUpload" class="tp-label">Upload your images here:</label>
     <input class="form-control-file tp-file-upload" type="file" id="imageUpload" name="Images" accept="image/*" multiple />
@@ -46,13 +53,6 @@
         }
     </div> 
 </div>
-
-<div id="map" class="form-group tp-form-group"></div>
-<div class="tp-label">Trip's distance: <span id="route-length-view" class="tp-input-desc">@Model.Distance</span>&nbsp km</div>
-<input type="hidden" name="routePoints" id="route-points-input"/>
-<input type="hidden" name="Distance" asp-for="Distance" value="@Model.Distance" />
-<input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset"/>
-<input type="hidden" name="FinishTimeZoneOffset" asp-for="FinishTimeZoneOffset"/>
 <div>
     <button class="btn btn-primary mt-3" type="submit">Save</button>
 </div>

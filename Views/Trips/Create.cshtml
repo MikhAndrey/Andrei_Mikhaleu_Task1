@@ -29,8 +29,9 @@
         <textarea class="form-control tp-textarea" asp-for="Description" id="descriptionInput"></textarea>
         <div class="tp-input-desc">Enter description of your trip</div>
     </div>
+    <div class="tp-label">Click on the map to place trip points</div>
     <div id="map" class="form-group tp-form-group"></div>
-    <div class="tp-label">Trip's distance: <span class="tp-input-desc" id="route-length-view">0</span>&nbsp km</div>
+    <div class="tp-label mt-2 mb-2">Trip's distance: <span class="tp-input-desc" id="route-length-view">0</span>&nbsp km</div>
     <input type="hidden" name="routePoints" />
     <input type="hidden" name="Distance" asp-for="Distance" />
     <input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset" />
