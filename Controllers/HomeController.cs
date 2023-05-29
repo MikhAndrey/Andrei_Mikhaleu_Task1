@@ -8,13 +8,21 @@ namespace Andrei_Mikhaleu_Task1.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private IWebHostEnvironment _environment;
+
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment environment)
         {
             _logger = logger;
+            _environment = environment;
         }
 
         public IActionResult Index()
         {
+            string path = Path.Combine(_environment.WebRootPath, "images");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
             return View();
         }
 
