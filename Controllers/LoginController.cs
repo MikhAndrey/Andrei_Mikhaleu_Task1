@@ -50,7 +50,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                             new AuthenticationProperties
                             {
                                 IsPersistent = true,
-                                ExpiresUtc = DateTime.UtcNow.AddDays(7)
+                                ExpiresUtc = DateTime.MaxValue
                             });
                     } else
                     {
