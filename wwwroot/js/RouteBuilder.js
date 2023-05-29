@@ -58,6 +58,10 @@ async function removeMarker(marker) {
         markers.splice(index, 1);
         await calculateAndDisplayRoute(false);
     }
+    if (markers.length == 1) {
+        $("#endTimeInput").val('');
+        $("#route-length-view").text('0');
+    }
 }
 
 function addClickOnMarker(marker) {
