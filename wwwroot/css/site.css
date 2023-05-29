@@ -80,3 +80,7 @@ body {
     padding-left: 30px;
     text-align: left;
 }
+
+.tp-gradient-reverse {
+    background: linear-gradient(to bottom, #d0e5f2, #cfc4dd);
+}
