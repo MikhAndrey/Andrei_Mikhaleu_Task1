@@ -39,23 +39,34 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Name","StartTime","EndTime","Public","Description", "Distance", "StartTimeZoneOffset", "FinishTimeZoneOffset")] Trip trip, List<IFormFile> images, string routePoints)
+		public async Task<IActionResult> Create(NewTripViewModel model, List<IFormFile> images, string routePoints)
 		{
-			if (ModelState.IsValid)
+            if (ModelState.IsValid)
 			{
-				UploadImages(trip, images);
-				ParseAndAddRoutePoints(trip, routePoints);
+                Trip trip = new()
+                {
+                    Name = model.Name,
+                    Description = model.Description,
+                    Distance = model.Distance,
+                    Public = model.Public,
+                    StartTimeZoneOffset = model.StartTimeZoneOffset,
+                    FinishTimeZoneOffset = model.FinishTimeZoneOffset
+                };
 
-				trip.StartTime = trip.StartTime.AddSeconds(-trip.StartTimeZoneOffset);
-				trip.EndTime = trip.EndTime.AddSeconds(-trip.FinishTimeZoneOffset);
+                trip.StartTime = model.StartTime.AddSeconds(-model.StartTimeZoneOffset);
+                trip.EndTime = model.EndTime.AddSeconds(-model.FinishTimeZoneOffset);
+
+                await UploadImages(trip, images);
+				ParseAndAddRoutePoints(trip, routePoints);
 
 				User currentUser = _userSettings.CurrentUser;
 				trip.User= currentUser;
 				
 				_tripRepository.Add(trip);
 				return RedirectToAction(nameof(Index));
-			}			
-			return View(trip);
+			}
+
+            return View(model);
 		}
 
 		[Authorize]

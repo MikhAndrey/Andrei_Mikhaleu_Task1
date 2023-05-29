@@ -1,108 +1,57 @@
-﻿@model Andrei_Mikhaleu_Task1.Models.Entities.Common.Trip
+﻿@model Andrei_Mikhaleu_Task1.Models.ViewModels.NewTripViewModel
 
 @{
     ViewData["Title"] = "New Trip";
 }
-<form class="bootstrap-form" asp-action="Create" enctype="multipart/form-data">
-	<div class="form-group">
-		<label for="nameInput">Name:</label> 
-		<input class="form-control" type="text" asp-for="Name" required id="nameInput" />
-	</div>
-	<div class="form-group">
-		<label for="startTimeInput">Starting Time:</label> 
-		<input class="form-control" type="datetime-local" asp-for="StartTime" required id="startTimeInput" />
-	</div>
-	<div class="form-group">
-		<label for="endTimeInput">Ending Time:</label>
-		<input class="form-control" type="datetime-local" asp-for="EndTime" readonly required id="endTimeInput" />
-	</div>
-	<div class="form-check">
-		<input class="form-check-input" type="checkbox" asp-for="Public" id="publicCheck" /> 
-		<label class="form-check-label" for="publicCheck">Public</label>
-	</div>
-	<div class="form-group">
-		<label for="descriptionInput">Description:</label> 
-		<textarea class="form-control" asp-for="Description" id="descriptionInput"></textarea>
-	</div>
-	<div id="map" class="form-group" style="height: 400px; width: 100%; margin-bottom: 20px;"></div>
-	<div>Trip's distance: <span id="route-length-view"></span></div>
-	<div>Trip's duration: <span id="route-duration-view"></span></div>
-	<input type="hidden" name="routePoints"/>
-	<input type="hidden" name="Distance" asp-for="Distance"/>
-	<input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset"/>
-	<input type="hidden" name="FinishTimeZoneOffset" asp-for="FinishTimeZoneOffset"/>
-	<div class="form-group">
-		<label for="imageUpload">Images:</label> 
-		<input class="form-control-file" type="file" id="imageUpload" name="images" accept="image/*" multiple />
-	</div>
-	<div id="imagesList"></div>
-	<div>
-		<button class="btn btn-primary" type="submit">Create</button>
-	</div>
+<form class="bootstrap-form tp-form" asp-action="Create" enctype="multipart/form-data">
+    <div class="form-group tp-form-group">
+        <label for="nameInput" class="tp-label">Your trip name:</label>
+        <input class="form-control tp-text-input" type="text" asp-for="Name" required id="nameInput" />
+        <div class="tp-input-desc">Enter name of your trip</div>
+    </div>
+    <div class="form-group tp-form-group">
+        <label for="startTimeInput" class="tp-label">Departure Time:</label>
+        <input class="form-control tp-datetime-input" type="datetime-local" asp-for="StartTime" required id="startTimeInput" />
+        <div class="tp-input-desc">Select the start time of your trip</div>
+    </div>
+    <div class="form-group tp-form-group">
+        <label for="endTimeInput" class="tp-label">Arrival Time:</label>
+        <input class="form-control tp-datetime-input" type="datetime-local" asp-for="EndTime" readonly id="endTimeInput" />
+        <div class="tp-input-desc">End time of your trip will be calculated automatically</div>
+    </div>
+    <div class="form-check tp-form-check">
+        <input class="form-check-input tp-check-input" type="checkbox" asp-for="Public" id="publicCheck" />
+        <label class="form-check-label tp-label" for="publicCheck">Public</label>
+        <div class="tp-input-desc">Make your trip visible to everyone</div>
+    </div>
+    <div class="form-group tp-form-group">
+        <label for="descriptionInput" class="tp-label">Description:</label>
+        <textarea class="form-control tp-textarea" asp-for="Description" id="descriptionInput"></textarea>
+        <div class="tp-input-desc">Enter description of your trip</div>
+    </div>
+    <div id="map" class="form-group tp-form-group"></div>
+    <div class="tp-label">Trip's distance: <span class="tp-input-desc" id="route-length-view">0</span>&nbsp km</div>
+    <input type="hidden" name="routePoints" />
+    <input type="hidden" name="Distance" asp-for="Distance" />
+    <input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset" />
+    <input type="hidden" name="FinishTimeZoneOffset" asp-for="FinishTimeZoneOffset" />
+    <div class="form-group tp-form-group">
+        <label for="imageUpload" class="tp-label">Upload your images here:</label>
+        <input class="form-control-file tp-file-upload" type="file" id="imageUpload" name="images" accept="image/*" multiple />
+        <div class="tp-input-desc">Upload photos of your trip</div>
+    </div>
+    <div id="imagesList"></div>
+    <div>
+        <button class="btn btn-primary tp-submit-btn mt-3" type="submit">Create trip</button>
+    </div>
 </form>
+
 @section Scripts {
-        <script src="@Url.Content("~/js/RouteBuilder.js")"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap"></script> 
-		<script>
-			initMap(52.4345, 30.9754, 12);
-			addClickOnMap();
-		</script>
-            <script>
-        const fileInput = document.getElementById('imageUpload');
-        const imagesList = document.getElementById('imagesList');
-
-        const files = [];
-        const form = document.querySelector('form');
-        function renderImage(file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const imgContainer = document.createElement('div');
-                const img = document.createElement('img');
-                const deleteButton = document.createElement('button');
-
-                img.src = event.target.result;
-                deleteButton.textContent = 'Delete';
-                deleteButton.onclick = function() {
-                    const index = files.indexOf(file);
-                    if (index >= 0) {
-                        files.splice(index, 1);
-                        imgContainer.remove();
-                    }
-                };
-
-                imgContainer.appendChild(img);
-                imgContainer.appendChild(deleteButton);
-                imagesList.appendChild(imgContainer);
-            }
-            reader.readAsDataURL(file);
-        }
-
-        fileInput.onchange = function() {
-            for (let i = 0; i < fileInput.files.length; i++) {
-                const file = fileInput.files[i];
-                if (file.type.startsWith('image/')) {
-                    files.push(file);
-                    renderImage(file);
-                }
-            }
-            fileInput.value = '';
-        };
-		form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(form);
-            for (const file of files) {
-                formData.append('images', file, file.name);
-            }
-            fetch(form.action, {
-                method: form.method,
-                body: formData
-            }).then(response => {
-                if (response.ok) {
-                    window.location.href = response.url;
-                } else {
-                    alert("An error occured while sending images to server");
-                }
-            });
-		});
-    </script>
+    <script src="@Url.Content("~/js/RouteBuilder.js")"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap"></script> 
+	<script>
+		initMap(51.5085, 0, 6);
+		addClickOnMap();
+	</script>
+    <script src="~/js/ImagesLoading.js"></script>
 }
