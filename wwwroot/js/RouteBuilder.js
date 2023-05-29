@@ -4,6 +4,7 @@ let directionsService;
 let directionsDisplay;
 let startTimeZoneOffset, finishTimeZoneOffset;
 const decimalSeparator = (1.1).toLocaleString().substring(1, 2);
+let totalDuration = 0;
 
 function initMap(latitude, longitude, zoom) {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -20,9 +21,9 @@ function initMap(latitude, longitude, zoom) {
 }
 
 function addClickOnMap() {
-    map.addListener('click', function (event) {
+    map.addListener('click', async function (event) {
         addMarker(event.latLng);
-        calculateAndDisplayRoute(false);
+        await calculateAndDisplayRoute(false);
         const currentMarker = markers[markers.length - 1];
         addClickOnMarker(currentMarker);
         makeMarkerDraggable(currentMarker);
@@ -49,29 +50,29 @@ function addMarker(location) {
     });
 }
 
-function removeMarker(marker) {
+async function removeMarker(marker) {
     const index = getMarkerIndexByLabel(marker.label);
     if (index > -1) {
         markers[index].marker.setMap(null);
         markers[index].letterMarker.setMap(null);
         markers.splice(index, 1);
-        calculateAndDisplayRoute(false);
+        await calculateAndDisplayRoute(false);
     }
 }
 
 function addClickOnMarker(marker) {
-    marker.letterMarker.addListener('click', function () {
-        removeMarker(marker);
+    marker.letterMarker.addListener('click', async function () {
+        await removeMarker(marker);
     });
 }
 
 function makeMarkerDraggable(marker){
     marker.letterMarker.setDraggable(true);
-    google.maps.event.addListener(marker.letterMarker, 'dragend', function (event) {
+    google.maps.event.addListener(marker.letterMarker, 'dragend', async function (event) {
         const index = getMarkerIndexByLabel(marker.label);
         if (index > -1) {
             markers[index].marker.setPosition(event.latLng);
-            calculateAndDisplayRoute(false);
+            await calculateAndDisplayRoute(false);
         }
     });
 }
@@ -125,7 +126,7 @@ async function calculateAndDisplayRoute(routeIsReadOnly) {
             if (!routeIsReadOnly) {
                 const legs = response.routes[0].legs;
                 const totalDistance = legs.reduce((total, current) => total + current.distance.value, 0);
-                const totalDuration = legs.reduce((total, current) => total + current.duration.value, 0);
+                totalDuration = legs.reduce((total, current) => total + current.duration.value, 0);
                 const distanceText = getTextOfDistance(totalDistance);
 
                 storeDistance(totalDistance);
@@ -158,10 +159,12 @@ function storeDistance(distance) {
 }
 
 function setEndDate(tripDuration) {
-    const startDate = new Date($("#startTimeInput").val());
-    const localTimezoneOffset = startDate.getTimezoneOffset() * 60 * 1000;
-    const endDate = new Date(startDate.getTime() - localTimezoneOffset + 1000 * (tripDuration - startTimeZoneOffset + finishTimeZoneOffset));
-    $("#endTimeInput").val(endDate.toISOString().slice(0, 16));
+    try {
+        const startDate = new Date($("#startTimeInput").val());
+        const localTimezoneOffset = startDate.getTimezoneOffset() * 60 * 1000;
+        const endDate = new Date(startDate.getTime() - localTimezoneOffset + 1000 * (tripDuration - startTimeZoneOffset + finishTimeZoneOffset));
+        $("#endTimeInput").val(endDate.toISOString().slice(0, 16));
+    } catch{}
 }
 
 function getTextOfDistance(distance){
@@ -199,3 +202,7 @@ async function getAndSaveTimeZoneOffsets(startMarker, finishMarker) {
         console.log("Failed to retrieve timezone information: " + error);
     }
 };
+
+$("#startTimeInput").on('change', function () {
+    setEndDate(totalDuration);
+});

@@ -40,12 +40,12 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
                 .FirstOrDefaultAsync(u => u.UserId == id);
         }
 
-        public async Task<User> GetByUsername(string username)
+        public User GetByUsername(string username)
         {
-            return await _context.Users
+            return _context.Users
                 .Include(u => u.Trips)
                 .Include(u => u.Comments)
-                .FirstOrDefaultAsync(u => u.UserName == username);
+                .FirstOrDefault(u => u.UserName == username);
         }
     }
 }
