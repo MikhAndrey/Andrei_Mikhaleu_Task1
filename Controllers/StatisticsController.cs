@@ -25,10 +25,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         }
 
         [HttpGet]
-        public IActionResult TotalDuration()
+        public async Task<IActionResult> TotalDuration()
         {
-            List<int> years = _tripRepository
-                .GetAllTripsWithUsers(_userSettings.CurrentUser.UserId)
+            List<int> years = (await _tripRepository
+                .GetAllTripsWithUsers(_userSettings.CurrentUser.UserId))
                 .Select(t => t.StartTime.Year).Distinct().ToList();
             int firstYear = years.FirstOrDefault();
             var viewModel = new YearStatisticsViewModel()
@@ -40,9 +40,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         }
 
         [HttpPost]
-        public IActionResult TotalDurationData(int year)
+        public async Task<IActionResult> TotalDurationData(int year)
         {
-            List <DurationInMonth> durations = _tripRepository
+            List <DurationInMonth> durations = await _tripRepository
                 .GetTotalDurationByMonths(year, _userSettings.CurrentUser.UserId);
 
             return Json(durations);
@@ -50,10 +50,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 
         [HttpGet]
-        public IActionResult HeatMap()
+        public async Task<IActionResult> HeatMap()
         {
-            List<int> years = _tripRepository
-                .GetAllTripsWithUsers(_userSettings.CurrentUser.UserId)
+            List<int> years = (await _tripRepository
+                .GetAllTripsWithUsers(_userSettings.CurrentUser.UserId))
                 .Select(t => t.StartTime.Year).Distinct().ToList();
             int firstYear = years.FirstOrDefault();
             var viewModel = new YearStatisticsViewModel() 
@@ -65,10 +65,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         }
 
         [HttpPost]
-        public IActionResult HeatMapData(int year)
+        public async Task<IActionResult> HeatMapData(int year)
         {
-            var dataPoints = _routePointRepository
-                .GetRoutePointsByYear(year, _userSettings.CurrentUser.UserId)
+            var dataPoints = (await _routePointRepository
+                .GetRoutePointsByYear(year, _userSettings.CurrentUser.UserId))
                 .Select(rp => new { rp.Latitude, rp.Longitude });
 
             var options = new JsonSerializerOptions

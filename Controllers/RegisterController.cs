@@ -27,7 +27,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             if (ModelState.IsValid)
             {
-				User? existingUser = _userRepository.GetByUsername(model.UserName);
+				User? existingUser = await _userRepository.GetByUsername(model.UserName);
 				if (existingUser != null)
 				{
 					ModelState.AddModelError(string.Empty, "This username is already taken");
@@ -41,7 +41,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
                 _userRepository.Add(user);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(nameof(Index), "Home");
             }
 
             return View(model);

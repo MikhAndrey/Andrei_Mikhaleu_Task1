@@ -13,39 +13,39 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
             _context = context;
         }
 
-        public void Add(User user)
+        public async Task Add(User user)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(User user)
+        public async Task Update(User user)
         {
             _context.Users.Update(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            var user = GetById(id);
+            var user = await GetById(id);
             _context.Users.Remove(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public User GetById(int id)
+        public async Task<User> GetById(int id)
         {
-            return _context.Users
+            return await _context.Users
                 .Include(u => u.Trips)
                 .Include(u => u.Comments)
-                .FirstOrDefault(u => u.UserId == id);
+                .FirstOrDefaultAsync(u => u.UserId == id);
         }
 
-        public User GetByUsername(string username)
+        public async Task<User> GetByUsername(string username)
         {
-            return _context.Users
+            return await _context.Users
                 .Include(u => u.Trips)
                 .Include(u => u.Comments)
-                .FirstOrDefault(u => u.UserName == username);
+                .FirstOrDefaultAsync(u => u.UserName == username);
         }
     }
 }

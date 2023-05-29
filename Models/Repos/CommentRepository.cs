@@ -13,38 +13,38 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
             _context = context;
         }
 
-        public void Add(Comment comment)
+        public async Task Add(Comment comment)
         {
-            _context.Comments.Add(comment);
-            _context.SaveChanges();
+            await _context.Comments.AddAsync(comment);
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(Comment comment)
+        public async Task Update(Comment comment)
         {
             _context.Comments.Update(comment);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Comment comment)
+        public async Task Delete(Comment comment)
         {
             _context.Comments.Remove(comment);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Comment GetById(int id)
+        public async Task<Comment> GetById(int id)
         {
-            return _context.Comments
+            return await _context.Comments
                 .Include(c => c.User)
                 .Include(c => c.Trip)
-                .FirstOrDefault(c => c.CommentId == id);
+                .FirstOrDefaultAsync(c => c.CommentId == id);
         }
-        public List<Comment> GetCommentsByTripId(int tripId)
+        public async Task<List<Comment>> GetCommentsByTripId(int tripId)
         {
-            return _context.Comments
+            return await _context.Comments
                 .Include(c => c.User)
                 .Include(c => c.Trip)
                 .Where(c => c.TripId == tripId)
-                .ToList();
+                .ToListAsync();
         }
     }
 }

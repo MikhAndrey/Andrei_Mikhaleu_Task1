@@ -31,7 +31,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = _userRepository.GetByUsername(model.UserName);
+                var user = await _userRepository.GetByUsername(model.UserName);
 
                 if (user != null && user.Password == model.Password)
                 {

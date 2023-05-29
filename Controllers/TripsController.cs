@@ -62,7 +62,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 				User currentUser = _userSettings.CurrentUser;
 				trip.User= currentUser;
 				
-				_tripRepository.Add(trip);
+				await _tripRepository.Add(trip);
 				return RedirectToAction(nameof(Index));
 			}
 
@@ -70,10 +70,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
 		[Authorize]
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
 			var userId = _userSettings.CurrentUser.UserId;
-			var trips = _tripRepository.GetTripsByUserId(userId);
+			var trips = await _tripRepository.GetTripsByUserId(userId);
 
 			var tripModels = trips.Select(t => new TripViewModel(t)).ToList();
 
@@ -82,10 +82,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[Authorize]
 		[HttpGet]
-		public IActionResult History()
+		public async Task<IActionResult> History()
 		{
 			var userId = _userSettings.CurrentUser.UserId;
-			var trips = _tripRepository.GetTripsByUserId(userId);
+			var trips = await _tripRepository.GetTripsByUserId(userId);
 
 			var tripModels = trips.Where(el => el.EndTime < DateTime.UtcNow)
 				.Select(t => new TripViewModel(t)).ToList();
@@ -95,10 +95,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[Authorize]
 		[HttpGet]
-		public IActionResult Public()
+		public async Task<IActionResult> Public()
         {
             var userId = _userSettings.CurrentUser.UserId;
-            var trips = _tripRepository.GetOthersPublicTrips(userId);
+            var trips = await _tripRepository.GetOthersPublicTrips(userId);
 
             var tripModels = trips.Select(t => new TripPublicViewModel(t)).ToList();
 
@@ -107,22 +107,22 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[Authorize]
 		[HttpGet]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
 		{
-            Trip tripToDelete = _tripRepository.GetById(id);
+            Trip tripToDelete = await _tripRepository.GetById(id);
             if (tripToDelete != null)
             {
 				DeleteTripImages(tripToDelete);
-				_tripRepository.Delete(tripToDelete);
+				await _tripRepository.Delete(tripToDelete);
 			}
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
 		[Authorize]
 		[HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var trip = _tripRepository.GetById(id);
+            var trip = await _tripRepository.GetById(id);
 
             if (trip == null)
             {
@@ -136,9 +136,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name", "StartTime", "EndTime", "Public", "Description", "Distance", "StartTimeZoneOffset", "FinishTimeZoneOffset")] Trip t, List<IFormFile> images, string routePoints)
+        public async Task<IActionResult> Edit(int id, [Bind("TripId", "Name", "StartTime", "EndTime", "Public", "Description", "Distance", "StartTimeZoneOffset", "FinishTimeZoneOffset")] Trip t, List<IFormFile> images, string routePoints)
         {
-            Trip trip = _tripRepository.GetById(id);
+            Trip trip = await _tripRepository.GetById(id);
             trip.Description = t.Description;
             trip.Name = t.Name;
             trip.StartTime = t.StartTime.AddSeconds(-t.StartTimeZoneOffset);
@@ -154,7 +154,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 
                 trip.RoutePoints.Clear();
                 ParseAndAddRoutePoints(trip, routePoints);
-                _tripRepository.Update(trip);
+                await _tripRepository.Update(trip);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -163,9 +163,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[Authorize]
 		[HttpGet]
-		public IActionResult Details(int id)
+		public async Task<IActionResult> Details(int id)
 		{
-			var trip = _tripRepository.GetById(id);
+			var trip = await _tripRepository.GetById(id);
 			if (trip == null)
 			{
 				return NotFound();
@@ -180,9 +180,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult StartTrip(int id)
+		public async Task<IActionResult> StartTrip(int id)
 		{
-			var trip = _tripRepository.GetById(id);
+			var trip = await _tripRepository.GetById(id);
 			if (trip == null)
 			{
 				return NotFound();
@@ -196,16 +196,16 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 trip.StartTime = DateTime.UtcNow;
 				trip.StartTime.AddMilliseconds(-trip.StartTime.Millisecond);
                 trip.StartTime.AddSeconds(-trip.StartTime.Second);
-                _tripRepository.Update(trip);
+                await _tripRepository.Update(trip);
 			}
 
 			return RedirectToAction(nameof(Details), new { id });
 		}
 
 		[HttpPost]
-		public IActionResult EndTrip(int id)
+		public async Task<IActionResult> EndTrip(int id)
 		{
-			var trip = _tripRepository.GetById(id);
+			var trip = await _tripRepository.GetById(id);
 			if (trip == null)
 			{
 				return NotFound();
@@ -214,18 +214,18 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			if (trip.StartTime < DateTime.UtcNow && trip.EndTime > DateTime.UtcNow)
 			{
 				trip.EndTime = DateTime.UtcNow;
-				_tripRepository.Update(trip);
+				await _tripRepository.Update(trip);
 			}
 
 			return RedirectToAction(nameof(Details), new { id });
 		}
 
         [HttpPost]
-        public IActionResult AddComment(int tripId, string comment)
+        public async Task<IActionResult> AddComment(int tripId, string comment)
 		{
 			var user = _userSettings.CurrentUser;
 
-			var trip = _tripRepository.GetById(tripId);
+			var trip = await _tripRepository.GetById(tripId);
 
             if (trip != null && user != null)
             {
@@ -236,19 +236,19 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                     Date = DateTime.UtcNow
                 });
 
-                _tripRepository.Update(trip);
+                await _tripRepository.Update(trip);
             }
 
             return RedirectToAction(nameof(Details), new { id = tripId });
         }
 
         [HttpPost]
-        public IActionResult DeleteComment(int tripId, int commentId)
+        public async Task<IActionResult> DeleteComment(int tripId, int commentId)
         {
-            Comment commentToDelete = _commentRepository.GetById(commentId);
+            Comment commentToDelete = await _commentRepository.GetById(commentId);
             if (commentToDelete != null)
             {
-                _commentRepository.Delete(commentToDelete);
+                await _commentRepository.Delete(commentToDelete);
             }
             return RedirectToAction(nameof(Details), new { id = tripId });
         }
@@ -285,9 +285,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteImage(int imageId, int tripId)
+        public async Task<IActionResult> DeleteImage(int imageId, int tripId)
         {
-            Image image = _imageRepository.GetById(imageId);
+            Image image = await _imageRepository.GetById(imageId);
 
             if (image == null)
             {
@@ -299,7 +299,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             if (System.IO.File.Exists(path))
             {
                 System.IO.File.Delete(path);
-                _imageRepository.Delete(image);
+                await _imageRepository.Delete(image);
                 return NoContent();
             } else
             {

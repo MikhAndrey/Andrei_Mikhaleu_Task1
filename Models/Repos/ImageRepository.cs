@@ -13,37 +13,37 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
             _context = context;
         }
 
-        public void Add(Image image)
+        public async Task Add(Image image)
         {
-            _context.Images.Add(image);
-            _context.SaveChanges();
+            await _context.Images.AddAsync(image);
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(Image image)
+        public async Task Update(Image image)
         {
             _context.Images.Update(image);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Image image)
+        public async Task Delete(Image image)
         {
             _context.Images.Remove(image);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Image GetById(int id)
+        public async Task<Image> GetById(int id)
         {
-            return _context.Images
+            return await _context.Images
                 .Include(i => i.Trip)
-                .FirstOrDefault(i => i.ImageId == id);
+                .FirstOrDefaultAsync(i => i.ImageId == id);
         }
 
-        public List<Image> GetImagesByTripId(int tripId)
+        public async Task<List<Image>> GetImagesByTripId(int tripId)
         {
-            return _context.Images
+            return await _context.Images
                 .Include(i => i.Trip)
                 .Where(i => i.TripId == tripId)
-                .ToList();
+                .ToListAsync();
         }
     }
 }
