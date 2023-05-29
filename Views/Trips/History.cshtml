@@ -1,32 +1,32 @@
 ﻿@model List<Andrei_Mikhaleu_Task1.Models.ViewModels.TripViewModel>
-<div class="tp-form">
-	<h1 class="tp-label">Completed Trips</h1>
-	<div class="row row-cols-2">
-		@if (Model.Count == 0)
+
+<h1 class="tp-label">Completed Trips</h1>
+<div class="row row-cols-2">
+	@if (Model.Count == 0)
+	{ 
+		<p class="tp-label">You have no completed trips.</p>
+	}
+	else foreach (var trip in Model)
 		{ 
-			<p class="tp-label">You have no completed trips.</p>
-		}
-		else foreach (var trip in Model)
-			{ 
-				<div class="col mb-4">
-					<div class="card h-100">
-						<div class="card-header text-light tp-gradient-standard">
-							<h5 class="card-title tp-label">@trip.Name</h5>
-						</div>
-						<div class="card-body bg-light">
-							<p class="card-text tp-label">@trip.Description</p>
-							<ul class="list-group list-group-flush">
-								<li class="list-group-item text-right tp-label text-muted">Departure time: @trip.UtcStartTimeZone</li>
-								<li class="list-group-item text-right tp-label text-muted">Arrival time: @trip.UtcFinishTimeZone</li>
-							</ul>
-						</div>
-						<div class="card-footer tp-gradient-reverse"> 
-							<a href="@Url.Action("Details", new { id = trip.TripId })" class="btn btn-primary mr-2">Details</a> 
-							<a href="@Url.Action("Edit", new { id = trip.TripId })" class="btn btn-secondary mr-2">Edit</a> 
-							<a href="@Url.Action("Delete", new { id = trip.TripId })" class="btn btn-danger">Delete</a>
-						</div>
+			<div class="col mb-4">
+				<div class="card h-100 br-20">
+					<div class="card-header text-light tp-gradient-standard">
+						<h5 class="card-title tp-label">@trip.Name</h5>
+					</div>
+					<div class="card-body bg-light">
+						<p class="card-text tp-label">@trip.Description</p>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item text-right tp-label text-muted">Departure time: @trip.UtcStartTimeZone</li>
+							<li class="list-group-item text-right tp-label text-muted">Arrival time: @trip.UtcFinishTimeZone</li>
+						</ul>
+					</div>
+					<div class="card-footer tp-gradient-reverse"> 
+						<a href="@Url.Action("Details", new { id = trip.TripId })" class="btn btn-primary mr-2">Details</a> 
+						<a href="@Url.Action("Edit", new { id = trip.TripId })" class="btn btn-secondary mr-2">Edit</a> 
+						<a href="@Url.Action("Delete", new { id = trip.TripId })" class="btn btn-danger">Delete</a>
 					</div>
 				</div>
-			}        
-	</div>
+			</div>
+		}        
 </div>
+
