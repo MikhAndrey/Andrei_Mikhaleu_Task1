@@ -6,17 +6,19 @@
 <form class="bootstrap-form tp-form" asp-action="Create" enctype="multipart/form-data">
     <div class="form-group tp-form-group">
         <label for="nameInput" class="tp-label">Your trip name:</label>
-        <input class="form-control tp-text-input" type="text" asp-for="Name" required id="nameInput" />
+        <input class="form-control tp-text-input" type="text" asp-for="Name" id="nameInput" />
         <div class="tp-input-desc">Enter name of your trip</div>
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-group tp-form-group">
         <label for="startTimeInput" class="tp-label">Departure Time:</label>
-        <input class="form-control tp-datetime-input" type="datetime-local" asp-for="StartTime" required id="startTimeInput" />
-        <div class="tp-input-desc">Select the start time of your trip</div>
+        <input class="form-control tp-datetime-input" type="datetime-local" asp-for="StartTime" id="startTimeInput" />
+        <div class="tp-input-desc">Select the start time of your trip in terms of start point timezone</div>
+        <span asp-validation-for="StartTime" class="text-danger"></span>
     </div>
     <div class="form-group tp-form-group">
         <label for="endTimeInput" class="tp-label">Arrival Time:</label>
-        <input class="form-control tp-datetime-input" type="datetime-local" asp-for="EndTime" required readonly id="endTimeInput" />
+        <input class="form-control tp-datetime-input" type="datetime-local" asp-for="EndTime" readonly id="endTimeInput" />
         <div class="tp-input-desc">End time of your trip will be calculated automatically</div>
     </div>
     <div class="form-check tp-form-check">
@@ -27,7 +29,8 @@
     <div class="form-group tp-form-group">
         <label for="descriptionInput" class="tp-label">Description:</label>
         <textarea class="form-control tp-textarea" asp-for="Description" id="descriptionInput"></textarea>
-        <div class="tp-input-desc">Enter description of your trip</div>
+        <div class="tp-input-desc">Enter a couple of phrases describing your trip</div>
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <div class="tp-label">Click on the map to place trip points</div>
     <div id="map" class="form-group tp-form-group"></div>

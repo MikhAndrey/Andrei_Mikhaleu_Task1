@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Andrei_Mikhaleu_Task1.Models.Entities.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace Andrei_Mikhaleu_Task1.Models.ViewModels
 {
@@ -14,6 +15,7 @@ namespace Andrei_Mikhaleu_Task1.Models.ViewModels
 
         public bool Public { get; set; }
 
+        [Required(ErrorMessage = "Please enter a description for your trip")]
         public string Description { get; set; }
 
         public decimal Distance { get; set; }

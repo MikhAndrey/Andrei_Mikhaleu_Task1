@@ -31,18 +31,20 @@ $('#imageUpload').on('change', function () {
 
 $('form').on('submit', function (event) {
     event.preventDefault();
-    const formData = new FormData(this);
-    for (const file of files) {
-        formData.append('images', file, file.name);
-    }
-    fetch(this.action, {
-        method: this.method,
-        body: formData
-    }).then(response => {
-        if (response.ok) {
-            window.location.href = response.url;
-        } else {
-            alert("An error occured while sending data to server");
+    if ($(this).valid()) {
+        const formData = new FormData(this);
+        for (const file of files) {
+            formData.append('images', file, file.name);
         }
-    });
+        fetch(this.action, {
+            method: this.method,
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = response.url;
+            } else {
+                alert("An error occured while sending data to server");
+            }
+        });
+    }
 });

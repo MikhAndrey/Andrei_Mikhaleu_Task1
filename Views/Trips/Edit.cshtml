@@ -1,61 +1,64 @@
-﻿@model Andrei_Mikhaleu_Task1.Models.Entities.Common.Trip
+﻿@model Andrei_Mikhaleu_Task1.Models.ViewModels.EditTripViewModel
 
 @{
     ViewData["Title"] = "Edit Trip";
 }
 
 <form class="bootstrap-form tp-form" asp-action="Edit" asp-route-id="@Model.TripId" enctype="multipart/form-data"> 
-<div class="form-group tp-form-group"> 
-    <label for="nameInput" class="tp-label">Your trip name:</label> 
-    <input class="form-control tp-text-input" type="text" asp-for="Name" required id="nameInput"/>
-    <div class="tp-input-desc">Enter name of your trip</div>
-</div> 
-<div class="form-group tp-form-group"> 
-    <label for="startTimeInput" class="tp-label">Departure Time:</label>
-    <input class="form-control tp-datetime-input" type="datetime-local" asp-for="StartTime" required id="startTimeInput" /> 
-    <div class="tp-input-desc">Select the start time of your trip</div>
-</div> 
-<div class="form-group tp-form-group"> 
-    <label for="endTimeInput" class="tp-label">Arrival Time:</label>
-    <input class="form-control tp-datetime-input" type="datetime-local" asp-for="EndTime" required readonly id="endTimeInput" /> 
-    <div class="tp-input-desc">End time of your trip will be calculated automatically</div>
-</div> 
-<div class="form-check tp-form-check"> 
-    <input class="form-check-input tp-check-input" type="checkbox" asp-for="Public" id="publicCheck" /> 
-    <label class="form-check-label tp-label" for="publicCheck">Public</label>
-    <div class="tp-input-desc">Make your trip visible to everyone</div>
-</div> 
-<div class="form-group tp-form-group"> 
-    <label for="descriptionInput" class="tp-label">Description:</label> 
-    <textarea class="form-control tp-textarea" asp-for="Description" id="descriptionInput"></textarea>
-    <div class="tp-input-desc">Enter description of your trip</div>
-</div>
-<div class="tp-label">Click on the map to place trip points</div>
-<div id="map" class="form-group tp-form-group"></div>
-<div class="tp-label">Trip's distance: <span id="route-length-view" class="tp-input-desc">@Model.Distance</span>&nbsp km</div>
-<input type="hidden" name="routePoints" id="route-points-input"/>
-<input type="hidden" name="Distance" asp-for="Distance" value="@Model.Distance" />
-<input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset"/>
-<input type="hidden" name="FinishTimeZoneOffset" asp-for="FinishTimeZoneOffset"/>
-<div class="form-group">
-    <label for="imageUpload" class="tp-label">Upload your images here:</label>
-    <input class="form-control-file tp-file-upload" type="file" id="imageUpload" name="Images" accept="image/*" multiple />
-    <div class="tp-label">New images:</div>
-    <div id="imagesList" class="row"></div>
-    <div class="tp-label">Previously loaded images:</div>
-    <div class="row">
-    @foreach (var image in Model.Images)
-        {
-            <div class="col-4 mb-3 preload-image-container"> 
-                <img src="@image.Link" class="img-fluid d-block" style="object-fit: cover; height: 250px"/> 
-                <button type="button" class="btn btn-danger remove-image mt-2" data-image-id="@image.ImageId">Delete</button> 
-            </div>
-        }
-    </div> 
-</div>
-<div>
-    <button class="btn btn-primary mt-3" type="submit">Save</button>
-</div>
+    <div class="form-group tp-form-group">
+        <label for="nameInput" class="tp-label">Your trip name:</label>
+        <input class="form-control tp-text-input" type="text" asp-for="Name" id="nameInput" />
+        <div class="tp-input-desc">Enter name of your trip</div>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group tp-form-group">
+        <label for="startTimeInput" class="tp-label">Departure Time:</label>
+        <input class="form-control tp-datetime-input" type="datetime-local" asp-for="StartTime" id="startTimeInput" />
+        <div class="tp-input-desc">Select the start time of your trip in terms of start point timezone</div>
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+    <div class="form-group tp-form-group">
+        <label for="endTimeInput" class="tp-label">Arrival Time:</label>
+        <input class="form-control tp-datetime-input" type="datetime-local" asp-for="EndTime" readonly id="endTimeInput" />
+        <div class="tp-input-desc">End time of your trip will be calculated automatically</div>
+    </div>
+    <div class="form-check tp-form-check">
+        <input class="form-check-input tp-check-input" type="checkbox" asp-for="Public" id="publicCheck" />
+        <label class="form-check-label tp-label" for="publicCheck">Public</label>
+        <div class="tp-input-desc">Make your trip visible to everyone</div>
+    </div>
+    <div class="form-group tp-form-group">
+        <label for="descriptionInput" class="tp-label">Description:</label>
+        <textarea class="form-control tp-textarea" asp-for="Description" id="descriptionInput"></textarea>
+        <div class="tp-input-desc">Enter a couple of phrases describing your trip</div>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="tp-label">Click on the map to place trip points</div>
+    <div id="map" class="form-group tp-form-group"></div>
+    <div class="tp-label">Trip's distance: <span id="route-length-view" class="tp-input-desc">@Model.Distance</span>&nbsp km</div>
+    <input type="hidden" name="routePoints" id="route-points-input"/>
+    <input type="hidden" name="Distance" asp-for="Distance" value="@Model.Distance" />
+    <input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset"/>
+    <input type="hidden" name="FinishTimeZoneOffset" asp-for="FinishTimeZoneOffset"/>
+    <div class="form-group">
+        <label for="imageUpload" class="tp-label">Upload your images here:</label>
+        <input class="form-control-file tp-file-upload" type="file" id="imageUpload" name="Images" accept="image/*" multiple />
+        <div class="tp-label">New images:</div>
+        <div id="imagesList" class="row"></div>
+        <div class="tp-label">Previously loaded images:</div>
+        <div class="row">
+        @foreach (var image in Model.Images)
+            {
+                <div class="col-4 mb-3 preload-image-container"> 
+                    <img src="@image.Link" class="img-fluid d-block" style="object-fit: cover; height: 250px"/> 
+                    <button type="button" class="btn btn-danger remove-image mt-2" data-image-id="@image.ImageId">Delete</button> 
+                </div>
+            }
+        </div> 
+    </div>
+    <div>
+        <button class="btn btn-primary mt-3" type="submit">Save</button>
+    </div>
 </form>
 @section scripts {
     <script src="@Url.Content("~/js/RouteBuilder.js")"></script> 

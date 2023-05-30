@@ -128,28 +128,42 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 return NotFound();
             }
-			trip.StartTime = trip.StartTime.AddSeconds(trip.StartTimeZoneOffset);
+            /*trip.StartTime = trip.StartTime.AddSeconds(trip.StartTimeZoneOffset);
 			trip.EndTime = trip.EndTime.AddSeconds(trip.FinishTimeZoneOffset);
+            */
+            EditTripViewModel model = new()
+            {
+                TripId = trip.TripId,
+                Name = trip.Name,
+                Description = trip.Description,
+                StartTimeZoneOffset = trip.StartTimeZoneOffset,
+                FinishTimeZoneOffset = trip.FinishTimeZoneOffset,
+                Distance = trip.Distance,
+                Images = trip.Images,
+                RoutePoints = trip.RoutePoints,
+                Public = trip.Public,
+                StartTime = trip.StartTime.AddSeconds(trip.StartTimeZoneOffset),
+                EndTime = trip.EndTime.AddSeconds(trip.FinishTimeZoneOffset)
+            };
 
-            return View(trip);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TripId", "Name", "StartTime", "EndTime", "Public", "Description", "Distance", "StartTimeZoneOffset", "FinishTimeZoneOffset")] Trip t, List<IFormFile> images, string routePoints)
+        public async Task<IActionResult> Edit(int id, EditTripViewModel model, List<IFormFile> images, string routePoints)
         {
-            Trip trip = await _tripRepository.GetById(id);
-            trip.Description = t.Description;
-            trip.Name = t.Name;
-            trip.StartTime = t.StartTime.AddSeconds(-t.StartTimeZoneOffset);
-            trip.EndTime = t.EndTime.AddSeconds(-t.FinishTimeZoneOffset);
-            trip.Distance = t.Distance;
-            trip.Public = t.Public;
-			trip.StartTimeZoneOffset = t.StartTimeZoneOffset;
-			trip.FinishTimeZoneOffset = t.FinishTimeZoneOffset;
-
             if (ModelState.IsValid)
             {
+                Trip trip = await _tripRepository.GetById(id);
+                trip.Description = model.Description;
+                trip.Name = model.Name;
+                trip.StartTime = model.StartTime.AddSeconds(-model.StartTimeZoneOffset);
+                trip.EndTime = model.EndTime.AddSeconds(-model.FinishTimeZoneOffset);
+                trip.Distance = model.Distance;
+                trip.Public = model.Public;
+                trip.StartTimeZoneOffset = model.StartTimeZoneOffset;
+                trip.FinishTimeZoneOffset = model.FinishTimeZoneOffset;
                 await UploadImages(trip, images);
                 
                 trip.RoutePoints.Clear();
@@ -158,7 +172,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(trip);
+            return View(model);
         }
 
 		[Authorize]
@@ -191,8 +205,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			if (trip.StartTime > DateTime.UtcNow)
 			{
 				trip.EndTime -= trip.StartTime - DateTime.UtcNow;
-                trip.EndTime.AddMilliseconds(-trip.StartTime.Millisecond);
-                trip.EndTime.AddSeconds(-trip.StartTime.Second);
+                trip.EndTime.AddMilliseconds(-trip.EndTime.Millisecond);
+                trip.EndTime.AddSeconds(-trip.EndTime.Second);
                 trip.StartTime = DateTime.UtcNow;
 				trip.StartTime.AddMilliseconds(-trip.StartTime.Millisecond);
                 trip.StartTime.AddSeconds(-trip.StartTime.Second);
