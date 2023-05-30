@@ -128,9 +128,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 return NotFound();
             }
-            /*trip.StartTime = trip.StartTime.AddSeconds(trip.StartTimeZoneOffset);
-			trip.EndTime = trip.EndTime.AddSeconds(trip.FinishTimeZoneOffset);
-            */
+
             EditTripViewModel model = new()
             {
                 TripId = trip.TripId,
