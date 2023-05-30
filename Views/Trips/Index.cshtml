@@ -13,7 +13,7 @@
 					<div class="card-header text-light tp-gradient-standard">
 						<h5 class="card-title tp-label">@trip.Name</h5>
 					</div>
-					<div class="card-body bg-light">
+					<div class="card-body bg-light br-20">
 						<p class="card-text">@trip.Description</p>
 						<ul class="list-group list-group-flush">
 							<li class="list-group-item text-right text-muted tp-label">Departure time: @trip.UtcStartTimeZone</li>
@@ -33,12 +33,12 @@
 						} 
 							</li>
 						</ul>
-					</div>
-					<div class="card-footer tp-gradient-reverse">
-						<a href="@Url.Action("Details", new { id = trip.TripId })" class="btn btn-primary mr-2">Details</a> 
-						<a href="@Url.Action("Edit", new { id = trip.TripId })" class="btn btn-secondary mr-2">Edit</a> 
-						<a href="@Url.Action("Delete", new { id = trip.TripId })" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</a>
-					</div>
+						<div class="tp-gradient-reverse">
+							<a href="@Url.Action("Details", new { id = trip.TripId })" class="btn btn-primary ml-3 mt-2 mb-3 mr-2">Details</a> 
+							<a href="@Url.Action("Edit", new { id = trip.TripId })" class="btn btn-secondary  mt-2 mb-3 mr-2">Edit</a> 
+							<a href="@Url.Action("Delete", new { id = trip.TripId })" class="btn btn-danger mt-2 mb-3" data-toggle="modal" data-target="#deleteModal">Delete</a>
+						</div>
+					</div>					
 				</div>
 			</div>
 		}        
