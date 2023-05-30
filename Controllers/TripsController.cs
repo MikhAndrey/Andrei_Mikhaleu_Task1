@@ -205,12 +205,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			if (trip.StartTime > DateTime.UtcNow)
 			{
 				trip.EndTime -= trip.StartTime - DateTime.UtcNow;
-                trip.EndTime.AddMilliseconds(-trip.EndTime.Millisecond);
-                trip.EndTime.AddSeconds(-trip.EndTime.Second);
+                trip.EndTime = DateTime.Parse(trip.EndTime.ToString("dd.MM.yyyy HH:mm"));
                 trip.StartTime = DateTime.UtcNow;
-				trip.StartTime.AddMilliseconds(-trip.StartTime.Millisecond);
-                trip.StartTime.AddSeconds(-trip.StartTime.Second);
-                await _tripRepository.Update(trip);
+				trip.StartTime = DateTime.Parse(trip.StartTime.ToString("dd.MM.yyyy HH:mm"));
+				await _tripRepository.Update(trip);
 			}
 
 			return RedirectToAction(nameof(Details), new { id });
@@ -228,6 +226,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			if (trip.StartTime < DateTime.UtcNow && trip.EndTime > DateTime.UtcNow)
 			{
 				trip.EndTime = DateTime.UtcNow;
+				trip.EndTime = DateTime.Parse(trip.EndTime.ToString("dd.MM.yyyy HH:mm"));
 				await _tripRepository.Update(trip);
 			}
 
