@@ -1,4 +1,5 @@
 ﻿@model Andrei_Mikhaleu_Task1.Models.ViewModels.TripDetailsViewModel
+@using Andrei_Mikhaleu_Task1.Common
 
 <div class="tp-form">
     <h1 class="mt-5 tp-label">@Model.Trip.Name</h1>
@@ -20,12 +21,12 @@
     @{if (Model.IsCurrent)
     {
         TimeSpan ElapsedTime = DateTime.UtcNow.AddSeconds(Model.Trip.StartTimeZoneOffset).Subtract(Model.Trip.StartTime);
-        <p class="tp-label">Elapsed time: @ElapsedTime.ToString("hh\\:mm")</p>
+        <p class="tp-label">Elapsed time: @TimeUtils.GetTimeSpanString(ElapsedTime)</p>
     }
     else if (Model.IsFuture)
     {
         TimeSpan TimeUntilTrip = Model.Trip.StartTime.AddSeconds(-Model.Trip.StartTimeZoneOffset).Subtract(DateTime.UtcNow);
-        <p class="tp-label">Time until trip: @TimeUntilTrip.ToString("hh\\:mm")</p>
+        <p class="tp-label">Time until trip: @TimeUtils.GetTimeSpanString(TimeUntilTrip)</p>
     }
     else
     {
