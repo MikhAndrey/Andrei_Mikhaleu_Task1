@@ -117,11 +117,11 @@
             const initLongitude = @Html.Raw(Json.Serialize(firstRoutePoint.Longitude));
             initMap(initLatitude, initLongitude, 12);
         @{
-            ViewData["Latitudes"] = routePoints.Select(rp => rp.Latitude);
-            ViewData["Longitudes"] = routePoints.Select(rp => rp.Longitude);
+            var latitudes = routePoints.Select(rp => rp.Latitude);
+            var longitudes = routePoints.Select(rp => rp.Longitude);
         }
-            const latitudes = @Html.Raw(Json.Serialize(ViewData["Latitudes"]));
-            const longitudes = @Html.Raw(Json.Serialize(ViewData["Longitudes"]));
+            const latitudes = @Html.Raw(Json.Serialize(latitudes));
+            const longitudes = @Html.Raw(Json.Serialize(longitudes));
             markers = [];
             for (let i = 0; i < latitudes.length; i++){
                 addMarker({
