@@ -30,7 +30,7 @@
 								<ul class="dropdown-menu tp-gradient-standard" aria-labelledby="navbarDropdown">
 									<li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
 									@{
-										string userName = ViewContext?.HttpContext?.User?.Identity?.Name;
+										string? userName = ViewContext?.HttpContext?.User?.Identity?.Name;
 										if (userName == null)
 										{
 											<li ><a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Index">Log In</a></li>
