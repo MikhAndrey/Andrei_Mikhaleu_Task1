@@ -11,6 +11,7 @@ namespace Andrei_Mikhaleu_Task1.Models.ViewModels
         [Required(ErrorMessage = "Please select the start time of your trip")]
         public DateTime StartTime { get; set; }
 
+        [Required(ErrorMessage = "This field will be filled automatically when you build the route of at least two points")]
         public DateTime EndTime { get; set; }
 
         public bool Public { get; set; }
