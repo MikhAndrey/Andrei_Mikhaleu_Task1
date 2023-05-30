@@ -44,12 +44,16 @@
 											<li><a class="dropdown-item" asp-area="" asp-controller="Statistics" asp-action="HeatMap">Heatmap of my trips</a></li>
 											<li><a class="dropdown-item" asp-area="" asp-controller="Statistics" asp-action="TotalDuration">Total duration of my trips</a></li>
 											<li><a class="dropdown-item" asp-area="" asp-controller="Trips" asp-action="Public">Trips of others</a></li>
-											<li><a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Logout">Log Out</a></li>
+										<li><a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Logout">Log Out</a></li>
 										}
 									}
 								</ul>
 							</li>
 						</ul>
+						@if (userName != null)
+						{
+							<h5 class="tp-label">@($"Welcome back, {userName}!")</h5>
+						}
 					</div>
 				</div>
 			</nav>
