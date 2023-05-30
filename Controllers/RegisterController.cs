@@ -39,9 +39,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                     Password= model.Password
                 };
 
-                _userRepository.Add(user);
+                await _userRepository.Add(user);
 
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(model);
