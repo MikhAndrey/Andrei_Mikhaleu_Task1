@@ -19,15 +19,19 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         private readonly ImageRepository _imageRepository;
 
+        private readonly IWebHostEnvironment _environment;
+
         public TripsController(TripRepository tripRepository, 
 			UserSettings userSettings, 
 			CommentRepository commentRepository,
-			ImageRepository imageRepository)
+			ImageRepository imageRepository, 
+            IWebHostEnvironment environment)
 		{
 			_tripRepository = tripRepository;
 			_userSettings = userSettings;
 			_commentRepository = commentRepository;
 			_imageRepository = imageRepository;
+            _environment = environment;
 		}
 
 		[Authorize]
@@ -273,7 +277,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 {
                     var extension = Path.GetExtension(image.FileName);
                     var newFileName = $"{Guid.NewGuid()}{extension}";
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newFileName);
+                    var filePath = Path.Combine(_environment.WebRootPath, "images", newFileName);
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         await image.CopyToAsync(fileStream);
@@ -296,7 +300,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteImage(int imageId, int tripId)
+        public async Task<IActionResult> DeleteImage(int imageId)
         {
             Image image = await _imageRepository.GetById(imageId);
 
@@ -305,7 +309,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 return NotFound();
             }
 
-            string path = "wwwroot" + image.Link;
+            string path = _environment.WebRootPath + image.Link;
 
             if (System.IO.File.Exists(path))
             {

@@ -101,7 +101,7 @@
             $.ajax({ 
                 type: "POST", 
                 url: '@Url.Action("DeleteImage", "Trips")',
-                    data: { imageId: imageId, tripId: tripId},
+                    data: { imageId: imageId},
                 success: function () {
                     $('.preload-image-container')[index].remove(); 
                 } 

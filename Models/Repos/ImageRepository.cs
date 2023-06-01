@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Andrei_Mikhaleu_Task1.Models.Repos
 {
-    public class ImageRepository
+    public class ImageRepository : IRepository<Image>
     {
         private readonly TripsDBContext _context;
 
@@ -44,6 +44,26 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
                 .Include(i => i.Trip)
                 .Where(i => i.TripId == tripId)
                 .ToListAsync();
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

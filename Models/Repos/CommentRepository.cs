@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Andrei_Mikhaleu_Task1.Models.Repos
 {
-    public class CommentRepository
+    public class CommentRepository : IRepository<Comment>
     {
         private readonly TripsDBContext _context;
 
@@ -45,6 +45,26 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
                 .Include(c => c.Trip)
                 .Where(c => c.TripId == tripId)
                 .ToListAsync();
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Andrei_Mikhaleu_Task1.Models.Repos
 {
-    public class TripRepository
+    public class TripRepository : IRepository<Trip>
     {
         private readonly TripsDBContext _context;
 
@@ -80,6 +80,26 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
         {
             return await _context.Trips.Where(t => t.UserId != userId && t.Public)
                 .Include(t => t.User).ToListAsync();
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

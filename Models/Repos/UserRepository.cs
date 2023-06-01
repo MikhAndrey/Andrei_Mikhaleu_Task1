@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Andrei_Mikhaleu_Task1.Models.Repos
 {
-    public class UserRepository
+    public class UserRepository : IRepository<User>
     {
         private readonly TripsDBContext _context;
 
@@ -25,9 +25,8 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(User user)
         {
-            var user = await GetById(id);
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
         }
@@ -46,6 +45,26 @@ namespace Andrei_Mikhaleu_Task1.Models.Repos
                 .Include(u => u.Trips)
                 .Include(u => u.Comments)
                 .FirstOrDefault(u => u.UserName == username);
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }
