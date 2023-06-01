@@ -70,14 +70,7 @@
 
     <h3 class="mt-5 tp-label">Leave a comment</h3>
 
-    <form method="post" action="@Url.Action("AddComment", "Trips")">
-        <div class="form-group tp-form-group">
-            <input type="hidden" name="tripId" value="@Model.Trip.TripId" />
-            <label for="comment" class="tp-label">Comment:</label>
-            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Add comment</button>
-    </form>
+    @await Html.PartialAsync("_AddComment", new Andrei_Mikhaleu_Task1.Models.ViewModels.NewCommentViewModel {TripId = Model.Trip.TripId})
 
     <h2 class="mt-5 tp-label">Comments</h2>
 

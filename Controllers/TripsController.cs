@@ -236,25 +236,29 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
         [HttpPost]
-        public async Task<IActionResult> AddComment(int tripId, string comment)
+        public async Task<IActionResult> AddComment(NewCommentViewModel model)
 		{
-			User user = _userSettings.CurrentUser;
-
-			Trip trip = await _tripRepository.GetById(tripId);
-
-            if (trip != null && user != null)
+            if (ModelState.IsValid)
             {
-                trip.Comments.Add(new Comment
-                {
-                    User = user,
-					Message = comment,
-                    Date = DateTime.UtcNow
-                });
+                User user = _userSettings.CurrentUser;
 
-                await _tripRepository.Update(trip);
+                Trip trip = await _tripRepository.GetById(model.TripId);
+
+                if (trip != null && user != null)
+                {
+                    trip.Comments.Add(new Comment
+                    {
+                        Message = model.Message,
+                        TripId = model.TripId,
+                        Date = DateTime.UtcNow,
+                        User = user
+                    });
+
+                    await _tripRepository.Update(trip);
+                }
             }
 
-            return RedirectToAction(nameof(Details), new { id = tripId });
+            return RedirectToAction(nameof(Details), new { id = model.TripId });
         }
 
         [HttpPost]
