@@ -365,3 +365,4 @@ FodyWeavers.xsd
 #Images
 wwwroot/images/
 /wwwroot/img
+/Migrations
