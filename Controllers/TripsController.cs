@@ -76,10 +76,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[Authorize]
 		public async Task<IActionResult> Index()
 		{
-			var userId = _userSettings.CurrentUser.UserId;
-			var trips = await _tripRepository.GetTripsByUserId(userId);
+			int userId = _userSettings.CurrentUser.UserId;
+			List<Trip> trips = await _tripRepository.GetTripsByUserId(userId);
 
-			var tripModels = trips.Select(t => new TripViewModel(t)).ToList();
+			List<TripViewModel>? tripModels = trips.Select(t => new TripViewModel(t)).ToList();
 
 			return View(tripModels);
 		}
@@ -88,10 +88,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public async Task<IActionResult> History()
 		{
-			var userId = _userSettings.CurrentUser.UserId;
-			var trips = await _tripRepository.GetTripsByUserId(userId);
+			int userId = _userSettings.CurrentUser.UserId;
+			List<Trip> trips = await _tripRepository.GetTripsByUserId(userId);
 
-			var tripModels = trips.Where(el => el.EndTime < DateTime.UtcNow)
+			List<TripViewModel>? tripModels = trips.Where(el => el.EndTime < DateTime.UtcNow)
 				.Select(t => new TripViewModel(t)).ToList();
 
 			return View(tripModels);
@@ -101,10 +101,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Public()
         {
-            var userId = _userSettings.CurrentUser.UserId;
-            var trips = await _tripRepository.GetOthersPublicTrips(userId);
+            int userId = _userSettings.CurrentUser.UserId;
+            List<Trip> trips = await _tripRepository.GetOthersPublicTrips(userId);
 
-            var tripModels = trips.Select(t => new TripPublicViewModel(t)).ToList();
+            List<TripPublicViewModel>? tripModels = trips.Select(t => new TripPublicViewModel(t)).ToList();
 
             return View(tripModels);
         }
@@ -126,7 +126,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var trip = await _tripRepository.GetById(id);
+            Trip trip = await _tripRepository.GetById(id);
 
             if (trip == null)
             {
@@ -181,7 +181,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Details(int id)
 		{
-			var trip = await _tripRepository.GetById(id);
+			Trip trip = await _tripRepository.GetById(id);
 			if (trip == null)
 			{
 				return NotFound();
@@ -198,7 +198,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpPost]
 		public async Task<IActionResult> StartTrip(int id)
 		{
-			var trip = await _tripRepository.GetById(id);
+			Trip trip = await _tripRepository.GetById(id);
 			if (trip == null)
 			{
 				return NotFound();
@@ -219,7 +219,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpPost]
 		public async Task<IActionResult> EndTrip(int id)
 		{
-			var trip = await _tripRepository.GetById(id);
+			Trip trip = await _tripRepository.GetById(id);
 			if (trip == null)
 			{
 				return NotFound();
@@ -238,9 +238,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [HttpPost]
         public async Task<IActionResult> AddComment(int tripId, string comment)
 		{
-			var user = _userSettings.CurrentUser;
+			User user = _userSettings.CurrentUser;
 
-			var trip = await _tripRepository.GetById(tripId);
+			Trip trip = await _tripRepository.GetById(tripId);
 
             if (trip != null && user != null)
             {
@@ -275,9 +275,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 if (image != null && image.Length > 0)
                 {
-                    var extension = Path.GetExtension(image.FileName);
-                    var newFileName = $"{Guid.NewGuid()}{extension}";
-                    var filePath = Path.Combine(_environment.WebRootPath, "images", newFileName);
+                    string? extension = Path.GetExtension(image.FileName);
+                    string newFileName = $"{Guid.NewGuid()}{extension}";
+                    string filePath = Path.Combine(_environment.WebRootPath, "images", newFileName);
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         await image.CopyToAsync(fileStream);
@@ -286,7 +286,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 }
             }
 
-            foreach (var imageUrl in newImageFileNames)
+            foreach (string imageUrl in newImageFileNames)
             {
                 trip.Images.Add(new Image { Link = imageUrl });
             }

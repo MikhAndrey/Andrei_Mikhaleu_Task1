@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Andrei_Mikhaleu_Task1.Models.ViewModels;
+using Andrei_Mikhaleu_Task1.Models.Entities.Common;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
@@ -31,7 +32,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = _userRepository.GetByUsername(model.UserName);
+                User user = _userRepository.GetByUsername(model.UserName);
 
                 if (user != null && user.Password == model.Password)
                 {
