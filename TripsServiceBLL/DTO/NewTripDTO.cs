@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TripsServiceBLL.DTO
+{
+    public class NewTripDTO
+    {
+        public string Name { get; set; }
+
+        public DateTime StartTime { get; set; }
+
+        public DateTime EndTime { get; set; }
+
+        public bool Public { get; set; }
+
+        public string Description { get; set; }
+
+        public decimal Distance { get; set; }
+
+        public int StartTimeZoneOffset { get; set; }
+
+        public int FinishTimeZoneOffset { get; set; }
+    }
+}
