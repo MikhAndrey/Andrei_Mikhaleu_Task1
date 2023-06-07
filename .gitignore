@@ -366,3 +366,4 @@ FodyWeavers.xsd
 wwwroot/images/
 /wwwroot/img
 /Migrations
+/TripsServiceWeb/wwwroot/images
