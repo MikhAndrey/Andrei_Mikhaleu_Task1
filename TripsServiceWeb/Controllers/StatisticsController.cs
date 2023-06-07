@@ -15,14 +15,14 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 {
     public class StatisticsController : Controller
     {
-        
+
         private RoutePointService _routePointService;
 
         private TripService _tripService;
 
         private UserService _userService;
 
-        public StatisticsController(RoutePointService routePointService, TripService tripService, UserService userService) 
+        public StatisticsController(RoutePointService routePointService, TripService tripService, UserService userService)
         {
             _routePointService = routePointService;
             _tripService = tripService;
@@ -32,10 +32,12 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [HttpGet]
         public async Task<IActionResult> TotalDuration()
         {
-            try {
+            try
+            {
                 YearStatisticsViewModel viewModel = await GetDistinctYearsModel();
                 return View(viewModel);
-            } catch (ValidationException ex)
+            }
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
             }
@@ -92,7 +94,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                     ReferenceHandler = ReferenceHandler.Preserve
                 };
                 return Json(result, options);
-            } catch (ValidationException ex)
+            }
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
             }
@@ -106,7 +109,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 Command = new GetDistinctTripYearsCommand(_tripService, _userService, userName)
             };
-            
+
             YearsStatisticsDTO yearsInfo = await invoker.ExecuteCommandAsync();
             return new()
             {

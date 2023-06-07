@@ -31,7 +31,7 @@ namespace TripsServiceBLL.Services
         {
             IQueryable<RoutePointCoordinatesDTO> dataPoints = _unitOfWork.RoutePoints
                 .GetRoutePointsByYear(year, userId)
-                .Select(rp => new RoutePointCoordinatesDTO(){ Latitude = rp.Latitude, Longitude = rp.Longitude });
+                .Select(rp => new RoutePointCoordinatesDTO() { Latitude = rp.Latitude, Longitude = rp.Longitude });
             return dataPoints;
         }
     }

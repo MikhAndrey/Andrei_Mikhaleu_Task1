@@ -7,11 +7,11 @@ namespace TripsServiceBLL.Commands.Trips
     public class DeleteTripCommand : IAsyncCommand
     {
         private readonly int _id;
-        
+
         private readonly TripService _tripService;
 
         private readonly ImageService _imageService;
-        
+
         public DeleteTripCommand(int id, TripService tripService, ImageService imageService)
         {
             _id = id;
@@ -22,7 +22,7 @@ namespace TripsServiceBLL.Commands.Trips
         public async Task ExecuteAsync()
         {
             Trip? tripToDelete = await _tripService.GetByIdAsync(_id);
-            if (tripToDelete == null) 
+            if (tripToDelete == null)
             {
                 throw new ValidationException("Trip was not found", "");
             }

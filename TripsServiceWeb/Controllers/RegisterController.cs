@@ -14,7 +14,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         public RegisterController(UserService userService)
         {
-            _userService= userService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -41,7 +41,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 try
                 {
                     await invoker.ExecuteCommandAsync();
-                } catch (ValidationException ex)
+                }
+                catch (ValidationException ex)
                 {
                     ModelState.AddModelError(ex.Property, ex.Message);
                     return View(model);

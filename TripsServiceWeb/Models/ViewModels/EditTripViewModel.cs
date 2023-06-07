@@ -2,16 +2,16 @@
 
 namespace Andrei_Mikhaleu_Task1.Models.ViewModels
 {
-	public class EditTripViewModel : NewTripViewModel
-	{
-		public List<ImageDTO> Images { get; set; }
+    public class EditTripViewModel : NewTripViewModel
+    {
+        public List<ImageDTO> Images { get; set; }
 
-		public List<RoutePointDTO> RoutePoints { get; set; }
+        public List<RoutePointDTO> RoutePoints { get; set; }
 
-		public int TripId { get; set; }
+        public int TripId { get; set; }
 
-		public EditTripViewModel(ExtendedExistingTripDTO trip)
-		{
+        public EditTripViewModel(ExtendedExistingTripDTO trip)
+        {
             TripId = trip.TripId;
             Name = trip.Name;
             Description = trip.Description;
@@ -26,5 +26,5 @@ namespace Andrei_Mikhaleu_Task1.Models.ViewModels
         }
 
         public EditTripViewModel() { }
-	}
+    }
 }

@@ -21,7 +21,7 @@ namespace TripsServiceBLL.Services
         public async Task<bool> UserExists(UserLoginDTO user)
         {
             User? userFromDB = await GetByUserNameAsync(user.UserName);
-            return userFromDB != null && userFromDB.Password == user.Password;  
+            return userFromDB != null && userFromDB.Password == user.Password;
         }
 
         public async Task AddAsync(User user)

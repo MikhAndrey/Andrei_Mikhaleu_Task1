@@ -1,4 +1,5 @@
-﻿namespace TripsServiceBLL.Utils { 
+﻿namespace TripsServiceBLL.Utils
+{
     public class DurationInMonth
     {
         public string Month { get; set; }

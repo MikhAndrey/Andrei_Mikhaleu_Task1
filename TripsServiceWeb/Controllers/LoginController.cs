@@ -58,18 +58,19 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                                 IsPersistent = true,
                                 ExpiresUtc = DateTime.UtcNow.AddDays(7)
                             });
-                    } else
+                    }
+                    else
                     {
-						var authProperties = new AuthenticationProperties
-						{
-							IsPersistent = false,
-							ExpiresUtc = null
-						};
-						await HttpContext.SignInAsync(
-							CookieAuthenticationDefaults.AuthenticationScheme,
-							userPrincipal,
-							authProperties);
-					}
+                        var authProperties = new AuthenticationProperties
+                        {
+                            IsPersistent = false,
+                            ExpiresUtc = null
+                        };
+                        await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            userPrincipal,
+                            authProperties);
+                    }
                     return RedirectToLocal(returnUrl);
                 }
 
@@ -80,10 +81,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Logout() 
-        { 
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); 
-            return RedirectToAction("Index", "Home"); 
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

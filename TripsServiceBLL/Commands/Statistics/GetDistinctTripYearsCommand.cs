@@ -19,7 +19,7 @@ namespace TripsServiceBLL.Commands.Statistics
             _userService = userService;
             _userName = userName;
         }
-        
+
         public async Task<YearsStatisticsDTO> ExecuteAsync()
         {
             User? user = await _userService.GetByUserNameAsync(_userName);

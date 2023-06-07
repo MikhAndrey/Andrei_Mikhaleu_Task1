@@ -26,7 +26,8 @@ namespace Andrei_Mikhaleu_Task1
             services.AddScoped<TripService>();
             services.AddHttpContextAccessor();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => {
+                .AddCookie(options =>
+                {
                     options.LoginPath = "/Login/Index";
                     options.LogoutPath = "/Login/Logout";
                 });

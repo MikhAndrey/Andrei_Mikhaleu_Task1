@@ -17,20 +17,20 @@ namespace TripsServiceBLL.Commands.Trips
         private readonly TripService _tripService;
 
         private readonly int _id;
-        
+
         private readonly List<IFormFile> _images;
 
         private readonly string _webRootPath;
 
         private readonly string _routePoints;
-        
+
         public EditTripCommand(
-            ExistingTripDTO trip, 
-            int id, 
-            List<IFormFile> images, 
-            RoutePointService routePointService, 
-            ImageService imageService, 
-            TripService tripService, 
+            ExistingTripDTO trip,
+            int id,
+            List<IFormFile> images,
+            RoutePointService routePointService,
+            ImageService imageService,
+            TripService tripService,
             string webRootPath,
             string routePoints
         )
@@ -48,10 +48,11 @@ namespace TripsServiceBLL.Commands.Trips
         public async Task ExecuteAsync()
         {
             Trip? trip = await _tripService.GetByIdAsync(_id);
-            if ( trip == null ) 
+            if (trip == null)
             {
                 throw new ValidationException("Trip was not found", "");
-            } else
+            }
+            else
             {
                 trip.Name = _trip.Name;
                 trip.Description = _trip.Description;

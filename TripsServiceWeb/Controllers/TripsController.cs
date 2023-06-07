@@ -35,26 +35,26 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             UserService userService,
             IWebHostEnvironment environment
             )
-		{
+        {
             _commentService = service;
             _routePointService = routePointService;
             _imageService = imageService;
             _tripService = tripService;
             _userService = userService;
             _environment = environment;
-		}
-
-		[Authorize]
-		[HttpGet]
-        public IActionResult Create()
-        {
-			return View();
         }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(NewTripViewModel model, List<IFormFile> images, string routePoints)
-		{
+        [Authorize]
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(NewTripViewModel model, List<IFormFile> images, string routePoints)
+        {
             if (ModelState.IsValid)
             {
                 string? userName = HttpContext?.User?.Identity?.Name;
@@ -78,18 +78,19 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 {
                     await invoker.ExecuteCommandAsync();
                     return RedirectToAction(nameof(Index));
-                } catch(ValidationException ex)
+                }
+                catch (ValidationException ex)
                 {
                     return NotFound(ex.Message);
                 }
-			}
+            }
 
             return View(model);
-		}
+        }
 
-		[Authorize]
-		public async Task<IActionResult> Index()
-		{
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
             string? userName = HttpContext?.User?.Identity?.Name;
             AsyncGenericCommandInvoker<List<TripDTO>> invoker = new()
             {
@@ -106,11 +107,11 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 return NotFound(ex.Message);
             }
         }
-        
-		[Authorize]
-		[HttpGet]
-		public async Task<IActionResult> History()
-		{
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> History()
+        {
             string? userName = HttpContext?.User?.Identity?.Name;
             AsyncGenericCommandInvoker<List<TripDTO>> invoker = new()
             {
@@ -128,9 +129,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             }
         }
 
-		[Authorize]
-		[HttpGet]
-		public async Task<IActionResult> Public()
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Public()
         {
             string? userName = HttpContext?.User?.Identity?.Name;
             AsyncGenericCommandInvoker<List<TripDTO>> invoker = new()
@@ -142,16 +143,17 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 List<TripDTO> trips = await invoker.ExecuteCommandAsync();
                 List<TripPublicViewModel> tripModels = trips.Select(t => new TripPublicViewModel(t)).ToList();
                 return View(tripModels);
-            } catch(ValidationException ex)
+            }
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
             }
         }
 
-		[Authorize]
-		[HttpGet]
+        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
-		{
+        {
             AsyncCommandInvoker invoker = new()
             {
                 Command = new DeleteTripCommand(id, _tripService, _imageService)
@@ -160,14 +162,15 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 await invoker.ExecuteCommandAsync();
                 return RedirectToAction(nameof(Index));
-            } catch (ValidationException ex)
+            }
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
-            }           
+            }
         }
 
-		[Authorize]
-		[HttpGet]
+        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             AsyncGenericCommandInvoker<ExtendedExistingTripDTO> invoker = new()
@@ -213,19 +216,20 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 {
                     await invoker.ExecuteCommandAsync();
                     return RedirectToAction(nameof(Index));
-                } catch (ValidationException ex)
+                }
+                catch (ValidationException ex)
                 {
                     return NotFound(ex.Message);
-                }             
+                }
             }
 
             return View(model);
         }
 
-		[Authorize]
-		[HttpGet]
-		public async Task<IActionResult> Details(int id)
-		{
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
             string? userName = HttpContext?.User?.Identity?.Name;
             AsyncGenericCommandInvoker<TripDTO> invoker = new()
             {
@@ -236,31 +240,34 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 TripDTO trip = await invoker.ExecuteCommandAsync();
                 TripDetailsViewModel viewModel = new(trip);
                 return View(viewModel);
-            } catch (ValidationException ex)
+            }
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
-            }           
-		}
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> StartTrip(int id)
         {
-            AsyncCommandInvoker invoker = new() {
+            AsyncCommandInvoker invoker = new()
+            {
                 Command = new StartTripCommand(_tripService, id)
             };
             try
             {
                 await invoker.ExecuteCommandAsync();
                 return RedirectToAction(nameof(Details), new { id });
-            } catch (ValidationException ex)
+            }
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
             }
-		}
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> EndTrip(int id)
-		{
+        [HttpPost]
+        public async Task<IActionResult> EndTrip(int id)
+        {
             AsyncCommandInvoker invoker = new()
             {
                 Command = new EndTripCommand(_tripService, id)
@@ -279,7 +286,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddComment(NewCommentViewModel model)
-		{
+        {
             if (ModelState.IsValid)
             {
                 string? userName = HttpContext?.User?.Identity?.Name;
@@ -329,7 +336,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 await invoker.ExecuteCommandAsync();
                 return NoContent();
-            } catch (ValidationException ex)
+            }
+            catch (ValidationException ex)
             {
                 return NotFound(ex.Message);
             }

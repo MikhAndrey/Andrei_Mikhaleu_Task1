@@ -52,7 +52,7 @@ namespace TripsServiceBLL.Services
             string path = webRootPath + image.Link;
 
             if (File.Exists(path))
-                File.Delete(path);              
+                File.Delete(path);
             else
                 throw new ValidationException("File of image was not found", "");
         }

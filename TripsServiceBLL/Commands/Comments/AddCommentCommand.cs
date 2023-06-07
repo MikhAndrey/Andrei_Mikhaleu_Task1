@@ -17,10 +17,10 @@ namespace TripsServiceBLL.Commands.Comments
 
         public AddCommentCommand(CommentService commentService, UserService userService, CommentDTO comment, string userName)
         {
-            _commentService= commentService;
-            _userService= userService;
-            _userName= userName;
-            _comment= comment;
+            _commentService = commentService;
+            _userService = userService;
+            _userName = userName;
+            _comment = comment;
         }
 
         public async Task ExecuteAsync()

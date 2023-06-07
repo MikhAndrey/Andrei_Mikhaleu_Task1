@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TripsServiceBLL.Utils;
+﻿using TripsServiceBLL.Utils;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Services;
 using TripsServiceDAL.Entities;

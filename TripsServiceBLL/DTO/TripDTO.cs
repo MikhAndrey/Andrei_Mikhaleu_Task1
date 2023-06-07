@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using TripsServiceDAL.Entities;
-
-namespace TripsServiceBLL.DTO
+﻿namespace TripsServiceBLL.DTO
 {
     public class TripDTO : ExtendedExistingTripDTO
     {

@@ -2,7 +2,6 @@
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Infrastructure;
 using TripsServiceBLL.Infrastructure;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TripsServiceBLL.Utils;
 
@@ -17,7 +16,7 @@ namespace TripsServiceBLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Trip?> GetByIdAsync(int id) 
+        public async Task<Trip?> GetByIdAsync(int id)
         {
             return await _unitOfWork.Trips.GetByIdAsync(id);
         }
@@ -117,7 +116,7 @@ namespace TripsServiceBLL.Services
                     Month = new DateTime(year, month, 1).ToString("MMMM"),
                     TotalDuration = trips
                         .Where(t => t.StartTime.Year == year && t.StartTime.Month <= month && t.EndTime.Year == year && t.EndTime.Month >= month)
-                        .Select(t => 
+                        .Select(t =>
                         {
                             var start = t.StartTime <= new DateTime(year, month, 1) ? new DateTime(year, month, 1) : t.StartTime;
                             DateTime end = t.EndTime >= new DateTime(year, month, DateTime.DaysInMonth(year, month)) ? new DateTime(year, month, DateTime.DaysInMonth(year, month)) : t.EndTime;
