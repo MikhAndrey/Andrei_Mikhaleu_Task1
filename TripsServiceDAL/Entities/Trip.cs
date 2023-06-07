@@ -26,7 +26,7 @@ namespace TripsServiceDAL.Entities
         [Column(TypeName = "decimal(10,3)")]
         public decimal Distance { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public bool Public { get; set; }
 

@@ -16,6 +16,7 @@ namespace TripsServiceBLL.Infrastructure
             CreateMap<User, UserDTO>();
             CreateMap<List<TripDTO>, IQueryable<Trip>>();
             CreateMap<ExtendedExistingTripDTO, Trip>();
+            CreateMap<NewTripDTO, Trip>();
         }
     }
 }
