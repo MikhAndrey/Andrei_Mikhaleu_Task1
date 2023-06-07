@@ -13,9 +13,14 @@ namespace TripsServiceBLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<User?> GetByUserNameAsync(string? userName)
+        public async Task<User?> GetByUserNameAsync(string userName)
         {
             return await _unitOfWork.Users.GetByUsernameAsync(userName);
+        }
+
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _unitOfWork.Users.GetByEmailAsync(email);
         }
 
         public async Task<bool> UserExists(UserLoginDTO user)

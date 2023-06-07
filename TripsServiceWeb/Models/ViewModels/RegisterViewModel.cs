@@ -14,5 +14,9 @@ namespace Andrei_Mikhaleu_Task1.Models.ViewModels
         [RegularExpression(@"^(?=.*[0-9])(?=.*[a-zA-Z])[\u0020-\u007E]{0,}$",
             ErrorMessage = "Password must contain at least one latin letter, one digit and no cyrillic symbols.")]
         public string Password { get; set; }
+
+        [Required]
+        [EmailAddress(ErrorMessage = "Please enter valid email address")]
+        public string Email { get; set; }
     }
 }

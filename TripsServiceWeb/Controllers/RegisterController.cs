@@ -32,7 +32,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 UserSignupDTO user = new()
                 {
                     UserName = model.UserName,
-                    Password = model.Password
+                    Password = model.Password,
+                    Email= model.Email
                 };
                 AsyncCommandInvoker invoker = new()
                 {
