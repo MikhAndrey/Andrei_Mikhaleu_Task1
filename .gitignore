@@ -367,3 +367,4 @@ wwwroot/images/
 /wwwroot/img
 /Migrations
 /TripsServiceWeb/wwwroot/images
+/TripsServiceDAL/Migrations
