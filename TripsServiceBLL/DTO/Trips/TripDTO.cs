@@ -1,4 +1,7 @@
-﻿namespace TripsServiceBLL.DTO
+﻿using TripsServiceBLL.DTO.Comments;
+using TripsServiceBLL.DTO.Users;
+
+namespace TripsServiceBLL.DTO.Trips
 {
     public class TripDTO : ExtendedExistingTripDTO
     {

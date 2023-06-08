@@ -1,4 +1,4 @@
-﻿namespace TripsServiceBLL.DTO
+﻿namespace TripsServiceBLL.DTO.Trips
 {
     public class NewTripDTO
     {

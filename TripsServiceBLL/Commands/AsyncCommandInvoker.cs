@@ -1,4 +1,6 @@
-﻿namespace TripsServiceBLL.Commands
+﻿using TripsServiceBLL.Interfaces;
+
+namespace TripsServiceBLL.Commands
 {
     public class AsyncCommandInvoker
     {

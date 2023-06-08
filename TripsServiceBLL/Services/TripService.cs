@@ -1,9 +1,9 @@
-﻿using TripsServiceBLL.DTO;
-using TripsServiceDAL.Entities;
+﻿using TripsServiceDAL.Entities;
 using TripsServiceDAL.Infrastructure;
 using TripsServiceBLL.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using TripsServiceBLL.Utils;
+using TripsServiceBLL.DTO.Trips;
 
 namespace TripsServiceBLL.Services
 {

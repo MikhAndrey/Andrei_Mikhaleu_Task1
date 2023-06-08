@@ -1,4 +1,4 @@
-﻿namespace TripsServiceBLL.DTO
+﻿namespace TripsServiceBLL.DTO.Statistics
 {
     public class YearsStatisticsDTO
     {

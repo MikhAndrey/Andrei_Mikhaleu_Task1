@@ -1,4 +1,4 @@
-﻿namespace TripsServiceBLL.Commands
+﻿namespace TripsServiceBLL.Interfaces
 {
     public interface IAsyncCommand
     {

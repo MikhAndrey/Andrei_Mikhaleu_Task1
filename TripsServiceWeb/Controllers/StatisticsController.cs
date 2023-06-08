@@ -4,12 +4,13 @@ using TripsServiceBLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json.Serialization;
 using System.Text.Json;
-using TripsServiceBLL.DTO;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Commands;
 using TripsServiceBLL.Commands.Statistics;
 using TripsServiceBLL.Utils;
 using TripsServiceBLL.Commands.RoutePoints;
+using TripsServiceBLL.DTO.RoutePoints;
+using TripsServiceBLL.DTO.Statistics;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

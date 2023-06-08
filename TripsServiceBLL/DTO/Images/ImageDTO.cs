@@ -1,4 +1,6 @@
-﻿namespace TripsServiceBLL.DTO
+﻿using TripsServiceBLL.DTO.Trips;
+
+namespace TripsServiceBLL.DTO.Images
 {
     public class ImageDTO
     {

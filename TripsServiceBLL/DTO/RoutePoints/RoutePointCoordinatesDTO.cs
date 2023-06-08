@@ -1,4 +1,4 @@
-﻿namespace TripsServiceBLL.DTO
+﻿namespace TripsServiceBLL.DTO.RoutePoints
 {
     public class RoutePointCoordinatesDTO
     {

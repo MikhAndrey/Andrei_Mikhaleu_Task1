@@ -1,7 +1,8 @@
-﻿using TripsServiceBLL.DTO;
-using TripsServiceBLL.Services;
+﻿using TripsServiceBLL.Services;
 using TripsServiceDAL.Entities;
 using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.DTO.Trips;
 
 namespace TripsServiceBLL.Commands.Trips
 {

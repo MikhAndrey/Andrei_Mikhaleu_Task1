@@ -1,4 +1,4 @@
-﻿namespace TripsServiceBLL.DTO
+﻿namespace TripsServiceBLL.DTO.Users
 {
     public class UserLoginDTO
     {

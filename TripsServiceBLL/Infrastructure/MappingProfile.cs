@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
-using TripsServiceBLL.DTO;
+using TripsServiceBLL.DTO.Comments;
+using TripsServiceBLL.DTO.Images;
+using TripsServiceBLL.DTO.RoutePoints;
+using TripsServiceBLL.DTO.Trips;
+using TripsServiceBLL.DTO.Users;
 using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Infrastructure

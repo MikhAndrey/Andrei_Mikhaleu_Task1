@@ -1,4 +1,6 @@
-﻿using TripsServiceBLL.DTO;
+﻿using TripsServiceBLL.DTO.Images;
+using TripsServiceBLL.DTO.RoutePoints;
+using TripsServiceBLL.DTO.Trips;
 
 namespace Andrei_Mikhaleu_Task1.Models.ViewModels
 {

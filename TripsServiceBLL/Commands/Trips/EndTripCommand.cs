@@ -1,4 +1,5 @@
 ﻿using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Services;
 using TripsServiceDAL.Entities;
 

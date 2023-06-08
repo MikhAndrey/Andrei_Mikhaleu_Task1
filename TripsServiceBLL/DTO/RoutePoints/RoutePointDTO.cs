@@ -1,4 +1,6 @@
-﻿namespace TripsServiceBLL.DTO
+﻿using TripsServiceBLL.DTO.Trips;
+
+namespace TripsServiceBLL.DTO.RoutePoints
 {
     public class RoutePointDTO
     {

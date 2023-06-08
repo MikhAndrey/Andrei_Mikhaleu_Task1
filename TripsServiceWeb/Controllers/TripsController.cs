@@ -1,7 +1,6 @@
 ﻿using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TripsServiceBLL.DTO;
 using TripsServiceBLL.Services;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.Commands;
@@ -9,6 +8,8 @@ using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Commands.Comments;
 using TripsServiceBLL.Commands.Images;
 using TripsServiceDAL.Entities;
+using TripsServiceBLL.DTO.Comments;
+using TripsServiceBLL.DTO.Trips;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

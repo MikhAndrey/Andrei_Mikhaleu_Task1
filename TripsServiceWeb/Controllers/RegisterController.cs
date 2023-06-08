@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using TripsServiceBLL.Services;
-using TripsServiceBLL.DTO;
 using TripsServiceBLL.Commands;
 using TripsServiceBLL.Commands.Users;
 using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.DTO.Users;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

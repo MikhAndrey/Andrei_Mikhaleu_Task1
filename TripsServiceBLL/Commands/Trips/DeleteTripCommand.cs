@@ -1,6 +1,7 @@
 ﻿using TripsServiceBLL.Services;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceDAL.Entities;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Trips
 {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using TripsServiceBLL.Services;
-using TripsServiceBLL.DTO;
+using TripsServiceBLL.DTO.Users;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

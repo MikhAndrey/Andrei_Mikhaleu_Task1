@@ -1,4 +1,4 @@
-﻿using TripsServiceBLL.DTO;
+﻿using TripsServiceBLL.DTO.Trips;
 
 namespace Andrei_Mikhaleu_Task1.Models.ViewModels
 {

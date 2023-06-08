@@ -1,4 +1,7 @@
-﻿namespace TripsServiceBLL.DTO
+﻿using TripsServiceBLL.DTO.Images;
+using TripsServiceBLL.DTO.RoutePoints;
+
+namespace TripsServiceBLL.DTO.Trips
 {
     public class ExtendedExistingTripDTO : ExistingTripDTO
     {

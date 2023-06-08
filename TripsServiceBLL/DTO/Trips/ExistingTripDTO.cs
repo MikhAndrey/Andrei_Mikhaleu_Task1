@@ -1,6 +1,6 @@
 ﻿using TripsServiceDAL.Entities;
 
-namespace TripsServiceBLL.DTO
+namespace TripsServiceBLL.DTO.Trips
 {
     public class ExistingTripDTO : NewTripDTO
     {

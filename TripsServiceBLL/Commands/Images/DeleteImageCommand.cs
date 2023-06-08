@@ -1,4 +1,5 @@
-﻿using TripsServiceBLL.Services;
+﻿using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Services;
 
 namespace TripsServiceBLL.Commands.Images
 {

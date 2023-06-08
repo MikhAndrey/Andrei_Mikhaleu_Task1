@@ -2,6 +2,7 @@
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Services;
 using TripsServiceDAL.Entities;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Statistics
 {

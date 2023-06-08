@@ -1,4 +1,4 @@
-﻿namespace Andrei_Mikhaleu_Task1.Common
+﻿namespace TripsServiceBLL.Utils
 {
     public static class TimeUtils
     {

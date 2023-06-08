@@ -1,4 +1,4 @@
-﻿using TripsServiceBLL.DTO;
+﻿using TripsServiceBLL.DTO.Users;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Infrastructure;
 
