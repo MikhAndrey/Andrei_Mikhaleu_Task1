@@ -20,12 +20,13 @@ namespace TripsServiceBLL.Commands.Trips
         public async Task ExecuteAsync()
         {
             Trip? trip = await _tripService.GetByIdAsync(_id);
-            if (trip == null)
-                throw new ValidationException("Trip not found", "");
-            if (trip.StartTime > DateTime.UtcNow)
+            if (trip != null)
             {
-                _tripService.SetNewTimeForStartingTrip(trip);
-                await _tripService.UpdateAsync(trip);
+                if (trip.StartTime > DateTime.UtcNow)
+                {
+                    _tripService.SetNewTimeForStartingTrip(trip);
+                    await _tripService.UpdateAsync(trip);
+                }
             }
         }
     }

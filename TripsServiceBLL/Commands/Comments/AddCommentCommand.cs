@@ -27,9 +27,8 @@ namespace TripsServiceBLL.Commands.Comments
         public async Task ExecuteAsync()
         {
             User? user = await _userService.GetByUserNameAsync(_userName);
-            if (user == null)
-                throw new ValidationException("User was not found", "");
-            await _commentService.AddCommentAsync(_comment, user);
+            if (user != null)
+                await _commentService.AddCommentAsync(_comment, user);
         }
     }
 }

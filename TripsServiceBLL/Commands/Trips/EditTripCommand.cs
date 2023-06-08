@@ -49,11 +49,7 @@ namespace TripsServiceBLL.Commands.Trips
         public async Task ExecuteAsync()
         {
             Trip? trip = await _tripService.GetByIdAsync(_id);
-            if (trip == null)
-            {
-                throw new ValidationException("Trip was not found", "");
-            }
-            else
+            if (trip != null)
             {
                 trip.Name = _trip.Name;
                 trip.Description = _trip.Description;

@@ -4,4 +4,9 @@
     {
         Task ExecuteAsync();
     }
+
+	public interface IAsyncCommand<T> where T : class
+	{
+		Task<T> ExecuteAsync();
+	}
 }

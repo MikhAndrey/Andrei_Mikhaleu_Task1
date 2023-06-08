@@ -4,7 +4,7 @@ using TripsServiceBLL.Services;
 
 namespace TripsServiceBLL.Commands.Trips
 {
-    public class GetTripByIdCommand : IAsyncGenericCommand<ExtendedExistingTripDTO>
+    public class GetTripByIdCommand : IAsyncCommand<ExtendedExistingTripDTO>
     {
         private TripService _tripService;
 

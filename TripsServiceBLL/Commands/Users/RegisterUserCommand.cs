@@ -20,20 +20,7 @@ namespace TripsServiceBLL.Commands.Users
 
         public async Task ExecuteAsync()
         {
-            User? existingUser = await _userService.GetByUserNameAsync( _user.UserName);
-            if (existingUser != null)
-                throw new ValidationException("This username is already taken", "UserName");
-            existingUser = await _userService.GetByEmailAsync(_user.Email); 
-            if (existingUser != null)
-                throw new ValidationException("This email is already taken", "Email");
-            User newUser = new()
-            {
-                UserName = _user.UserName,
-                Password = _user.Password,
-                Email = _user.Email
-            };
-
-            await _userService.AddAsync(newUser);
+            await _userService.TryToRegisterNewUserAsync(_user);
         }
     }
 }

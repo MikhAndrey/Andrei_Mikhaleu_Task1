@@ -39,7 +39,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                     RememberMe = model.RememberMe
                 };
 
-                if (await _userService.UserExists(user))
+                if (await _userService.UserExistsAsync(user))
                 {
                     var claims = new List<Claim>
                     {

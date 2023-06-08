@@ -6,7 +6,7 @@ using TripsServiceBLL.DTO.Trips;
 
 namespace TripsServiceBLL.Commands.Trips
 {
-    public class GetTripDetailsCommand : IAsyncGenericCommand<TripDTO>
+    public class GetTripDetailsCommand : IAsyncCommand<TripDTO>
     {
         private TripService _tripService;
 
@@ -27,8 +27,6 @@ namespace TripsServiceBLL.Commands.Trips
         public async Task<TripDTO> ExecuteAsync()
         {
             User? user = await _userService.GetByUserNameAsync(_userName);
-            if (user == null)
-                throw new ValidationException("User was not found", "");
             return await _tripService.InitializeTripDTOAsync(_id, user.UserId);
         }
     }

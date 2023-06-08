@@ -4,6 +4,7 @@ using TripsServiceBLL.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using TripsServiceBLL.Utils;
 using TripsServiceBLL.DTO.Trips;
+using TripsServiceBLL.DTO.Statistics;
 
 namespace TripsServiceBLL.Services
 {
@@ -57,28 +58,18 @@ namespace TripsServiceBLL.Services
         {
             Trip? trip = await GetByIdAsync(tripId);
             if (trip == null)
-            {
-                throw new ValidationException("Trip was not found", "");
-            }
-            else
-            {
-                TripDTO newTrip = CustomMapper<Trip, TripDTO>.Map(trip);
-                newTrip.IsCurrentUserTrip = trip.User.UserId == userId;
-                return newTrip;
-            }
+                 throw new ValidationException("Trip was not found", "");
+            TripDTO newTrip = CustomMapper<Trip, TripDTO>.Map(trip);
+            newTrip.IsCurrentUserTrip = trip.User.UserId == userId;
+            return newTrip;
         }
 
         public async Task<ExtendedExistingTripDTO> InitializeExtendedExistingTripAsync(int tripId)
         {
             Trip? trip = await GetByIdAsync(tripId);
             if (trip == null)
-            {
                 throw new ValidationException("Trip was not found", "");
-            }
-            else
-            {
-                return CustomMapper<Trip, ExtendedExistingTripDTO>.Map(trip);
-            }
+            return CustomMapper<Trip, ExtendedExistingTripDTO>.Map(trip);
         }
 
         public List<TripDTO> GetOthersPublicTrips(int userId)
@@ -101,9 +92,14 @@ namespace TripsServiceBLL.Services
             return CustomMapper<IQueryable<Trip>, List<TripDTO>>.Map(rawTrips);
         }
 
-        public IQueryable<int> GetYearsOfUserTrips(int userId)
+        public YearsStatisticsDTO GetYearsOfUserTrips(int userId)
         {
-            return _unitOfWork.Trips.GetYearsOfUserTrips(userId);
+			IQueryable<int> years = _unitOfWork.Trips.GetYearsOfUserTrips(userId);
+            return new()
+            {
+                Years = years,
+                SelectedYear = years.FirstOrDefault()
+            };
         }
 
         public async Task<List<DurationInMonth>> GetTotalDurationByMonthsAsync(int year, int userId)

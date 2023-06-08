@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using TripsServiceBLL.Services;
-using TripsServiceBLL.Commands;
 using TripsServiceBLL.Commands.Users;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.DTO.Users;
@@ -35,14 +34,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                     Password = model.Password,
                     Email= model.Email
                 };
-                AsyncCommandInvoker invoker = new()
-                {
-                    Command = new RegisterUserCommand(_userService, user)
-                };
                 try
                 {
-                    await invoker.ExecuteCommandAsync();
-                }
+                    await new RegisterUserCommand(_userService, user).ExecuteAsync();
+			    }
                 catch (ValidationException ex)
                 {
                     ModelState.AddModelError(ex.Property, ex.Message);

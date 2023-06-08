@@ -23,12 +23,11 @@ namespace TripsServiceBLL.Commands.Trips
         public async Task ExecuteAsync()
         {
             Trip? tripToDelete = await _tripService.GetByIdAsync(_id);
-            if (tripToDelete == null)
+            if (tripToDelete != null)
             {
-                throw new ValidationException("Trip was not found", "");
+                _imageService.DeleteTripImages(tripToDelete);
+                await _tripService.DeleteAsync(tripToDelete);
             }
-            _imageService.DeleteTripImages(tripToDelete);
-            await _tripService.DeleteAsync(tripToDelete);
         }
     }
 }

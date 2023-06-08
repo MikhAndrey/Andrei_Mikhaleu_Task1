@@ -6,7 +6,7 @@ using TripsServiceBLL.DTO.RoutePoints;
 
 namespace TripsServiceBLL.Commands.RoutePoints
 {
-    public class GetRoutePointsCoordinatesCommand : IAsyncGenericCommand<IQueryable<RoutePointCoordinatesDTO>>
+    public class GetRoutePointsCoordinatesCommand : IAsyncCommand<IQueryable<RoutePointCoordinatesDTO>>
     {
         private RoutePointService _routePointService;
 
@@ -27,10 +27,7 @@ namespace TripsServiceBLL.Commands.RoutePoints
         public async Task<IQueryable<RoutePointCoordinatesDTO>> ExecuteAsync()
         {
             User? user = await _userService.GetByUserNameAsync(_userName);
-            if (user == null)
-                throw new ValidationException("User was not found", "");
-            IQueryable<RoutePointCoordinatesDTO> coordinates = _routePointService.GetRoutePointsByYear(_year, user.UserId);
-            return coordinates;
+            return _routePointService.GetRoutePointsByYear(_year, user.UserId);
         }
     }
 }

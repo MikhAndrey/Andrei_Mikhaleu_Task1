@@ -53,13 +53,14 @@ namespace TripsServiceBLL.Commands.Trips
         public async Task ExecuteAsync()
         {
             User? user = await _userService.GetByUserNameAsync(_userName);
-            if (user == null)
-                throw new ValidationException("User was not found", "");
-            Trip trip = CustomMapper<NewTripDTO, Trip>.Map(_trip);
-            await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
-            _routePointService.ParseAndAddRoutePoints(trip, _routePoints);
-            trip.User = user;
-            await _tripService.AddAsync(trip);
+            if (user != null)
+            {
+                Trip trip = CustomMapper<NewTripDTO, Trip>.Map(_trip);
+                await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
+                _routePointService.ParseAndAddRoutePoints(trip, _routePoints);
+                trip.User = user;
+                await _tripService.AddAsync(trip);
+            }
         }
     }
 }

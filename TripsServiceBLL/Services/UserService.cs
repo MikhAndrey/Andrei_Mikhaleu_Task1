@@ -1,6 +1,7 @@
 ﻿using TripsServiceBLL.DTO.Users;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Infrastructure;
+using TripsServiceBLL.Infrastructure;
 
 namespace TripsServiceBLL.Services
 {
@@ -23,7 +24,7 @@ namespace TripsServiceBLL.Services
             return await _unitOfWork.Users.GetByEmailAsync(email);
         }
 
-        public async Task<bool> UserExists(UserLoginDTO user)
+        public async Task<bool> UserExistsAsync(UserLoginDTO user)
         {
             User? userFromDB = await GetByUserNameAsync(user.UserName);
             return userFromDB != null && userFromDB.Password == user.Password;
@@ -34,5 +35,23 @@ namespace TripsServiceBLL.Services
             await _unitOfWork.Users.AddAsync(user);
             await _unitOfWork.SaveAsync();
         }
+
+        public async Task TryToRegisterNewUserAsync(UserSignupDTO user)
+        {
+			User? existingUser = await GetByUserNameAsync(user.UserName);
+			if (existingUser != null)
+				throw new ValidationException("This username is already taken", "UserName");
+			existingUser = await GetByEmailAsync(user.Email);
+			if (existingUser != null)
+				throw new ValidationException("This email is already taken", "Email");
+			User newUser = new()
+			{
+				UserName = user.UserName,
+				Password = user.Password,
+				Email = user.Email
+			};
+
+			await AddAsync(newUser);
+		}
     }
 }
