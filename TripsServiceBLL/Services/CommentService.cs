@@ -28,7 +28,7 @@ namespace TripsServiceBLL.Services
                 });
 
                 _unitOfWork.Trips.Update(trip);
-                await _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
             }
         }
 
@@ -38,7 +38,7 @@ namespace TripsServiceBLL.Services
             if (commentToDelete != null)
             {
                 _unitOfWork.Comments.Delete(commentToDelete);
-                await _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
             }
         }
     }

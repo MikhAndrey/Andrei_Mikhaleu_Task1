@@ -14,7 +14,7 @@ namespace TripsServiceBLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task UploadImages(Trip trip, List<IFormFile> images, string webRootPath)
+        public async Task UploadImagesAsync(Trip trip, List<IFormFile> images, string webRootPath)
         {
             List<string> newImageFileNames = new();
             foreach (var image in images)
@@ -37,7 +37,7 @@ namespace TripsServiceBLL.Services
             }
         }
 
-        public async Task DeleteById(int imageId, string webRootPath)
+        public async Task DeleteByIdAsync(int imageId, string webRootPath)
         {
             Image? image = await _unitOfWork.Images.GetByIdAsync(imageId);
 
@@ -47,7 +47,7 @@ namespace TripsServiceBLL.Services
             }
 
             _unitOfWork.Images.Delete(image);
-            await _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
 
             string path = webRootPath + image.Link;
 

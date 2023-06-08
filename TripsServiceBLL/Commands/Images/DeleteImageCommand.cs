@@ -20,7 +20,7 @@ namespace TripsServiceBLL.Commands.Images
 
         public async Task ExecuteAsync()
         {
-            await _imageService.DeleteById(_imageId, _webRootPath);
+            await _imageService.DeleteByIdAsync(_imageId, _webRootPath);
         }
     }
 }

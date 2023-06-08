@@ -63,7 +63,7 @@ namespace TripsServiceBLL.Commands.Trips
                 trip.EndTime = _trip.EndTime;
                 trip.StartTimeZoneOffset = _trip.StartTimeZoneOffset;
                 trip.FinishTimeZoneOffset = _trip.FinishTimeZoneOffset;
-                await _imageService.UploadImages(trip, _images, _webRootPath);
+                await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
                 trip.RoutePoints.Clear();
                 _routePointService.ParseAndAddRoutePoints(trip, _routePoints);
                 await _tripService.UpdateAsync(trip);

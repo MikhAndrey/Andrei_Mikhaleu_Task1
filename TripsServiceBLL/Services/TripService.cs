@@ -38,19 +38,19 @@ namespace TripsServiceBLL.Services
         public async Task UpdateAsync(Trip trip)
         {
             _unitOfWork.Trips.Update(trip);
-            await _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task DeleteAsync(Trip trip)
         {
             _unitOfWork.Trips.Delete(trip);
-            await _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task AddAsync(Trip trip)
         {
             await _unitOfWork.Trips.AddAsync(trip);
-            await _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task<TripDTO> InitializeTripDTOAsync(int tripId, int userId)

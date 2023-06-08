@@ -32,7 +32,7 @@ namespace TripsServiceBLL.Services
         public async Task AddAsync(User user)
         {
             await _unitOfWork.Users.AddAsync(user);
-            await _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

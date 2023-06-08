@@ -62,7 +62,7 @@ namespace TripsServiceDAL.Infrastructure
             }
         }
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
         }
