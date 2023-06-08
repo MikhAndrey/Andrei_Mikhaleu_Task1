@@ -89,6 +89,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             string? userName = HttpContext?.User?.Identity?.Name;
@@ -151,7 +152,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         }
 
         [Authorize]
-        [HttpGet]
+        [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
             AsyncCommandInvoker invoker = new()
@@ -189,7 +190,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditTripViewModel model, List<IFormFile> images, string routePoints)
         {
@@ -247,7 +248,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> StartTrip(int id)
         {
             AsyncCommandInvoker invoker = new()
@@ -265,7 +267,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EndTrip(int id)
         {
             AsyncCommandInvoker invoker = new()
@@ -283,8 +286,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddComment(NewCommentViewModel model)
         {
             if (ModelState.IsValid)
@@ -314,7 +317,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             return RedirectToAction(nameof(Details), new { id = model.TripId });
         }
 
-        [HttpPost]
+        [HttpDelete]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteComment(int tripId, int commentId)
         {
             AsyncCommandInvoker invoker = new()
@@ -325,7 +329,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             return RedirectToAction(nameof(Details), new { id = tripId });
         }
 
-        [HttpPost]
+        [HttpDelete]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteImage(int imageId)
         {
             AsyncCommandInvoker invoker = new()
