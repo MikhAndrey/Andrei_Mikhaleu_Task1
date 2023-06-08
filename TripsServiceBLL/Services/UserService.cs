@@ -3,6 +3,7 @@ using TripsServiceDAL.Entities;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceDAL.Interfaces;
 using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Utils;
 
 namespace TripsServiceBLL.Services
 {
@@ -28,7 +29,7 @@ namespace TripsServiceBLL.Services
         public async Task<bool> UserExistsAsync(UserLoginDTO user)
         {
             User? userFromDB = await GetByUserNameAsync(user.UserName);
-            return userFromDB != null && userFromDB.Password == user.Password;
+            return userFromDB != null && userFromDB.Password == Encryptor.Encrypt(user.Password);
         }
 
         public async Task AddAsync(User user)
@@ -48,7 +49,7 @@ namespace TripsServiceBLL.Services
 			User newUser = new()
 			{
 				UserName = user.UserName,
-				Password = user.Password,
+				Password = Encryptor.Encrypt(user.Password),
 				Email = user.Email
 			};
 

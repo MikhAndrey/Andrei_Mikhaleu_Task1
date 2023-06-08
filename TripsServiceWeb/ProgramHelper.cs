@@ -4,18 +4,19 @@ using TripsServiceDAL.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using TripsServiceDAL.Interfaces;
 using TripsServiceBLL.Interfaces;
+using Microsoft.CodeAnalysis;
 
 namespace Andrei_Mikhaleu_Task1
 {
     public static class ProgramHelper
     {
-        public static void ConfigureServices(IServiceCollection services)
-        {
-            var configuration = new ConfigurationBuilder()
+        public static IConfigurationRoot Configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false)
                 .Build();
 
-            string connectionString = configuration.GetConnectionString("DefaultConnection");
+		public static void ConfigureServices(IServiceCollection services)
+        {
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddControllersWithViews();
             services.AddDbContext<TripsDBContext>(options =>
