@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TripsServiceDAL.Infrastructure;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Repos
 {
-    public class UserRepository : EFGenericRepository<User>
+    public class UserRepository : EFGenericRepository<User>, IUserRepository
     {
         public UserRepository(TripsDBContext context) : base(context) { }
 

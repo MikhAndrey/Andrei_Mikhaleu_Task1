@@ -8,13 +8,13 @@ namespace TripsServiceBLL.Commands.Statistics
 {
     public class GetDistinctTripYearsCommand : IAsyncCommand<YearsStatisticsDTO>
     {
-        private TripService _tripService;
+        private ITripService _tripService;
 
-        private UserService _userService;
+        private IUserService _userService;
 
         private string _userName;
 
-        public GetDistinctTripYearsCommand(TripService tripService, UserService userService, string userName)
+        public GetDistinctTripYearsCommand(ITripService tripService, IUserService userService, string userName)
         {
             _tripService = tripService;
             _userService = userService;

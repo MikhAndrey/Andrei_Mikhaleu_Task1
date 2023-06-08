@@ -8,30 +8,31 @@ using TripsServiceBLL.Commands.Comments;
 using TripsServiceBLL.Commands.Images;
 using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.DTO.Trips;
+using TripsServiceBLL.Interfaces;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
     public class TripsController : Controller
     {
 
-        private readonly CommentService _commentService;
+        private readonly ICommentService _commentService;
 
-        private readonly RoutePointService _routePointService;
+        private readonly IRoutePointService _routePointService;
 
-        private readonly ImageService _imageService;
+        private readonly IImageService _imageService;
 
-        private readonly TripService _tripService;
+        private readonly ITripService _tripService;
 
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
         private readonly IWebHostEnvironment _environment;
 
         public TripsController(
-            CommentService service,
-            RoutePointService routePointService,
-            ImageService imageService,
-            TripService tripService,
-            UserService userService,
+            ICommentService service,
+            IRoutePointService routePointService,
+            IImageService imageService,
+            ITripService tripService,
+            IUserService userService,
             IWebHostEnvironment environment
             )
         {
@@ -148,7 +149,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             string? userName = HttpContext?.User?.Identity?.Name;

@@ -1,18 +1,19 @@
 ﻿using TripsServiceDAL.Entities;
-using TripsServiceDAL.Infrastructure;
 using TripsServiceBLL.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using TripsServiceBLL.Utils;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.DTO.Statistics;
+using TripsServiceDAL.Interfaces;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Services
 {
-    public class TripService
+    public class TripService : ITripService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public TripService(UnitOfWork unitOfWork)
+        public TripService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

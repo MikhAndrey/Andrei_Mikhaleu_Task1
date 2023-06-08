@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Andrei_Mikhaleu_Task1.Models.ViewModels;
-using TripsServiceBLL.Services;
 using TripsServiceBLL.Commands.Users;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.DTO.Users;
+using TripsServiceBLL.Interfaces;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
     public class RegisterController : Controller
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public RegisterController(UserService userService)
+        public RegisterController(IUserService userService)
         {
             _userService = userService;
         }

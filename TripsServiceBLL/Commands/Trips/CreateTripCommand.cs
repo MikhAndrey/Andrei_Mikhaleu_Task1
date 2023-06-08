@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using TripsServiceBLL.Services;
 using TripsServiceDAL.Entities;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
@@ -11,13 +10,13 @@ namespace TripsServiceBLL.Commands.Trips
     {
         private readonly NewTripDTO _trip;
 
-        private readonly RoutePointService _routePointService;
+        private readonly IRoutePointService _routePointService;
 
-        private readonly ImageService _imageService;
+        private readonly IImageService _imageService;
 
-        private readonly TripService _tripService;
+        private readonly ITripService _tripService;
 
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
         private readonly List<IFormFile> _images;
 
@@ -30,10 +29,10 @@ namespace TripsServiceBLL.Commands.Trips
         public CreateTripCommand(
             NewTripDTO trip,
             List<IFormFile> images,
-            RoutePointService routePointService,
-            ImageService imageService,
-            TripService tripService,
-            UserService userService,
+            IRoutePointService routePointService,
+            IImageService imageService,
+            ITripService tripService,
+            IUserService userService,
             string webRootPath,
             string routePoints,
             string? userName

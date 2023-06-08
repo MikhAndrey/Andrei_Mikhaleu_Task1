@@ -2,14 +2,16 @@
 using TripsServiceDAL.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using TripsServiceBLL.Infrastructure;
+using TripsServiceDAL.Interfaces;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Services
 {
-    public class ImageService
+    public class ImageService : IImageService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ImageService(UnitOfWork unitOfWork)
+        public ImageService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

@@ -2,6 +2,8 @@
 using TripsServiceBLL.Services;
 using TripsServiceDAL.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using TripsServiceDAL.Interfaces;
+using TripsServiceBLL.Interfaces;
 
 namespace Andrei_Mikhaleu_Task1
 {
@@ -18,12 +20,12 @@ namespace Andrei_Mikhaleu_Task1
             services.AddControllersWithViews();
             services.AddDbContext<TripsDBContext>(options =>
                     options.UseSqlServer(connectionString));
-            services.AddScoped<UnitOfWork>();
-            services.AddScoped<UserService>();
-            services.AddScoped<CommentService>();
-            services.AddScoped<ImageService>();
-            services.AddScoped<RoutePointService>();
-            services.AddScoped<TripService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IRoutePointService, RoutePointService>();
+            services.AddScoped<ITripService, TripService>();
             services.AddHttpContextAccessor();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -31,6 +33,30 @@ namespace Andrei_Mikhaleu_Task1
                     options.LoginPath = "/Login/Index";
                     options.LogoutPath = "/Login/Logout";
                 });
+        }
+
+        public static void Configure (WebApplication app)
+        {
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseCors("AllowAll");
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.Run();
         }
     }
 }

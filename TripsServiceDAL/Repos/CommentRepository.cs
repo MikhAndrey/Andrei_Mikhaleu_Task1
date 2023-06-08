@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TripsServiceDAL.Infrastructure;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Repos
 {
-    public class CommentRepository : EFGenericRepository<Comment>
+    public class CommentRepository : EFGenericRepository<Comment>, ICommentRepository
     {
         public CommentRepository(TripsDBContext context) : base(context) { }
 

@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TripsServiceDAL.Infrastructure;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Repos
 {
-    public class ImageRepository : EFGenericRepository<Image>
+    public class ImageRepository : EFGenericRepository<Image>, IImageRepository
     {
         public ImageRepository(TripsDBContext context) : base(context) { }
 

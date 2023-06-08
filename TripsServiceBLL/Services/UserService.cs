@@ -1,15 +1,16 @@
 ﻿using TripsServiceBLL.DTO.Users;
 using TripsServiceDAL.Entities;
-using TripsServiceDAL.Infrastructure;
 using TripsServiceBLL.Infrastructure;
+using TripsServiceDAL.Interfaces;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(UnitOfWork unitOfWork)
+        public UserService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

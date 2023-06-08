@@ -8,15 +8,15 @@ namespace TripsServiceBLL.Commands.Comments
 {
     public class AddCommentCommand : IAsyncCommand
     {
-        private readonly CommentService _commentService;
+        private readonly ICommentService _commentService;
 
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
         private readonly CommentDTO _comment;
 
         private readonly string _userName;
 
-        public AddCommentCommand(CommentService commentService, UserService userService, CommentDTO comment, string userName)
+        public AddCommentCommand(ICommentService commentService, IUserService userService, CommentDTO comment, string userName)
         {
             _commentService = commentService;
             _userService = userService;

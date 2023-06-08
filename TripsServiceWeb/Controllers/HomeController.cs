@@ -1,6 +1,7 @@
 ﻿using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Services;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
@@ -11,9 +12,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         private readonly IWebHostEnvironment _environment;
 
-        private readonly ImageService _imageService;
+        private readonly IImageService _imageService;
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment environment, ImageService imageService)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment environment, IImageService imageService)
         {
             _logger = logger;
             _environment = environment;

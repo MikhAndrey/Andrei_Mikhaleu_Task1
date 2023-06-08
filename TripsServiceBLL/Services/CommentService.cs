@@ -1,14 +1,16 @@
 ﻿using TripsServiceDAL.Entities;
 using TripsServiceDAL.Infrastructure;
 using TripsServiceBLL.DTO.Comments;
+using TripsServiceDAL.Interfaces;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Services
 {
-    public class CommentService
+    public class CommentService : ICommentService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CommentService(UnitOfWork unitOfWork)
+        public CommentService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

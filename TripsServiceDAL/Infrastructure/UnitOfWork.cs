@@ -1,63 +1,64 @@
-﻿using TripsServiceDAL.Repos;
+﻿using TripsServiceDAL.Interfaces;
+using TripsServiceDAL.Repos;
 
 namespace TripsServiceDAL.Infrastructure
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IDisposable, IUnitOfWork
     {
         readonly TripsDBContext _context;
 
-        private CommentRepository _commentRepository;
-        private ImageRepository _imageRepository;
-        private RoutePointRepository _routePointRepository;
-        private TripRepository _tripRepository;
-        private UserRepository _userRepository;
+        private ICommentRepository _commentRepository;
+        private IImageRepository _imageRepository;
+        private IRoutePointRepository _routePointRepository;
+        private ITripRepository _tripRepository;
+        private IUserRepository _userRepository;
 
         public UnitOfWork(TripsDBContext context)
         {
             _context = context;
         }
 
-        public CommentRepository Comments
+        public ICommentRepository Comments
         {
             get
             {
-                _commentRepository ??= new(_context);
+                _commentRepository ??= new CommentRepository(_context);
                 return _commentRepository;
             }
         }
 
-        public ImageRepository Images
+        public IImageRepository Images
         {
             get
             {
-                _imageRepository ??= new(_context);
+                _imageRepository ??= new ImageRepository(_context);
                 return _imageRepository;
             }
         }
 
-        public RoutePointRepository RoutePoints
+        public IRoutePointRepository RoutePoints
         {
             get
             {
-                _routePointRepository ??= new(_context);
+                _routePointRepository ??= new RoutePointRepository(_context);
                 return _routePointRepository;
             }
         }
 
-        public TripRepository Trips
+        public ITripRepository Trips
         {
             get
             {
-                _tripRepository ??= new(_context);
+                _tripRepository ??= new TripRepository(_context);
                 return _tripRepository;
             }
         }
 
-        public UserRepository Users
+        public IUserRepository Users
         {
             get
             {
-                _userRepository ??= new(_context);
+                _userRepository ??= new UserRepository(_context);
                 return _userRepository;
             }
         }

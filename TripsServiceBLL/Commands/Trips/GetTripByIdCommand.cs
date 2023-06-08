@@ -1,16 +1,15 @@
 ﻿using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Services;
 
 namespace TripsServiceBLL.Commands.Trips
 {
     public class GetTripByIdCommand : IAsyncCommand<ExtendedExistingTripDTO>
     {
-        private TripService _tripService;
+        private ITripService _tripService;
 
         private int _id;
 
-        public GetTripByIdCommand(TripService tripService, int id)
+        public GetTripByIdCommand(ITripService tripService, int id)
         {
             _tripService = tripService;
             _id = id;

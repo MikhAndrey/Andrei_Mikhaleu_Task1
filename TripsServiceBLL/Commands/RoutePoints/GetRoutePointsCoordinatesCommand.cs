@@ -1,6 +1,4 @@
-﻿using TripsServiceBLL.Services;
-using TripsServiceDAL.Entities;
-using TripsServiceBLL.Infrastructure;
+﻿using TripsServiceDAL.Entities;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.DTO.RoutePoints;
 
@@ -8,15 +6,15 @@ namespace TripsServiceBLL.Commands.RoutePoints
 {
     public class GetRoutePointsCoordinatesCommand : IAsyncCommand<IQueryable<RoutePointCoordinatesDTO>>
     {
-        private RoutePointService _routePointService;
+        private IRoutePointService _routePointService;
 
-        private UserService _userService;
+        private IUserService _userService;
 
         private string _userName;
 
         private int _year;
 
-        public GetRoutePointsCoordinatesCommand(RoutePointService routePointService, UserService userService, string userName, int year)
+        public GetRoutePointsCoordinatesCommand(IRoutePointService routePointService, IUserService userService, string userName, int year)
         {
             _routePointService = routePointService;
             _userService = userService;

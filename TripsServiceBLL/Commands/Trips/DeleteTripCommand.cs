@@ -1,6 +1,4 @@
-﻿using TripsServiceBLL.Services;
-using TripsServiceBLL.Infrastructure;
-using TripsServiceDAL.Entities;
+﻿using TripsServiceDAL.Entities;
 using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Trips
@@ -9,11 +7,11 @@ namespace TripsServiceBLL.Commands.Trips
     {
         private readonly int _id;
 
-        private readonly TripService _tripService;
+        private readonly ITripService _tripService;
 
-        private readonly ImageService _imageService;
+        private readonly IImageService _imageService;
 
-        public DeleteTripCommand(int id, TripService tripService, ImageService imageService)
+        public DeleteTripCommand(int id, ITripService tripService, IImageService imageService)
         {
             _id = id;
             _tripService = tripService;

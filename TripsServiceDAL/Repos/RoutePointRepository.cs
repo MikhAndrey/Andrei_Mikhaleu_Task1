@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TripsServiceDAL.Infrastructure;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Repos
 {
-    public class RoutePointRepository : EFGenericRepository<RoutePoint>
+    public class RoutePointRepository : EFGenericRepository<RoutePoint>, IRoutePointRepository
     {
         public RoutePointRepository(TripsDBContext context) : base(context) { }
 

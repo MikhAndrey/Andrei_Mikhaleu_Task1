@@ -8,11 +8,11 @@ namespace TripsServiceBLL.Commands.Users
 {
     public class RegisterUserCommand : IAsyncCommand
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
         private readonly UserSignupDTO _user;
 
-        public RegisterUserCommand(UserService userService, UserSignupDTO user)
+        public RegisterUserCommand(IUserService userService, UserSignupDTO user)
         {
             _userService = userService;
             _user = user;

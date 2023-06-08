@@ -1,6 +1,5 @@
 ﻿using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using TripsServiceBLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json.Serialization;
 using System.Text.Json;
@@ -9,19 +8,20 @@ using TripsServiceBLL.Utils;
 using TripsServiceBLL.Commands.RoutePoints;
 using TripsServiceBLL.DTO.RoutePoints;
 using TripsServiceBLL.DTO.Statistics;
+using TripsServiceBLL.Interfaces;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
     public class StatisticsController : Controller
     {
 
-        private RoutePointService _routePointService;
+        private IRoutePointService _routePointService;
 
-        private TripService _tripService;
+        private ITripService _tripService;
 
-        private UserService _userService;
+        private IUserService _userService;
 
-        public StatisticsController(RoutePointService routePointService, TripService tripService, UserService userService)
+        public StatisticsController(IRoutePointService routePointService, ITripService tripService, IUserService userService)
         {
             _routePointService = routePointService;
             _tripService = tripService;

@@ -2,14 +2,16 @@
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Infrastructure;
 using TripsServiceBLL.DTO.RoutePoints;
+using TripsServiceDAL.Interfaces;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Services
 {
-    public class RoutePointService
+    public class RoutePointService : IRoutePointService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public RoutePointService(UnitOfWork unitOfWork)
+        public RoutePointService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

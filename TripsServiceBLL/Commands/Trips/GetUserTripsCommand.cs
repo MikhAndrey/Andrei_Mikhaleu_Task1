@@ -1,6 +1,4 @@
-﻿using TripsServiceBLL.Services;
-using TripsServiceBLL.Infrastructure;
-using TripsServiceDAL.Entities;
+﻿using TripsServiceDAL.Entities;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.DTO.Trips;
 
@@ -8,13 +6,13 @@ namespace TripsServiceBLL.Commands.Trips
 {
     public class GetUserTripsCommand : IAsyncCommand<List<TripDTO>>
     {
-        private TripService _tripService;
+        private ITripService _tripService;
 
-        private UserService _userService;
+        private IUserService _userService;
 
         private string _userName;
 
-        public GetUserTripsCommand(TripService tripService, UserService userService, string userName)
+        public GetUserTripsCommand(ITripService tripService, IUserService userService, string userName)
         {
             _tripService = tripService;
             _userService = userService;

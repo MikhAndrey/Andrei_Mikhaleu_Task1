@@ -1,17 +1,15 @@
-﻿using TripsServiceBLL.Infrastructure;
-using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Services;
+﻿using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Commands.Trips
 {
     public class EndTripCommand : IAsyncCommand
     {
-        private readonly TripService _tripService;
+        private readonly ITripService _tripService;
 
         private readonly int _id;
 
-        public EndTripCommand(TripService tripService, int id)
+        public EndTripCommand(ITripService tripService, int id)
         {
             _tripService = tripService;
             _id = id;

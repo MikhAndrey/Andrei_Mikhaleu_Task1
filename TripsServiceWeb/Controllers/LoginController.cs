@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Andrei_Mikhaleu_Task1.Models.ViewModels;
-using TripsServiceBLL.Services;
 using TripsServiceBLL.DTO.Users;
+using TripsServiceBLL.Interfaces;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
     public class LoginController : Controller
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public LoginController(UserService userService)
+        public LoginController(IUserService userService)
         {
             _userService = userService;
         }
