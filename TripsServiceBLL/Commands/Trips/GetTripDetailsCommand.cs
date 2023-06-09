@@ -3,7 +3,7 @@ using TripsServiceBLL.DTO.Trips;
 
 namespace TripsServiceBLL.Commands.Trips
 {
-    public class GetTripDetailsCommand : IAsyncCommand<TripDTO>
+    public class GetTripDetailsCommand : IAsyncCommand<TripDetailsDTO>
     {
         private ITripService _tripService;
 
@@ -18,9 +18,9 @@ namespace TripsServiceBLL.Commands.Trips
             _userId = userId;
         }
 
-        public async Task<TripDTO> ExecuteAsync()
+        public async Task<TripDetailsDTO> ExecuteAsync()
         {
-            return await _tripService.InitializeTripDTOAsync(_id, _userId);
+            return await _tripService.GetTripDetailsAsync(_id, _userId);
         }
     }
 }

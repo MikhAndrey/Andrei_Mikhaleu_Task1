@@ -1,12 +1,15 @@
-﻿@model Andrei_Mikhaleu_Task1.Models.ViewModels.TripDetailsViewModel
+﻿@model TripsServiceBLL.DTO.Trips.TripDetailsDTO
 @using TripsServiceBLL.Utils
 
+@{
+    ViewData["Title"] = "Trip info";
+}
 <div class="tp-form">
-    <h1 class="mt-5 tp-label">@Model.Trip.Name</h1>
+    <h1 class="mt-5 tp-label">@Model.Name</h1>
 
-    <p class="tp-label">@Model.Trip.Description</p>
+    <p class="tp-label">@Model.Description</p>
 
-    @if (Model.Trip.Public)
+    @if (Model.Public)
     {
         <span class="badge badge-pill badge-success">Public</span>
     }
@@ -14,18 +17,18 @@
     {
         <span class="badge badge-pill badge-danger">Private</span>
     }
-    <p class="mt-3 tp-label">Distance: @Model.Trip.Distance &nbsp km</p>
+    <p class="mt-3 tp-label">Distance: @Model.Distance &nbsp km</p>
     <p class="tp-label">Departure time: @Model.UtcStartTimeZone</p>
     <p class="tp-label">Arrival time: @Model.UtcFinishTimeZone</p>
 
     @{if (Model.IsCurrent)
     {
-        TimeSpan ElapsedTime = DateTime.UtcNow.AddSeconds(Model.Trip.StartTimeZoneOffset).Subtract(Model.Trip.StartTime);
+        TimeSpan ElapsedTime = DateTime.UtcNow.AddSeconds(Model.StartTimeZoneOffset).Subtract(Model.StartTime);
         <p class="tp-label">Elapsed time: @TimeUtils.GetTimeSpanString(ElapsedTime)</p>
     }
     else if (Model.IsFuture)
     {
-        TimeSpan TimeUntilTrip = Model.Trip.StartTime.AddSeconds(-Model.Trip.StartTimeZoneOffset).Subtract(DateTime.UtcNow);
+        TimeSpan TimeUntilTrip = Model.StartTime.AddSeconds(-Model.StartTimeZoneOffset).Subtract(DateTime.UtcNow);
         <p class="tp-label">Time until trip: @TimeUtils.GetTimeSpanString(TimeUntilTrip)</p>
     }
     else
@@ -39,13 +42,13 @@
     {
         @if (Model.IsCurrent)
         {
-            <form asp-controller="Trips" asp-action="EndTrip" asp-route-id="@Model.Trip.TripId" method="post">
+            <form asp-controller="Trips" asp-action="EndTrip" asp-route-id="@Model.TripId" method="post">
                 <button type="submit" class="btn btn-primary mt-3">End trip</button>
             </form>
         }
         else if (Model.IsFuture)
         {
-            <form asp-controller="Trips" asp-action="StartTrip" asp-route-id="@Model.Trip.TripId" method="post">
+            <form asp-controller="Trips" asp-action="StartTrip" asp-route-id="@Model.TripId" method="post">
                 <button type="submit" class="btn btn-primary mt-3">Start trip</button>
             </form>
         }
@@ -53,13 +56,13 @@
 
     <h2 class="mt-5 tp-label">Trip gallery</h2>
 
-    @if (Model.Trip.Images.Count == 0)
+    @if (Model.Images.Count == 0)
     {
         <h4 class="tp-label">There's nothing to see here yet</h4>
     }
     else{
         <div class="row">
-        @foreach (var image in Model.Trip.Images)
+        @foreach (var image in Model.Images)
         {
             <div class="col-4 mb-3"> 
                 <img src="@image.Link" class="img-fluid d-block" style="object-fit: cover; height: 250px"/> 
@@ -70,16 +73,16 @@
 
     <h3 class="mt-5 tp-label">Leave a comment</h3>
 
-    @await Html.PartialAsync("_AddComment", new Andrei_Mikhaleu_Task1.Models.ViewModels.NewCommentViewModel {TripId = Model.Trip.TripId})
+    @await Html.PartialAsync("_AddComment", new Andrei_Mikhaleu_Task1.Models.ViewModels.NewCommentViewModel {TripId = Model.TripId})
 
     <h2 class="mt-5 tp-label">Comments</h2>
 
     <ul>
-        @if (Model.Trip.Comments.Count == 0)
+        @if (Model.Comments.Count == 0)
         {
                 <h4 class="tp-label">There's nothing to see here yet</h4>
         }
-        else foreach (var comment in Model.Trip.Comments)
+        else foreach (var comment in Model.Comments)
         {
             <li class="mt-3">
                 <p><strong>@comment.User.UserName</strong> - @comment.Date.ToString("dd.MM.yyyy HH:mm")</p>
@@ -87,7 +90,7 @@
                 @if (ViewContext?.HttpContext?.User?.Identity?.Name == comment.User.UserName)
                 {
                     <form method="post" action="@Url.Action("DeleteComment", "Trips")">
-                        <input type="hidden" name="tripId" value="@Model.Trip.TripId" />
+                        <input type="hidden" name="tripId" value="@Model.TripId" />
                         <input type="hidden" name="commentId" value="@comment.CommentId" />
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
@@ -103,7 +106,7 @@
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap"></script>
         <script>
         @{
-            var routePoints = Model.Trip.RoutePoints.OrderBy(rp => rp.Ordinal);
+            var routePoints = Model.RoutePoints.OrderBy(rp => rp.Ordinal);
             var firstRoutePoint = routePoints.First();
         }
             const initLatitude = @Html.Raw(Json.Serialize(firstRoutePoint.Latitude));

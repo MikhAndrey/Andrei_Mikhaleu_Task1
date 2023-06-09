@@ -8,7 +8,7 @@ namespace TripsServiceBLL.Commands.Trips
 {
     public class CreateTripCommand : IAsyncCommand
     {
-        private readonly NewTripDTO _trip;
+        private readonly CreateTripDTO _trip;
 
         private readonly IRoutePointService _routePointService;
 
@@ -27,7 +27,7 @@ namespace TripsServiceBLL.Commands.Trips
         private readonly int _userId;
 
         public CreateTripCommand(
-            NewTripDTO trip,
+            CreateTripDTO trip,
             List<IFormFile> images,
             IRoutePointService routePointService,
             IImageService imageService,
@@ -54,7 +54,8 @@ namespace TripsServiceBLL.Commands.Trips
             User? user = await _userService.GetByIdAsync(_userId);
             if (user != null)
             {
-                Trip trip = CustomMapper<NewTripDTO, Trip>.Map(_trip);
+                _tripService.FixTimeOfNewTripForTimeZones(_trip);
+                Trip trip = CustomMapper<CreateTripDTO, Trip>.Map(_trip);
                 await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
                 _routePointService.ParseAndAddRoutePoints(trip, _routePoints);
                 trip.User = user;

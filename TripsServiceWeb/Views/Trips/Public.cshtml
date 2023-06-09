@@ -1,9 +1,12 @@
-﻿@model List<Andrei_Mikhaleu_Task1.Models.ViewModels.TripPublicViewModel>
+﻿@model IQueryable<TripsServiceBLL.DTO.Trips.ReadTripDTOExtended>
 
+@{
+	ViewData["Title"] = "Other's trips";
+}
 <h1 class="tp-label">Other trips</h1>
 
 <div class="row row-cols-2">
-@if (Model.Count == 0)
+@if (Model.Count() == 0)
 {
 	<p class="tp-label">No trips here so far.</p>
 }

@@ -5,11 +5,11 @@ namespace TripsServiceBLL.DTO.Comments
 {
     public class CommentDTO
     {
-        public CommentDTO()
+        /*public CommentDTO()
         {
             Trip = new();
             User = new();
-        }
+        }*/
 
         public int CommentId { get; set; }
 
@@ -23,6 +23,6 @@ namespace TripsServiceBLL.DTO.Comments
 
         public int TripId { get; set; }
 
-        public TripDTO Trip { get; set; }
+        public ReadTripDTO Trip { get; set; }
     }
 }

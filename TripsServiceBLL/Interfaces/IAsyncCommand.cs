@@ -9,4 +9,9 @@
 	{
 		Task<T> ExecuteAsync();
 	}
+
+	public interface ICommand<T> where T : class
+	{
+		T Execute();
+	}
 }

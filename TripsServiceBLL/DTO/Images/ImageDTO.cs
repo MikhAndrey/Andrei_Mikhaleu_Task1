@@ -4,10 +4,10 @@ namespace TripsServiceBLL.DTO.Images
 {
     public class ImageDTO
     {
-        public ImageDTO()
+        /*public ImageDTO()
         {
             Trip = new();
-        }
+        }*/
 
         public int ImageId { get; set; }
 
@@ -15,6 +15,6 @@ namespace TripsServiceBLL.DTO.Images
 
         public int TripId { get; set; }
 
-        public TripDTO Trip { get; set; }
+        public ReadTripDTO Trip { get; set; }
     }
 }

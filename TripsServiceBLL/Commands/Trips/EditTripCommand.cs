@@ -7,7 +7,7 @@ namespace TripsServiceBLL.Commands.Trips
 {
     public class EditTripCommand : IAsyncCommand
     {
-        private readonly ExistingTripDTO _trip;
+        private readonly EditTripDTO _trip;
 
         private readonly IRoutePointService _routePointService;
 
@@ -24,7 +24,7 @@ namespace TripsServiceBLL.Commands.Trips
         private readonly string _routePoints;
 
         public EditTripCommand(
-            ExistingTripDTO trip,
+            EditTripDTO trip,
             int id,
             List<IFormFile> images,
             IRoutePointService routePointService,
@@ -49,14 +49,7 @@ namespace TripsServiceBLL.Commands.Trips
             Trip? trip = await _tripService.GetByIdAsync(_id);
             if (trip != null)
             {
-                trip.Name = _trip.Name;
-                trip.Description = _trip.Description;
-                trip.Distance = _trip.Distance;
-                trip.Public = _trip.Public;
-                trip.StartTime = _trip.StartTime;
-                trip.EndTime = _trip.EndTime;
-                trip.StartTimeZoneOffset = _trip.StartTimeZoneOffset;
-                trip.FinishTimeZoneOffset = _trip.FinishTimeZoneOffset;
+                _tripService.UpdateFromEditTripDTO(trip, _trip);
                 await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
                 trip.RoutePoints.Clear();
                 _routePointService.ParseAndAddRoutePoints(trip, _routePoints);

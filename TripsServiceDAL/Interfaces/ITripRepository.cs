@@ -11,5 +11,7 @@ namespace TripsServiceDAL.Interfaces
         IQueryable<Trip> GetTripsByUserId(int userId);
 
         IQueryable<Trip> GetOthersPublicTrips(int userId);
-    }
+
+		IQueryable<Trip> GetHistoryOfTripsByUserId(int userId);
+	}
 }

@@ -37,7 +37,25 @@ namespace TripsServiceBLL.Services
             trip.EndTime = DateTime.Parse(trip.EndTime.ToString("dd.MM.yyyy HH:mm"));
         }
 
-        public async Task UpdateAsync(Trip trip)
+        public void FixTimeOfNewTripForTimeZones(CreateTripDTO trip)
+        {
+            trip.StartTime = trip.StartTime.AddSeconds(-trip.StartTimeZoneOffset);
+            trip.EndTime = trip.EndTime.AddSeconds(-trip.FinishTimeZoneOffset);
+        }
+
+		public void UpdateFromEditTripDTO(Trip trip, EditTripDTO editTrip)
+		{
+			trip.Name = editTrip.Name;
+			trip.Description = editTrip.Description;
+			trip.Distance = editTrip.Distance;
+			trip.Public = editTrip.Public;
+			trip.StartTime = editTrip.StartTime.AddSeconds(-editTrip.StartTimeZoneOffset);
+			trip.EndTime = editTrip.EndTime.AddSeconds(-editTrip.FinishTimeZoneOffset); ;
+			trip.StartTimeZoneOffset = editTrip.StartTimeZoneOffset;
+			trip.FinishTimeZoneOffset = editTrip.FinishTimeZoneOffset;
+		}
+
+		public async Task UpdateAsync(Trip trip)
         {
             _unitOfWork.Trips.Update(trip);
             await _unitOfWork.SaveAsync();
@@ -55,42 +73,34 @@ namespace TripsServiceBLL.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<TripDTO> InitializeTripDTOAsync(int tripId, int userId)
+        public async Task<TripDetailsDTO> GetTripDetailsAsync(int tripId, int userId)
         {
             Trip? trip = await GetByIdAsync(tripId);
-            if (trip == null)
-                 throw new ValidationException("Trip was not found", "");
-            TripDTO newTrip = CustomMapper<Trip, TripDTO>.Map(trip);
-            newTrip.IsCurrentUserTrip = trip.User.UserId == userId;
-            return newTrip;
+			return new(trip, userId);
         }
 
-        public async Task<ExtendedExistingTripDTO> InitializeExtendedExistingTripAsync(int tripId)
+        public async Task<EditTripDTO> GetTripForEditingAsync(int tripId)
         {
             Trip? trip = await GetByIdAsync(tripId);
-            if (trip == null)
-                throw new ValidationException("Trip was not found", "");
-            return CustomMapper<Trip, ExtendedExistingTripDTO>.Map(trip);
+            return new(trip);
         }
 
-        public List<TripDTO> GetOthersPublicTrips(int userId)
+		public IQueryable<ReadTripDTOExtended> GetOthersPublicTrips(int userId)
         {
             IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetOthersPublicTrips(userId);
-            return CustomMapper<IQueryable<Trip>, List<TripDTO>>.Map(rawTrips);
-        }
+			return rawTrips.Select(el => new ReadTripDTOExtended(el));
+		}
 
-        public List<TripDTO> GetHistoryOfTripsByUserId(int userId)
+        public IQueryable<ReadTripDTO> GetHistoryOfTripsByUserId(int userId)
         {
+            IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetHistoryOfTripsByUserId(userId);
+			return rawTrips.Select(el => new ReadTripDTO(el));
+		}
 
-            IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetTripsByUserId(userId)
-                .Where(el => el.EndTime < DateTime.UtcNow);
-            return CustomMapper<IQueryable<Trip>, List<TripDTO>>.Map(rawTrips);
-        }
-
-        public List<TripDTO> GetTripsByUserId(int userId)
+        public IQueryable<ReadTripDTO> GetTripsByUserId(int userId)
         {
             IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetTripsByUserId(userId);
-            return CustomMapper<IQueryable<Trip>, List<TripDTO>>.Map(rawTrips);
+            return rawTrips.Select(el => new ReadTripDTO(el));
         }
 
         public YearsStatisticsDTO GetYearsOfUserTrips(int userId)

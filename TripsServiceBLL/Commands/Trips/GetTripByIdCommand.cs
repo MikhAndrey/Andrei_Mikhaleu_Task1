@@ -3,7 +3,7 @@ using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Trips
 {
-    public class GetTripByIdCommand : IAsyncCommand<ExtendedExistingTripDTO>
+    public class GetTripByIdCommand : IAsyncCommand<EditTripDTO>
     {
         private ITripService _tripService;
 
@@ -15,9 +15,9 @@ namespace TripsServiceBLL.Commands.Trips
             _id = id;
         }
 
-        public async Task<ExtendedExistingTripDTO> ExecuteAsync()
+        public async Task<EditTripDTO> ExecuteAsync()
         {
-            return await _tripService.InitializeExtendedExistingTripAsync(_id);
+            return await _tripService.GetTripForEditingAsync(_id);
         }
     }
 }

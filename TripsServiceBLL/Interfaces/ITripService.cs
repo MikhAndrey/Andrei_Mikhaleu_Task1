@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using TripsServiceBLL.DTO.Statistics;
+﻿using TripsServiceBLL.DTO.Statistics;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
@@ -14,21 +13,25 @@ namespace TripsServiceBLL.Interfaces
 
         void SetNewTimeForEndingTrip(Trip trip);
 
-        Task UpdateAsync(Trip trip);
+        void FixTimeOfNewTripForTimeZones(CreateTripDTO trip);
+
+        void UpdateFromEditTripDTO(Trip trip, EditTripDTO editTrip);
+
+		Task UpdateAsync(Trip trip);
 
         Task DeleteAsync(Trip trip);
 
         Task AddAsync(Trip trip);
 
-        Task<TripDTO> InitializeTripDTOAsync(int tripId, int userId);
+        Task<TripDetailsDTO> GetTripDetailsAsync(int tripId, int userId);
 
-        Task<ExtendedExistingTripDTO> InitializeExtendedExistingTripAsync(int tripId);
+        Task<EditTripDTO> GetTripForEditingAsync(int tripId);
 
-        List<TripDTO> GetOthersPublicTrips(int userId);
+		IQueryable<ReadTripDTOExtended> GetOthersPublicTrips(int userId);
 
-        List<TripDTO> GetHistoryOfTripsByUserId(int userId);
+        IQueryable<ReadTripDTO> GetHistoryOfTripsByUserId(int userId);
 
-        List<TripDTO> GetTripsByUserId(int userId);
+		IQueryable<ReadTripDTO> GetTripsByUserId(int userId);
 
         YearsStatisticsDTO GetYearsOfUserTrips(int userId);
 

@@ -52,62 +52,47 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NewTripViewModel model, List<IFormFile> images, string routePoints)
+        public async Task<IActionResult> Create(CreateTripDTO trip, List<IFormFile> images, string routePoints)
         {
             if (ModelState.IsValid)
             {
 				int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
-				NewTripDTO trip = new()
-                {
-                    Name = model.Name,
-                    Description = model.Description,
-                    Distance = model.Distance,
-                    Public = model.Public,
-                    StartTimeZoneOffset = model.StartTimeZoneOffset,
-                    FinishTimeZoneOffset = model.FinishTimeZoneOffset,
-                    StartTime = model.StartTime.AddSeconds(-model.StartTimeZoneOffset),
-                    EndTime = model.EndTime.AddSeconds(-model.FinishTimeZoneOffset),
-                };
                 await new CreateTripCommand(trip, images, _routePointService, _imageService,
                     _tripService, _userService, _environment.WebRootPath, routePoints, userId).ExecuteAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(model);
+            return View(trip);
         }
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
 			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
-            List<TripDTO> trips = await new GetUserTripsCommand(_tripService, userId).ExecuteAsync();
-			List<TripViewModel> tripModels = trips.Select(t => new TripViewModel(t)).ToList();
-            return View(tripModels);
+			IQueryable<ReadTripDTO> trips = new GetUserTripsCommand(_tripService, userId).Execute();
+            return View(trips);
         }
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> History()
+        public IActionResult History()
         {
 			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
-			List<TripDTO> trips = await new GetTripsHistoryCommand(_tripService, userId).ExecuteAsync();
-			List<TripViewModel> tripModels = trips.Select(t => new TripViewModel(t)).ToList();
-			return View(tripModels);
+			IQueryable<ReadTripDTO> trips = new GetTripsHistoryCommand(_tripService, userId).Execute();
+			return View(trips);
 		}
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Public()
+        public IActionResult Public()
         {
 			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
-			List<TripDTO> trips = await new GetOthersPublicTripsCommand(_tripService, userId).ExecuteAsync();
-            List<TripPublicViewModel> tripModels = trips.Select(t => new TripPublicViewModel(t)).ToList();
-            return View(tripModels);
+			IQueryable<ReadTripDTOExtended> trips = new GetOthersPublicTripsCommand(_tripService, userId).Execute();
+            return View(trips);
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             await new DeleteTripCommand(id, _tripService, _imageService).ExecuteAsync();
@@ -118,33 +103,21 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            ExtendedExistingTripDTO trip = await new GetTripByIdCommand(_tripService, id).ExecuteAsync();
-            EditTripViewModel viewModel = new(trip);
-            return View(viewModel);
+            EditTripDTO trip = await new GetTripByIdCommand(_tripService, id).ExecuteAsync();
+            return View(trip);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EditTripViewModel model, List<IFormFile> images, string routePoints)
+        public async Task<IActionResult> Edit(int id, EditTripDTO trip, List<IFormFile> images, string routePoints)
         {
             if (ModelState.IsValid)
             {
-                ExistingTripDTO trip = new()
-                {
-                    Description = model.Description,
-                    Name = model.Name,
-                    StartTime = model.StartTime.AddSeconds(-model.StartTimeZoneOffset),
-                    EndTime = model.EndTime.AddSeconds(-model.FinishTimeZoneOffset),
-                    Distance = model.Distance,
-                    Public = model.Public,
-                    StartTimeZoneOffset = model.StartTimeZoneOffset,
-                    FinishTimeZoneOffset = model.FinishTimeZoneOffset
-                };
                 await new EditTripCommand(trip, id, images, _routePointService, _imageService,
                 _tripService, _environment.WebRootPath, routePoints).ExecuteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(model);
+            return View(trip);
         }
 
         [Authorize]
@@ -152,9 +125,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         public async Task<IActionResult> Details(int id)
         {
 			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
-			TripDTO trip = await new GetTripDetailsCommand(_tripService, id, userId).ExecuteAsync();
-            TripDetailsViewModel viewModel = new(trip);
-            return View(viewModel);
+			TripDetailsDTO trip = await new GetTripDetailsCommand(_tripService, id, userId).ExecuteAsync();
+            return View(trip);
         }
 
         [HttpPost]

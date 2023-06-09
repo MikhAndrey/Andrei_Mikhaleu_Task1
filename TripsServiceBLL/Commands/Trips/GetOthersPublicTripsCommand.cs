@@ -3,7 +3,7 @@ using TripsServiceBLL.DTO.Trips;
 
 namespace TripsServiceBLL.Commands.Trips
 {
-    public class GetOthersPublicTripsCommand : IAsyncCommand<List<TripDTO>>
+    public class GetOthersPublicTripsCommand : ICommand<IQueryable<ReadTripDTOExtended>>
     {
         private ITripService _tripService;
 
@@ -15,7 +15,7 @@ namespace TripsServiceBLL.Commands.Trips
             _userId = userId;
         }
 
-        public async Task<List<TripDTO>> ExecuteAsync()
+        public IQueryable<ReadTripDTOExtended> Execute()
         {
             return _tripService.GetOthersPublicTrips(_userId);
         }

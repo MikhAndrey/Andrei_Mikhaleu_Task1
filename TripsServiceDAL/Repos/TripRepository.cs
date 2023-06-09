@@ -15,7 +15,7 @@ namespace TripsServiceDAL.Repos
                 .Include(t => t.RoutePoints)
                 .Include(t => t.Images)
                 .Include(t => t.Comments)
-                    .ThenInclude(c => c.User)
+                .Include(t => t.User)
                 .FirstOrDefaultAsync(t => t.TripId == id);
         }
 
@@ -41,5 +41,10 @@ namespace TripsServiceDAL.Repos
                 .Include(t => t.User)
                 .Where(t => t.UserId != userId && t.Public);
         }
+
+        public IQueryable<Trip> GetHistoryOfTripsByUserId(int userId)
+        {
+			return _dbSet.Where(t => t.UserId == userId && t.EndTime < DateTime.UtcNow);
+		}
     }
 }

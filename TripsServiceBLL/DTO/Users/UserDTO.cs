@@ -19,7 +19,7 @@ namespace TripsServiceBLL.DTO.Users
 
         public string Password { get; set; }
 
-        public List<TripDTO> Trips { get; set; }
+        public List<ReadTripDTO> Trips { get; set; }
 
         public List<CommentDTO> Comments { get; set; }
     }
