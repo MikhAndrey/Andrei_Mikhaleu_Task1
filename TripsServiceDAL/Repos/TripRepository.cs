@@ -15,6 +15,7 @@ namespace TripsServiceDAL.Repos
                 .Include(t => t.RoutePoints)
                 .Include(t => t.Images)
                 .Include(t => t.Comments)
+                    .ThenInclude(c => c.User)
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(t => t.TripId == id);
         }
