@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using TripsServiceBLL.DTO.Users;
 using TripsServiceBLL.Interfaces;
 using Microsoft.IdentityModel.Tokens;
@@ -27,18 +26,12 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Index(LoginViewModel model, string returnUrl = null)
+		public async Task<IActionResult> Index(UserLoginDTO user, string returnUrl = null)
 		{
 			ViewData["ReturnUrl"] = returnUrl;
 
 			if (ModelState.IsValid)
 			{
-				UserLoginDTO user = new()
-				{
-					UserName = model.UserName,
-					Password = model.Password,
-					RememberMe = model.RememberMe
-				};
 				int? idOfUserFromDb = await _userService.GetUserIdForLoginAsync(user);
 				if (idOfUserFromDb != null)
 				{
@@ -76,7 +69,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 				ModelState.AddModelError(string.Empty, "Invalid credentials. Please, try again.");
 			}
 
-			return View(model);
+			return View(user);
 		}
 
 		[HttpGet]

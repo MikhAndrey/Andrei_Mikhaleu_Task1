@@ -1,11 +1,23 @@
-﻿namespace TripsServiceBLL.DTO.Users
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TripsServiceBLL.DTO.Users
 {
     public class UserLoginDTO
     {
-        public string UserName { get; set; }
+		[Required(ErrorMessage = "Enter your login")]
+		public string UserName { get; set; }
 
-        public string Password { get; set; }
+		[Required(ErrorMessage = "Enter your password")]
+		public string Password { get; set; }
 
-        public bool RememberMe { get; set; }
-    }
+		[Display(Name = "Remember me")]
+		public bool RememberMe { get; set; }
+
+		public UserLoginDTO(UserSignupDTO signupUser)
+		{
+			UserName = signupUser.UserName;
+			Password = signupUser.Password;
+			RememberMe = false;
+		}
+	}
 }

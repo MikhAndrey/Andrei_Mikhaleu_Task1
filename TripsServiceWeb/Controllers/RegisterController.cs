@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using TripsServiceBLL.Commands.Users;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.DTO.Users;
@@ -24,16 +23,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(RegisterViewModel model)
+        public async Task<IActionResult> Index(UserSignupDTO user)
         {
             if (ModelState.IsValid)
             {
-                UserSignupDTO user = new()
-                {
-                    UserName = model.UserName,
-                    Password = model.Password,
-                    Email= model.Email
-                };
                 try
                 {
                     await new RegisterUserCommand(_userService, user).ExecuteAsync();
@@ -41,12 +34,12 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 catch (ValidationException ex)
                 {
                     ModelState.AddModelError(ex.Property, ex.Message);
-                    return View(model);
+                    return View(user);
                 }
 
                 return RedirectToAction("Index", "Home");
             }
-            return View(model);
+            return View(user);
         }
     }
 }

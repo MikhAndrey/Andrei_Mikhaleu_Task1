@@ -2,17 +2,9 @@
 
 namespace TripsServiceBLL.DTO.RoutePoints
 {
-    public class RoutePointDTO
+    public class RoutePointDTO : RoutePointCoordinatesDTO
     {
-        /*public RoutePointDTO()
-        {
-            Trip = new();
-        }*/
         public int RoutePointId { get; set; }
-
-        public decimal Longitude { get; set; }
-
-        public decimal Latitude { get; set; }
 
         public int Ordinal { get; set; }
 
