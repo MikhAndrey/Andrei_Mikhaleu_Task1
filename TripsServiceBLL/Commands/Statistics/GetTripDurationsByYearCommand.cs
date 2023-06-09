@@ -1,5 +1,4 @@
 ﻿using TripsServiceBLL.Utils;
-using TripsServiceDAL.Entities;
 using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Statistics
@@ -8,24 +7,20 @@ namespace TripsServiceBLL.Commands.Statistics
     {
         private ITripService _tripService;
 
-        private IUserService _userService;
-
-        private string _userName;
+        private int _userId;
 
         private int _year;
 
-        public GetTripDurationsByYearCommand(ITripService tripService, IUserService userService, string userName, int year)
+        public GetTripDurationsByYearCommand(ITripService tripService, int userId, int year)
         {
             _tripService = tripService;
-            _userService = userService;
-            _userName = userName;
+            _userId = userId;
             _year = year;
         }
 
         public async Task<List<DurationInMonth>> ExecuteAsync()
         {
-            User? user = await _userService.GetByUserNameAsync(_userName);
-            return await _tripService.GetTotalDurationByMonthsAsync(_year, user.UserId);
+            return await _tripService.GetTotalDurationByMonthsAsync(_year, _userId);
         }
     }
 }

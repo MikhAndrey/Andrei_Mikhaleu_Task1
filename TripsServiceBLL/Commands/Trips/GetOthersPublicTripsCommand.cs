@@ -1,7 +1,4 @@
-﻿using TripsServiceBLL.Services;
-using TripsServiceDAL.Entities;
-using TripsServiceBLL.Infrastructure;
-using TripsServiceBLL.Interfaces;
+﻿using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.DTO.Trips;
 
 namespace TripsServiceBLL.Commands.Trips
@@ -10,21 +7,17 @@ namespace TripsServiceBLL.Commands.Trips
     {
         private ITripService _tripService;
 
-        private IUserService _userService;
+        private int _userId;
 
-        private string _userName;
-
-        public GetOthersPublicTripsCommand(ITripService tripService, IUserService userService, string userName)
+        public GetOthersPublicTripsCommand(ITripService tripService, int userId)
         {
             _tripService = tripService;
-            _userService = userService;
-            _userName = userName;
+            _userId = userId;
         }
 
         public async Task<List<TripDTO>> ExecuteAsync()
         {
-            User? user = await _userService.GetByUserNameAsync(_userName);
-            return _tripService.GetOthersPublicTrips(user.UserId);
+            return _tripService.GetOthersPublicTrips(_userId);
         }
     }
 }

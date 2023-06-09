@@ -24,7 +24,7 @@ namespace TripsServiceBLL.Commands.Trips
 
         private readonly string _routePoints;
 
-        private readonly string? _userName;
+        private readonly int _userId;
 
         public CreateTripCommand(
             NewTripDTO trip,
@@ -35,7 +35,7 @@ namespace TripsServiceBLL.Commands.Trips
             IUserService userService,
             string webRootPath,
             string routePoints,
-            string? userName
+            int userId
         )
         {
             _trip = trip;
@@ -46,12 +46,12 @@ namespace TripsServiceBLL.Commands.Trips
             _userService = userService;
             _webRootPath = webRootPath;
             _routePoints = routePoints;
-            _userName = userName;
+            _userId = userId;
         }
 
         public async Task ExecuteAsync()
         {
-            User? user = await _userService.GetByUserNameAsync(_userName);
+            User? user = await _userService.GetByIdAsync(_userId);
             if (user != null)
             {
                 Trip trip = CustomMapper<NewTripDTO, Trip>.Map(_trip);

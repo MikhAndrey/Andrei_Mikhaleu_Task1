@@ -9,7 +9,9 @@ namespace TripsServiceBLL.Interfaces
 
         Task<User?> GetByEmailAsync(string email);
 
-        Task<bool> UserExistsAsync(UserLoginDTO user);
+		Task<User?> GetByIdAsync(int id);
+
+		Task<int?> GetUserIdForLoginAsync(UserLoginDTO user);
 
         Task AddAsync(User user);
 

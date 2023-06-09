@@ -1,7 +1,4 @@
-﻿using TripsServiceBLL.Services;
-using TripsServiceDAL.Entities;
-using TripsServiceBLL.Infrastructure;
-using TripsServiceBLL.Interfaces;
+﻿using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.DTO.Statistics;
 
 namespace TripsServiceBLL.Commands.Statistics
@@ -10,21 +7,17 @@ namespace TripsServiceBLL.Commands.Statistics
     {
         private ITripService _tripService;
 
-        private IUserService _userService;
+        private int _userId;
 
-        private string _userName;
-
-        public GetDistinctTripYearsCommand(ITripService tripService, IUserService userService, string userName)
+        public GetDistinctTripYearsCommand(ITripService tripService, int userId)
         {
             _tripService = tripService;
-            _userService = userService;
-            _userName = userName;
+            _userId = userId;
         }
 
         public async Task<YearsStatisticsDTO> ExecuteAsync()
         {
-            User? user = await _userService.GetByUserNameAsync(_userName);
-            return _tripService.GetYearsOfUserTrips(user.UserId);
+            return _tripService.GetYearsOfUserTrips(_userId);
         }
     }
 }

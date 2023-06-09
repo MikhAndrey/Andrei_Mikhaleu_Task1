@@ -1,7 +1,6 @@
 ﻿using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TripsServiceBLL.Services;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Commands.Comments;
@@ -57,8 +56,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             if (ModelState.IsValid)
             {
-                string? userName = HttpContext?.User?.Identity?.Name;
-                NewTripDTO trip = new()
+				int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+				NewTripDTO trip = new()
                 {
                     Name = model.Name,
                     Description = model.Description,
@@ -70,7 +69,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                     EndTime = model.EndTime.AddSeconds(-model.FinishTimeZoneOffset),
                 };
                 await new CreateTripCommand(trip, images, _routePointService, _imageService,
-                    _tripService, _userService, _environment.WebRootPath, routePoints, userName).ExecuteAsync();
+                    _tripService, _userService, _environment.WebRootPath, routePoints, userId).ExecuteAsync();
                 return RedirectToAction(nameof(Index));
             }
 
@@ -81,8 +80,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            string? userName = HttpContext?.User?.Identity?.Name;
-            List<TripDTO> trips = await new GetUserTripsCommand(_tripService, _userService, userName).ExecuteAsync();
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+            List<TripDTO> trips = await new GetUserTripsCommand(_tripService, userId).ExecuteAsync();
 			List<TripViewModel> tripModels = trips.Select(t => new TripViewModel(t)).ToList();
             return View(tripModels);
         }
@@ -91,8 +90,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [HttpGet]
         public async Task<IActionResult> History()
         {
-			string? userName = HttpContext?.User?.Identity?.Name;
-			List<TripDTO> trips = await new GetTripsHistoryCommand(_tripService, _userService, userName).ExecuteAsync();
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+			List<TripDTO> trips = await new GetTripsHistoryCommand(_tripService, userId).ExecuteAsync();
 			List<TripViewModel> tripModels = trips.Select(t => new TripViewModel(t)).ToList();
 			return View(tripModels);
 		}
@@ -101,8 +100,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [HttpGet]
         public async Task<IActionResult> Public()
         {
-            string? userName = HttpContext?.User?.Identity?.Name;
-            List<TripDTO> trips = await new GetOthersPublicTripsCommand(_tripService, _userService, userName).ExecuteAsync();
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+			List<TripDTO> trips = await new GetOthersPublicTripsCommand(_tripService, userId).ExecuteAsync();
             List<TripPublicViewModel> tripModels = trips.Select(t => new TripPublicViewModel(t)).ToList();
             return View(tripModels);
         }
@@ -152,8 +151,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            string? userName = HttpContext?.User?.Identity?.Name;
-            TripDTO trip = await new GetTripDetailsCommand(_tripService, _userService, id, userName).ExecuteAsync();
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+			TripDTO trip = await new GetTripDetailsCommand(_tripService, id, userId).ExecuteAsync();
             TripDetailsViewModel viewModel = new(trip);
             return View(viewModel);
         }
@@ -179,14 +178,14 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             if (ModelState.IsValid)
             {
-                string? userName = HttpContext?.User?.Identity?.Name;
+				int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
 
-                CommentDTO comment = new()
+				CommentDTO comment = new()
                 {
                     Message = model.Message,
                     TripId = model.TripId
                 };
-                await new AddCommentCommand(_commentService, _userService, comment, userName).ExecuteAsync();
+                await new AddCommentCommand(_commentService, _userService, comment, userId).ExecuteAsync();
             }
             return RedirectToAction(nameof(Details), new { id = model.TripId });
         }

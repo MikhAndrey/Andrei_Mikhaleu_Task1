@@ -1,6 +1,4 @@
-﻿using TripsServiceBLL.Services;
-using TripsServiceDAL.Entities;
-using TripsServiceBLL.Infrastructure;
+﻿using TripsServiceDAL.Entities;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.DTO.Comments;
 
@@ -14,19 +12,22 @@ namespace TripsServiceBLL.Commands.Comments
 
         private readonly CommentDTO _comment;
 
-        private readonly string _userName;
+        private readonly int _userId;
 
-        public AddCommentCommand(ICommentService commentService, IUserService userService, CommentDTO comment, string userName)
+        public AddCommentCommand(ICommentService commentService, 
+            IUserService userService, 
+            CommentDTO comment, 
+            int userId)
         {
             _commentService = commentService;
             _userService = userService;
-            _userName = userName;
+            _userId = userId;
             _comment = comment;
         }
 
         public async Task ExecuteAsync()
         {
-            User? user = await _userService.GetByUserNameAsync(_userName);
+            User? user = await _userService.GetByIdAsync(_userId);
             if (user != null)
                 await _commentService.AddCommentAsync(_comment, user);
         }

@@ -39,8 +39,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 					Password = model.Password,
 					RememberMe = model.RememberMe
 				};
-
-				if (await _userService.UserExistsAsync(user))
+				int? idOfUserFromDb = await _userService.GetUserIdForLoginAsync(user);
+				if (idOfUserFromDb != null)
 				{
 					DateTime jwtExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(7) : DateTime.UtcNow.AddHours(1);
 					DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(7) : null;
@@ -51,6 +51,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 						Subject = new ClaimsIdentity(new Claim[]
 						{
 							new Claim(ClaimTypes.Name, user.UserName),
+							new Claim ("userId", idOfUserFromDb.ToString())
 						}),
 						Audience = ProgramHelper.Configuration["Jwt:Issuer"],
 						Issuer = ProgramHelper.Configuration["Jwt:Issuer"],

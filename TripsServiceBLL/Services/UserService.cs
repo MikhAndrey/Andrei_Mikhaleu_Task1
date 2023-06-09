@@ -26,10 +26,15 @@ namespace TripsServiceBLL.Services
             return await _unitOfWork.Users.GetByEmailAsync(email);
         }
 
-        public async Task<bool> UserExistsAsync(UserLoginDTO user)
+		public async Task<User?> GetByIdAsync(int id)
+		{
+			return await _unitOfWork.Users.GetByIdAsync(id);
+		}
+
+		public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
         {
             User? userFromDB = await GetByUserNameAsync(user.UserName);
-            return userFromDB != null && userFromDB.Password == Encryptor.Encrypt(user.Password);
+            return (userFromDB != null && userFromDB.Password == Encryptor.Encrypt(user.Password)) ? userFromDB.UserId : null;
         }
 
         public async Task AddAsync(User user)
