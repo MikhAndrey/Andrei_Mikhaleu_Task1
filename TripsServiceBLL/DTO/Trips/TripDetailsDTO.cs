@@ -8,7 +8,7 @@ namespace TripsServiceBLL.DTO.Trips
 {
 	public class TripDetailsDTO : ReadTripDTO
 	{
-		public bool IsCurrentUserTrip { get; set; } 
+		public bool IsCurrentUserTrip { get; set; }
 
 		public bool Public { get; set; }
 
@@ -24,7 +24,7 @@ namespace TripsServiceBLL.DTO.Trips
 
 		public decimal Distance { get; set; }
 
-		public TripDetailsDTO(Trip trip, int userId) : base(trip) 
+		public TripDetailsDTO(Trip trip, int userId) : base(trip)
 		{
 			IsCurrentUserTrip = trip.User.UserId == userId;
 			Public = trip.Public;

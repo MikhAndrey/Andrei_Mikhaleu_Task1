@@ -18,7 +18,7 @@ namespace TripsServiceBLL.Utils
 				tripleDES.Key = _tripleDESKey;
 				tripleDES.IV = _tripleDESIV;
 				using MemoryStream memoryStream = new();
-				using CryptoStream cryptoStream = new(memoryStream, tripleDES.CreateEncryptor(),CryptoStreamMode.Write);
+				using CryptoStream cryptoStream = new(memoryStream, tripleDES.CreateEncryptor(), CryptoStreamMode.Write);
 				using (StreamWriter streamWriter = new(cryptoStream))
 				{
 					streamWriter.Write(text);

@@ -2,8 +2,8 @@
 
 namespace TripsServiceBLL.DTO.Trips
 {
-    public class CreateTripDTO
-    {
+	public class CreateTripDTO
+	{
 		[Required(ErrorMessage = "Please enter a name for your trip")]
 		public string Name { get; set; }
 

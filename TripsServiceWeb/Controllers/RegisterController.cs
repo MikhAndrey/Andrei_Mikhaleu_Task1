@@ -6,40 +6,40 @@ using TripsServiceBLL.Interfaces;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
-    public class RegisterController : Controller
-    {
-        private readonly IUserService _userService;
+	public class RegisterController : Controller
+	{
+		private readonly IUserService _userService;
 
-        public RegisterController(IUserService userService)
-        {
-            _userService = userService;
-        }
+		public RegisterController(IUserService userService)
+		{
+			_userService = userService;
+		}
 
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
+		[HttpGet]
+		public IActionResult Index()
+		{
+			return View();
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(UserSignupDTO user)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await new RegisterUserCommand(_userService, user).ExecuteAsync();
-			    }
-                catch (ValidationException ex)
-                {
-                    ModelState.AddModelError(ex.Property, ex.Message);
-                    return View(user);
-                }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Index(UserSignupDTO user)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					await new RegisterUserCommand(_userService, user).ExecuteAsync();
+				}
+				catch (ValidationException ex)
+				{
+					ModelState.AddModelError(ex.Property, ex.Message);
+					return View(user);
+				}
 
-                return RedirectToAction("Index", "Home");
-            }
-            return View(user);
-        }
-    }
+				return RedirectToAction("Index", "Home");
+			}
+			return View(user);
+		}
+	}
 }

@@ -8,17 +8,17 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Infrastructure
 {
-    public class MappingProfile : Profile
-    {
-        public MappingProfile()
-        {
-            CreateMap<Comment, CommentDTO>();
-            CreateMap<Image, ImageDTO>();
+	public class MappingProfile : Profile
+	{
+		public MappingProfile()
+		{
+			CreateMap<Comment, CommentDTO>();
+			CreateMap<Image, ImageDTO>();
 			CreateMap<RoutePoint, RoutePointDTO>();
-            CreateMap<Trip, ReadTripDTO>();
-            CreateMap<User, UserDTO>();
-            CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
-            CreateMap<CreateTripDTO, Trip>();
-        }
-    }
+			CreateMap<Trip, ReadTripDTO>();
+			CreateMap<User, UserDTO>();
+			CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
+			CreateMap<CreateTripDTO, Trip>();
+		}
+	}
 }

@@ -7,24 +7,24 @@ using TripsServiceBLL.Utils;
 
 namespace TripsServiceBLL.Services
 {
-    public class UserService : IUserService
-    {
-        private readonly IUnitOfWork _unitOfWork;
+	public class UserService : IUserService
+	{
+		private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+		public UserService(IUnitOfWork unitOfWork)
+		{
+			_unitOfWork = unitOfWork;
+		}
 
-        public async Task<User?> GetByUserNameAsync(string userName)
-        {
-            return await _unitOfWork.Users.GetByUsernameAsync(userName);
-        }
+		public async Task<User?> GetByUserNameAsync(string userName)
+		{
+			return await _unitOfWork.Users.GetByUsernameAsync(userName);
+		}
 
-        public async Task<User?> GetByEmailAsync(string email)
-        {
-            return await _unitOfWork.Users.GetByEmailAsync(email);
-        }
+		public async Task<User?> GetByEmailAsync(string email)
+		{
+			return await _unitOfWork.Users.GetByEmailAsync(email);
+		}
 
 		public async Task<User?> GetByIdAsync(int id)
 		{
@@ -32,19 +32,19 @@ namespace TripsServiceBLL.Services
 		}
 
 		public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
-        {
-            User? userFromDB = await GetByUserNameAsync(user.UserName);
-            return (userFromDB != null && userFromDB.Password == Encryptor.Encrypt(user.Password)) ? userFromDB.UserId : null;
-        }
+		{
+			User? userFromDB = await GetByUserNameAsync(user.UserName);
+			return (userFromDB != null && userFromDB.Password == Encryptor.Encrypt(user.Password)) ? userFromDB.UserId : null;
+		}
 
-        public async Task AddAsync(User user)
-        {
-            await _unitOfWork.Users.AddAsync(user);
-            await _unitOfWork.SaveAsync();
-        }
+		public async Task AddAsync(User user)
+		{
+			await _unitOfWork.Users.AddAsync(user);
+			await _unitOfWork.SaveAsync();
+		}
 
-        public async Task TryToRegisterNewUserAsync(UserSignupDTO user)
-        {
+		public async Task TryToRegisterNewUserAsync(UserSignupDTO user)
+		{
 			User? existingUser = await GetByUserNameAsync(user.UserName);
 			if (existingUser != null)
 				throw new ValidationException("This username is already taken", "UserName");
@@ -60,5 +60,5 @@ namespace TripsServiceBLL.Services
 
 			await AddAsync(newUser);
 		}
-    }
+	}
 }

@@ -2,8 +2,8 @@
 
 namespace TripsServiceBLL.DTO.Users
 {
-    public class UserSignupDTO
-    {
+	public class UserSignupDTO
+	{
 		[Required(ErrorMessage = "Enter your username")]
 		[MinLength(4, ErrorMessage = "Username must be at least 4 characters long")]
 		public string UserName { get; set; }

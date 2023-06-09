@@ -1,4 +1,4 @@
-namespace Andrei_Mikhaleu_Task1.Models.ViewModels
+namespace Andrei_Mikhaleu_Task1.Models
 {
     public class ErrorViewModel
     {

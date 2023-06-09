@@ -2,8 +2,8 @@
 
 namespace TripsServiceBLL.DTO.Users
 {
-    public class UserLoginDTO
-    {
+	public class UserLoginDTO
+	{
 		[Required(ErrorMessage = "Enter your login")]
 		public string UserName { get; set; }
 

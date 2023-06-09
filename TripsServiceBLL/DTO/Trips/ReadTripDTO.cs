@@ -2,8 +2,8 @@
 
 namespace TripsServiceBLL.DTO.Trips
 {
-    public class ReadTripDTO
-    {
+	public class ReadTripDTO
+	{
 		public int TripId { get; set; }
 
 		public string Name { get; set; }
