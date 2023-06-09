@@ -61,15 +61,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             return Json(result, options);
         }
 
-        private async Task<YearStatisticsViewModel> GetDistinctYearsModel()
+        private async Task<YearsStatisticsDTO> GetDistinctYearsModel()
         {
 			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
-			YearsStatisticsDTO yearsInfo =  await new GetDistinctTripYearsCommand(_tripService, userId).ExecuteAsync();
-            return new()
-            {
-                Years = yearsInfo.Years,
-                SelectedYear = yearsInfo.SelectedYear
-            };
+			return await new GetDistinctTripYearsCommand(_tripService, userId).ExecuteAsync();
         }
     }
 }
