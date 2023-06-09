@@ -19,5 +19,7 @@ namespace TripsServiceBLL.DTO.Users
 			Password = signupUser.Password;
 			RememberMe = false;
 		}
+
+		public UserLoginDTO() { }
 	}
 }

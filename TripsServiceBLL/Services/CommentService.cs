@@ -1,5 +1,4 @@
 ﻿using TripsServiceDAL.Entities;
-using TripsServiceDAL.Infrastructure;
 using TripsServiceBLL.DTO.Comments;
 using TripsServiceDAL.Interfaces;
 using TripsServiceBLL.Interfaces;
@@ -15,23 +14,18 @@ namespace TripsServiceBLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task AddCommentAsync(CommentDTO comment, User user)
+        public async Task AddCommentAsync(CreateCommentDTO comment, Trip trip, User user)
         {
-            Trip? trip = await _unitOfWork.Trips.GetByIdAsync(comment.TripId);
-
-            if (trip != null)
+            trip.Comments.Add(new Comment
             {
-                trip.Comments.Add(new Comment
-                {
-                    Message = comment.Message,
-                    TripId = comment.TripId,
-                    Date = DateTime.UtcNow,
-                    User = user
-                });
+                Message = comment.Message,
+                TripId = comment.TripId,
+                Date = DateTime.UtcNow,
+                User = user
+            });
 
-                _unitOfWork.Trips.Update(trip);
-                await _unitOfWork.SaveAsync();
-            }
+            _unitOfWork.Trips.Update(trip);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task DeleteCommentAsync(int commentId)

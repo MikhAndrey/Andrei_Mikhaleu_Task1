@@ -146,20 +146,15 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
         [HttpPost]
-        public async Task<IActionResult> AddComment(NewCommentViewModel model)
+        public async Task<IActionResult> AddComment(CreateCommentDTO comment)
         {
             if (ModelState.IsValid)
             {
 				int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
 
-				CommentDTO comment = new()
-                {
-                    Message = model.Message,
-                    TripId = model.TripId
-                };
-                await new AddCommentCommand(_commentService, _userService, comment, userId).ExecuteAsync();
+                await new AddCommentCommand(_commentService, _userService, _tripService, comment, userId).ExecuteAsync();
             }
-            return RedirectToAction(nameof(Details), new { id = model.TripId });
+            return RedirectToAction(nameof(Details), new { id = comment.TripId });
         }
 
         [HttpPost]

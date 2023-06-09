@@ -5,7 +5,7 @@ namespace TripsServiceBLL.Interfaces
 {
     public interface ICommentService
     {
-        Task AddCommentAsync(CommentDTO comment, User user);
+        Task AddCommentAsync(CreateCommentDTO comment, Trip trip, User user);
 
         Task DeleteCommentAsync(int commentId);
     }

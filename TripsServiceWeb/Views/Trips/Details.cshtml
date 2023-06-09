@@ -73,7 +73,7 @@
 
     <h3 class="mt-5 tp-label">Leave a comment</h3>
 
-    @await Html.PartialAsync("_AddComment", new Andrei_Mikhaleu_Task1.Models.ViewModels.NewCommentViewModel {TripId = Model.TripId})
+    @await Html.PartialAsync("_AddComment", new TripsServiceBLL.DTO.Comments.CreateCommentDTO {TripId = Model.TripId})
 
     <h2 class="mt-5 tp-label">Comments</h2>
 
