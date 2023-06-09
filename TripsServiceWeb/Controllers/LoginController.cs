@@ -1,102 +1,100 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Andrei_Mikhaleu_Task1.Models.ViewModels;
 using TripsServiceBLL.DTO.Users;
 using TripsServiceBLL.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
-    public class LoginController : Controller
-    {
-        private readonly IUserService _userService;
+	public class LoginController : Controller
+	{
+		private readonly IUserService _userService;
 
-        public LoginController(IUserService userService)
-        {
-            _userService = userService;
-        }
+		public LoginController(IUserService userService)
+		{
+			_userService = userService;
+		}
 
-        [HttpGet]
-        public IActionResult Index(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
+		[HttpGet]
+		public IActionResult Index(string returnUrl = null)
+		{
+			ViewData["ReturnUrl"] = returnUrl;
+			return View();
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(LoginViewModel model, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Index(LoginViewModel model, string returnUrl = null)
+		{
+			ViewData["ReturnUrl"] = returnUrl;
 
-            if (ModelState.IsValid)
-            {
-                UserLoginDTO user = new()
-                {
-                    UserName = model.UserName,
-                    Password = model.Password,
-                    RememberMe = model.RememberMe
-                };
+			if (ModelState.IsValid)
+			{
+				UserLoginDTO user = new()
+				{
+					UserName = model.UserName,
+					Password = model.Password,
+					RememberMe = model.RememberMe
+				};
 
-                if (await _userService.UserExistsAsync(user))
-                {
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.UserName),
-                    };
-                    var userIdentity = new ClaimsIdentity(claims, "login");
-                    var userPrincipal = new ClaimsPrincipal(userIdentity);
+				if (await _userService.UserExistsAsync(user))
+				{
+					DateTime jwtExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(7) : DateTime.UtcNow.AddHours(1);
+					DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(7) : null;
+					JwtSecurityTokenHandler tokenHandler = new();
+					byte[] key = Encoding.ASCII.GetBytes(ProgramHelper.Configuration["Jwt:Key"]);
+					SecurityTokenDescriptor tokenDescriptor = new()
+					{
+						Subject = new ClaimsIdentity(new Claim[]
+						{
+							new Claim(ClaimTypes.Name, user.UserName),
+						}),
+						Audience = ProgramHelper.Configuration["Jwt:Issuer"],
+						Issuer = ProgramHelper.Configuration["Jwt:Issuer"],
+						Expires = jwtExpiresUTC,
+						SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+					};
+					SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
-                    if (user.RememberMe)
-                    {
-                        await HttpContext.SignInAsync(
-                            CookieAuthenticationDefaults.AuthenticationScheme,
-                            userPrincipal,
-                            new AuthenticationProperties
-                            {
-                                IsPersistent = true,
-                                ExpiresUtc = DateTime.UtcNow.AddDays(7)
-                            });
-                    }
-                    else
-                    {
-                        var authProperties = new AuthenticationProperties
-                        {
-                            IsPersistent = false,
-                            ExpiresUtc = null
-                        };
-                        await HttpContext.SignInAsync(
-                            CookieAuthenticationDefaults.AuthenticationScheme,
-                            userPrincipal,
-                            authProperties);
-                    }
-                    return RedirectToLocal(returnUrl);
-                }
+					string? jwtToken = tokenHandler.WriteToken(token);
 
-                ModelState.AddModelError(string.Empty, "Invalid credentials. Please, try again.");
-            }
+					HttpContext.Response.Cookies.Append("jwt", jwtToken, new CookieOptions
+					{
+						HttpOnly = true,
+						Secure = true,
+						Expires = cookieExpiresUTC,
+						SameSite = SameSiteMode.Strict
+					});
 
-            return View(model);
-        }
+					return RedirectToLocal(returnUrl);
+				}
 
-        [HttpGet]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
-        }
+				ModelState.AddModelError(string.Empty, "Invalid credentials. Please, try again.");
+			}
 
-        private IActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
-        }
-    }
+			return View(model);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Logout()
+		{
+			HttpContext.Response.Cookies.Delete("jwt");
+			return RedirectToAction("Index", "Home");
+		}
+
+		private IActionResult RedirectToLocal(string returnUrl)
+		{
+			if (Url.IsLocalUrl(returnUrl))
+			{
+				return Redirect(returnUrl);
+			}
+			else
+			{
+				return RedirectToAction("Index", "Home");
+			}
+		}
+	}
 }
