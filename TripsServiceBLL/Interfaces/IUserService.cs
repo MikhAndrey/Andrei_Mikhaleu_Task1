@@ -16,5 +16,7 @@ namespace TripsServiceBLL.Interfaces
 		Task AddAsync(User user);
 
 		Task TryToRegisterNewUserAsync(UserSignupDTO user);
+
+		Task<string> GetJWTTokenAsync(UserLoginDTO user);
 	}
 }

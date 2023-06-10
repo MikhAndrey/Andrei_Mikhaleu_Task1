@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Net;
+using TripsServiceBLL.Utils;
 
 namespace Andrei_Mikhaleu_Task1
 {
@@ -45,9 +46,9 @@ namespace Andrei_Mikhaleu_Task1
 					ValidateLifetime = true,
 					RequireExpirationTime = true,
 					ValidateIssuerSigningKey = true,
-					ValidIssuer = Configuration["Jwt:Issuer"],
-					ValidAudience = Configuration["Jwt:Issuer"],
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+					ValidIssuer = Constants.JwtIssuer,
+					ValidAudience = Constants.JwtIssuer,
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.JwtKey))
 				};
 			});
 

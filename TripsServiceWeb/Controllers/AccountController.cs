@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using TripsServiceBLL.DTO.Users;
 using TripsServiceBLL.Interfaces;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Commands.Users;
 
@@ -61,29 +57,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 			if (ModelState.IsValid)
 			{
-				int? idOfUserFromDb = await _userService.GetUserIdForLoginAsync(user);
-				if (idOfUserFromDb != null)
+				try
 				{
-					DateTime jwtExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(7) : DateTime.UtcNow.AddHours(1);
+					string jwtToken = await new GetLoginJWTTokenCommand(_userService, user).ExecuteAsync();
 					DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(7) : null;
-					JwtSecurityTokenHandler tokenHandler = new();
-					byte[] key = Encoding.ASCII.GetBytes(ProgramHelper.Configuration["Jwt:Key"]);
-					SecurityTokenDescriptor tokenDescriptor = new()
-					{
-						Subject = new ClaimsIdentity(new Claim[]
-						{
-							new Claim(ClaimTypes.Name, user.UserName),
-							new Claim ("userId", idOfUserFromDb.ToString())
-						}),
-						Audience = ProgramHelper.Configuration["Jwt:Issuer"],
-						Issuer = ProgramHelper.Configuration["Jwt:Issuer"],
-						Expires = jwtExpiresUTC,
-						SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-					};
-					SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-
-					string? jwtToken = tokenHandler.WriteToken(token);
-
 					HttpContext.Response.Cookies.Append("jwt", jwtToken, new CookieOptions
 					{
 						HttpOnly = true,
@@ -94,8 +71,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 					return RedirectToLocal(returnUrl);
 				}
-
-				ModelState.AddModelError(string.Empty, "Invalid credentials. Please, try again.");
+				catch (ValidationException ex)
+				{
+					ModelState.AddModelError(ex.Property, ex.Message);
+				}
 			}
 
 			return View(user);

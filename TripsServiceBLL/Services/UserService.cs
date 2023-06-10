@@ -4,6 +4,10 @@ using TripsServiceBLL.Infrastructure;
 using TripsServiceDAL.Interfaces;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace TripsServiceBLL.Services
 {
@@ -59,6 +63,33 @@ namespace TripsServiceBLL.Services
 			};
 
 			await AddAsync(newUser);
+		}
+
+		public async Task<string> GetJWTTokenAsync(UserLoginDTO user)
+		{
+			int? idOfUserFromDb = await GetUserIdForLoginAsync(user);
+			if (idOfUserFromDb != null)
+			{
+				DateTime jwtExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(7) : DateTime.UtcNow.AddHours(1);
+				JwtSecurityTokenHandler tokenHandler = new();
+				byte[] key = Encoding.ASCII.GetBytes(Constants.JwtKey);
+				SecurityTokenDescriptor tokenDescriptor = new()
+				{
+					Subject = new ClaimsIdentity(new Claim[]
+					{
+							new Claim(ClaimTypes.Name, user.UserName),
+							new Claim ("userId", idOfUserFromDb.ToString())
+					}),
+					Audience = Constants.JwtIssuer,
+					Issuer = Constants.JwtIssuer,
+					Expires = jwtExpiresUTC,
+					SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+				};
+				SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+				return tokenHandler.WriteToken(token);
+			}
+			else
+				throw new ValidationException("Invalid credentials. Please, try again.", "");
 		}
 	}
 }
