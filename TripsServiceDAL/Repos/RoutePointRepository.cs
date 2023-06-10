@@ -19,7 +19,7 @@ namespace TripsServiceDAL.Repos
 		public IQueryable<RoutePoint> GetRoutePointsByYear(int year, int userId)
 		{
 			return _dbSet
-				.Where(x => x.Trip.StartTime.Year == year)
+				.Where(x => x.Trip.StartTime.Year == year || x.Trip.EndTime.Year == year)
 				.Include(rp => rp.Trip.User)
 				.Where(rp => rp.Trip.UserId == userId);
 		}
