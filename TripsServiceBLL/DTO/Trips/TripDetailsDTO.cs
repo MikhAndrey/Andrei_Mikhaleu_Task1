@@ -2,6 +2,7 @@
 using TripsServiceBLL.DTO.Images;
 using TripsServiceBLL.DTO.RoutePoints;
 using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.DTO.Trips
@@ -22,6 +23,8 @@ namespace TripsServiceBLL.DTO.Trips
 
 		public int FinishTimeZoneOffset { get; set; }
 
+		public string Duration { get; set; }
+
 		public decimal Distance { get; set; }
 
 		public TripDetailsDTO(Trip trip, int userId) : base(trip)
@@ -33,7 +36,8 @@ namespace TripsServiceBLL.DTO.Trips
 			Comments = CustomMapper<List<Comment>, List<CommentDTO>>.Map(trip.Comments);
 			StartTimeZoneOffset = trip.StartTimeZoneOffset;
 			FinishTimeZoneOffset = trip.FinishTimeZoneOffset;
-			Distance = trip.Distance;
+			Duration = TimeUtils.GetTimeSpanString(EndTime.AddSeconds(StartTimeZoneOffset - FinishTimeZoneOffset) - StartTime);
+            Distance = trip.Distance;
 		}
 
 		public TripDetailsDTO() { }
