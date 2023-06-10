@@ -7,6 +7,7 @@ using TripsServiceBLL.Commands.Images;
 using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Utils;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
@@ -55,7 +56,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+				int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 				await new CreateTripCommand(trip, images, _routePointService, _imageService,
 					_tripService, _userService, _environment.WebRootPath, routePoints, userId).ExecuteAsync();
 				return RedirectToAction(nameof(Index));
@@ -67,7 +68,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public IActionResult Index()
 		{
-			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 			IQueryable<ReadTripDTO> trips = new GetUserTripsCommand(_tripService, userId).Execute();
 			return View(trips);
 		}
@@ -76,7 +77,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public IActionResult History()
 		{
-			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 			IQueryable<ReadTripDTO> trips = new GetTripsHistoryCommand(_tripService, userId).Execute();
 			return View(trips);
 		}
@@ -85,7 +86,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public IActionResult Public()
 		{
-			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 			IQueryable<ReadTripDTOExtended> trips = new GetOthersPublicTripsCommand(_tripService, userId).Execute();
 			return View(trips);
 		}
@@ -123,7 +124,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Details(int id)
 		{
-			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 			TripDetailsDTO trip = await new GetTripDetailsCommand(_tripService, id, userId).ExecuteAsync();
 			return View(trip);
 		}
@@ -149,7 +150,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+				int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 
 				await new AddCommentCommand(_commentService, _userService, _tripService, comment, userId).ExecuteAsync();
 			}
@@ -166,15 +167,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpPost]
 		public async Task<IActionResult> DeleteImage(int imageId)
 		{
-			try
-			{
-				await new DeleteImageCommand(_environment.WebRootPath, imageId, _imageService).ExecuteAsync();
-				return NoContent();
-			}
-			catch (ValidationException ex)
-			{
-				return NotFound(ex.Message);
-			}
+			await new DeleteImageCommand(_environment.WebRootPath, imageId, _imageService).ExecuteAsync();
+			return NoContent();
 		}
 	}
 }

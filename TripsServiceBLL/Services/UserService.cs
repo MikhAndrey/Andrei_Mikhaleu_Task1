@@ -51,10 +51,10 @@ namespace TripsServiceBLL.Services
 		{
 			User? existingUser = await GetByUserNameAsync(user.UserName);
 			if (existingUser != null)
-				throw new ValidationException("This username is already taken", "UserName");
+				throw new ValidationException(Constants.ExistingUserNameMessage, "UserName");
 			existingUser = await GetByEmailAsync(user.Email);
 			if (existingUser != null)
-				throw new ValidationException("This email is already taken", "Email");
+				throw new ValidationException(Constants.ExistingEmailMessage, "Email");
 			User newUser = new()
 			{
 				UserName = user.UserName,
@@ -70,7 +70,8 @@ namespace TripsServiceBLL.Services
 			int? idOfUserFromDb = await GetUserIdForLoginAsync(user);
 			if (idOfUserFromDb != null)
 			{
-				DateTime jwtExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(7) : DateTime.UtcNow.AddHours(1);
+				DateTime jwtExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(Constants.AuthorizationExpirationInDays) 
+					: DateTime.UtcNow.AddHours(Constants.JwtExpirationInHours);
 				JwtSecurityTokenHandler tokenHandler = new();
 				byte[] key = Encoding.ASCII.GetBytes(Constants.JwtKey);
 				SecurityTokenDescriptor tokenDescriptor = new()
@@ -78,7 +79,7 @@ namespace TripsServiceBLL.Services
 					Subject = new ClaimsIdentity(new Claim[]
 					{
 							new Claim(ClaimTypes.Name, user.UserName),
-							new Claim ("userId", idOfUserFromDb.ToString())
+							new Claim (Constants.UserIdClaimName, idOfUserFromDb.ToString())
 					}),
 					Audience = Constants.JwtIssuer,
 					Issuer = Constants.JwtIssuer,
@@ -89,7 +90,7 @@ namespace TripsServiceBLL.Services
 				return tokenHandler.WriteToken(token);
 			}
 			else
-				throw new ValidationException("Invalid credentials. Please, try again.", "");
+				throw new ValidationException(Constants.InvalidCredentialsMessage, "");
 		}
 	}
 }

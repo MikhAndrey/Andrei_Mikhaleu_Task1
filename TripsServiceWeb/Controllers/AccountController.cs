@@ -3,6 +3,7 @@ using TripsServiceBLL.DTO.Users;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Commands.Users;
+using TripsServiceBLL.Utils;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
@@ -60,8 +61,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 				try
 				{
 					string jwtToken = await new GetLoginJWTTokenCommand(_userService, user).ExecuteAsync();
-					DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(7) : null;
-					HttpContext.Response.Cookies.Append("jwt", jwtToken, new CookieOptions
+					DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(Constants.AuthorizationExpirationInDays) : null;
+					HttpContext.Response.Cookies.Append(Constants.JwtTokenCookiesAlias, jwtToken, new CookieOptions
 					{
 						HttpOnly = true,
 						Secure = true,
@@ -83,7 +84,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Logout()
 		{
-			HttpContext.Response.Cookies.Delete("jwt");
+			HttpContext.Response.Cookies.Delete(Constants.JwtTokenCookiesAlias);
 			return RedirectToAction("Index", "Home");
 		}
 

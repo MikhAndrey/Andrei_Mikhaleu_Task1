@@ -1,5 +1,4 @@
 ﻿using TripsServiceDAL.Entities;
-using TripsServiceBLL.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using TripsServiceBLL.Utils;
 using TripsServiceBLL.DTO.Trips;
@@ -126,7 +125,8 @@ namespace TripsServiceBLL.Services
 						.Select(t =>
 						{
 							var start = t.StartTime <= new DateTime(year, month, 1) ? new DateTime(year, month, 1) : t.StartTime;
-							DateTime end = t.EndTime >= new DateTime(year, month, DateTime.DaysInMonth(year, month)) ? new DateTime(year, month, DateTime.DaysInMonth(year, month)) : t.EndTime;
+							DateTime end = t.EndTime >= new DateTime(year, month, DateTime.DaysInMonth(year, month)) ?
+							new DateTime(year, month, DateTime.DaysInMonth(year, month)) : t.EndTime;
 							return (end - start).TotalHours;
 						})
 					.DefaultIfEmpty(0)

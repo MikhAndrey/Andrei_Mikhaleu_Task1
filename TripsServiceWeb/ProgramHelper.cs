@@ -72,7 +72,7 @@ namespace Andrei_Mikhaleu_Task1
 
 			app.Use(async (context, next) =>
 			{
-				string? jwtToken = context.Request.Cookies["jwt"];
+				string? jwtToken = context.Request.Cookies[Constants.JwtTokenCookiesAlias];
 				if (!string.IsNullOrEmpty(jwtToken))
 				{
 					context.Request.Headers.Add("Authorization", "Bearer " + jwtToken);

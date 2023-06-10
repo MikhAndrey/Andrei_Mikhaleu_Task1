@@ -1,9 +1,8 @@
 ﻿using TripsServiceDAL.Entities;
-using TripsServiceDAL.Infrastructure;
 using Microsoft.AspNetCore.Http;
-using TripsServiceBLL.Infrastructure;
 using TripsServiceDAL.Interfaces;
 using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Utils;
 
 namespace TripsServiceBLL.Services
 {
@@ -25,12 +24,12 @@ namespace TripsServiceBLL.Services
 				{
 					string? extension = Path.GetExtension(image.FileName);
 					string newFileName = $"{Guid.NewGuid()}{extension}";
-					string filePath = Path.Combine(webRootPath, "images", newFileName);
+					string filePath = Path.Combine(webRootPath, Constants.ImagesFolderName, newFileName);
 					using (var fileStream = new FileStream(filePath, FileMode.Create))
 					{
 						await image.CopyToAsync(fileStream);
 					}
-					newImageFileNames.Add($"/images/{newFileName}");
+					newImageFileNames.Add($"/{Constants.ImagesFolderName}/{newFileName}");
 				}
 			}
 			foreach (string imageUrl in newImageFileNames)
@@ -43,20 +42,16 @@ namespace TripsServiceBLL.Services
 		{
 			Image? image = await _unitOfWork.Images.GetByIdAsync(imageId);
 
-			if (image == null)
+			if (image != null)
 			{
-				throw new ValidationException("Image was not found", "");
+				_unitOfWork.Images.Delete(image);
+				await _unitOfWork.SaveAsync();
+
+				string path = webRootPath + image.Link;
+
+				if (File.Exists(path))
+					File.Delete(path);
 			}
-
-			_unitOfWork.Images.Delete(image);
-			await _unitOfWork.SaveAsync();
-
-			string path = webRootPath + image.Link;
-
-			if (File.Exists(path))
-				File.Delete(path);
-			else
-				throw new ValidationException("File of image was not found", "");
 		}
 
 		public void DeleteTripImages(Trip trip)
@@ -68,7 +63,7 @@ namespace TripsServiceBLL.Services
 
 		public void CreateImagesDirectory(string webRootPath)
 		{
-			string path = Path.Combine(webRootPath, "images");
+			string path = Path.Combine(webRootPath, Constants.ImagesFolderName);
 
 			if (!Directory.Exists(path))
 			{

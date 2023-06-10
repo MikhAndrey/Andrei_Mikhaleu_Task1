@@ -35,7 +35,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[Authorize]
 		public async Task<IActionResult> TotalDurationData(int year)
 		{
-			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 			List<DurationInMonth> durations = await new GetTripDurationsByYearCommand(_tripService, userId, year).ExecuteAsync();
 			return Json(durations);
 		}
@@ -51,7 +51,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[Authorize]
 		public async Task<IActionResult> HeatMapData(int year)
 		{
-			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 			IQueryable<RoutePointCoordinatesDTO> result = await new GetRoutePointsCoordinatesCommand(_routePointService, userId, year).ExecuteAsync();
 			JsonSerializerOptions options = new()
 			{
@@ -62,7 +62,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		private async Task<YearsStatisticsDTO> GetDistinctYearsModel()
 		{
-			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value);
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 			return await new GetDistinctTripYearsCommand(_tripService, userId).ExecuteAsync();
 		}
 	}

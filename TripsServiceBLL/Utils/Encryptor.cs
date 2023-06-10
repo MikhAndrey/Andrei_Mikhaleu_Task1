@@ -6,9 +6,9 @@ namespace TripsServiceBLL.Utils
 	public static class Encryptor
 	{
 
-		static readonly byte[] _tripleDESKey = Encoding.ASCII.GetBytes("JrchIVQqLTTFkS1SiL1JPRJm");
+		static readonly byte[] _tripleDESKey = Encoding.ASCII.GetBytes(Constants.TripleDesKey);
 
-		static readonly byte[] _tripleDESIV = Encoding.ASCII.GetBytes("tsXLqW0Y");
+		static readonly byte[] _tripleDESIV = Encoding.ASCII.GetBytes(Constants.TripleDesIV);
 
 		public static string Encrypt(string text)
 		{
