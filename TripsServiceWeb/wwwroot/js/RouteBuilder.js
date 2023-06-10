@@ -61,6 +61,7 @@ async function removeMarker(marker) {
     if (markers.length == 1) {
         $("#endTimeInput").val('');
         $("#route-length-view").text('0');
+        $("#route-duration-view").text('0 minutes');
     }
 }
 
@@ -132,6 +133,7 @@ async function calculateAndDisplayRoute(routeIsReadOnly) {
                 const totalDistance = legs.reduce((total, current) => total + current.distance.value, 0);
                 totalDuration = legs.reduce((total, current) => total + current.duration.value, 0);
                 const distanceText = getTextOfDistance(totalDistance);
+                const durationText = getStringRepresentationOfTripDuration(totalDuration);
 
                 storeDistance(totalDistance);
                 await getAndSaveTimeZoneOffsets(markers[0], markers[markers.length - 1]);
@@ -139,6 +141,7 @@ async function calculateAndDisplayRoute(routeIsReadOnly) {
                 storeRoutePoints();
 
                 $("#route-length-view").text(distanceText);
+                $("#route-duration-view").text(durationText);
             }
         } else {
             window.alert('Directions request failed due to ' + status);
@@ -170,6 +173,18 @@ function setEndDate(tripDuration) {
         $("#endTimeInput").val(endDate.toISOString().slice(0, 16));
     } catch{}
 }
+
+function getStringRepresentationOfTripDuration(tripDuration){
+    const SECONDS_IN_DAY = 86400;
+    const SECONDS_IN_HOUR = 3600;
+    const SECONDS_IN_MINUTE = 60;
+
+    const days = Math.floor(tripDuration / SECONDS_IN_DAY);
+    const hours = Math.floor((tripDuration % SECONDS_IN_DAY) / SECONDS_IN_HOUR);
+    const minutes = Math.floor((tripDuration % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE);
+
+    return `${days} days, ${hours} hours, ${minutes} minutes`;
+};
 
 function getTextOfDistance(distance){
     return `${distance / 1000}`;

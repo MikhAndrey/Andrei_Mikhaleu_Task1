@@ -36,7 +36,8 @@
     </div>
     <div class="tp-label">Click on the map to place trip points</div>
     <div id="map" class="form-group tp-form-group"></div>
-    <div class="tp-label">Trip's distance: <span id="route-length-view" class="tp-input-desc">@Model.Distance</span>&nbsp km</div>
+    <div class="tp-label mt-2 mb-2">Trip's distance: <span id="route-length-view" class="tp-input-desc">@Model.Distance</span>&nbsp km</div>
+    <div class="tp-label mt-2 mb-2">Trip's duration: <span class="tp-input-desc" id="route-duration-view">0 minutes</span></div>
     <input type="hidden" name="routePoints" id="route-points-input"/>
     <input type="hidden" name="Distance" asp-for="Distance" value="@Model.Distance" />
     <input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset"/>
