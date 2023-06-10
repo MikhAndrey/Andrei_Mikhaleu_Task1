@@ -1,6 +1,7 @@
 ﻿@model TripsServiceBLL.DTO.Statistics.YearsStatisticsDTO
 
-<div class="tp-form">
+<h4 class="tp-label" id="no-content">You have no trips yet</h4>
+<div id="main-content" class="tp-form">
     <h5 class="tp-label">Select year for displaying statistics:</h5>
     @Html.DropDownListFor(m => m.SelectedYear, new SelectList(Model.Years), new { @class = "form-control tp-form-group" })
     <div id="totalDurationDiagram" style="width:100%; height: 500px"></div>
@@ -9,6 +10,9 @@
 @section Scripts {
     <script>
         google.charts.load('current', {packages: ['corechart', 'bar']});
+
+        $("#no-content").hide();
+        $("#main-content").hide();
 
         function loadDataForProperYear() {
             const year = $('#SelectedYear').val();
@@ -54,26 +58,32 @@
 
 
         function drawDiagram(data){
-            const dataTable = new google.visualization.DataTable();
-            dataTable.addColumn('string', 'Month');
-            dataTable.addColumn('number', 'Total duration');
-            dataTable.addRows(data.length);
+            if (data.length == 0){
+                $("#no-content").show();
+                $("#main-content").hide();
+            } else {
+                $("#main-content").show();
+                const dataTable = new google.visualization.DataTable();
+                dataTable.addColumn('string', 'Month');
+                dataTable.addColumn('number', 'Total duration');
+                dataTable.addRows(data.length);
 
-            for (let i = 0; i < data.length; i++) {
-                dataTable.setCell(i, 0, data[i].month);
-                dataTable.setCell(i, 1, data[i].totalDuration);
-                dataTable.setFormattedValue(i, 1, formatDuration(data[i].totalDuration));
+                for (let i = 0; i < data.length; i++) {
+                    dataTable.setCell(i, 0, data[i].month);
+                    dataTable.setCell(i, 1, data[i].totalDuration);
+                    dataTable.setFormattedValue(i, 1, formatDuration(data[i].totalDuration));
+                }
+
+                const options = {
+                    title: 'Monthly trip durations',
+                    hAxis: {title: 'Month'},
+                    vAxis: {title: 'Total duration (hours)'},
+                    tooltip: {isHtml: true}
+                };
+
+                const chart = new google.visualization.ColumnChart(document.getElementById('totalDurationDiagram'));
+                chart.draw(dataTable, options);                
             }
-
-            const options = {
-                title: 'Monthly trip durations',
-                hAxis: {title: 'Month'},
-                vAxis: {title: 'Total duration (hours)'},
-                tooltip: {isHtml: true}
-            };
-
-            const chart = new google.visualization.ColumnChart(document.getElementById('totalDurationDiagram'));
-            chart.draw(dataTable, options);
         };
 
         window.onload = loadDataForProperYear;

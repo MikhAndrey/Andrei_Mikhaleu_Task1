@@ -114,7 +114,10 @@ namespace TripsServiceBLL.Services
 
 		public async Task<List<DurationInMonth>> GetTotalDurationByMonthsAsync(int year, int userId)
 		{
-			List<Trip> trips = await _unitOfWork.Trips.GetTripsByUserId(userId).ToListAsync();
+			List<Trip> trips = await _unitOfWork.Trips.GetTripsByYearAndUserId(year, userId).ToListAsync();
+
+			if (trips.Count == 0)
+				return new();
 
 			List<DurationInMonth> result = Enumerable.Range(1, 12)
 				.Select(month => new DurationInMonth()

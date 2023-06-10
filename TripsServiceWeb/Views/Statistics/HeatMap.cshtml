@@ -1,6 +1,7 @@
 ﻿@model TripsServiceBLL.DTO.Statistics.YearsStatisticsDTO
 
-<div class="tp-form">
+<h4 class="tp-label" id="no-content">You have no trips yet</h4>
+<div id="main-content" class="tp-form">
     <h5 class="tp-label">Select year for displaying statistics:</h5>
     @Html.DropDownListFor(m => m.SelectedYear, new SelectList(Model.Years), new { @class = "form-control tp-form-group" })
     <div id="heatMap" style="width:100%; height:600px"></div>
@@ -9,6 +10,13 @@
     <script>
         let map;
         let heatmapLayers = [];
+        
+        $("#no-content").hide();
+        $("#main-content").hide();
+
+        $(document).ready(() => {
+            loadDataForProperYear();
+        });
 
         function createHeatmapLayer(heatMapData) {
             const heatmapLayer = new google.maps.visualization.HeatmapLayer({
@@ -58,10 +66,16 @@
 
         function drawHeatMap(coordinateData) {
             clearHeatmapLayers();
-            const heatMapData = transformDataToCoordinates(coordinateData);
-            createHeatmapLayer(heatMapData);
-            heatmapLayers[0].set("opacity", 0.8);
-            heatmapLayers[0].set("radius", 50);
+            if (coordinateData.length == 0){
+                $("#no-content").show();
+                $("#main-content").hide();
+            } else {
+                const heatMapData = transformDataToCoordinates(coordinateData);
+                createHeatmapLayer(heatMapData);
+                heatmapLayers[0].set("opacity", 0.8);
+                heatmapLayers[0].set("radius", 50);
+                $("#main-content").show();
+            }
         };
 
         $(document).ready(loadDataForProperYear);

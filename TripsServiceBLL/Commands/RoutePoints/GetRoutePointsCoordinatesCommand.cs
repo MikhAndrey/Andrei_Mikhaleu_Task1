@@ -3,7 +3,7 @@ using TripsServiceBLL.DTO.RoutePoints;
 
 namespace TripsServiceBLL.Commands.RoutePoints
 {
-	public class GetRoutePointsCoordinatesCommand : IAsyncCommand<IQueryable<RoutePointCoordinatesDTO>>
+	public class GetRoutePointsCoordinatesCommand : ICommand<IQueryable<RoutePointCoordinatesDTO>>
 	{
 		private IRoutePointService _routePointService;
 
@@ -18,7 +18,7 @@ namespace TripsServiceBLL.Commands.RoutePoints
 			_year = year;
 		}
 
-		public async Task<IQueryable<RoutePointCoordinatesDTO>> ExecuteAsync()
+		public IQueryable<RoutePointCoordinatesDTO> Execute()
 		{
 			return _routePointService.GetRoutePointsByYear(_year, _userId);
 		}

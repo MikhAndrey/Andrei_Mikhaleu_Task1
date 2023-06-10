@@ -52,7 +52,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		public async Task<IActionResult> HeatMapData(int year)
 		{
 			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
-			IQueryable<RoutePointCoordinatesDTO> result = await new GetRoutePointsCoordinatesCommand(_routePointService, userId, year).ExecuteAsync();
+			IQueryable<RoutePointCoordinatesDTO> result = new GetRoutePointsCoordinatesCommand(_routePointService, userId, year).Execute();
 			JsonSerializerOptions options = new()
 			{
 				ReferenceHandler = ReferenceHandler.Preserve

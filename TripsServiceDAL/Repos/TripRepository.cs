@@ -36,6 +36,11 @@ namespace TripsServiceDAL.Repos
 			return _dbSet.Where(t => t.UserId == userId);
 		}
 
+		public IQueryable<Trip> GetTripsByYearAndUserId(int year, int userId)
+		{
+			return _dbSet.Where(t => t.UserId == userId && (t.StartTime.Year == year || t.EndTime.Year == year));
+		}
+
 		public IQueryable<Trip> GetOthersPublicTrips(int userId)
 		{
 			return _dbSet
