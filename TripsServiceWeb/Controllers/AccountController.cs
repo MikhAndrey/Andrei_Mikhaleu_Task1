@@ -5,20 +5,49 @@ using TripsServiceBLL.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Commands.Users;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
-	public class LoginController : Controller
+	public class AccountController : Controller
 	{
 		private readonly IUserService _userService;
 
-		public LoginController(IUserService userService)
+		public AccountController(IUserService userService)
 		{
 			_userService = userService;
 		}
 
 		[HttpGet]
-		public IActionResult Index(string returnUrl = null)
+		public IActionResult Register()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Register(UserSignupDTO user)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					await new RegisterUserCommand(_userService, user).ExecuteAsync();
+				}
+				catch (ValidationException ex)
+				{
+					ModelState.AddModelError(ex.Property, ex.Message);
+					return View(user);
+				}
+
+				return await Login(new(user), null);
+			}
+			return View(user);
+		}
+
+		[HttpGet]
+		public IActionResult Login(string returnUrl = null)
 		{
 			ViewData["ReturnUrl"] = returnUrl;
 			return View();
@@ -26,7 +55,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Index(UserLoginDTO user, string returnUrl = null)
+		public async Task<IActionResult> Login(UserLoginDTO user, string returnUrl = null)
 		{
 			ViewData["ReturnUrl"] = returnUrl;
 

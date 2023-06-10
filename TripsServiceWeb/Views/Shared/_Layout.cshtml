@@ -52,16 +52,16 @@
 								<div class="nav-item dropdown mr-50 fs-5">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown-1" role="button" data-bs-toggle="dropdown" aria-expanded="false">@($"Welcome back, {userName}!")</a>
 									<ul class="dropdown-menu tp-gradient-standard" aria-labelledby="navbarDropdown-1">
-										<li><a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Logout">Log Out</a></li>
+										<li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Log Out</a></li>
 									</ul>
 								</div>
 							} else {
 								<div class="nav-item dropdown mr-50 fs-5">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown-1" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
 									<ul class="dropdown-menu tp-gradient-standard" aria-labelledby="navbarDropdown-1">
-										<li ><a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Index">Log In</a></li>
+										<li ><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Log In</a></li>
 										<li><hr class="dropdown-divider"></li>
-										<li><a class="dropdown-item" asp-area="" asp-controller="Register" asp-action="Index">Sign Up</a></li>
+										<li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a></li>
 									</ul>
 								</div>
 							}

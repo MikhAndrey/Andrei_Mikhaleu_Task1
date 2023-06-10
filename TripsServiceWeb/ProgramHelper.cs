@@ -86,7 +86,7 @@ namespace Andrei_Mikhaleu_Task1
 
 				if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
 				{
-					response.Redirect("/Login/Index");
+					response.Redirect("/Account/Login");
 				}
 			});
 
