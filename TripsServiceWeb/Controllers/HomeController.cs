@@ -1,8 +1,7 @@
-﻿using Andrei_Mikhaleu_Task1.Models.ViewModels;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Services;
+using Andrei_Mikhaleu_Task1.Models;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

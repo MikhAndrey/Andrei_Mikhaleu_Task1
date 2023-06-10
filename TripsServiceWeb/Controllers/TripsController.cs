@@ -1,5 +1,4 @@
-﻿using Andrei_Mikhaleu_Task1.Models.ViewModels;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.Infrastructure;

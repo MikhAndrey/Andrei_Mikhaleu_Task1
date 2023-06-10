@@ -20,40 +20,51 @@
 		<header>
 			<nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 tp-gradient-standard">
 				<div class="container-fluid">
-					<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Planyourtrip.com - plan your trips with us</a>
+					<a class="navbar-brand fs-5" asp-area="" asp-controller="Home" asp-action="Index">Planyourtrip.com - plan your trips with us</a>
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
 					<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 						<ul class="navbar-nav flex-grow-1">
 							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Main Menu</a>
+								<a class="nav-link dropdown-toggle fs-5" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Main Menu</a>
 								<ul class="dropdown-menu tp-gradient-standard" aria-labelledby="navbarDropdown">
 									<li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-									@{
-										string? userName = ViewContext?.HttpContext?.User?.Identity?.Name;
-										if (userName == null)
-										{
-											<li ><a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Index">Log In</a></li>
-											<li><a class="dropdown-item" asp-area="" asp-controller="Register" asp-action="Index">Sign Up</a></li>
-										}
-										else
-										{
-											<li><a class="dropdown-item" asp-area="" asp-controller="Trips" asp-action="Create">New trip</a></li>
-											<li><a class="dropdown-item" asp-area="" asp-controller="Trips" asp-action="Index">My trips</a></li>
-											<li><a class="dropdown-item" asp-area="" asp-controller="Trips" asp-action="History">History</a></li>
-											<li><a class="dropdown-item" asp-area="" asp-controller="Statistics" asp-action="HeatMap">Heatmap of my trips</a></li>
-											<li><a class="dropdown-item" asp-area="" asp-controller="Statistics" asp-action="TotalDuration">Total duration of my trips</a></li>
-											<li><a class="dropdown-item" asp-area="" asp-controller="Trips" asp-action="Public">Trips of others</a></li>
-										<li><a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Logout">Log Out</a></li>
-										}
-									}
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" asp-area="" asp-controller="Trips" asp-action="Create">New trip</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" asp-area="" asp-controller="Trips" asp-action="Index">My trips</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" asp-area="" asp-controller="Trips" asp-action="History">History</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" asp-area="" asp-controller="Statistics" asp-action="HeatMap">Heatmap of my trips</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" asp-area="" asp-controller="Statistics" asp-action="TotalDuration">Total duration of my trips</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" asp-area="" asp-controller="Trips" asp-action="Public">Trips of others</a></li>					
 								</ul>
 							</li>
 						</ul>
-						@if (userName != null)
-						{
-							<h5 class="tp-label">@($"Welcome back, {userName}!")</h5>
+						@{ 
+							string? userName = ViewContext?.HttpContext?.User?.Identity?.Name;
+							if (userName != null)
+							{						
+								<div class="nav-item dropdown mr-50 fs-5">
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown-1" role="button" data-bs-toggle="dropdown" aria-expanded="false">@($"Welcome back, {userName}!")</a>
+									<ul class="dropdown-menu tp-gradient-standard" aria-labelledby="navbarDropdown-1">
+										<li><a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Logout">Log Out</a></li>
+									</ul>
+								</div>
+							} else {
+								<div class="nav-item dropdown mr-50 fs-5">
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown-1" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+									<ul class="dropdown-menu tp-gradient-standard" aria-labelledby="navbarDropdown-1">
+										<li ><a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Index">Log In</a></li>
+										<li><hr class="dropdown-divider"></li>
+										<li><a class="dropdown-item" asp-area="" asp-controller="Register" asp-action="Index">Sign Up</a></li>
+									</ul>
+								</div>
+							}
 						}
 					</div>
 				</div>
