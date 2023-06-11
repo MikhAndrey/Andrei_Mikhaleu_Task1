@@ -92,7 +92,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[Authorize]
 		[HttpDelete]
-		public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
 		{
 			await new DeleteTripCommand(id, _tripService, _imageService, _environment.WebRootPath).ExecuteAsync();
 			return Ok();
@@ -107,8 +107,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
 		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, EditTripDTO trip, List<IFormFile> images, string routePoints)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, EditTripDTO trip, List<IFormFile> images, string routePoints)
 		{
 			if (ModelState.IsValid)
 			{
@@ -156,19 +156,21 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			return RedirectToAction(nameof(Details), new { id = comment.TripId });
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> DeleteComment(int tripId, int commentId)
+        [Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteComment(int commentId)
 		{
 			await new DeleteCommentCommand(_commentService, commentId).ExecuteAsync();
-			return RedirectToAction(nameof(Details), new { id = tripId });
+			return Ok();
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> DeleteImage(int imageId, int tripId)
+		[Authorize]
+		[HttpDelete]
+        public async Task<IActionResult> DeleteImage(int imageId, int tripId)
 		{
-            int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
             await new DeleteImageCommand(_environment.WebRootPath, imageId, tripId, userId, _imageService).ExecuteAsync();
-			return NoContent();
+			return Ok();
 		}
 	}
 }

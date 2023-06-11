@@ -42,7 +42,7 @@ namespace TripsServiceBLL.Services
 		public async Task DeleteByIdAsync(int imageId, int tripId, int userId, string webRootPath)
 		{
 			Image? image = await _unitOfWork.Images.GetByIdAsync(imageId);
-
+			
 			if (image != null)
 			{
 				_unitOfWork.Images.Delete(image);

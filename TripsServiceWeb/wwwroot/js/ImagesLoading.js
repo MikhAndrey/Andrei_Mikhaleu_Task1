@@ -29,21 +29,23 @@ $('#imageUpload').on('change', function () {
     $(this).val('');
 });
 
-$('form').on('submit', function (event) {
+$('#main-form').on('submit', function (event) {
     event.preventDefault();
     if ($(this).valid()) {
         const formData = new FormData(this);
         for (const file of files) {
             formData.append('images', file, file.name);
         }
-        fetch(this.action, {
-            method: this.method,
-            body: formData
-        }).then(response => {
-            if (response.ok) {
-                window.location.href = response.url;
-            } else {
-                alert("An error occured while sending data to server");
+        $.ajax({
+            url: this.action,
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                if (response.ok) {
+                    window.location.href = response.url;
+                } else {
+                    alert("An error occured while sending data to server");
+                }
             }
         });
     }

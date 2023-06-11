@@ -41,7 +41,7 @@
 						<div class="tp-gradient-reverse">
 							<a href="@Url.Action("Details", new { id = trip.TripId })" class="btn btn-primary ml-3 mt-2 mb-3 mr-2">Details</a> 
 							<a href="@Url.Action("Edit", new { id = trip.TripId })" class="btn btn-secondary  mt-2 mb-3 mr-2">Edit</a> 
-							<a href="@Url.Action("Delete", new { id = trip.TripId })" class="btn btn-danger mt-2 mb-3 delete-btn" data-token="@(ViewContext.HttpContext.Request.Cookies["__RequestVerificationToken"])">Delete</a>
+							<a href="@Url.Action("Delete", new { id = trip.TripId })" class="btn btn-danger mt-2 mb-3 delete-btn">Delete</a>
 						</div>
 					</div>					
 				</div>
@@ -53,13 +53,8 @@
 $('.delete-btn').on('click', function (e) {
 	e.preventDefault(); 
 	var url = $(this).attr('href');
-	var token = $(this).data('token');
 	fetch(url, {
-		method: 'DELETE',
-		headers: {
-			'Content-Type': 'application/json',
-			'X-CSRF-TOKEN': token
-		}
+		method: 'DELETE'
 	})
 	.then(response => {
 		if (response.ok) {

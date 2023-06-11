@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "New Trip";
 }
-<form class="bootstrap-form tp-form" asp-action="Create" enctype="multipart/form-data">
+<form class="bootstrap-form tp-form" id="main-form" asp-action="Create" enctype="multipart/form-data">
     <div class="form-group tp-form-group">
         <label for="nameInput" class="tp-label">Your trip name:</label>
         <input class="form-control tp-text-input" type="text" asp-for="Name" id="nameInput" />
