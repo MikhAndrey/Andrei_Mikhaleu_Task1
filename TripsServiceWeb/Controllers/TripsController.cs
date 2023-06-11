@@ -95,7 +95,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Delete(int id)
 		{
-			await new DeleteTripCommand(id, _tripService, _imageService).ExecuteAsync();
+			await new DeleteTripCommand(id, _tripService, _imageService, _environment.WebRootPath).ExecuteAsync();
 			return RedirectToAction(nameof(Index));
 		}
 
@@ -165,9 +165,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> DeleteImage(int imageId)
+		public async Task<IActionResult> DeleteImage(int imageId, int tripId)
 		{
-			await new DeleteImageCommand(_environment.WebRootPath, imageId, _imageService).ExecuteAsync();
+            int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
+            await new DeleteImageCommand(_environment.WebRootPath, imageId, tripId, userId, _imageService).ExecuteAsync();
 			return NoContent();
 		}
 	}

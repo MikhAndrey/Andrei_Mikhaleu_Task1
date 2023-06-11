@@ -56,10 +56,11 @@ namespace TripsServiceBLL.Commands.Trips
 			{
 				_tripService.FixTimeOfNewTripForTimeZones(_trip);
 				Trip trip = CustomMapper<CreateTripDTO, Trip>.Map(_trip);
-				await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
-				_routePointService.ParseAndAddRoutePoints(trip, _routePoints);
-				trip.User = user;
-				await _tripService.AddAsync(trip);
+                _routePointService.ParseAndAddRoutePoints(trip, _routePoints);
+                trip.User = user;
+                await _tripService.AddAsync(trip);
+                await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
+				await _tripService.UpdateAsync(trip);
 			}
 		}
 	}

@@ -7,9 +7,9 @@ namespace TripsServiceBLL.Interfaces
 	{
 		Task UploadImagesAsync(Trip trip, List<IFormFile> images, string webRootPath);
 
-		Task DeleteByIdAsync(int imageId, string webRootPath);
+		Task DeleteByIdAsync(int imageId, int tripId, int userId, string webRootPath);
 
-		void DeleteTripImages(Trip trip);
+		void DeleteTripImages(Trip trip, string webRootPath);
 
 		void CreateImagesDirectory(string webRootPath);
 	}
