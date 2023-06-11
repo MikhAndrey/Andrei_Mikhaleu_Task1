@@ -9,6 +9,8 @@ namespace TripsServiceBLL.DTO.Trips
 {
 	public class TripDetailsDTO : ReadTripDTO
 	{
+		public int UserId { get; set; }
+		
 		public bool IsCurrentUserTrip { get; set; }
 
 		public bool Public { get; set; }
@@ -29,6 +31,7 @@ namespace TripsServiceBLL.DTO.Trips
 
 		public TripDetailsDTO(Trip trip, int userId) : base(trip)
 		{
+			UserId = trip.UserId;
 			IsCurrentUserTrip = trip.User.UserId == userId;
 			Public = trip.Public;
 			Images = CustomMapper<List<Image>, List<ImageDTO>>.Map(trip.Images);

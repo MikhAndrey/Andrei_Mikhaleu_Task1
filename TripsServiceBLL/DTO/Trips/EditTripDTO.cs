@@ -13,9 +13,12 @@ namespace TripsServiceBLL.DTO.Trips
 
 		public int TripId { get; set; }
 
+		public int UserId { get; set; }
+		
 		public EditTripDTO(Trip trip)
 		{
 			TripId = trip.TripId;
+			UserId = trip.UserId;
 			Name = trip.Name;
 			Description = trip.Description;
 			StartTimeZoneOffset = trip.StartTimeZoneOffset;

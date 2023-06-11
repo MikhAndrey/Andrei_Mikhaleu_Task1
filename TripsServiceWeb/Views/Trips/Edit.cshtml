@@ -1,4 +1,5 @@
 ﻿@model TripsServiceBLL.DTO.Trips.EditTripDTO
+@using TripsServiceBLL.Utils
 
 @{
     ViewData["Title"] = "Edit Trip";
@@ -52,7 +53,10 @@
         @foreach (var image in Model.Images)
             {
                 <div class="col-4 mb-3 preload-image-container"> 
-                    <img src="@image.Link" class="img-fluid d-block" style="object-fit: cover; height: 250px"/> 
+                    @{
+                        string imagePath = $"/{Constants.ImagesFolderName}/{Model.UserId.ToString()}/{Model.TripId.ToString()}/{image.Link}";
+                    }
+                    <img src="@imagePath" class="img-fluid d-block" style="object-fit: cover; height: 250px"/> 
                     <button type="button" class="btn btn-danger remove-image mt-2" data-image-id="@image.ImageId">Delete</button> 
                 </div>
             }
