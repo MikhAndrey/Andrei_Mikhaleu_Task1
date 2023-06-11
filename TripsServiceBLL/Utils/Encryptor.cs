@@ -6,19 +6,19 @@ namespace TripsServiceBLL.Utils
 	public static class Encryptor
 	{
 
-		static readonly byte[] _tripleDESKey = Encoding.ASCII.GetBytes(Constants.TripleDesKey);
+		static readonly byte[] _aesKey = Encoding.ASCII.GetBytes(Constants.AesKey);
 
-		static readonly byte[] _tripleDESIV = Encoding.ASCII.GetBytes(Constants.TripleDesIV);
+		static readonly byte[] _aesIV = Encoding.ASCII.GetBytes(Constants.AesIV);
 
 		public static string Encrypt(string text)
 		{
 			byte[] encrypted;
-			using (TripleDES tripleDES = TripleDES.Create())
+			using (Aes aes = Aes.Create())
 			{
-				tripleDES.Key = _tripleDESKey;
-				tripleDES.IV = _tripleDESIV;
+				aes.Key = _aesKey;
+				aes.IV = _aesIV;
 				using MemoryStream memoryStream = new();
-				using CryptoStream cryptoStream = new(memoryStream, tripleDES.CreateEncryptor(), CryptoStreamMode.Write);
+				using CryptoStream cryptoStream = new(memoryStream, aes.CreateEncryptor(aes.Key, aes.IV), CryptoStreamMode.Write);
 				using (StreamWriter streamWriter = new(cryptoStream))
 				{
 					streamWriter.Write(text);

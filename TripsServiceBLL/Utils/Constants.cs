@@ -6,9 +6,9 @@
 
 		public const string JwtIssuer = "planyourtrips.com";
 
-		public const string TripleDesKey = "JrchIVQqLTTFkS1SiL1JPRJm";
+		public const string AesKey = "cgJOF9VOMJ2FM1ZRCfPdvWcNWr5fPPsd";
 
-		public const string TripleDesIV = "tsXLqW0Y";
+		public const string AesIV = "Nl8NaASrhR77xy6t";
 
 		public const string ImagesFolderName = "images";
 
