@@ -63,7 +63,9 @@ namespace TripsServiceBLL.Services
 				if (File.Exists(path))
 					File.Delete(path);
 			}
-            Directory.Delete(Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.UserId.ToString(), trip.TripId.ToString()));
+			string tripDirectoryPath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.UserId.ToString(), trip.TripId.ToString());
+			if (Directory.Exists(tripDirectoryPath))
+				Directory.Delete(tripDirectoryPath);
         }
 
 		public void CreateImagesDirectory(string webRootPath)

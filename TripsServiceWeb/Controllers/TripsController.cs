@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.Commands.Trips;
-using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Commands.Comments;
 using TripsServiceBLL.Commands.Images;
 using TripsServiceBLL.DTO.Comments;
@@ -92,11 +91,11 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
 		[Authorize]
-		[HttpGet]
+		[HttpDelete]
 		public async Task<IActionResult> Delete(int id)
 		{
 			await new DeleteTripCommand(id, _tripService, _imageService, _environment.WebRootPath).ExecuteAsync();
-			return RedirectToAction(nameof(Index));
+			return Ok();
 		}
 
 		[Authorize]
