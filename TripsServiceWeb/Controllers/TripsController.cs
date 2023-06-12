@@ -106,7 +106,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			return View(trip);
 		}
 
-		[HttpPost]
+		[HttpPut]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditTripDTO trip, List<IFormFile> images, string routePoints)
 		{
@@ -114,8 +114,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			{
 				await new EditTripCommand(trip, id, images, _routePointService, _imageService,
 				_tripService, _environment.WebRootPath, routePoints).ExecuteAsync();
-				return RedirectToAction(nameof(Index));
-			}
+                return RedirectToAction(nameof(Index));
+            }
 			return View(trip);
 		}
 

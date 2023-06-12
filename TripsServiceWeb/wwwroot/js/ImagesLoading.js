@@ -37,14 +37,10 @@ $('#main-form').on('submit', function (event) {
             formData.append('images', file, file.name);
         }
         fetch(this.action, {
-            method: "POST",
+            method: "PUT",
             body: formData
         }).then(response => {
-            if (response.ok) {
-                window.location.href = response.url;
-            } else {
-                alert("An error occured while sending data to server");
-            }
+            location.href = response.url;
         });
     }
 });
