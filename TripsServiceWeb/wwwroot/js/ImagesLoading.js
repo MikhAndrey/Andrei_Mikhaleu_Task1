@@ -36,16 +36,14 @@ $('#main-form').on('submit', function (event) {
         for (const file of files) {
             formData.append('images', file, file.name);
         }
-        $.ajax({
-            url: this.action,
-            type: "POST",
-            data: formData,
-            success: function (response) {
-                if (response.ok) {
-                    window.location.href = response.url;
-                } else {
-                    alert("An error occured while sending data to server");
-                }
+        fetch(this.action, {
+            method: "POST",
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = response.url;
+            } else {
+                alert("An error occured while sending data to server");
             }
         });
     }
