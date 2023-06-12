@@ -4,6 +4,6 @@ namespace TripsServiceDAL.Interfaces
 {
 	public interface IDriverRepository : IGenericRepository<Driver>
 	{
-		IQueryable<Driver> GetAllWithRating();
+		IQueryable<Driver> GetAll();
 	}
 }

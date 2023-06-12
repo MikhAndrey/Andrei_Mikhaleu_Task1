@@ -1,5 +1,5 @@
-﻿using TripsServiceBLL.Interfaces;
-using TripsServiceDAL.Entities;
+﻿using TripsServiceBLL.DTO.Drivers;
+using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Services
@@ -13,9 +13,16 @@ namespace TripsServiceBLL.Services
 			_unitOfWork = unitOfWork;
 		}
 
-		public IQueryable<Driver> GetAllWithRating()
+		public IQueryable<ReadDriverDTO> GetDriversOverall()
 		{
-			return _unitOfWork.Drivers.GetAllWithRating();
+			return _unitOfWork.Drivers.GetAll().Select(d => new ReadDriverDTO
+			{
+				Id = d.Id,
+				Name = d.Name,
+				Experience = d.Experience,
+				AverageRating = d.Trips.Average(t => (double?)t.Feedback.Rating ?? 0),
+				FirstPhoto = d.Photos.FirstOrDefault()
+			}).OrderByDescending(d => d.AverageRating);
 		}
 	}
 }

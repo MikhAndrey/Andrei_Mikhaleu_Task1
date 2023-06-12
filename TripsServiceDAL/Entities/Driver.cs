@@ -12,9 +12,6 @@ namespace TripsServiceDAL.Entities
 
 		public int Experience { get; set; }
 
-		[NotMapped]
-		public double AverageRating { get; set; }
-
 		public List<Trip> Trips { get; set; }
 	}
 }

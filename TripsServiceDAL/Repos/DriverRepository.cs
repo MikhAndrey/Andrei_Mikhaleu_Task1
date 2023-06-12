@@ -9,15 +9,9 @@ namespace TripsServiceDAL.Repos
 	{
 		public DriverRepository(TripsDBContext context) : base(context) { }
 
-		public IQueryable<Driver> GetAllWithRating()
+		public IQueryable<Driver> GetAll()
 		{
-			return _dbSet.Include(d => d.Photos).Select(d => new Driver{
-				Id = d.Id,
-				Name = d.Name,
-				Experience = d.Experience,
-				Photos = d.Photos,
-				AverageRating = d.Trips.Where(t => t.Feedback != null).Select(t => (double?)t.Feedback.Rating).Average() ?? 0
-			});
+			return _dbSet.Include(d => d.Photos).Include(d => d.Trips).ThenInclude(t => t.Feedback);
 		}
 	}
 }
