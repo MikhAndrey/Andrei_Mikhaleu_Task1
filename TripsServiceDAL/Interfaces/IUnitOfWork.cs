@@ -12,6 +12,8 @@
 
 		IUserRepository Users { get; }
 
+		IDriverRepository Drivers { get; }
+
 		Task SaveAsync();
 	}
 }
