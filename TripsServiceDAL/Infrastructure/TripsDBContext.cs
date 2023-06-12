@@ -10,8 +10,10 @@ namespace TripsServiceDAL.Infrastructure
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<RoutePoint> RoutePoints { get; set; }
+		public DbSet<Feedback> Feedbacks { get; set; }
+		public DbSet<Driver> Drivers { get; set; }
 
-        public TripsDBContext(DbContextOptions options) : base(options)
+		public TripsDBContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
         }
@@ -47,6 +49,18 @@ namespace TripsServiceDAL.Infrastructure
                 .WithMany(t => t.Images)
                 .HasForeignKey(i => i.TripId)
                 .OnDelete(DeleteBehavior.Cascade);
-        }
+
+			modelBuilder.Entity<Feedback>()
+				.HasOne(f => f.Trip)
+				.WithOne(t => t.Feedback)
+				.HasForeignKey<Feedback>(f => f.TripId)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<Trip>()
+			   .HasOne(t => t.Driver)
+			   .WithMany(u => u.Trips)
+			   .HasForeignKey(t => t.DriverId)
+			   .OnDelete(DeleteBehavior.SetNull);
+		}
     }
 }

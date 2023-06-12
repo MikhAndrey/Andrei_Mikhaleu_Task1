@@ -41,5 +41,11 @@ namespace TripsServiceDAL.Entities
         public int StartTimeZoneOffset { get; set; }
 
         public int FinishTimeZoneOffset { get; set; }
+
+        public int? DriverId { get; set; }
+
+        public Driver Driver { get; set; }
+
+        public Feedback Feedback { get; set; }
     }
 }
