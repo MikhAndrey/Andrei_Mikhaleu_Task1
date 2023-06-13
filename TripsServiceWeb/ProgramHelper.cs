@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
-using System.Reflection;
 using System.Text;
-using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Services;
 using TripsServiceBLL.Utils;
@@ -20,13 +17,9 @@ namespace Andrei_Mikhaleu_Task1
                 .AddJsonFile("appsettings.json", optional: false)
                 .Build();
 
-        public static void ConfigureServices(IServiceCollection services)
+        public static void AddServices(IServiceCollection services)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-
-            _ = services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-            _ = services.AddControllersWithViews();
             _ = services.AddDbContext<TripsDBContext>(options =>
                 options.UseSqlServer(connectionString));
             _ = services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -35,8 +28,10 @@ namespace Andrei_Mikhaleu_Task1
             _ = services.AddScoped<IImageService, ImageService>();
             _ = services.AddScoped<IRoutePointService, RoutePointService>();
             _ = services.AddScoped<ITripService, TripService>();
-            _ = services.AddHttpContextAccessor();
+        }
 
+        public static void AddAuthentication(IServiceCollection services)
+        {
             _ = services.AddAuthentication(options =>
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -56,33 +51,10 @@ namespace Andrei_Mikhaleu_Task1
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.JwtKey))
                 };
             });
-
-            _ = services.AddAuthorization();
-
-            MapperConfiguration mapperConfig = new(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-
-            IMapper mapper = mapperConfig.CreateMapper();
-            _ = services.AddSingleton(mapper);
         }
 
-        public static void Configure(WebApplication app)
+        public static void AddJwtTokenToRequests(WebApplication app)
         {
-            if (!app.Environment.IsDevelopment())
-            {
-                _ = app.UseExceptionHandler("/Home/Error");
-                _ = app.UseHsts();
-            }
-
-            _ = app.UseHttpsRedirection();
-            _ = app.UseStaticFiles();
-
-            _ = app.UseRouting();
-
-            _ = app.UseCors("AllowAll");
-
             _ = app.Use(async (context, next) =>
             {
                 string? jwtToken = context.Request.Cookies[Constants.JwtTokenCookiesAlias];
@@ -92,7 +64,10 @@ namespace Andrei_Mikhaleu_Task1
                 }
                 await next();
             });
+        }
 
+        public static void AddUnauthorizedStateRedirection(WebApplication app)
+        {
             _ = app.UseStatusCodePages(async context =>
             {
                 HttpRequest request = context.HttpContext.Request;
@@ -103,15 +78,6 @@ namespace Andrei_Mikhaleu_Task1
                     response.Redirect("/Account/Login");
                 }
             });
-
-            _ = app.UseAuthentication();
-            _ = app.UseAuthorization();
-
-            _ = app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            app.Run();
         }
     }
 }
