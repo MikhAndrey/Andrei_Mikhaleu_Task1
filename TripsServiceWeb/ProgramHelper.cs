@@ -1,13 +1,13 @@
-﻿using TripsServiceBLL.Services;
-using TripsServiceDAL.Infrastructure;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using TripsServiceDAL.Interfaces;
-using TripsServiceBLL.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using System.Net;
+using System.Text;
+using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Services;
 using TripsServiceBLL.Utils;
+using TripsServiceDAL.Infrastructure;
+using TripsServiceDAL.Interfaces;
 
 namespace Andrei_Mikhaleu_Task1
 {
@@ -21,18 +21,18 @@ namespace Andrei_Mikhaleu_Task1
 		{
 			string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-			services.AddControllersWithViews();
-			services.AddDbContext<TripsDBContext>(options =>
+			_ = services.AddControllersWithViews();
+			_ = services.AddDbContext<TripsDBContext>(options =>
 				options.UseSqlServer(connectionString));
-			services.AddScoped<IUnitOfWork, UnitOfWork>();
-			services.AddScoped<IUserService, UserService>();
-			services.AddScoped<ICommentService, CommentService>();
-			services.AddScoped<IImageService, ImageService>();
-			services.AddScoped<IRoutePointService, RoutePointService>();
-			services.AddScoped<ITripService, TripService>();
-			services.AddHttpContextAccessor();
+			_ = services.AddScoped<IUnitOfWork, UnitOfWork>();
+			_ = services.AddScoped<IUserService, UserService>();
+			_ = services.AddScoped<ICommentService, CommentService>();
+			_ = services.AddScoped<IImageService, ImageService>();
+			_ = services.AddScoped<IRoutePointService, RoutePointService>();
+			_ = services.AddScoped<ITripService, TripService>();
+			_ = services.AddHttpContextAccessor();
 
-			services.AddAuthentication(options =>
+			_ = services.AddAuthentication(options =>
 			{
 				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -52,25 +52,25 @@ namespace Andrei_Mikhaleu_Task1
 				};
 			});
 
-			services.AddAuthorization();
+			_ = services.AddAuthorization();
 		}
 
 		public static void Configure(WebApplication app)
 		{
 			if (!app.Environment.IsDevelopment())
 			{
-				app.UseExceptionHandler("/Home/Error");
-				app.UseHsts();
+				_ = app.UseExceptionHandler("/Home/Error");
+				_ = app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
-			app.UseStaticFiles();
+			_ = app.UseHttpsRedirection();
+			_ = app.UseStaticFiles();
 
-			app.UseRouting();
+			_ = app.UseRouting();
 
-			app.UseCors("AllowAll");
+			_ = app.UseCors("AllowAll");
 
-			app.Use(async (context, next) =>
+			_ = app.Use(async (context, next) =>
 			{
 				string? jwtToken = context.Request.Cookies[Constants.JwtTokenCookiesAlias];
 				if (!string.IsNullOrEmpty(jwtToken))
@@ -80,10 +80,10 @@ namespace Andrei_Mikhaleu_Task1
 				await next();
 			});
 
-			app.UseStatusCodePages(async context =>
+			_ = app.UseStatusCodePages(context =>
 			{
-				var request = context.HttpContext.Request;
-				var response = context.HttpContext.Response;
+				HttpRequest request = context.HttpContext.Request;
+				HttpResponse response = context.HttpContext.Response;
 
 				if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
 				{
@@ -91,10 +91,10 @@ namespace Andrei_Mikhaleu_Task1
 				}
 			});
 
-			app.UseAuthentication();
-			app.UseAuthorization();
+			_ = app.UseAuthentication();
+			_ = app.UseAuthorization();
 
-			app.MapControllerRoute(
+			_ = app.MapControllerRoute(
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 

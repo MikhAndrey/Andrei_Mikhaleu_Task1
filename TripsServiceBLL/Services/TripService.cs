@@ -1,10 +1,10 @@
-﻿using TripsServiceDAL.Entities;
-using Microsoft.EntityFrameworkCore;
-using TripsServiceBLL.Utils;
-using TripsServiceBLL.DTO.Trips;
+﻿using Microsoft.EntityFrameworkCore;
 using TripsServiceBLL.DTO.Statistics;
-using TripsServiceDAL.Interfaces;
+using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Utils;
+using TripsServiceDAL.Entities;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Services
 {
@@ -117,7 +117,9 @@ namespace TripsServiceBLL.Services
 			List<Trip> trips = await _unitOfWork.Trips.GetTripsByYearAndUserId(year, userId).ToListAsync();
 
 			if (trips.Count == 0)
+			{
 				return new();
+			}
 
 			List<DurationInMonth> result = Enumerable.Range(1, 12)
 				.Select(month => new DurationInMonth()
@@ -127,7 +129,7 @@ namespace TripsServiceBLL.Services
 						.Where(t => t.StartTime.Year == year && t.StartTime.Month <= month && t.EndTime.Year == year && t.EndTime.Month >= month)
 						.Select(t =>
 						{
-							var start = t.StartTime <= new DateTime(year, month, 1) ? new DateTime(year, month, 1) : t.StartTime;
+							DateTime start = t.StartTime <= new DateTime(year, month, 1) ? new DateTime(year, month, 1) : t.StartTime;
 							DateTime end = t.EndTime >= new DateTime(year, month, DateTime.DaysInMonth(year, month)) ?
 							new DateTime(year, month, DateTime.DaysInMonth(year, month)) : t.EndTime;
 							return (end - start).TotalHours;

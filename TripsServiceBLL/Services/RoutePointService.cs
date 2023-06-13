@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
-using TripsServiceDAL.Entities;
 using TripsServiceBLL.DTO.RoutePoints;
-using TripsServiceDAL.Interfaces;
 using TripsServiceBLL.Interfaces;
+using TripsServiceDAL.Entities;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Services
 {

@@ -6,10 +6,10 @@ namespace TripsServiceBLL.DTO.Images
 	{
 		public int ImageId { get; set; }
 
-		public string Link { get; set; }
+		public string? Link { get; set; }
 
 		public int TripId { get; set; }
 
-		public ReadTripDTO Trip { get; set; }
+		public ReadTripDTO? Trip { get; set; }
 	}
 }

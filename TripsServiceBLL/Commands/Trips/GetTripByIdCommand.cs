@@ -5,9 +5,9 @@ namespace TripsServiceBLL.Commands.Trips
 {
 	public class GetTripByIdCommand : IAsyncCommand<EditTripDTO>
 	{
-		private ITripService _tripService;
+		private readonly ITripService _tripService;
 
-		private int _id;
+		private readonly int _id;
 
 		public GetTripByIdCommand(ITripService tripService, int id)
 		{

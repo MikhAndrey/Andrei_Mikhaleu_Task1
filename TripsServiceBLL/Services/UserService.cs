@@ -1,13 +1,13 @@
-﻿using TripsServiceBLL.DTO.Users;
-using TripsServiceDAL.Entities;
-using TripsServiceBLL.Infrastructure;
-using TripsServiceDAL.Interfaces;
-using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Utils;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TripsServiceBLL.DTO.Users;
+using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Utils;
+using TripsServiceDAL.Entities;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Services
 {
@@ -51,10 +51,16 @@ namespace TripsServiceBLL.Services
 		{
 			User? existingUser = await GetByUserNameAsync(user.UserName);
 			if (existingUser != null)
+			{
 				throw new ValidationException(Constants.ExistingUserNameMessage, "UserName");
+			}
+
 			existingUser = await GetByEmailAsync(user.Email);
 			if (existingUser != null)
+			{
 				throw new ValidationException(Constants.ExistingEmailMessage, "Email");
+			}
+
 			User newUser = new()
 			{
 				UserName = user.UserName,
@@ -70,7 +76,7 @@ namespace TripsServiceBLL.Services
 			int? idOfUserFromDb = await GetUserIdForLoginAsync(user);
 			if (idOfUserFromDb != null)
 			{
-				DateTime jwtExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(Constants.AuthorizationExpirationInDays) 
+				DateTime jwtExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(Constants.AuthorizationExpirationInDays)
 					: DateTime.UtcNow.AddHours(Constants.JwtExpirationInHours);
 				JwtSecurityTokenHandler tokenHandler = new();
 				byte[] key = Encoding.ASCII.GetBytes(Constants.JwtKey);
@@ -90,7 +96,9 @@ namespace TripsServiceBLL.Services
 				return tokenHandler.WriteToken(token);
 			}
 			else
+			{
 				throw new ValidationException(Constants.InvalidCredentialsMessage, "");
+			}
 		}
 	}
 }

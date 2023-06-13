@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TripsServiceDAL.Infrastructure;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Infrastructure;
 using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Repos
@@ -9,7 +9,7 @@ namespace TripsServiceDAL.Repos
 	{
 		public UserRepository(TripsDBContext context) : base(context) { }
 
-		public async new Task<User?> GetByIdAsync(int id)
+		public new async Task<User?> GetByIdAsync(int id)
 		{
 			return await _dbSet
 				.Include(u => u.Trips)

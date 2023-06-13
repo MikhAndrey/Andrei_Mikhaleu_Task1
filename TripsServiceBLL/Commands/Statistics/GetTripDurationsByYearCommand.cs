@@ -1,15 +1,15 @@
-﻿using TripsServiceBLL.Utils;
-using TripsServiceBLL.Interfaces;
+﻿using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Utils;
 
 namespace TripsServiceBLL.Commands.Statistics
 {
 	public class GetTripDurationsByYearCommand : IAsyncCommand<List<DurationInMonth>>
 	{
-		private ITripService _tripService;
+		private readonly ITripService _tripService;
 
-		private int _userId;
+		private readonly int _userId;
 
-		private int _year;
+		private readonly int _year;
 
 		public GetTripDurationsByYearCommand(ITripService tripService, int userId, int year)
 		{

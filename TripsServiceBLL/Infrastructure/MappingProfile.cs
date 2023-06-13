@@ -12,13 +12,13 @@ namespace TripsServiceBLL.Infrastructure
 	{
 		public MappingProfile()
 		{
-			CreateMap<Comment, CommentDTO>();
-			CreateMap<Image, ImageDTO>();
-			CreateMap<RoutePoint, RoutePointDTO>();
-			CreateMap<Trip, ReadTripDTO>();
-			CreateMap<User, UserDTO>();
-			CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
-			CreateMap<CreateTripDTO, Trip>();
+			_ = CreateMap<Comment, CommentDTO>();
+			_ = CreateMap<Image, ImageDTO>();
+			_ = CreateMap<RoutePoint, RoutePointDTO>();
+			_ = CreateMap<Trip, ReadTripDTO>();
+			_ = CreateMap<User, UserDTO>();
+			_ = CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
+			_ = CreateMap<CreateTripDTO, Trip>();
 		}
 	}
 }

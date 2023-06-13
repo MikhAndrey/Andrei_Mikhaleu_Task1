@@ -12,8 +12,8 @@ namespace TripsServiceBLL.DTO.Comments
 
 		public int UserId { get; set; }
 
-		public UserDTO User { get; set; }
+		public UserDTO? User { get; set; }
 
-		public ReadTripDTO Trip { get; set; }
+		public ReadTripDTO? Trip { get; set; }
 	}
 }

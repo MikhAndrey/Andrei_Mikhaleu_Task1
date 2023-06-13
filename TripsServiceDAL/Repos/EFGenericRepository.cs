@@ -14,12 +14,12 @@ namespace TripsServiceDAL.Repos
 
 		public async Task AddAsync(TEntity entity)
 		{
-			await _dbSet.AddAsync(entity);
+			_ = await _dbSet.AddAsync(entity);
 		}
 
 		public void Update(TEntity entity)
 		{
-			_dbSet.Update(entity);
+			_ = _dbSet.Update(entity);
 		}
 
 		public async Task<TEntity?> GetByIdAsync(int id)
@@ -29,7 +29,7 @@ namespace TripsServiceDAL.Repos
 
 		public void Delete(TEntity entity)
 		{
-			_dbSet.Remove(entity);
+			_ = _dbSet.Remove(entity);
 		}
 	}
 }

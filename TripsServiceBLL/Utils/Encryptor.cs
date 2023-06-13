@@ -5,10 +5,8 @@ namespace TripsServiceBLL.Utils
 {
 	public static class Encryptor
 	{
-
-		static readonly byte[] _aesKey = Encoding.ASCII.GetBytes(Constants.AesKey);
-
-		static readonly byte[] _aesIV = Encoding.ASCII.GetBytes(Constants.AesIV);
+		private static readonly byte[] _aesKey = Encoding.ASCII.GetBytes(Constants.AesKey);
+		private static readonly byte[] _aesIV = Encoding.ASCII.GetBytes(Constants.AesIV);
 
 		public static string Encrypt(string text)
 		{

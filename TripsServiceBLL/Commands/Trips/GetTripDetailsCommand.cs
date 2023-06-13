@@ -1,15 +1,15 @@
-﻿using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.DTO.Trips;
+﻿using TripsServiceBLL.DTO.Trips;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Trips
 {
 	public class GetTripDetailsCommand : IAsyncCommand<TripDetailsDTO>
 	{
-		private ITripService _tripService;
+		private readonly ITripService _tripService;
 
-		private int _id;
+		private readonly int _id;
 
-		private int _userId;
+		private readonly int _userId;
 
 		public GetTripDetailsCommand(ITripService tripService, int id, int userId)
 		{

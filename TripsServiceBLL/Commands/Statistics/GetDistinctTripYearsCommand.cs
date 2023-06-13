@@ -1,13 +1,13 @@
-﻿using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.DTO.Statistics;
+﻿using TripsServiceBLL.DTO.Statistics;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Statistics
 {
 	public class GetDistinctTripYearsCommand : IAsyncCommand<YearsStatisticsDTO>
 	{
-		private ITripService _tripService;
+		private readonly ITripService _tripService;
 
-		private int _userId;
+		private readonly int _userId;
 
 		public GetDistinctTripYearsCommand(ITripService tripService, int userId)
 		{

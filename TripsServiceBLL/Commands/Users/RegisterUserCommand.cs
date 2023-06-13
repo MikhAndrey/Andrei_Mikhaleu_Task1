@@ -1,5 +1,5 @@
-﻿using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.DTO.Users;
+﻿using TripsServiceBLL.DTO.Users;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Users
 {

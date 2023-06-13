@@ -8,11 +8,11 @@ namespace TripsServiceBLL.Commands.Images
 
 		private readonly int _imageId;
 
-        private readonly int _tripId;
+		private readonly int _tripId;
 
-        private readonly int _userId;
+		private readonly int _userId;
 
-        private readonly IImageService _imageService;
+		private readonly IImageService _imageService;
 
 		public DeleteImageCommand(string webRootPath, int imageId, int tripId, int userId, IImageService imageService)
 		{

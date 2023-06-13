@@ -5,7 +5,7 @@ namespace TripsServiceBLL.DTO.Trips
 	public class CreateTripDTO
 	{
 		[Required(ErrorMessage = "Please enter a name for your trip")]
-		public string Name { get; set; }
+		public string? Name { get; set; }
 
 		[Required(ErrorMessage = "Please select the start time of your trip")]
 		public DateTime StartTime { get; set; }

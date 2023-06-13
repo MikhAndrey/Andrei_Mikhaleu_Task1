@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TripsServiceDAL.Infrastructure;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Infrastructure;
 using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Repos

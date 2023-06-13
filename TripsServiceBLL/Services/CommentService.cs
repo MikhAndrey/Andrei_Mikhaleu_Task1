@@ -1,7 +1,7 @@
-﻿using TripsServiceDAL.Entities;
-using TripsServiceBLL.DTO.Comments;
-using TripsServiceDAL.Interfaces;
+﻿using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.Interfaces;
+using TripsServiceDAL.Entities;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Services
 {

@@ -1,13 +1,13 @@
-﻿using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.DTO.Trips;
+﻿using TripsServiceBLL.DTO.Trips;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Trips
 {
 	public class GetUserTripsCommand : ICommand<IQueryable<ReadTripDTO>>
 	{
-		private ITripService _tripService;
+		private readonly ITripService _tripService;
 
-		private int _userId;
+		private readonly int _userId;
 
 		public GetUserTripsCommand(ITripService tripService, int userId)
 		{

@@ -10,7 +10,7 @@ namespace TripsServiceBLL.DTO.Trips
 	public class TripDetailsDTO : ReadTripDTO
 	{
 		public int UserId { get; set; }
-		
+
 		public bool IsCurrentUserTrip { get; set; }
 
 		public bool Public { get; set; }
@@ -40,7 +40,7 @@ namespace TripsServiceBLL.DTO.Trips
 			StartTimeZoneOffset = trip.StartTimeZoneOffset;
 			FinishTimeZoneOffset = trip.FinishTimeZoneOffset;
 			Duration = TimeUtils.GetTimeSpanString(EndTime.AddSeconds(StartTimeZoneOffset - FinishTimeZoneOffset) - StartTime);
-            Distance = trip.Distance;
+			Distance = trip.Distance;
 		}
 
 		public TripDetailsDTO() { }

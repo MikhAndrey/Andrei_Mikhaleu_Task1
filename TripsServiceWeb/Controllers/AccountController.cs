@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TripsServiceBLL.DTO.Users;
-using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Commands.Users;
+using TripsServiceBLL.DTO.Users;
+using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
@@ -44,7 +44,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Login(string returnUrl = null)
+		public IActionResult Login(string? returnUrl = null)
 		{
 			ViewData["ReturnUrl"] = returnUrl;
 			return View();
@@ -52,7 +52,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Login(UserLoginDTO user, string returnUrl = null)
+		public async Task<IActionResult> Login(UserLoginDTO user, string? returnUrl = null)
 		{
 			ViewData["ReturnUrl"] = returnUrl;
 
@@ -82,7 +82,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Logout()
+		public IActionResult Logout()
 		{
 			HttpContext.Response.Cookies.Delete(Constants.JwtTokenCookiesAlias);
 			return RedirectToAction("Index", "Home");
@@ -90,14 +90,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		private IActionResult RedirectToLocal(string returnUrl)
 		{
-			if (Url.IsLocalUrl(returnUrl))
-			{
-				return Redirect(returnUrl);
-			}
-			else
-			{
-				return RedirectToAction("Index", "Home");
-			}
+			return Url.IsLocalUrl(returnUrl) ? Redirect(returnUrl) : RedirectToAction("Index", "Home");
 		}
 	}
 }

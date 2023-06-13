@@ -1,5 +1,5 @@
-﻿using TripsServiceDAL.Entities;
-using TripsServiceBLL.Interfaces;
+﻿using TripsServiceBLL.Interfaces;
+using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Commands.Trips
 {

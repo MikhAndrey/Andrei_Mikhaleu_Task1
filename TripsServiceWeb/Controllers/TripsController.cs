@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Andrei_Mikhaleu_Task1.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.Commands.Comments;
 using TripsServiceBLL.Commands.Images;
+using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
-using Andrei_Mikhaleu_Task1.Helpers;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
@@ -125,7 +125,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[Authorize]
 		[HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+		public async Task<IActionResult> Delete(int id)
 		{
 			await new DeleteTripCommand(id, _tripService, _imageService, _environment.WebRootPath).ExecuteAsync();
 			return Ok();
@@ -140,15 +140,15 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		}
 
 		[HttpPut]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EditTripDTO trip, List<IFormFile> images, string routePoints)
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(int id, EditTripDTO trip, List<IFormFile> images, string routePoints)
 		{
 			if (ModelState.IsValid)
 			{
 				await new EditTripCommand(trip, id, images, _routePointService, _imageService,
 				_tripService, _environment.WebRootPath, routePoints).ExecuteAsync();
-                return RedirectToAction(nameof(Index));
-            }
+				return RedirectToAction(nameof(Index));
+			}
 			return View(trip);
 		}
 
@@ -196,9 +196,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			return RedirectToAction(nameof(Details), new { id = comment.TripId });
 		}
 
-        [Authorize]
-        [HttpDelete]
-        public async Task<IActionResult> DeleteComment(int commentId)
+		[Authorize]
+		[HttpDelete]
+		public async Task<IActionResult> DeleteComment(int commentId)
 		{
 			await new DeleteCommentCommand(_commentService, commentId).ExecuteAsync();
 			return Ok();
@@ -206,7 +206,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		[Authorize]
 		[HttpDelete]
-        public async Task<IActionResult> DeleteImage(int imageId, int tripId)
+		public async Task<IActionResult> DeleteImage(int imageId, int tripId)
 		{
 			int userId;
 			try

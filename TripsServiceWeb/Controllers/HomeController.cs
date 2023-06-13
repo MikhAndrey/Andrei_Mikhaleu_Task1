@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Andrei_Mikhaleu_Task1.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TripsServiceBLL.Interfaces;
-using Andrei_Mikhaleu_Task1.Models;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

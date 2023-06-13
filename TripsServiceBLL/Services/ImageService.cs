@@ -1,8 +1,8 @@
-﻿using TripsServiceDAL.Entities;
-using Microsoft.AspNetCore.Http;
-using TripsServiceDAL.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
+using TripsServiceDAL.Entities;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Services
 {
@@ -17,7 +17,7 @@ namespace TripsServiceBLL.Services
 
 		public async Task UploadImagesAsync(Trip trip, List<IFormFile> images, string webRootPath)
 		{
-			foreach (var image in images)
+			foreach (IFormFile image in images)
 			{
 				if (image != null && image.Length > 0)
 				{
@@ -25,24 +25,33 @@ namespace TripsServiceBLL.Services
 					string newFileName = $"{Guid.NewGuid()}{extension}";
 					string userFilePath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.UserId.ToString());
 					if (!Directory.Exists(userFilePath))
-						Directory.CreateDirectory(userFilePath);
+					{
+						_ = Directory.CreateDirectory(userFilePath);
+					}
+
 					string tripFilePath = Path.Combine(userFilePath, trip.TripId.ToString());
-                    if (!Directory.Exists(tripFilePath))
-                        Directory.CreateDirectory(tripFilePath);
-                    string filePath = Path.Combine(tripFilePath, newFileName);
-					using (var fileStream = new FileStream(filePath, FileMode.Create))
+					if (!Directory.Exists(tripFilePath))
+					{
+						_ = Directory.CreateDirectory(tripFilePath);
+					}
+
+					string filePath = Path.Combine(tripFilePath, newFileName);
+					using (FileStream fileStream = new(filePath, FileMode.Create))
 					{
 						await image.CopyToAsync(fileStream);
 					}
-                    trip.Images.Add(new Image { Link = newFileName });
-                }
+					trip.Images.Add(new Image 
+					{ 
+						Link = newFileName 
+					});
+				}
 			}
 		}
 
 		public async Task DeleteByIdAsync(int imageId, int tripId, int userId, string webRootPath)
 		{
 			Image? image = await _unitOfWork.Images.GetByIdAsync(imageId);
-			
+
 			if (image != null)
 			{
 				_unitOfWork.Images.Delete(image);
@@ -51,7 +60,9 @@ namespace TripsServiceBLL.Services
 				string path = Path.Combine(webRootPath, Constants.ImagesFolderName, userId.ToString(), tripId.ToString(), image.Link);
 
 				if (File.Exists(path))
+				{
 					File.Delete(path);
+				}
 			}
 		}
 
@@ -61,12 +72,16 @@ namespace TripsServiceBLL.Services
 			{
 				string path = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.UserId.ToString(), trip.TripId.ToString(), image.Link);
 				if (File.Exists(path))
+				{
 					File.Delete(path);
+				}
 			}
 			string tripDirectoryPath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.UserId.ToString(), trip.TripId.ToString());
 			if (Directory.Exists(tripDirectoryPath))
+			{
 				Directory.Delete(tripDirectoryPath);
-        }
+			}
+		}
 
 		public void CreateImagesDirectory(string webRootPath)
 		{
@@ -74,7 +89,7 @@ namespace TripsServiceBLL.Services
 
 			if (!Directory.Exists(path))
 			{
-				Directory.CreateDirectory(path);
+				_ = Directory.CreateDirectory(path);
 			}
 		}
 	}

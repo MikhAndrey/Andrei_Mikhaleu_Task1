@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using TripsServiceDAL.Entities;
-using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.DTO.Trips;
+using TripsServiceBLL.Interfaces;
+using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Commands.Trips
 {

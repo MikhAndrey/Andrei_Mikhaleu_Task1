@@ -10,6 +10,6 @@ namespace TripsServiceBLL.DTO.RoutePoints
 
 		public int TripId { get; set; }
 
-		public ReadTripDTO Trip { get; set; }
+		public ReadTripDTO? Trip { get; set; }
 	}
 }
