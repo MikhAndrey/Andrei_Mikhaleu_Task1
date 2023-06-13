@@ -40,9 +40,9 @@ namespace TripsServiceBLL.Services
 					{
 						await image.CopyToAsync(fileStream);
 					}
-					trip.Images.Add(new Image 
-					{ 
-						Link = newFileName 
+					trip.Images.Add(new Image
+					{
+						Link = newFileName
 					});
 				}
 			}
