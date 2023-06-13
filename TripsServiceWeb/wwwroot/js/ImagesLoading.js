@@ -29,18 +29,20 @@ $('#imageUpload').on('change', function () {
     $(this).val('');
 });
 
-$('#main-form').on('submit', function (event) {
-    event.preventDefault();
-    if ($(this).valid()) {
-        const formData = new FormData(this);
-        for (const file of files) {
-            formData.append('images', file, file.name);
+function sendDataHandler(shouldDataBePosted) {
+    $('#main-form').on('submit', function (event) {
+        event.preventDefault();
+        if ($(this).valid()) {
+            const formData = new FormData(this);
+            for (const file of files) {
+                formData.append('images', file, file.name);
+            }
+            fetch(this.action, {
+                method: shouldDataBePosted ? "POST" : "PUT",
+                body: formData
+            }).then(response => {
+                location.href = response.url;
+            });
         }
-        fetch(this.action, {
-            method: "PUT",
-            body: formData
-        }).then(response => {
-            location.href = response.url;
-        });
-    }
-});
+    });
+}

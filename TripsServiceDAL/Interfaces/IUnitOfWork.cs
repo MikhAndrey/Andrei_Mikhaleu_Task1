@@ -1,17 +1,17 @@
 ﻿namespace TripsServiceDAL.Interfaces
 {
-	public interface IUnitOfWork
-	{
-		ICommentRepository Comments { get; }
+    public interface IUnitOfWork
+    {
+        ICommentRepository Comments { get; }
 
-		IImageRepository Images { get; }
+        IImageRepository Images { get; }
 
-		IRoutePointRepository RoutePoints { get; }
+        IRoutePointRepository RoutePoints { get; }
 
-		ITripRepository Trips { get; }
+        ITripRepository Trips { get; }
 
-		IUserRepository Users { get; }
+        IUserRepository Users { get; }
 
-		Task SaveAsync();
-	}
+        Task SaveAsync();
+    }
 }

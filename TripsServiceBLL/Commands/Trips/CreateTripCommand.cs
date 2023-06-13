@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using TripsServiceBLL.DTO.Trips;
-using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
 
@@ -26,6 +26,8 @@ namespace TripsServiceBLL.Commands.Trips
 
 		private readonly int _userId;
 
+		private readonly IMapper _mapper;
+
 		public CreateTripCommand(
 			CreateTripDTO trip,
 			List<IFormFile> images,
@@ -33,6 +35,7 @@ namespace TripsServiceBLL.Commands.Trips
 			IImageService imageService,
 			ITripService tripService,
 			IUserService userService,
+			IMapper mapper,
 			string webRootPath,
 			string routePoints,
 			int userId
@@ -44,6 +47,7 @@ namespace TripsServiceBLL.Commands.Trips
 			_imageService = imageService;
 			_tripService = tripService;
 			_userService = userService;
+			_mapper = mapper;
 			_webRootPath = webRootPath;
 			_routePoints = routePoints;
 			_userId = userId;
@@ -54,8 +58,7 @@ namespace TripsServiceBLL.Commands.Trips
 			User? user = await _userService.GetByIdAsync(_userId);
 			if (user != null)
 			{
-				_tripService.FixTimeOfNewTripForTimeZones(_trip);
-				Trip trip = CustomMapper<CreateTripDTO, Trip>.Map(_trip);
+				Trip trip = _mapper.Map<Trip>(_trip);
 				_routePointService.ParseAndAddRoutePoints(trip, _routePoints);
 				trip.User = user;
 				await _tripService.AddAsync(trip);

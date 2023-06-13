@@ -13,10 +13,6 @@ namespace TripsServiceBLL.Interfaces
 
 		void SetNewTimeForEndingTrip(Trip trip);
 
-		void FixTimeOfNewTripForTimeZones(CreateTripDTO trip);
-
-		void UpdateFromEditTripDTO(Trip trip, EditTripDTO editTrip);
-
 		Task UpdateAsync(Trip trip);
 
 		Task DeleteAsync(Trip trip);

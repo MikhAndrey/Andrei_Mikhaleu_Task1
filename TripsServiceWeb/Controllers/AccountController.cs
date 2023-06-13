@@ -7,90 +7,90 @@ using TripsServiceBLL.Utils;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
-	public class AccountController : Controller
-	{
-		private readonly IUserService _userService;
+    public class AccountController : Controller
+    {
+        private readonly IUserService _userService;
 
-		public AccountController(IUserService userService)
-		{
-			_userService = userService;
-		}
+        public AccountController(IUserService userService)
+        {
+            _userService = userService;
+        }
 
-		[HttpGet]
-		public IActionResult Register()
-		{
-			return View();
-		}
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Register(UserSignupDTO user)
-		{
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					await new RegisterUserCommand(_userService, user).ExecuteAsync();
-				}
-				catch (ValidationException ex)
-				{
-					ModelState.AddModelError(ex.Property, ex.Message);
-					return View(user);
-				}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(UserSignupDTO user)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await new RegisterUserCommand(_userService, user).ExecuteAsync();
+                }
+                catch (ValidationException ex)
+                {
+                    ModelState.AddModelError(ex.Property, ex.Message);
+                    return View(user);
+                }
 
-				return await Login(new(user), null);
-			}
-			return View(user);
-		}
+                return await Login(new(user), null);
+            }
+            return View(user);
+        }
 
-		[HttpGet]
-		public IActionResult Login(string? returnUrl = null)
-		{
-			ViewData["ReturnUrl"] = returnUrl;
-			return View();
-		}
+        [HttpGet]
+        public IActionResult Login(string? returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Login(UserLoginDTO user, string? returnUrl = null)
-		{
-			ViewData["ReturnUrl"] = returnUrl;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(UserLoginDTO user, string? returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
 
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					string jwtToken = await new GetLoginJWTTokenCommand(_userService, user).ExecuteAsync();
-					DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(Constants.AuthorizationExpirationInDays) : null;
-					HttpContext.Response.Cookies.Append(Constants.JwtTokenCookiesAlias, jwtToken, new CookieOptions
-					{
-						HttpOnly = true,
-						Secure = true,
-						Expires = cookieExpiresUTC,
-						SameSite = SameSiteMode.Strict
-					});
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string jwtToken = await new GetLoginJWTTokenCommand(_userService, user).ExecuteAsync();
+                    DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(Constants.AuthorizationExpirationInDays) : null;
+                    HttpContext.Response.Cookies.Append(Constants.JwtTokenCookiesAlias, jwtToken, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        Expires = cookieExpiresUTC,
+                        SameSite = SameSiteMode.Strict
+                    });
 
-					return RedirectToLocal(returnUrl);
-				}
-				catch (ValidationException ex)
-				{
-					ModelState.AddModelError(ex.Property, ex.Message);
-				}
-			}
+                    return RedirectToLocal(returnUrl);
+                }
+                catch (ValidationException ex)
+                {
+                    ModelState.AddModelError(ex.Property, ex.Message);
+                }
+            }
 
-			return View(user);
-		}
+            return View(user);
+        }
 
-		[HttpGet]
-		public IActionResult Logout()
-		{
-			HttpContext.Response.Cookies.Delete(Constants.JwtTokenCookiesAlias);
-			return RedirectToAction("Index", "Home");
-		}
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Response.Cookies.Delete(Constants.JwtTokenCookiesAlias);
+            return RedirectToAction("Index", "Home");
+        }
 
-		private IActionResult RedirectToLocal(string returnUrl)
-		{
-			return Url.IsLocalUrl(returnUrl) ? Redirect(returnUrl) : RedirectToAction("Index", "Home");
-		}
-	}
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            return Url.IsLocalUrl(returnUrl) ? Redirect(returnUrl) : RedirectToAction("Index", "Home");
+        }
+    }
 }

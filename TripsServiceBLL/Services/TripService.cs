@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TripsServiceBLL.DTO.Statistics;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Interfaces;
@@ -12,9 +13,12 @@ namespace TripsServiceBLL.Services
 	{
 		private readonly IUnitOfWork _unitOfWork;
 
-		public TripService(IUnitOfWork unitOfWork)
+		private readonly IMapper _mapper;
+
+		public TripService(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
+			_mapper = mapper;
 		}
 
 		public async Task<Trip?> GetByIdAsync(int id)
@@ -34,24 +38,6 @@ namespace TripsServiceBLL.Services
 		{
 			trip.EndTime = DateTime.UtcNow;
 			trip.EndTime = DateTime.Parse(trip.EndTime.ToString("dd.MM.yyyy HH:mm"));
-		}
-
-		public void FixTimeOfNewTripForTimeZones(CreateTripDTO trip)
-		{
-			trip.StartTime = trip.StartTime.AddSeconds(-trip.StartTimeZoneOffset);
-			trip.EndTime = trip.EndTime.AddSeconds(-trip.FinishTimeZoneOffset);
-		}
-
-		public void UpdateFromEditTripDTO(Trip trip, EditTripDTO editTrip)
-		{
-			trip.Name = editTrip.Name;
-			trip.Description = editTrip.Description;
-			trip.Distance = editTrip.Distance;
-			trip.Public = editTrip.Public;
-			trip.StartTime = editTrip.StartTime.AddSeconds(-editTrip.StartTimeZoneOffset);
-			trip.EndTime = editTrip.EndTime.AddSeconds(-editTrip.FinishTimeZoneOffset); ;
-			trip.StartTimeZoneOffset = editTrip.StartTimeZoneOffset;
-			trip.FinishTimeZoneOffset = editTrip.FinishTimeZoneOffset;
 		}
 
 		public async Task UpdateAsync(Trip trip)
@@ -75,31 +61,32 @@ namespace TripsServiceBLL.Services
 		public async Task<TripDetailsDTO> GetTripDetailsAsync(int tripId, int userId)
 		{
 			Trip? trip = await GetByIdAsync(tripId);
-			return new(trip, userId);
+			return _mapper.Map<Trip, TripDetailsDTO>(trip, opt =>
+				opt.AfterMap((src, dest) => dest.IsCurrentUserTrip = src.User.UserId == userId));
 		}
 
 		public async Task<EditTripDTO> GetTripForEditingAsync(int tripId)
 		{
 			Trip? trip = await GetByIdAsync(tripId);
-			return new(trip);
+			return _mapper.Map<EditTripDTO>(trip);
 		}
 
 		public IQueryable<ReadTripDTOExtended> GetOthersPublicTrips(int userId)
 		{
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetOthersPublicTrips(userId);
-			return rawTrips.Select(el => new ReadTripDTOExtended(el));
+			return rawTrips.Select(el => _mapper.Map<ReadTripDTOExtended>(el));
 		}
 
 		public IQueryable<ReadTripDTO> GetHistoryOfTripsByUserId(int userId)
 		{
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetHistoryOfTripsByUserId(userId);
-			return rawTrips.Select(el => new ReadTripDTO(el));
+			return rawTrips.Select(el => _mapper.Map<ReadTripDTO>(el));
 		}
 
 		public IQueryable<ReadTripDTO> GetTripsByUserId(int userId)
 		{
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetTripsByUserId(userId);
-			return rawTrips.Select(el => new ReadTripDTO(el));
+			return rawTrips.Select(el => _mapper.Map<ReadTripDTO>(el));
 		}
 
 		public YearsStatisticsDTO GetYearsOfUserTrips(int userId)

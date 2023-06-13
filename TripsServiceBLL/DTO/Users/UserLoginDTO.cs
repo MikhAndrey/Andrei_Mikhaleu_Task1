@@ -2,24 +2,24 @@
 
 namespace TripsServiceBLL.DTO.Users
 {
-	public class UserLoginDTO
-	{
-		[Required(ErrorMessage = "Enter your login")]
-		public string UserName { get; set; }
+    public class UserLoginDTO
+    {
+        [Required(ErrorMessage = "Enter your login")]
+        public string UserName { get; set; }
 
-		[Required(ErrorMessage = "Enter your password")]
-		public string Password { get; set; }
+        [Required(ErrorMessage = "Enter your password")]
+        public string Password { get; set; }
 
-		[Display(Name = "Remember me")]
-		public bool RememberMe { get; set; }
+        [Display(Name = "Remember me")]
+        public bool RememberMe { get; set; }
 
-		public UserLoginDTO(UserSignupDTO signupUser)
-		{
-			UserName = signupUser.UserName;
-			Password = signupUser.Password;
-			RememberMe = false;
-		}
+        public UserLoginDTO(UserSignupDTO signupUser)
+        {
+            UserName = signupUser.UserName;
+            Password = signupUser.Password;
+            RememberMe = false;
+        }
 
-		public UserLoginDTO() { }
-	}
+        public UserLoginDTO() { }
+    }
 }

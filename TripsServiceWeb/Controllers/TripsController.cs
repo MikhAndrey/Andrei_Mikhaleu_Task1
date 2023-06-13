@@ -1,4 +1,5 @@
 ﻿using Andrei_Mikhaleu_Task1.Helpers;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.Commands.Comments;
@@ -26,13 +27,16 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		private readonly IWebHostEnvironment _environment;
 
+		private readonly IMapper _mapper;
+
 		public TripsController(
 			ICommentService service,
 			IRoutePointService routePointService,
 			IImageService imageService,
 			ITripService tripService,
 			IUserService userService,
-			IWebHostEnvironment environment
+			IWebHostEnvironment environment,
+			IMapper mapper
 			)
 		{
 			_commentService = service;
@@ -41,6 +45,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			_tripService = tripService;
 			_userService = userService;
 			_environment = environment;
+			_mapper = mapper;
 		}
 
 		[Authorize]
@@ -66,7 +71,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 					return RedirectToAction("Login", "Account");
 				}
 				await new CreateTripCommand(trip, images, _routePointService, _imageService,
-					_tripService, _userService, _environment.WebRootPath, routePoints, userId).ExecuteAsync();
+					_tripService, _userService, _mapper, _environment.WebRootPath, routePoints, userId).ExecuteAsync();
 				return RedirectToAction(nameof(Index));
 			}
 			return View(trip);
@@ -146,7 +151,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			if (ModelState.IsValid)
 			{
 				await new EditTripCommand(trip, id, images, _routePointService, _imageService,
-				_tripService, _environment.WebRootPath, routePoints).ExecuteAsync();
+				_tripService, _environment.WebRootPath, routePoints, _mapper).ExecuteAsync();
 				return RedirectToAction(nameof(Index));
 			}
 			return View(trip);
