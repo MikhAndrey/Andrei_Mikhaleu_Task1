@@ -93,7 +93,7 @@ namespace Andrei_Mikhaleu_Task1
                 await next();
             });
 
-            _ = app.UseStatusCodePages(context =>
+            _ = app.UseStatusCodePages(async context =>
             {
                 HttpRequest request = context.HttpContext.Request;
                 HttpResponse response = context.HttpContext.Response;
