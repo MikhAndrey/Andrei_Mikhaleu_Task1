@@ -5,7 +5,7 @@ namespace TripsServiceDAL.Infrastructure
 {
     public class UnitOfWork : IDisposable, IUnitOfWork
     {
-        readonly TripsDBContext _context;
+        private readonly TripsDBContext _context;
 
         private ICommentRepository _commentRepository;
         private IImageRepository _imageRepository;
@@ -75,7 +75,7 @@ namespace TripsServiceDAL.Infrastructure
 
 		public async Task SaveAsync()
         {
-            await _context.SaveChangesAsync();
+            _ = await _context.SaveChangesAsync();
         }
 
         private bool disposed = false;

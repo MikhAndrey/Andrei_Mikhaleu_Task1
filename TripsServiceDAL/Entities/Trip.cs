@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Entities
 {
-    public class Trip
+    public class Trip : IIdentifiable
     {
         public Trip()
         {
             RoutePoints = new();
             Images = new();
             Comments = new();
-            User = new();
         }
 
-        public int TripId { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 

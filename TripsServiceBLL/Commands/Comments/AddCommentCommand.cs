@@ -1,39 +1,28 @@
-﻿using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.DTO.Comments;
-using TripsServiceDAL.Entities;
+﻿using TripsServiceBLL.DTO.Comments;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Comments
 {
-	public class AddCommentCommand : IAsyncCommand
-	{
-		private readonly ICommentService _commentService;
+    public class AddCommentCommand : IAsyncCommand
+    {
+        private readonly ICommentService _commentService;
 
-		private readonly IUserService _userService;
+        private readonly CreateCommentDTO _comment;
 
-		private readonly ITripService _tripService;
+        private readonly int _userId;
 
-		private readonly CreateCommentDTO _comment;
+        public AddCommentCommand(ICommentService commentService,
+            CreateCommentDTO comment,
+            int userId)
+        {
+            _commentService = commentService;
+            _userId = userId;
+            _comment = comment;
+        }
 
-		private readonly int _userId;
-
-		public AddCommentCommand(ICommentService commentService,
-			IUserService userService,
-			ITripService tripService,
-			CreateCommentDTO comment,
-			int userId)
-		{
-			_commentService = commentService;
-			_userService = userService;
-			_tripService = tripService;
-			_userId = userId;
-			_comment = comment;
-		}
-
-		public async Task ExecuteAsync()
-		{
-			Trip? trip = await _tripService.GetByIdAsync(_comment.TripId);
-			User? user = await _userService.GetByIdAsync(_userId);
-			await _commentService.AddCommentAsync(_comment, trip, user);
-		}
-	}
+        public async Task ExecuteAsync()
+        {
+            await _commentService.AddCommentAsync(_comment, _userId);
+        }
+    }
 }

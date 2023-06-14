@@ -1,104 +1,83 @@
-﻿using TripsServiceBLL.Services;
-using TripsServiceDAL.Infrastructure;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using TripsServiceDAL.Interfaces;
-using TripsServiceBLL.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using System.Net;
+using System.Text;
+using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Services;
 using TripsServiceBLL.Utils;
+using TripsServiceDAL.Infrastructure;
+using TripsServiceDAL.Interfaces;
 
 namespace Andrei_Mikhaleu_Task1
 {
-	public static class ProgramHelper
-	{
-		public static IConfigurationRoot Configuration = new ConfigurationBuilder()
-				.AddJsonFile("appsettings.json", optional: false)
-				.Build();
+    public static class ProgramHelper
+    {
+        public static IConfigurationRoot Configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();
 
-		public static void ConfigureServices(IServiceCollection services)
-		{
-			string connectionString = Configuration.GetConnectionString("DefaultConnection");
+        public static void AddServices(IServiceCollection services)
+        {
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+            _ = services.AddDbContext<TripsDBContext>(options =>
+                options.UseSqlServer(connectionString));
+            _ = services.AddScoped<IUnitOfWork, UnitOfWork>();
+            _ = services.AddScoped<IUserService, UserService>();
+            _ = services.AddScoped<ICommentService, CommentService>();
+            _ = services.AddScoped<IImageService, ImageService>();
+            _ = services.AddScoped<IRoutePointService, RoutePointService>();
+            _ = services.AddScoped<ITripService, TripService>();
+        }
 
-			services.AddControllersWithViews();
-			services.AddDbContext<TripsDBContext>(options =>
-				options.UseSqlServer(connectionString));
-			services.AddScoped<IUnitOfWork, UnitOfWork>();
-			services.AddScoped<IUserService, UserService>();
-			services.AddScoped<ICommentService, CommentService>();
-			services.AddScoped<IImageService, ImageService>();
-			services.AddScoped<IRoutePointService, RoutePointService>();
-			services.AddScoped<ITripService, TripService>();
-			services.AddHttpContextAccessor();
+        public static void AddAuthentication(IServiceCollection services)
+        {
+            _ = services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    RequireExpirationTime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Constants.JwtIssuer,
+                    ValidAudience = Constants.JwtIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.JwtKey))
+                };
+            });
+        }
 
-			services.AddAuthentication(options =>
-			{
-				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-			}).AddJwtBearer(options =>
-			{
-				options.SaveToken = true;
-				options.TokenValidationParameters = new TokenValidationParameters
-				{
-					ValidateIssuer = true,
-					ValidateAudience = true,
-					ValidateLifetime = true,
-					RequireExpirationTime = true,
-					ValidateIssuerSigningKey = true,
-					ValidIssuer = Constants.JwtIssuer,
-					ValidAudience = Constants.JwtIssuer,
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.JwtKey))
-				};
-			});
+        public static void AddJwtTokenToRequests(WebApplication app)
+        {
+            _ = app.Use(async (context, next) =>
+            {
+                string? jwtToken = context.Request.Cookies[Constants.JwtTokenCookiesAlias];
+                if (!string.IsNullOrEmpty(jwtToken))
+                {
+                    context.Request.Headers.Add("Authorization", "Bearer " + jwtToken);
+                }
+                await next();
+            });
+        }
 
-			services.AddAuthorization();
-		}
+        public static void AddUnauthorizedStateRedirection(WebApplication app)
+        {
+            _ = app.UseStatusCodePages(async context =>
+            {
+                HttpRequest request = context.HttpContext.Request;
+                HttpResponse response = context.HttpContext.Response;
 
-		public static void Configure(WebApplication app)
-		{
-			if (!app.Environment.IsDevelopment())
-			{
-				app.UseExceptionHandler("/Home/Error");
-				app.UseHsts();
-			}
-
-			app.UseHttpsRedirection();
-			app.UseStaticFiles();
-
-			app.UseRouting();
-
-			app.UseCors("AllowAll");
-
-			app.Use(async (context, next) =>
-			{
-				string? jwtToken = context.Request.Cookies[Constants.JwtTokenCookiesAlias];
-				if (!string.IsNullOrEmpty(jwtToken))
-				{
-					context.Request.Headers.Add("Authorization", "Bearer " + jwtToken);
-				}
-				await next();
-			});
-
-			app.UseStatusCodePages(async context =>
-			{
-				var request = context.HttpContext.Request;
-				var response = context.HttpContext.Response;
-
-				if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
-				{
-					response.Redirect("/Account/Login");
-				}
-			});
-
-			app.UseAuthentication();
-			app.UseAuthorization();
-
-			app.MapControllerRoute(
-				name: "default",
-				pattern: "{controller=Home}/{action=Index}/{id?}");
-
-			app.Run();
-		}
-	}
+                if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
+                {
+                    response.Redirect("/Account/Login");
+                }
+            });
+        }
+    }
 }

@@ -1,23 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Andrei_Mikhaleu_Task1.Helpers;
 using Microsoft.AspNetCore.Authorization;
-using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using TripsServiceBLL.Commands.Statistics;
-using TripsServiceBLL.Utils;
+using System.Text.Json.Serialization;
 using TripsServiceBLL.Commands.RoutePoints;
+using TripsServiceBLL.Commands.Statistics;
 using TripsServiceBLL.DTO.RoutePoints;
 using TripsServiceBLL.DTO.Statistics;
 using TripsServiceBLL.Interfaces;
-using Andrei_Mikhaleu_Task1.Helpers;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
-	public class StatisticsController : Controller
-	{
+    public class StatisticsController : Controller
+    {
 
-		private IRoutePointService _routePointService;
+        private readonly IRoutePointService _routePointService;
 
-		private ITripService _tripService;
+        private readonly ITripService _tripService;
 
 		public StatisticsController(IRoutePointService routePointService, ITripService tripService)
 		{
@@ -29,30 +28,14 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[Authorize]
 		public async Task<IActionResult> TotalDuration()
 		{
-			try
-			{
-				YearsStatisticsDTO model = await GetDistinctYearsModel();
-				return View(model);
-			}
-			catch (ArgumentNullException)
-			{
-				return RedirectToAction("Login", "Account");
-			};
+			return View(await GetDistinctYearsModel());
 		}
 
 		[HttpPost]
 		[Authorize]
 		public async Task<IActionResult> TotalDurationData(int year)
 		{
-			int userId;
-			try
-			{
-				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-			}
-			catch (ArgumentNullException)
-			{
-				return RedirectToAction("Login", "Account");
-			}
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 			List<DurationInMonth> durations = await new GetTripDurationsByYearCommand(_tripService, userId, year).ExecuteAsync();
 			return Json(durations);
 		}
@@ -61,30 +44,14 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[Authorize]
 		public async Task<IActionResult> HeatMap()
 		{
-			try
-			{
-				YearsStatisticsDTO model = await GetDistinctYearsModel();
-				return View(model);
-			}
-			catch (ArgumentNullException)
-			{
-				return RedirectToAction("Login", "Account");
-			};
+			return View(await GetDistinctYearsModel());
 		}
 
 		[HttpPost]
 		[Authorize]
 		public async Task<IActionResult> HeatMapData(int year)
 		{
-			int userId;
-			try
-			{
-				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-			}
-			catch (ArgumentNullException)
-			{
-				return RedirectToAction("Login", "Account");
-			};
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 			IQueryable<RoutePointCoordinatesDTO> result = new GetRoutePointsCoordinatesCommand(_routePointService, userId, year).Execute();
 			JsonSerializerOptions options = new()
 			{
@@ -95,7 +62,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
 		private async Task<YearsStatisticsDTO> GetDistinctYearsModel()
 		{
-			int userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
+			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
 			return await new GetDistinctTripYearsCommand(_tripService, userId).ExecuteAsync();
 		}
 	}

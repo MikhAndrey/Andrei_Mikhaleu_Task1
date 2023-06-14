@@ -39,9 +39,9 @@
 							</li>
 						</ul>
 						<div class="tp-gradient-reverse">
-							<a href="@Url.Action("Details", new { id = trip.TripId })" class="btn btn-primary ml-3 mt-2 mb-3 mr-2">Details</a> 
-							<a href="@Url.Action("Edit", new { id = trip.TripId })" class="btn btn-secondary  mt-2 mb-3 mr-2">Edit</a> 
-							<a href="@Url.Action("Delete", new { id = trip.TripId })" class="btn btn-danger mt-2 mb-3 delete-btn">Delete</a>
+							<a href="@Url.Action("Details", new { id = trip.Id })" class="btn btn-primary ml-3 mt-2 mb-3 mr-2">Details</a> 
+							<a href="@Url.Action("Edit", new { id = trip.Id })" class="btn btn-secondary  mt-2 mb-3 mr-2">Edit</a> 
+							<a href="@Url.Action("Delete", new { id = trip.Id })" class="btn btn-danger mt-2 mb-3 delete-btn">Delete</a>
 						</div>
 					</div>					
 				</div>
@@ -49,23 +49,6 @@
 		}        
 	} 
 </div>
-<script>
-$('.delete-btn').on('click', function (e) {
-	e.preventDefault(); 
-	var url = $(this).attr('href');
-	fetch(url, {
-		method: 'DELETE'
-	})
-	.then(response => {
-		if (response.ok) {
-			location.reload();
-		} else {
-			alert("An error occured while deleting a trip");
-		}
-	})
-	.catch(error => {
-		console.error('Error:', error);
-	});
-});
+<script src="@Url.Content("~/js/deleteTrip.js")">
 </script>
 

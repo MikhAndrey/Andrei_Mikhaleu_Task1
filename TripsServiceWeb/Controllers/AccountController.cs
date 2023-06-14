@@ -1,103 +1,100 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TripsServiceBLL.DTO.Users;
-using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Infrastructure;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.Commands.Users;
+using TripsServiceBLL.DTO.Users;
+using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
-	public class AccountController : Controller
-	{
-		private readonly IUserService _userService;
+    public class AccountController : Controller
+    {
+        private readonly IUserService _userService;
 
-		public AccountController(IUserService userService)
-		{
-			_userService = userService;
-		}
+        private readonly IMapper _mapper;
 
-		[HttpGet]
-		public IActionResult Register()
-		{
-			return View();
-		}
+        public AccountController(IUserService userService, IMapper mapper)
+        {
+            _userService = userService;
+            _mapper = mapper;
+        }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Register(UserSignupDTO user)
-		{
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					await new RegisterUserCommand(_userService, user).ExecuteAsync();
-				}
-				catch (ValidationException ex)
-				{
-					ModelState.AddModelError(ex.Property, ex.Message);
-					return View(user);
-				}
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
 
-				return await Login(new(user), null);
-			}
-			return View(user);
-		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(UserSignupDTO user)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await new RegisterUserCommand(_userService, user).ExecuteAsync();
+                }
+                catch (ValidationException ex)
+                {
+                    ModelState.AddModelError(ex.Property, ex.Message);
+                    return View(user);
+                }
 
-		[HttpGet]
-		public IActionResult Login(string returnUrl = null)
-		{
-			ViewData["ReturnUrl"] = returnUrl;
-			return View();
-		}
+                return await Login(_mapper.Map<UserLoginDTO>(user), null);
+            }
+            return View(user);
+        }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Login(UserLoginDTO user, string returnUrl = null)
-		{
-			ViewData["ReturnUrl"] = returnUrl;
+        [HttpGet]
+        public IActionResult Login(string? returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
 
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					string jwtToken = await new GetLoginJWTTokenCommand(_userService, user).ExecuteAsync();
-					DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(Constants.AuthorizationExpirationInDays) : null;
-					HttpContext.Response.Cookies.Append(Constants.JwtTokenCookiesAlias, jwtToken, new CookieOptions
-					{
-						HttpOnly = true,
-						Secure = true,
-						Expires = cookieExpiresUTC,
-						SameSite = SameSiteMode.Strict
-					});
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(UserLoginDTO user, string? returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
 
-					return RedirectToLocal(returnUrl);
-				}
-				catch (ValidationException ex)
-				{
-					ModelState.AddModelError(ex.Property, ex.Message);
-				}
-			}
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string jwtToken = await new GetLoginJWTTokenCommand(_userService, user).ExecuteAsync();
+                    DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(Constants.AuthorizationExpirationInDays) : null;
+                    HttpContext.Response.Cookies.Append(Constants.JwtTokenCookiesAlias, jwtToken, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        Expires = cookieExpiresUTC,
+                        SameSite = SameSiteMode.Strict
+                    });
 
-			return View(user);
-		}
+                    return RedirectToLocal(returnUrl);
+                }
+                catch (ValidationException ex)
+                {
+                    ModelState.AddModelError(ex.Property, ex.Message);
+                }
+            }
 
-		[HttpGet]
-		public async Task<IActionResult> Logout()
-		{
-			HttpContext.Response.Cookies.Delete(Constants.JwtTokenCookiesAlias);
-			return RedirectToAction("Index", "Home");
-		}
+            return View(user);
+        }
 
-		private IActionResult RedirectToLocal(string returnUrl)
-		{
-			if (Url.IsLocalUrl(returnUrl))
-			{
-				return Redirect(returnUrl);
-			}
-			else
-			{
-				return RedirectToAction("Index", "Home");
-			}
-		}
-	}
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Response.Cookies.Delete(Constants.JwtTokenCookiesAlias);
+            return RedirectToAction("Index", "Home");
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            return Url.IsLocalUrl(returnUrl) ? Redirect(returnUrl) : RedirectToAction("Index", "Home");
+        }
+    }
 }

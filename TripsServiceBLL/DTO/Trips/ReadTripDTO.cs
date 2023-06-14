@@ -1,43 +1,27 @@
-﻿using TripsServiceDAL.Entities;
-
-namespace TripsServiceBLL.DTO.Trips
+﻿namespace TripsServiceBLL.DTO.Trips
 {
-	public class ReadTripDTO
-	{
-		public int TripId { get; set; }
+    public class ReadTripDTO
+    {
+        public int Id { get; set; }
 
-		public string Name { get; set; }
+        public string Name { get; set; }
 
-		public string? Description { get; set; }
+        public string? Description { get; set; }
 
-		public DateTime StartTime { get; set; }
+        public DateTime StartTime { get; set; }
 
-		public DateTime EndTime { get; set; }
+        public DateTime EndTime { get; set; }
 
-		public bool IsCurrent { get; set; }
+        public bool IsCurrent { get; set; }
 
-		public bool IsFuture { get; set; }
+        public bool IsFuture { get; set; }
 
-		public bool IsPast { get; set; }
+        public bool IsPast { get; set; }
 
-		public string UtcStartTimeZone { get; set; }
+        public string UtcStartTimeZone { get; set; }
 
-		public string UtcFinishTimeZone { get; set; }
+        public string UtcFinishTimeZone { get; set; }
 
-		public ReadTripDTO(Trip trip)
-		{
-			TripId = trip.TripId;
-			Name = trip.Name;
-			Description = trip.Description;
-			StartTime = trip.StartTime.AddSeconds(trip.StartTimeZoneOffset);
-			EndTime = trip.EndTime.AddSeconds(trip.FinishTimeZoneOffset);
-			IsCurrent = DateTime.UtcNow >= trip.StartTime && DateTime.UtcNow <= trip.EndTime;
-			IsFuture = DateTime.UtcNow < trip.StartTime;
-			IsPast = DateTime.UtcNow > trip.EndTime;
-			UtcStartTimeZone = string.Concat(StartTime.ToString("dd.MM.yyyy HH:mm"), $" UTC{trip.StartTimeZoneOffset / 3600:+#;-#;+0}");
-			UtcFinishTimeZone = string.Concat(EndTime.ToString("dd.MM.yyyy HH:mm"), $" UTC{trip.FinishTimeZoneOffset / 3600:+#;-#;+0}");
-		}
-
-		public ReadTripDTO() { }
-	}
+        public ReadTripDTO() { }
+    }
 }
