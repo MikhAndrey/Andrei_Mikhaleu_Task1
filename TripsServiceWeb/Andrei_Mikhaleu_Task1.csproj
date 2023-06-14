@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\drivers\" />
+    <Folder Include="Views\Drivers\" />
   </ItemGroup>
 
   <ItemGroup>

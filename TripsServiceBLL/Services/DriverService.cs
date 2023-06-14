@@ -20,7 +20,7 @@ namespace TripsServiceBLL.Services
                 Id = d.Id,
                 Name = d.Name,
                 Experience = d.Experience,
-                AverageRating = d.Trips.Average(t => (double?)t.Feedback.Rating ?? 0),
+                AverageRating = Math.Round(d.Trips.Where(t => t.Feedback != null).Average(t => (double?)t.Feedback.Rating ?? 0), 1),
                 FirstPhoto = d.Photos.FirstOrDefault()
             }).OrderByDescending(d => d.AverageRating);
         }

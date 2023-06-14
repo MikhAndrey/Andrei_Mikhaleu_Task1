@@ -28,6 +28,7 @@ namespace Andrei_Mikhaleu_Task1
             _ = services.AddScoped<IImageService, ImageService>();
             _ = services.AddScoped<IRoutePointService, RoutePointService>();
             _ = services.AddScoped<ITripService, TripService>();
+            _ = services.AddScoped<IDriverService, DriverService>();
         }
 
         public static void AddAuthentication(IServiceCollection services)

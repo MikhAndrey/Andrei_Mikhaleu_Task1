@@ -35,5 +35,7 @@
         public const string ImageNotExistsMessage = "This image doesn't exist anymore";
 
         public const string TripNotExistsMessage = "This trip doesn't exist anymore";
+
+        public const string DriversFolderName = "drivers";
     }
 }

@@ -1,0 +1,92 @@
+﻿@model IQueryable<TripsServiceBLL.DTO.Drivers.ReadDriverDTO>
+@using TripsServiceBLL.Utils
+@{
+	ViewData["Title"] = "Our drivers";
+}
+<h1 class="tp-label">Our drivers</h1>
+<div class="row row-cols-2">
+	@if (Model.Count() == 0)
+	{ 
+			<p class="tp-label">No drivers here yet.</p>
+	}
+	else
+	{ 
+		@foreach (var driver in Model)
+		{ 
+					<div class="col mb-4">
+						<div class="card h-100 br-20">
+							<div class="card-header text-light tp-gradient-standard">
+								<h5 class="card-title tp-label">@driver.Name</h5>
+							</div>
+							<div class="card-body bg-light br-20">
+								<div> 
+							@{
+								string imagePath = $"/{Constants.ImagesFolderName}/{Constants.DriversFolderName}/{driver.Id.ToString()}/{driver.FirstPhoto.Link}";
+							}
+									<img src="@imagePath" alt="Driver Photo" style="width:200px;height:200px;"> 
+									<h3>@driver.Name</h3> 
+									<p>Experience: @driver.Experience years</p> 
+									<div class="rating-container">Rating: 
+										<span class="rating-value">@driver.AverageRating</span>
+										<span class="star-container">
+											<span class="star">
+												<span class="star-filled" style="width: 100%;"></span>
+												<span class="star-outline"></span>
+											</span>
+												<span class="star">
+												<span class="star-filled" style="width: 100%;"></span>
+											<span class="star-outline"></span>
+											</span>
+												<span class="star">
+												<span class="star-filled" style="width: 100%;"></span>
+											<span class="star-outline"></span>
+											</span>
+												<span class="star">
+												<span class="star-filled" style="width: 68%;"></span>
+											<span class="star-outline"></span>
+											</span>
+											<span class="star">
+												<span class="star-filled" style="width: 0%;"></span>
+												<span class="star-outline"></span>
+											</span>
+										</span>
+									</div> 
+								</div>
+							</div>					
+						</div>
+					</div>
+		}        
+	} 
+</div>
+@section Scripts{
+	<script>
+			function buildRating(rating, container) {
+	  const intRating = Math.floor(rating);
+	  const fracRating = rating - intRating;
+	  const stars = container.find(".star-filled");
+
+	  for(let i = 0; i < stars.length; i++){
+		if(i < intRating) {
+		  stars.eq(i).css("width", "100%");
+		}
+		else if(i === intRating) {
+		  stars.eq(i).css("width", `${fracRating * 100}%`);
+		}
+		else {
+		  stars.eq(i).css("width", "0%");
+		}
+	  }
+	}
+
+	$('.rating-container').each(function() {
+		const ratingValueContainer = $(this).find('.rating-value')
+		const starContainer = $(this).find('.star-container');
+		const decimalSeparator = (1.1).toLocaleString().substring(1, 2);
+		const nonLocalRating = $(ratingValueContainer).text().replace(decimalSeparator, ".");
+		const rating = parseFloat(nonLocalRating);
+	  buildRating(rating, starContainer);
+	  $(ratingValueContainer).css('background-color', `rgb(${255 - 51*rating}, ${51*rating}, 0)`);
+	});
+		
+	</script>
+}
