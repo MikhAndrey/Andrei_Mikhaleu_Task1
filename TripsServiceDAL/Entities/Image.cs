@@ -6,11 +6,11 @@ namespace TripsServiceDAL.Entities
     {
         public int Id { get; set; }
 
-        public string Link { get; set; }
+        public string? Link { get; set; }
 
         public int TripId { get; set; }
 
-        public Trip Trip { get; set; }
+        public Trip? Trip { get; set; }
 
     }
 }

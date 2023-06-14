@@ -15,7 +15,7 @@ namespace TripsServiceBLL.Interfaces
 
 		Task EndTripAsync(int tripId);
 
-		Task StartTripAsync (int tripId);
+		Task StartTripAsync(int tripId);
 
 		Task UpdateAsync(Trip trip);
 

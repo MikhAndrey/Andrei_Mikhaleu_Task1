@@ -18,6 +18,6 @@ namespace TripsServiceDAL.Entities
 
         public int TripId { get; set; }
 
-        public Trip Trip { get; set; }
+        public Trip? Trip { get; set; }
     }
 }

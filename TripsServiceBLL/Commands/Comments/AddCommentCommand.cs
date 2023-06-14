@@ -1,7 +1,5 @@
 ﻿using TripsServiceBLL.DTO.Comments;
-using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
-using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Commands.Comments
 {

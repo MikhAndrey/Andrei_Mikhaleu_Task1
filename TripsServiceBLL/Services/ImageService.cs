@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
-using TripsServiceBLL.Infrastructure;
 
 namespace TripsServiceBLL.Services
 {
@@ -53,13 +53,21 @@ namespace TripsServiceBLL.Services
         {
             Image? image = await _unitOfWork.Images.GetByIdAsync(imageId);
             if (image == null)
+            {
                 throw new EntityNotFoundException(Constants.ImageNotExistsMessage);
+            }
+
             bool tripExists = _unitOfWork.Trips.Exists(tripId);
             if (!tripExists)
+            {
                 throw new EntityNotFoundException(Constants.TripNotFoundMessage);
+            }
+
             bool userExists = _unitOfWork.Users.Exists(userId);
             if (!userExists)
+            {
                 throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+            }
 
             _unitOfWork.Images.Delete(image);
             await _unitOfWork.SaveAsync();
