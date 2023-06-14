@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 using TripsServiceBLL.DTO.Statistics;
 using TripsServiceBLL.DTO.Trips;
+using TripsServiceBLL.DTO.Users;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
+using TripsServiceBLL.Infrastructure;
 using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Services
@@ -34,11 +37,35 @@ namespace TripsServiceBLL.Services
 			trip.StartTime = DateTime.Parse(trip.StartTime.ToString("dd.MM.yyyy HH:mm"));
 		}
 
+		public async Task StartTripAsync(int tripId)
+		{
+            Trip? trip = await GetByIdAsync(tripId);
+            if (trip == null)
+                throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+            if (trip.StartTime > DateTime.UtcNow)
+            {
+                SetNewTimeForStartingTrip(trip);
+                await UpdateAsync(trip);
+            }
+        }
+
 		public void SetNewTimeForEndingTrip(Trip trip)
 		{
 			trip.EndTime = DateTime.UtcNow;
 			trip.EndTime = DateTime.Parse(trip.EndTime.ToString("dd.MM.yyyy HH:mm"));
 		}
+
+		public async Task EndTripAsync(int tripId)
+		{
+            Trip? trip = await GetByIdAsync(tripId);
+			if (trip == null)
+				throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+            if (trip.StartTime < DateTime.UtcNow && trip.EndTime > DateTime.UtcNow)
+            {
+                SetNewTimeForEndingTrip(trip);
+                await UpdateAsync(trip);
+            }
+        }
 
 		public async Task UpdateAsync(Trip trip)
 		{
@@ -58,39 +85,50 @@ namespace TripsServiceBLL.Services
 			await _unitOfWork.SaveAsync();
 		}
 
-		public bool Exists(int id)
-		{
-			return _unitOfWork.Trips.Exists(id);
-		}
-
 		public async Task<TripDetailsDTO> GetTripDetailsAsync(int tripId, int userId)
 		{
 			Trip? trip = await GetByIdAsync(tripId);
-			return _mapper.Map<Trip, TripDetailsDTO>(trip, opt =>
+            if (trip == null)
+                throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+			bool userExists = _unitOfWork.Users.Exists(userId);
+			if (!userExists)
+                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+            return _mapper.Map<Trip, TripDetailsDTO>(trip, opt =>
 				opt.AfterMap((src, dest) => dest.IsCurrentUserTrip = src.User.Id == userId));
 		}
 
 		public async Task<EditTripDTO> GetTripForEditingAsync(int tripId)
 		{
 			Trip? trip = await GetByIdAsync(tripId);
-			return _mapper.Map<EditTripDTO>(trip);
+            if (trip == null)
+                throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+            return _mapper.Map<EditTripDTO>(trip);
 		}
 
 		public IQueryable<ReadTripDTOExtended> GetOthersPublicTrips(int userId)
 		{
-			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetOthersPublicTrips(userId);
+            bool userExists = _unitOfWork.Users.Exists(userId);
+            if (!userExists)
+                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+            IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetOthersPublicTrips(userId);
 			return rawTrips.Select(el => _mapper.Map<ReadTripDTOExtended>(el));
 		}
 
 		public IQueryable<ReadTripDTO> GetHistoryOfTripsByUserId(int userId)
 		{
-			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetHistoryOfTripsByUserId(userId);
+            bool userExists = _unitOfWork.Users.Exists(userId);
+            if (!userExists)
+                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+            IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetHistoryOfTripsByUserId(userId);
 			return rawTrips.Select(el => _mapper.Map<ReadTripDTO>(el));
 		}
 
 		public IQueryable<ReadTripDTO> GetTripsByUserId(int userId)
 		{
-			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetTripsByUserId(userId);
+            bool userExists = _unitOfWork.Users.Exists(userId);
+            if (!userExists)
+                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+            IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetTripsByUserId(userId);
 			return rawTrips.Select(el => _mapper.Map<ReadTripDTO>(el));
 		}
 

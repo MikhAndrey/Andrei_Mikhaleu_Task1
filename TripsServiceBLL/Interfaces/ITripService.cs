@@ -13,6 +13,10 @@ namespace TripsServiceBLL.Interfaces
 
 		void SetNewTimeForEndingTrip(Trip trip);
 
+		Task EndTripAsync(int tripId);
+
+		Task StartTripAsync (int tripId);
+
 		Task UpdateAsync(Trip trip);
 
 		Task DeleteAsync(Trip trip);
@@ -32,7 +36,5 @@ namespace TripsServiceBLL.Interfaces
 		YearsStatisticsDTO GetYearsOfUserTrips(int userId);
 
 		Task<List<DurationInMonth>> GetTotalDurationByMonthsAsync(int year, int userId);
-
-		bool Exists(int id);
 	}
 }

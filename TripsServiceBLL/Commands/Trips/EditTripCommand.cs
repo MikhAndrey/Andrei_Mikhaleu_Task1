@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
+using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Utils;
 
 namespace TripsServiceBLL.Commands.Trips
 {
@@ -52,14 +54,13 @@ namespace TripsServiceBLL.Commands.Trips
         public async Task ExecuteAsync()
         {
             Trip? trip = await _tripService.GetByIdAsync(_id);
-            if (trip != null)
-            {
-                _ = _mapper.Map(_trip, trip);
-                await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
-                trip.RoutePoints.Clear();
-                _routePointService.ParseAndAddRoutePoints(trip, _routePoints);
-                await _tripService.UpdateAsync(trip);
-            }
+            if (trip == null)
+                throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+            _ = _mapper.Map(_trip, trip);
+            await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
+            trip.RoutePoints.Clear();
+            _routePointService.ParseAndAddRoutePoints(trip, _routePoints);
+            await _tripService.UpdateAsync(trip);
         }
     }
 }

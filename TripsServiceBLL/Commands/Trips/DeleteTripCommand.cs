@@ -1,5 +1,7 @@
 ﻿using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
+using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Utils;
 
 namespace TripsServiceBLL.Commands.Trips
 {
@@ -24,11 +26,10 @@ namespace TripsServiceBLL.Commands.Trips
         public async Task ExecuteAsync()
         {
             Trip? tripToDelete = await _tripService.GetByIdAsync(_id);
-            if (tripToDelete != null)
-            {
-                _imageService.DeleteTripImages(tripToDelete, _webRootPath);
-                await _tripService.DeleteAsync(tripToDelete);
-            }
+            if (tripToDelete == null)
+                throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+            _imageService.DeleteTripImages(tripToDelete, _webRootPath);
+            await _tripService.DeleteAsync(tripToDelete);
         }
     }
 }

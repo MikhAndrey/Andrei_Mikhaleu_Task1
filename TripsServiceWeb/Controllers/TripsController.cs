@@ -86,14 +86,18 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			try
 			{
 				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-			}
+                IQueryable<ReadTripDTO> trips = new GetUserTripsCommand(_tripService, userId).Execute();
+                return View(trips);
+            }
 			catch (ArgumentNullException)
 			{
 				return RedirectToAction("Login", "Account");
 			}
-			IQueryable<ReadTripDTO> trips = new GetUserTripsCommand(_tripService, userId).Execute();
-			return View(trips);
-		}
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
 		[Authorize]
 		[HttpGet]
@@ -103,14 +107,18 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			try
 			{
 				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-			}
+                IQueryable<ReadTripDTO> trips = new GetTripsHistoryCommand(_tripService, userId).Execute();
+                return View(trips);
+            }
 			catch (ArgumentNullException)
 			{
 				return RedirectToAction("Login", "Account");
 			}
-			IQueryable<ReadTripDTO> trips = new GetTripsHistoryCommand(_tripService, userId).Execute();
-			return View(trips);
-		}
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
 		[Authorize]
 		[HttpGet]
@@ -120,30 +128,48 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			try
 			{
 				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-			}
+                IQueryable<ReadTripDTOExtended> trips = new GetOthersPublicTripsCommand(_tripService, userId).Execute();
+                return View(trips);
+            }
 			catch (ArgumentNullException)
 			{
 				return RedirectToAction("Login", "Account");
 			}
-			IQueryable<ReadTripDTOExtended> trips = new GetOthersPublicTripsCommand(_tripService, userId).Execute();
-			return View(trips);
+			catch(EntityNotFoundException ex)
+			{
+				return NotFound(ex.Message);
+			}			
 		}
 
 		[Authorize]
 		[HttpDelete]
 		public async Task<IActionResult> Delete(int id)
 		{
-			await new DeleteTripCommand(id, _tripService, _imageService, _environment.WebRootPath).ExecuteAsync();
-			return Ok();
+			try
+			{
+				await new DeleteTripCommand(id, _tripService, _imageService, _environment.WebRootPath).ExecuteAsync();
+			}
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            return Ok();
 		}
 
 		[Authorize]
 		[HttpGet]
 		public async Task<IActionResult> Edit(int id)
 		{
-			EditTripDTO trip = await new GetTripByIdCommand(_tripService, id).ExecuteAsync();
-			return View(trip);
-		}
+			try
+			{
+				EditTripDTO trip = await new GetTripByIdCommand(_tripService, id).ExecuteAsync();
+                return View(trip);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
 		[HttpPut]
 		[ValidateAntiForgeryToken]
@@ -151,8 +177,14 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await new EditTripCommand(trip, id, images, _routePointService, _imageService,
-				_tripService, _environment.WebRootPath, routePoints, _mapper).ExecuteAsync();
+				try
+				{
+					await new EditTripCommand(trip, id, images, _routePointService, _imageService,
+					_tripService, _environment.WebRootPath, routePoints, _mapper).ExecuteAsync();
+				} catch (EntityNotFoundException ex) 
+				{
+                    return NotFound(ex.Message);
+                }
 				return RedirectToAction(nameof(Index));
 			}
 			return View(trip);
@@ -162,25 +194,50 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Details(int id)
 		{
-			int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
-			TripDetailsDTO trip = await new GetTripDetailsCommand(_tripService, id, userId).ExecuteAsync();
-			return View(trip);
+			try
+			{
+				int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
+				TripDetailsDTO trip = await new GetTripDetailsCommand(_tripService, id, userId).ExecuteAsync();
+                return View(trip);
+            }
+			catch (ArgumentNullException)
+			{
+				return RedirectToAction("Login", "Account");
+			}
+			catch (EntityNotFoundException ex)
+			{
+				return NotFound(ex.Message);
+			}          
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> StartTrip(int id)
 		{
-			await new StartTripCommand(_tripService, id).ExecuteAsync();
-			return RedirectToAction(nameof(Details), new { id });
+			try
+			{
+				await new StartTripCommand(_tripService, id).ExecuteAsync();
+			}
+			catch (EntityNotFoundException ex)
+			{
+				return NotFound(ex.Message);
+			}
+            return RedirectToAction(nameof(Details), new { id });
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> EndTrip(int id)
 		{
-			await new EndTripCommand(_tripService, id).ExecuteAsync();
-			return RedirectToAction(nameof(Details), new { id });
+			try
+			{
+				await new EndTripCommand(_tripService, id).ExecuteAsync();
+			}
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            return RedirectToAction(nameof(Details), new { id });
 		}
 
 		[HttpPost]
@@ -192,7 +249,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 				try
 				{
 					userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-                    await new AddCommentCommand(_commentService, _userService, _tripService, comment, userId).ExecuteAsync();
+                    await new AddCommentCommand(_commentService, comment, userId).ExecuteAsync();
                 }
 				catch (ArgumentNullException)
 				{
@@ -210,8 +267,15 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpDelete]
 		public async Task<IActionResult> DeleteComment(int commentId)
 		{
-			await new DeleteCommentCommand(_commentService, commentId).ExecuteAsync();
-			return Ok();
+			try
+			{
+				await new DeleteCommentCommand(_commentService, commentId).ExecuteAsync();
+			}
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            return Ok();
 		}
 
 		[Authorize]
@@ -222,13 +286,17 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			try
 			{
 				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-			}
+                await new DeleteImageCommand(_environment.WebRootPath, imageId, tripId, userId, _imageService).ExecuteAsync();
+            }
 			catch (ArgumentNullException)
 			{
 				return RedirectToAction("Login", "Account");
 			}
-			await new DeleteImageCommand(_environment.WebRootPath, imageId, tripId, userId, _imageService).ExecuteAsync();
-			return Ok();
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            return Ok();
 		}
 	}
 }

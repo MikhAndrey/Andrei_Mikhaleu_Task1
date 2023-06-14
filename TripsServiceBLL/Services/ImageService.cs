@@ -3,6 +3,7 @@ using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
+using TripsServiceBLL.Infrastructure;
 
 namespace TripsServiceBLL.Services
 {
@@ -23,7 +24,7 @@ namespace TripsServiceBLL.Services
                 {
                     string? extension = Path.GetExtension(image.FileName);
                     string newFileName = $"{Guid.NewGuid()}{extension}";
-                    string userFilePath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.Id.ToString());
+                    string userFilePath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.UserId.ToString());
                     if (!Directory.Exists(userFilePath))
                     {
                         _ = Directory.CreateDirectory(userFilePath);
@@ -51,18 +52,23 @@ namespace TripsServiceBLL.Services
         public async Task DeleteByIdAsync(int imageId, int tripId, int userId, string webRootPath)
         {
             Image? image = await _unitOfWork.Images.GetByIdAsync(imageId);
+            if (image == null)
+                throw new EntityNotFoundException(Constants.ImageNotExistsMessage);
+            bool tripExists = _unitOfWork.Trips.Exists(tripId);
+            if (!tripExists)
+                throw new EntityNotFoundException(Constants.TripNotFoundMessage);
+            bool userExists = _unitOfWork.Users.Exists(userId);
+            if (!userExists)
+                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
 
-            if (image != null)
+            _unitOfWork.Images.Delete(image);
+            await _unitOfWork.SaveAsync();
+
+            string path = Path.Combine(webRootPath, Constants.ImagesFolderName, userId.ToString(), tripId.ToString(), image.Link);
+
+            if (File.Exists(path))
             {
-                _unitOfWork.Images.Delete(image);
-                await _unitOfWork.SaveAsync();
-
-                string path = Path.Combine(webRootPath, Constants.ImagesFolderName, userId.ToString(), tripId.ToString(), image.Link);
-
-                if (File.Exists(path))
-                {
-                    File.Delete(path);
-                }
+                File.Delete(path);
             }
         }
 

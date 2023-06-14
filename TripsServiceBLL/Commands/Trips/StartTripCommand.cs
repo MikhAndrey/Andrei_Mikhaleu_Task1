@@ -17,15 +17,7 @@ namespace TripsServiceBLL.Commands.Trips
 
         public async Task ExecuteAsync()
         {
-            Trip? trip = await _tripService.GetByIdAsync(_id);
-            if (trip != null)
-            {
-                if (trip.StartTime > DateTime.UtcNow)
-                {
-                    _tripService.SetNewTimeForStartingTrip(trip);
-                    await _tripService.UpdateAsync(trip);
-                }
-            }
+            await _tripService.StartTripAsync(_id);
         }
     }
 }

@@ -25,5 +25,15 @@
         public const string InvalidCredentialsMessage = "Invalid credentials. Please, try again";
 
         public const string JwtTokenCookiesAlias = "jwt";
+
+        public const string TripNotFoundMessage = "Corresponding trip was not found";
+
+        public const string UserNotFoundMessage = "Corresponding user was not found";
+
+        public const string CommentNotExistsMessage = "This comment doesn't exist anymore";
+
+        public const string ImageNotExistsMessage = "This image doesn't exist anymore";
+
+        public const string TripNotExistsMessage = "This trip doesn't exist anymore";
     }
 }
