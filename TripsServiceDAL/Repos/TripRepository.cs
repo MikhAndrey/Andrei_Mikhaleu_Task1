@@ -17,7 +17,7 @@ namespace TripsServiceDAL.Repos
                 .Include(t => t.Comments)
                     .ThenInclude(c => c.User)
                 .Include(t => t.User)
-                .FirstOrDefaultAsync(t => t.TripId == id);
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public IQueryable<int> GetYearsOfUserTrips(int userId)

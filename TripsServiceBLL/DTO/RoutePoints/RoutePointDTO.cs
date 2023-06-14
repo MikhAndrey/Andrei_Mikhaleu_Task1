@@ -4,7 +4,7 @@ namespace TripsServiceBLL.DTO.RoutePoints
 {
     public class RoutePointDTO : RoutePointCoordinatesDTO
     {
-        public int RoutePointId { get; set; }
+        public int Id { get; set; }
 
         public int Ordinal { get; set; }
 

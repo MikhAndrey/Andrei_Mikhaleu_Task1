@@ -4,7 +4,7 @@ namespace TripsServiceBLL.DTO.Images
 {
     public class ImageDTO
     {
-        public int ImageId { get; set; }
+        public int Id { get; set; }
 
         public string? Link { get; set; }
 

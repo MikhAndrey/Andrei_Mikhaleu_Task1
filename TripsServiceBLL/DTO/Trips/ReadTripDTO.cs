@@ -2,7 +2,7 @@
 {
     public class ReadTripDTO
     {
-        public int TripId { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 

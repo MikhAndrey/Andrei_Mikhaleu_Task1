@@ -14,7 +14,7 @@ namespace TripsServiceDAL.Repos
             return await _dbSet
                 .Include(c => c.User)
                 .Include(c => c.Trip)
-                .FirstOrDefaultAsync(c => c.CommentId == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public IQueryable<Comment> GetCommentsByTripId(int tripId)

@@ -13,7 +13,7 @@ namespace TripsServiceDAL.Repos
         {
             return await _dbSet
                 .Include(rp => rp.Trip)
-                .FirstOrDefaultAsync(rp => rp.RoutePointId == id);
+                .FirstOrDefaultAsync(rp => rp.Id == id);
         }
 
         public IQueryable<RoutePoint> GetRoutePointsByYear(int year, int userId)

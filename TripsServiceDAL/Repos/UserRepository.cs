@@ -14,7 +14,7 @@ namespace TripsServiceDAL.Repos
             return await _dbSet
                 .Include(u => u.Trips)
                 .Include(u => u.Comments)
-                .FirstOrDefaultAsync(u => u.UserId == id);
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User?> GetByUsernameAsync(string username)

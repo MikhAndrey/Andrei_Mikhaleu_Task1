@@ -1,16 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Entities
 {
-    public class RoutePoint
+    public class RoutePoint : IIdentifiable
     {
-        public RoutePoint()
-        {
-            Trip = new();
-        }
-
-        public int RoutePointId { get; set; }
+        public int Id { get; set; }
 
         [Column(TypeName = "decimal(12,9)")]
         public decimal Longitude { get; set; }

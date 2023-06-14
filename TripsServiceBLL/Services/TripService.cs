@@ -58,11 +58,16 @@ namespace TripsServiceBLL.Services
 			await _unitOfWork.SaveAsync();
 		}
 
+		public bool Exists(int id)
+		{
+			return _unitOfWork.Trips.Exists(id);
+		}
+
 		public async Task<TripDetailsDTO> GetTripDetailsAsync(int tripId, int userId)
 		{
 			Trip? trip = await GetByIdAsync(tripId);
 			return _mapper.Map<Trip, TripDetailsDTO>(trip, opt =>
-				opt.AfterMap((src, dest) => dest.IsCurrentUserTrip = src.User.UserId == userId));
+				opt.AfterMap((src, dest) => dest.IsCurrentUserTrip = src.User.Id == userId));
 		}
 
 		public async Task<EditTripDTO> GetTripForEditingAsync(int tripId)

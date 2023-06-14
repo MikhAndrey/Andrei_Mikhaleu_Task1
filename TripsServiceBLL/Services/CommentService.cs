@@ -14,17 +14,16 @@ namespace TripsServiceBLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task AddCommentAsync(CreateCommentDTO comment, Trip trip, User user)
+        public async Task AddCommentAsync(CreateCommentDTO comment, int userId)
         {
-            trip.Comments.Add(new Comment
+            await _unitOfWork.Comments.AddAsync(new Comment
             {
                 Message = comment.Message,
                 TripId = comment.TripId,
                 Date = DateTime.UtcNow,
-                User = user
+                UserId = userId
             });
 
-            _unitOfWork.Trips.Update(trip);
             await _unitOfWork.SaveAsync();
         }
 

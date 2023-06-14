@@ -1,13 +1,10 @@
-﻿namespace TripsServiceDAL.Entities
-{
-    public class Image
-    {
-        public Image()
-        {
-            Trip = new();
-        }
+﻿using TripsServiceDAL.Interfaces;
 
-        public int ImageId { get; set; }
+namespace TripsServiceDAL.Entities
+{
+    public class Image : IIdentifiable
+    {
+        public int Id { get; set; }
 
         public string Link { get; set; }
 

@@ -1,14 +1,10 @@
-﻿namespace TripsServiceDAL.Entities
-{
-    public class Comment
-    {
-        public Comment()
-        {
-            Trip = new();
-            User = new();
-        }
+﻿using TripsServiceDAL.Interfaces;
 
-        public int CommentId { get; set; }
+namespace TripsServiceDAL.Entities
+{
+    public class Comment : IIdentifiable
+    {
+        public int Id { get; set; }
 
         public string Message { get; set; }
 

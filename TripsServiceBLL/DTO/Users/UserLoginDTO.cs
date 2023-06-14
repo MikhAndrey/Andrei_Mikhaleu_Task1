@@ -13,13 +13,6 @@ namespace TripsServiceBLL.DTO.Users
         [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
 
-        public UserLoginDTO(UserSignupDTO signupUser)
-        {
-            UserName = signupUser.UserName;
-            Password = signupUser.Password;
-            RememberMe = false;
-        }
-
         public UserLoginDTO() { }
     }
 }

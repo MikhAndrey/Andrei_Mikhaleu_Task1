@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.Commands.Users;
 using TripsServiceBLL.DTO.Users;
 using TripsServiceBLL.Infrastructure;
@@ -11,9 +12,12 @@ namespace Andrei_Mikhaleu_Task1.Controllers
     {
         private readonly IUserService _userService;
 
-        public AccountController(IUserService userService)
+        private readonly IMapper _mapper;
+
+        public AccountController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -38,7 +42,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                     return View(user);
                 }
 
-                return await Login(new(user), null);
+                return await Login(_mapper.Map<UserLoginDTO>(user), null);
             }
             return View(user);
         }

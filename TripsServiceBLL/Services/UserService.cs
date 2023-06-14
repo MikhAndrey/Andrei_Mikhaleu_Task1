@@ -38,13 +38,18 @@ namespace TripsServiceBLL.Services
         public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
         {
             User? userFromDB = await GetByUserNameAsync(user.UserName);
-            return (userFromDB != null && userFromDB.Password == Encryptor.Encrypt(user.Password)) ? userFromDB.UserId : null;
+            return (userFromDB != null && userFromDB.Password == Encryptor.Encrypt(user.Password)) ? userFromDB.Id : null;
         }
 
         public async Task AddAsync(User user)
         {
             await _unitOfWork.Users.AddAsync(user);
             await _unitOfWork.SaveAsync();
+        }
+
+        public bool Exists(int id)
+        {
+            return _unitOfWork.Users.Exists(id);
         }
 
         public async Task TryToRegisterNewUserAsync(UserSignupDTO user)

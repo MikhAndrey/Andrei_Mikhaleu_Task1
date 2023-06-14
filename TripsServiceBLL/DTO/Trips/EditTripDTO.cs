@@ -9,7 +9,7 @@ namespace TripsServiceBLL.DTO.Trips
 
         public List<RoutePointDTO> RoutePoints { get; set; }
 
-        public int TripId { get; set; }
+        public int Id { get; set; }
 
         public int UserId { get; set; }
 

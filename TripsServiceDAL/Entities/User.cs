@@ -1,17 +1,16 @@
-﻿namespace TripsServiceDAL.Entities
+﻿using TripsServiceDAL.Interfaces;
+
+namespace TripsServiceDAL.Entities
 {
-    public class User
+    public class User : IIdentifiable
     {
         public User()
         {
             Trips = new();
             Comments = new();
-            UserName = "";
-            Password = "";
-            Email = "";
         }
 
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         public string UserName { get; set; }
 

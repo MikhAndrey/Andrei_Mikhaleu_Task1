@@ -23,13 +23,13 @@ namespace TripsServiceBLL.Services
                 {
                     string? extension = Path.GetExtension(image.FileName);
                     string newFileName = $"{Guid.NewGuid()}{extension}";
-                    string userFilePath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.UserId.ToString());
+                    string userFilePath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.Id.ToString());
                     if (!Directory.Exists(userFilePath))
                     {
                         _ = Directory.CreateDirectory(userFilePath);
                     }
 
-                    string tripFilePath = Path.Combine(userFilePath, trip.TripId.ToString());
+                    string tripFilePath = Path.Combine(userFilePath, trip.Id.ToString());
                     if (!Directory.Exists(tripFilePath))
                     {
                         _ = Directory.CreateDirectory(tripFilePath);
@@ -70,13 +70,13 @@ namespace TripsServiceBLL.Services
         {
             foreach (Image image in trip.Images)
             {
-                string path = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.UserId.ToString(), trip.TripId.ToString(), image.Link);
+                string path = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.Id.ToString(), trip.Id.ToString(), image.Link);
                 if (File.Exists(path))
                 {
                     File.Delete(path);
                 }
             }
-            string tripDirectoryPath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.UserId.ToString(), trip.TripId.ToString());
+            string tripDirectoryPath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.Id.ToString(), trip.Id.ToString());
             if (Directory.Exists(tripDirectoryPath))
             {
                 Directory.Delete(tripDirectoryPath);

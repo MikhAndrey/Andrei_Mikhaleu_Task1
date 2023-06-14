@@ -18,12 +18,13 @@ namespace TripsServiceBLL.Infrastructure
             _ = CreateMap<RoutePoint, RoutePointDTO>();
             _ = CreateMap<Trip, ReadTripDTO>();
             _ = CreateMap<User, UserDTO>();
+            _ = CreateMap<UserSignupDTO, UserLoginDTO>();
             _ = CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
             _ = CreateMap<CreateTripDTO, Trip>()
                 .ForMember(trip => trip.StartTime, opt => opt.MapFrom(src => src.StartTime.AddSeconds(-src.StartTimeZoneOffset)))
                 .ForMember(trip => trip.EndTime, opt => opt.MapFrom(src => src.EndTime.AddSeconds(-src.FinishTimeZoneOffset)));
             _ = CreateMap<EditTripDTO, Trip>()
-                .ForMember(trip => trip.TripId, opt => opt.Ignore())
+                .ForMember(trip => trip.Id, opt => opt.Ignore())
                 .ForMember(trip => trip.UserId, opt => opt.Ignore())
                 .ForMember(trip => trip.Images, opt => opt.Ignore())
                 .ForMember(trip => trip.StartTime, opt => opt.MapFrom(src => src.StartTime.AddSeconds(-src.StartTimeZoneOffset)))

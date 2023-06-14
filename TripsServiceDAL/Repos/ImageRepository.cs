@@ -13,7 +13,7 @@ namespace TripsServiceDAL.Repos
         {
             return await _dbSet
                 .Include(i => i.Trip)
-                .FirstOrDefaultAsync(i => i.ImageId == id);
+                .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public IQueryable<Image> GetImagesByTripId(int tripId)

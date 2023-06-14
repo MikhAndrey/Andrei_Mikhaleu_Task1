@@ -1,4 +1,5 @@
 ﻿using TripsServiceBLL.DTO.Comments;
+using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
 
@@ -31,9 +32,13 @@ namespace TripsServiceBLL.Commands.Comments
 
         public async Task ExecuteAsync()
         {
-            Trip? trip = await _tripService.GetByIdAsync(_comment.TripId);
-            User? user = await _userService.GetByIdAsync(_userId);
-            await _commentService.AddCommentAsync(_comment, trip, user);
+            bool tripExists = _tripService.Exists(_comment.TripId);
+            if (!tripExists)
+                throw new EntityNotFoundException("Required trip was not found");
+            bool userExists = _userService.Exists(_userId);
+            if (!userExists)
+                throw new EntityNotFoundException("Required user was not found");
+            await _commentService.AddCommentAsync(_comment, _userId);
         }
     }
 }

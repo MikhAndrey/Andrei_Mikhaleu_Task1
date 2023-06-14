@@ -7,6 +7,7 @@ using TripsServiceBLL.Commands.Images;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.DTO.Trips;
+using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 
@@ -191,12 +192,16 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 				try
 				{
 					userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-				}
+                    await new AddCommentCommand(_commentService, _userService, _tripService, comment, userId).ExecuteAsync();
+                }
 				catch (ArgumentNullException)
 				{
 					return RedirectToAction("Login", "Account");
 				}
-				await new AddCommentCommand(_commentService, _userService, _tripService, comment, userId).ExecuteAsync();
+				catch (EntityNotFoundException ex)
+				{
+					return NotFound(ex.Message);
+				}
 			}
 			return RedirectToAction(nameof(Details), new { id = comment.TripId });
 		}

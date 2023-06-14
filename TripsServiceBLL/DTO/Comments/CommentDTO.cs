@@ -6,7 +6,7 @@ namespace TripsServiceBLL.DTO.Comments
     public class CommentDTO : CreateCommentDTO
     {
 
-        public int CommentId { get; set; }
+        public int Id { get; set; }
 
         public DateTime Date { get; set; }
 
