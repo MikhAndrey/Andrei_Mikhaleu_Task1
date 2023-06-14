@@ -2,8 +2,8 @@
 
 namespace TripsServiceBLL.Interfaces
 {
-	public interface IDriverService
-	{
-		IQueryable<ReadDriverDTO> GetDriversOverall();
-	}
+    public interface IDriverService
+    {
+        IQueryable<ReadDriverDTO> GetDriversOverall();
+    }
 }

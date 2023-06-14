@@ -10,9 +10,11 @@ namespace TripsServiceDAL.Infrastructure
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<RoutePoint> RoutePoints { get; set; }
-		public DbSet<Driver> Drivers { get; set; }
+        public DbSet<Driver> Drivers { get; set; }
+        public DbSet<DriverPhoto> DriverPhotos { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
-		public TripsDBContext(DbContextOptions options) : base(options)
+        public TripsDBContext(DbContextOptions options) : base(options)
         {
             _ = Database.EnsureCreated();
         }
@@ -49,23 +51,23 @@ namespace TripsServiceDAL.Infrastructure
                 .HasForeignKey(i => i.TripId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-			modelBuilder.Entity<Feedback>()
-				.HasOne(f => f.Trip)
-				.WithOne(t => t.Feedback)
-				.HasForeignKey<Feedback>(f => f.TripId)
-				.OnDelete(DeleteBehavior.Cascade);
+            _ = modelBuilder.Entity<Feedback>()
+                .HasOne(f => f.Trip)
+                .WithOne(t => t.Feedback)
+                .HasForeignKey<Feedback>(f => f.TripId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-			modelBuilder.Entity<Trip>()
-			   .HasOne(t => t.Driver)
-			   .WithMany(u => u.Trips)
-			   .HasForeignKey(t => t.DriverId)
-			   .OnDelete(DeleteBehavior.SetNull);
+            _ = modelBuilder.Entity<Trip>()
+               .HasOne(t => t.Driver)
+               .WithMany(u => u.Trips)
+               .HasForeignKey(t => t.DriverId)
+               .OnDelete(DeleteBehavior.SetNull);
 
-			modelBuilder.Entity<DriverPhoto>()
-			   .HasOne(dp => dp.Driver)
-			   .WithMany(d => d.Photos)
-			   .HasForeignKey(dp => dp.DriverId)
-			   .OnDelete(DeleteBehavior.Cascade);
-		}
+            _ = modelBuilder.Entity<DriverPhoto>()
+               .HasOne(dp => dp.Driver)
+               .WithMany(d => d.Photos)
+               .HasForeignKey(dp => dp.DriverId)
+               .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

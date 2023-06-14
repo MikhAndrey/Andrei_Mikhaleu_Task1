@@ -10,7 +10,6 @@ using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
-using Andrei_Mikhaleu_Task1.Helpers;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

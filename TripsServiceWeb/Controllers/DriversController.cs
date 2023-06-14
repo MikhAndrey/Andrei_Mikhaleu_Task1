@@ -5,26 +5,26 @@ using TripsServiceBLL.Interfaces;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
-	public class DriversController : Controller
-	{
+    public class DriversController : Controller
+    {
 
-		private readonly IDriverService _driverService;
+        private readonly IDriverService _driverService;
 
-		private readonly IWebHostEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
-		public DriversController(
-			IDriverService driverService,
-			IWebHostEnvironment environment
-			)
-		{
-			_driverService = driverService;
-			_environment = environment;
-		}
+        public DriversController(
+            IDriverService driverService,
+            IWebHostEnvironment environment
+            )
+        {
+            _driverService = driverService;
+            _environment = environment;
+        }
 
-		public IActionResult Index()
-		{
-			IQueryable<ReadDriverDTO> drivers = new GetDriversOverallCommand(_driverService).Execute();
-			return View(drivers);
-		}
-	}
+        public IActionResult Index()
+        {
+            IQueryable<ReadDriverDTO> drivers = new GetDriversOverallCommand(_driverService).Execute();
+            return View(drivers);
+        }
+    }
 }

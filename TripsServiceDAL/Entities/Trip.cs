@@ -44,7 +44,7 @@ namespace TripsServiceDAL.Entities
 
         public int? DriverId { get; set; }
 
-        public Driver Driver { get; set; }
+        public Driver? Driver { get; set; }
 
         public Feedback Feedback { get; set; }
     }

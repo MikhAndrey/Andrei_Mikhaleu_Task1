@@ -64,16 +64,16 @@ namespace TripsServiceDAL.Infrastructure
             }
         }
 
-		public IDriverRepository Drivers
-		{
-			get
-			{
-				_driverRepository ??= new DriverRepository(_context);
-				return _driverRepository;
-			}
-		}
+        public IDriverRepository Drivers
+        {
+            get
+            {
+                _driverRepository ??= new DriverRepository(_context);
+                return _driverRepository;
+            }
+        }
 
-		public async Task SaveAsync()
+        public async Task SaveAsync()
         {
             _ = await _context.SaveChangesAsync();
         }
