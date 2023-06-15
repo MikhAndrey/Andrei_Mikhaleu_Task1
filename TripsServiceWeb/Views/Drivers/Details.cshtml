@@ -23,7 +23,7 @@
                 @foreach (var photo in Model.Photos)
                 {
                     <div class="carousel-item @((photo.Id == Model.Photos.FirstOrDefault().Id) ? "active" : "")">
-                        <img src="/@Constants.ImagesFolderName/@Constants.DriversFolderName/@Model.Id.ToString()/@photo.Link" class="d-block w-100" alt="Driver photo">
+                        <img src="/@Constants.ImagesFolderName/@Constants.DriversFolderName/@Model.Id.ToString()/@photo.Link" class="d-block w-100 img-responsive" style="object-fit: contain; height: 400px" alt="Driver photo">
                     </div>
                 }
             </div>
