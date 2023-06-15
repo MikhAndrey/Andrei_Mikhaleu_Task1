@@ -2,14 +2,14 @@
 
 namespace TripsServiceDAL.Entities
 {
-    public class DriverPhoto : IIdentifiable
-    {
-        public int Id { get; set; }
+	public class DriverPhoto : IIdentifiable
+	{
+		public int Id { get; set; }
 
-        public string? Link { get; set; }
+		public string? Link { get; set; }
 
-        public int DriverId { get; set; }
+		public int DriverId { get; set; }
 
-        public Driver? Driver { get; set; }
-    }
+		public Driver? Driver { get; set; }
+	}
 }

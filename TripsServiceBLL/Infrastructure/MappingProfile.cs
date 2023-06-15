@@ -21,8 +21,10 @@ namespace TripsServiceBLL.Infrastructure
             _ = CreateMap<UserSignupDTO, UserLoginDTO>();
             _ = CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
             _ = CreateMap<CreateTripDTO, Trip>()
-                .ForMember(trip => trip.StartTime, opt => opt.MapFrom(src => src.StartTime.AddSeconds(-src.StartTimeZoneOffset)))
-                .ForMember(trip => trip.EndTime, opt => opt.MapFrom(src => src.EndTime.AddSeconds(-src.FinishTimeZoneOffset)));
+                .ForMember(trip => trip.StartTime, opt => opt.MapFrom
+                (src => src.StartTime.AddSeconds(-src.StartTimeZoneOffset)))
+                .ForMember(trip => trip.EndTime, opt => opt.MapFrom
+                (src => src.EndTime.AddSeconds(-src.FinishTimeZoneOffset)));
             _ = CreateMap<EditTripDTO, Trip>()
                 .IncludeBase<CreateTripDTO, Trip>()
                 .ForMember(trip => trip.Id, opt => opt.Ignore())
@@ -37,15 +39,20 @@ namespace TripsServiceBLL.Infrastructure
                 .ForMember(dest => dest.IsCurrent, opt => opt.MapFrom(src => DateTime.UtcNow >= src.StartTime && DateTime.UtcNow <= src.EndTime))
                 .ForMember(dest => dest.IsFuture, opt => opt.MapFrom(src => DateTime.UtcNow < src.StartTime))
                 .ForMember(dest => dest.IsPast, opt => opt.MapFrom(src => DateTime.UtcNow > src.EndTime))
-                .ForMember(dest => dest.UtcStartTimeZone, opt => opt.MapFrom(src => string.Concat(src.StartTime.AddSeconds(src.StartTimeZoneOffset).ToString("dd.MM.yyyy HH:mm"), $" UTC{src.StartTimeZoneOffset / 3600:+#;-#;+0}")))
-                .ForMember(dest => dest.UtcFinishTimeZone, opt => opt.MapFrom(src => string.Concat(src.EndTime.AddSeconds(src.FinishTimeZoneOffset).ToString("dd.MM.yyyy HH:mm"), $" UTC{src.FinishTimeZoneOffset / 3600:+#;-#;+0}")));
+                .ForMember(dest => dest.UtcStartTimeZone, opt => opt.MapFrom
+                (src => string.Concat(src.StartTime.AddSeconds(src.StartTimeZoneOffset).ToString("dd.MM.yyyy HH:mm"),
+                $" UTC{src.StartTimeZoneOffset / 3600:+#;-#;+0}")))
+                .ForMember(dest => dest.UtcFinishTimeZone, opt => opt.MapFrom
+                (src => string.Concat(src.EndTime.AddSeconds(src.FinishTimeZoneOffset).ToString("dd.MM.yyyy HH:mm"),
+                $" UTC{src.FinishTimeZoneOffset / 3600:+#;-#;+0}")));
             _ = CreateMap<Trip, ReadTripDTOExtended>()
                 .IncludeBase<Trip, ReadTripDTO>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
             _ = CreateMap<Trip, TripDetailsDTO>()
                 .IncludeBase<Trip, ReadTripDTO>()
                 .ForMember(dest => dest.IsCurrentUserTrip, opt => opt.Ignore())
-                .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeUtils.GetTimeSpanString(src.EndTime.AddSeconds(src.StartTimeZoneOffset - src.FinishTimeZoneOffset) - src.StartTime)));
+                .ForMember(dest => dest.Duration, opt => opt.MapFrom(src =>
+                TimeUtils.GetTimeSpanString(src.EndTime.AddSeconds(src.StartTimeZoneOffset - src.FinishTimeZoneOffset) - src.StartTime)));
         }
     }
 }

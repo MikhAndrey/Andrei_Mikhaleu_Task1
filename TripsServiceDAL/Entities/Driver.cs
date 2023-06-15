@@ -6,12 +6,12 @@ namespace TripsServiceDAL.Entities
     {
         public int Id { get; set; }
 
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
-        public List<DriverPhoto>? Photos { get; set; }
+        public List<DriverPhoto> Photos { get; set; }
 
         public int Experience { get; set; }
 
-        public List<Trip>? Trips { get; set; }
+        public List<Trip> Trips { get; set; }
     }
 }
