@@ -36,6 +36,8 @@
 
 		public const string TripNotExistsMessage = "This trip doesn't exist anymore";
 
-		public const string DriversFolderName = "drivers";
+        public const string DriverNotExistsMessage = "This driver doesn't exist anymore";
+
+        public const string DriversFolderName = "drivers";
 	}
 }

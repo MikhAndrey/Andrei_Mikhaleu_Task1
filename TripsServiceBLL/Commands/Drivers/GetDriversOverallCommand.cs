@@ -3,7 +3,7 @@ using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Drivers
 {
-	public class GetDriversOverallCommand : ICommand<IQueryable<ReadDriverDTO>>
+	public class GetDriversOverallCommand : ICommand<IEnumerable<ReadDriverDTO>>
 	{
 		private readonly IDriverService _driverService;
 
@@ -12,7 +12,7 @@ namespace TripsServiceBLL.Commands.Drivers
 			_driverService = driverService;
 		}
 
-		public IQueryable<ReadDriverDTO> Execute()
+		public IEnumerable<ReadDriverDTO> Execute()
 		{
 			return _driverService.GetDriversOverall();
 		}

@@ -1,4 +1,4 @@
-﻿@model IQueryable<TripsServiceBLL.DTO.Drivers.ReadDriverDTO>
+﻿@model IEnumerable<TripsServiceBLL.DTO.Drivers.ReadDriverDTO>
 @using TripsServiceBLL.Utils
 @{
 	ViewData["Title"] = "Our drivers";
@@ -26,7 +26,7 @@
 						<div style="flex-grow:1;">
 							<p class="tp-label">Experience: @driver.Experience years</p>
 							<div class="rating-container tp-label mb-3" style="display: flex; flex-wrap: wrap;">
-								<span class="rating-value text-light" style="order: 1;">@driver.AverageRating</span>
+								<span class="rating-value text-light mt-2" style="order: 1;">@driver.AverageRating</span>
 								<span class="star-container" style="flex-basis: 100%;">
 									<span class="star">
 										<span class="star-filled" style="width: 100%;"></span>
@@ -53,7 +53,7 @@
 						</div>
 					</div>
 					<div class="tp-gradient-reverse br-20">
-						<a href="@Url.Action("Details", "Drivers", new { id = driver.Id })" class="btn btn-primary ml-3 mt-2 mb-3">View feedbacks</a>
+						<a href="@Url.Action("Details", "Drivers", new { id = driver.Id })" class="btn btn-primary ml-3 mt-2 mb-3">Details</a>
 					</div>
 				</div>
 			</div>
@@ -61,34 +61,5 @@
 	} 
 </div>
 @section Scripts{
-	<script>
-			function buildRating(rating, container) {
-	  const intRating = Math.floor(rating);
-	  const fracRating = rating - intRating;
-	  const stars = container.find(".star-filled");
-
-	  for(let i = 0; i < stars.length; i++){
-		if(i < intRating) {
-		  stars.eq(i).css("width", "100%");
-		}
-		else if(i === intRating) {
-		  stars.eq(i).css("width", `${fracRating * 100}%`);
-		}
-		else {
-		  stars.eq(i).css("width", "0%");
-		}
-	  }
-	}
-
-	$('.rating-container').each(function() {
-		const ratingValueContainer = $(this).find('.rating-value')
-		const starContainer = $(this).find('.star-container');
-		const decimalSeparator = (1.1).toLocaleString().substring(1, 2);
-		const nonLocalRating = $(ratingValueContainer).text().replace(decimalSeparator, ".");
-		const rating = parseFloat(nonLocalRating);
-	  buildRating(rating, starContainer);
-	  $(ratingValueContainer).css('background-color', `rgb(${255 - 51*rating}, ${51*rating}, 0)`);
-	});
-		
-	</script>
+	<script src="@Url.Content("~/js/ratingBuilder.js")"></script>
 }

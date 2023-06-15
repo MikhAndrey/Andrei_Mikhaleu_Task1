@@ -28,7 +28,7 @@
 						<ul class="navbar-nav flex-grow-1">
 							<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle fs-5" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Main Menu</a>
-								<ul class="dropdown-menu tp-gradient-standard" aria-labelledby="navbarDropdown">
+								<ul class="dropdown-menu tp-gradient-standard fs-5" aria-labelledby="navbarDropdown">
 									<li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
 									<li><hr class="dropdown-divider"></li>
 									<li><a class="dropdown-item" asp-area="" asp-controller="Trips" asp-action="Create">New trip</a></li>
@@ -44,6 +44,9 @@
 									<li><a class="dropdown-item" asp-area="" asp-controller="Trips" asp-action="Public">Trips of others</a></li>					
 								</ul>
 							</li>
+							<li class="fs-5">
+								<a class="nav-link" asp-area="" asp-controller="Drivers" asp-action="Index">Our drivers</a>
+							</li>
 						</ul>
 						@{ 
 							string? userName = ViewContext?.HttpContext?.User?.Identity?.Name;
@@ -58,7 +61,7 @@
 							} else {
 								<div class="nav-item dropdown mr-50 fs-5">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown-1" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
-									<ul class="dropdown-menu tp-gradient-standard" aria-labelledby="navbarDropdown-1">
+									<ul class="dropdown-menu tp-gradient-standard fs-5" aria-labelledby="navbarDropdown-1">
 										<li ><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Log In</a></li>
 										<li><hr class="dropdown-divider"></li>
 										<li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a></li>

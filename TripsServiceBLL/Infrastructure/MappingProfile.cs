@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using TripsServiceBLL.DTO.Comments;
+using TripsServiceBLL.DTO.Drivers;
+using TripsServiceBLL.DTO.Feedbacks;
 using TripsServiceBLL.DTO.Images;
 using TripsServiceBLL.DTO.RoutePoints;
 using TripsServiceBLL.DTO.Trips;
@@ -53,6 +55,16 @@ namespace TripsServiceBLL.Infrastructure
                 .ForMember(dest => dest.IsCurrentUserTrip, opt => opt.Ignore())
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src =>
                 TimeUtils.GetTimeSpanString(src.EndTime.AddSeconds(src.StartTimeZoneOffset - src.FinishTimeZoneOffset) - src.StartTime)));
+            _ = CreateMap<Trip, ReadFeedbackDTO>()
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Feedback.Text))
+                .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Feedback.Rating))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
+            _ = CreateMap<Driver, ReadDriverDTO>()
+                .ForMember(dest => dest.AverageRating, opt => opt.Ignore())
+                .ForMember(dest => dest.FirstPhoto, opt => opt.MapFrom(src => src.Photos.FirstOrDefault()));
+            _ = CreateMap<Driver, DriverDetailsDTO>()
+                .ForMember(dest => dest.AverageRating, opt => opt.Ignore())
+                .ForMember(dest => dest.Feedbacks, opt => opt.Ignore());
         }
     }
 }

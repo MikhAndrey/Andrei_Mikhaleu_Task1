@@ -13,5 +13,16 @@ namespace TripsServiceDAL.Repos
         {
             return _dbSet.Include(d => d.Photos).Include(d => d.Trips).ThenInclude(t => t.Feedback);
         }
+
+        public new async Task<Driver?> GetByIdAsync(int id)
+        {
+            return await _dbSet
+                .Include(d => d.Photos)
+                .Include(d => d.Trips)
+                .ThenInclude(t => t.Feedback)
+                .Include(d => d.Trips)
+                .ThenInclude(t => t.User)
+                .FirstOrDefaultAsync(d => d.Id == id);
+        }
     }
 }
