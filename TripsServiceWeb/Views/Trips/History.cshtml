@@ -25,33 +25,8 @@
 						<div class="mb-2 mt-2" style="min-height:26px;">
 						@if (trip.Rating != null)
 						{
-							<span class="tp-label">You rated this trip as:</span>
-							<span class="rating-container">
-								<span class="rating-value" style="display:none">@trip.Rating</span>
-								<span class="star-container">
-									<span class="star">
-										<span class="star-filled"></span>
-										<span class="star-outline"></span>
-									</span>
-									<span class="star">
-										<span class="star-filled"></span>
-										<span class="star-outline"></span>
-									</span>
-									<span class="star">
-										<span class="star-filled"></span>
-										<span class="star-outline"></span>
-									</span>
-									<span class="star">
-										<span class="star-filled"></span>
-										<span class="star-outline"></span>
-									</span>
-									<span class="star">
-										<span class="star-filled"></span>
-										<span class="star-outline"></span>
-									</span>
-								</span>
-							</span>		
-													}
+							@await Html.PartialAsync("_DisplayTripRating", trip)		
+						}
 						</div>
 						<div class="tp-gradient-reverse card-footer">
 							<a href="@Url.Action("Details", new { id = trip.Id })" class="btn btn-primary ml-3 mt-2 mb-3 mr-2">Details</a> 
