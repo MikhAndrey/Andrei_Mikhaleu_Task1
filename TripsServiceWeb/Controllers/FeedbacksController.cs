@@ -22,8 +22,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			try
 			{
 				await new CreateFeedbackCommand(_feedbackService, feedback).ExecuteAsync();
-				return RedirectToAction("Index", "Trips");
-			} catch (EntityNotFoundException ex)
+                return Redirect(Request.Headers["Referer"].ToString());
+            } catch (EntityNotFoundException ex)
 			{
 				return NotFound(ex.Message);
 			}
