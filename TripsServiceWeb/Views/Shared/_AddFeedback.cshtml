@@ -1,41 +1,58 @@
 ﻿@model TripsServiceBLL.DTO.Feedbacks.CreateFeedbackDTO
 
-<form method="post" id="trip-rating-form" asp-action="Create" asp-controller="Feedbacks">
-    <div class="form-group tp-form-group">
-        <input type="hidden" id="feedback-trip-id" asp-for=@Model.TripId value="@Model.TripId" />
-        <label for="text" class="tp-label">Describe driver's work in a couple of words:</label>
-        <textarea class="form-control" id="text" asp-for="Text" rows="3"></textarea>
-        <input type="hidden" id="feedback-rating" asp-for=@Model.Rating value="0" />
-        <div class="mt-2">
-            <label class="tp-label">Rate driver of your trip:</label>
-            <span class="rating-container">
-                <span class="star-container">
-                    <span class="star">
-                        <span class="star-filled" style="width: 0%; transition: none;"></span>
-                        <span class="star-outline"></span>
-                    </span>
-                    <span class="star">
-                        <span class="star-filled" style="width: 0%; transition: none;"></span>
-                        <span class="star-outline"></span>
-                    </span>
-                    <span class="star">
-                        <span class="star-filled" style="width: 0%; transition: none;"></span>
-                        <span class="star-outline"></span>
-                    </span>
-                    <span class="star">
-                        <span class="star-filled" style="width: 0%; transition: none;"></span>
-                        <span class="star-outline"></span>
-                    </span>
-                    <span class="star">
-                        <span class="star-filled" style="width: 0%; transition: none;"></span>
-                        <span class="star-outline"></span>
+</div>
+<div class="modal fade" id="rateDriverModal" tabindex="-1" aria-labelledby="rateDriverModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content tp-form">
+      <div class="modal-header">
+        <h5 class="modal-title tp-label" id="exampleModalLabel">Please, rate driver of this trip and leave short feedback about him</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Rate later"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="trip-rating-form" asp-action="Create" asp-controller="Feedbacks">
+        <div class="form-group tp-form-group">
+            <input type="hidden" id="feedback-trip-id" asp-for=@Model.TripId value="@Model.TripId" />
+            <label for="text" class="tp-label">Describe driver's work in a couple of words:</label>
+            <textarea class="form-control" id="text" asp-for="Text" rows="3"></textarea>
+            <input type="hidden" id="feedback-rating" asp-for=@Model.Rating value="0" />
+            <div class="mt-2">
+                <label class="tp-label">Rate driver of your trip:</label>
+                <span class="rating-container">
+                    <span class="star-container">
+                        <span class="star">
+                            <span class="star-filled" style="width: 0%; transition: none;"></span>
+                            <span class="star-outline"></span>
+                        </span>
+                        <span class="star">
+                            <span class="star-filled" style="width: 0%; transition: none;"></span>
+                            <span class="star-outline"></span>
+                        </span>
+                        <span class="star">
+                            <span class="star-filled" style="width: 0%; transition: none;"></span>
+                            <span class="star-outline"></span>
+                        </span>
+                        <span class="star">
+                            <span class="star-filled" style="width: 0%; transition: none;"></span>
+                            <span class="star-outline"></span>
+                        </span>
+                        <span class="star">
+                            <span class="star-filled" style="width: 0%; transition: none;"></span>
+                            <span class="star-outline"></span>
+                        </span>
                     </span>
                 </span>
-            </span>
+            </div>
         </div>
+        <button type="submit" style="display:none" id="rate-driver-hidden" class="btn btn-primary"></button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Rate later</button>
+        <button type="button" id="rate-driver-visible" class="btn btn-primary">Rate</button>
+      </div>
     </div>
-    <button type="submit" style="display:none" id="rate-driver-hidden" class="btn btn-primary"></button>
-</form>
+  </div>
+</div>
 <script>
     $('form .star').on('mouseenter', function(){
         const index = $('form .star').index(this);

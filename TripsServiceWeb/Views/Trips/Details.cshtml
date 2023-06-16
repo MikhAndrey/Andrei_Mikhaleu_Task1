@@ -137,23 +137,8 @@
     </ul>
 </div>
 
-<div class="modal fade" id="rateDriverModal" tabindex="-1" aria-labelledby="rateDriverModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content tp-form">
-      <div class="modal-header">
-        <h5 class="modal-title tp-label" id="exampleModalLabel">Please, rate driver of this trip and leave short feedback about him</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Maybe later"></button>
-      </div>
-      <div class="modal-body">
-                @await Html.PartialAsync("_AddFeedback", new TripsServiceBLL.DTO.Feedbacks.CreateFeedbackDTO())
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Rate later</button>
-        <button type="button" id="rate-driver-visible" class="btn btn-primary">Rate</button>
-      </div>
-    </div>
-  </div>
-</div>
+@await Html.PartialAsync("_AddFeedback", new TripsServiceBLL.DTO.Feedbacks.CreateFeedbackDTO())
+
 <script>
     $(".rate-invoker").on('click', function(){
         $("#feedback-trip-id").val($(this).data('trip-id'));
