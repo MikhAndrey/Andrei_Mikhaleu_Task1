@@ -61,7 +61,7 @@ namespace TripsServiceBLL.Infrastructure
                 .IncludeBase<Trip, ReadTripDTO>()
                 .ForMember(dest => dest.IsCurrentUserTrip, opt => opt.Ignore())
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src =>
-                TimeUtils.GetTimeSpanString(src.EndTime.AddSeconds(src.StartTimeZoneOffset - src.FinishTimeZoneOffset) - src.StartTime)));
+                TimeUtils.GetTimeSpanString(src.EndTime - src.StartTime)));
             _ = CreateMap<Trip, ReadFeedbackDTO>()
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Feedback.Text))
                 .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Feedback.Rating))

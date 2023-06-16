@@ -17,6 +17,7 @@ namespace TripsServiceDAL.Repos
 				.Include(t => t.Comments)
 					.ThenInclude(c => c.User)
 				.Include(t => t.User)
+				.Include(t => t.Feedback)
 				.FirstOrDefaultAsync(t => t.Id == id);
 		}
 
