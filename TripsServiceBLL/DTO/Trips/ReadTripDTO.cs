@@ -22,6 +22,10 @@
 
 		public string UtcFinishTimeZone { get; set; }
 
+		public int? Rating { get; set; }
+
+		public bool IsNeedToBeRated { get; set; }
+
 		public ReadTripDTO() { }
 	}
 }

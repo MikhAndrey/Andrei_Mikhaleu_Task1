@@ -1,0 +1,64 @@
+﻿@model TripsServiceBLL.DTO.Feedbacks.CreateFeedbackDTO
+
+<form method="post" asp-action="Create" asp-controller="Feedbacks">
+    <div class="form-group tp-form-group">
+        <input type="hidden" id="feedback-trip-id" asp-for=@Model.TripId value="@Model.TripId" />
+        <label for="text" class="tp-label">Describe driver's work in a couple of words:</label>
+        <textarea class="form-control" id="text" asp-for="Text" rows="3"></textarea>
+        <input type="hidden" id="feedback-rating" asp-for=@Model.Rating value="0" />
+        <div class="mt-2">
+            <label class="tp-label">Rate driver of your trip:</label>
+            <span class="rating-container">
+                <span class="star-container">
+                    <span class="star">
+                        <span class="star-filled" style="width: 0%; transition: none;"></span>
+                        <span class="star-outline"></span>
+                    </span>
+                    <span class="star">
+                        <span class="star-filled" style="width: 0%; transition: none;"></span>
+                        <span class="star-outline"></span>
+                    </span>
+                    <span class="star">
+                        <span class="star-filled" style="width: 0%; transition: none;"></span>
+                        <span class="star-outline"></span>
+                    </span>
+                    <span class="star">
+                        <span class="star-filled" style="width: 0%; transition: none;"></span>
+                        <span class="star-outline"></span>
+                    </span>
+                    <span class="star">
+                        <span class="star-filled" style="width: 0%; transition: none;"></span>
+                        <span class="star-outline"></span>
+                    </span>
+                </span>
+            </span>
+        </div>
+    </div>
+    <button type="submit" style="display:none" id="rate-driver-hidden" class="btn btn-primary"></button>
+</form>
+<script>
+    $('form .star').on('mouseenter', function(){
+        const index = $('form .star').index(this);
+        for (let i = 0; i <= index; i++){
+            $('form .star').eq(i).addClass('star-hovered');
+            $('form .star-filled').eq(i).css({'width': '100%'});
+        }
+        for (let i = index + 1; i < $('form .star').length; i++){
+            $('form .star').eq(i).removeClass('star-hovered');
+            $('form .star-filled').eq(i).css({'width': '0%'});
+        }
+        $('form .star').on('mouseleave', function(){
+            const index = $('form .star').index(this);
+            for (let i = 0; i <= index; i++){
+                $('form .star').eq(i).removeClass('star-hovered');
+                $('form .star-filled').eq(i).css({'width' : '0%'});
+            }
+        });
+    });
+     
+    $('form .star').on('click', function(){
+        const index = $('form .star').index(this);
+        $('#feedback-rating').val(index + 1);
+        $('form .star').off('mouseleave');
+    });
+</script>

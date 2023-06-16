@@ -46,7 +46,14 @@ namespace TripsServiceBLL.Infrastructure
                 $" UTC{src.StartTimeZoneOffset / 3600:+#;-#;+0}")))
                 .ForMember(dest => dest.UtcFinishTimeZone, opt => opt.MapFrom
                 (src => string.Concat(src.EndTime.AddSeconds(src.FinishTimeZoneOffset).ToString("dd.MM.yyyy HH:mm"),
-                $" UTC{src.FinishTimeZoneOffset / 3600:+#;-#;+0}")));
+                $" UTC{src.FinishTimeZoneOffset / 3600:+#;-#;+0}")))
+				.ForMember(dest => dest.IsNeedToBeRated, opt => opt.MapFrom((src, dest) => src.DriverId != null && src.Feedback == null && dest.IsPast))
+                .ForMember(dest => dest.Rating, opt => opt.MapFrom((src, dest) => { 
+                    if (src.DriverId != null && src.Feedback == null && dest.IsPast) 
+                        return null; 
+                    else 
+                        return src.Feedback?.Rating; 
+                }));
             _ = CreateMap<Trip, ReadTripDTOExtended>()
                 .IncludeBase<Trip, ReadTripDTO>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
@@ -65,6 +72,7 @@ namespace TripsServiceBLL.Infrastructure
             _ = CreateMap<Driver, DriverDetailsDTO>()
                 .ForMember(dest => dest.AverageRating, opt => opt.Ignore())
                 .ForMember(dest => dest.Feedbacks, opt => opt.Ignore());
+            _ = CreateMap<CreateFeedbackDTO, Feedback>();
         }
     }
 }
