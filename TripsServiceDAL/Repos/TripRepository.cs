@@ -50,7 +50,7 @@ namespace TripsServiceDAL.Repos
 
 		public IQueryable<Trip> GetHistoryOfTripsByUserId(int userId)
 		{
-			return _dbSet.Where(t => t.UserId == userId && t.EndTime < DateTime.UtcNow);
+			return _dbSet.Where(t => t.UserId == userId && t.EndTime < DateTime.UtcNow).Include(t => t.Feedback);
 		}
 	}
 }
