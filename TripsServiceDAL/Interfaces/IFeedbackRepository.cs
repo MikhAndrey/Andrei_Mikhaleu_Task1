@@ -2,7 +2,7 @@
 
 namespace TripsServiceDAL.Interfaces
 {
-	public interface IFeedbackRepository : IGenericRepository<Feedback>
-	{
-	}
+    public interface IFeedbackRepository : IGenericRepository<Feedback>
+    {
+    }
 }

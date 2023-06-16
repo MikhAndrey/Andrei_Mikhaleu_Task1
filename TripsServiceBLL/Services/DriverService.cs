@@ -29,15 +29,14 @@ namespace TripsServiceBLL.Services
                 .OrderByDescending(d => d.AverageRating);
         }
 
-        public async Task<DriverDetailsDTO> GetDriverDetailsAsync(int driverId) 
+        public async Task<DriverDetailsDTO> GetDriverDetailsAsync(int driverId)
         {
             Driver? driver = await _unitOfWork.Drivers.GetByIdAsync(driverId);
-            if (driver == null)
-            {
-                throw new EntityNotFoundException(Constants.DriverNotExistsMessage);
-            }
-            return _mapper.Map<Driver, DriverDetailsDTO>(driver, opt =>
-                opt.AfterMap((src, dest) => {
+            return driver == null
+                ? throw new EntityNotFoundException(Constants.DriverNotExistsMessage)
+                : _mapper.Map<Driver, DriverDetailsDTO>(driver, opt =>
+                opt.AfterMap((src, dest) =>
+                {
                     dest.AverageRating = ComputeAverageRating(src);
                     dest.Feedbacks = src.Trips.Where(t => t.Feedback != null)
                     .Select(t => _mapper.Map<ReadFeedbackDTO>(t));

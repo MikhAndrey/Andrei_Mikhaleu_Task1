@@ -47,12 +47,10 @@ namespace TripsServiceBLL.Infrastructure
                 .ForMember(dest => dest.UtcFinishTimeZone, opt => opt.MapFrom
                 (src => string.Concat(src.EndTime.AddSeconds(src.FinishTimeZoneOffset).ToString("dd.MM.yyyy HH:mm"),
                 $" UTC{src.FinishTimeZoneOffset / 3600:+#;-#;+0}")))
-				.ForMember(dest => dest.IsNeedToBeRated, opt => opt.MapFrom((src, dest) => src.DriverId != null && src.Feedback == null && dest.IsPast))
-                .ForMember(dest => dest.Rating, opt => opt.MapFrom((src, dest) => { 
-                    if (src.DriverId != null && src.Feedback == null && dest.IsPast) 
-                        return null; 
-                    else 
-                        return src.Feedback?.Rating; 
+                .ForMember(dest => dest.IsNeedToBeRated, opt => opt.MapFrom((src, dest) => src.DriverId != null && src.Feedback == null && dest.IsPast))
+                .ForMember(dest => dest.Rating, opt => opt.MapFrom((src, dest) =>
+                {
+                    return src.DriverId != null && src.Feedback == null && dest.IsPast ? null : (src.Feedback?.Rating);
                 }));
             _ = CreateMap<Trip, ReadTripDTOExtended>()
                 .IncludeBase<Trip, ReadTripDTO>()

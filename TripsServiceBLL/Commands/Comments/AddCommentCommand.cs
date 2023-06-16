@@ -3,26 +3,26 @@ using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Comments
 {
-	public class AddCommentCommand : IAsyncCommand
-	{
-		private readonly ICommentService _commentService;
+    public class AddCommentCommand : IAsyncCommand
+    {
+        private readonly ICommentService _commentService;
 
-		private readonly CreateCommentDTO _comment;
+        private readonly CreateCommentDTO _comment;
 
-		private readonly int _userId;
+        private readonly int _userId;
 
-		public AddCommentCommand(ICommentService commentService,
-			CreateCommentDTO comment,
-			int userId)
-		{
-			_commentService = commentService;
-			_userId = userId;
-			_comment = comment;
-		}
+        public AddCommentCommand(ICommentService commentService,
+            CreateCommentDTO comment,
+            int userId)
+        {
+            _commentService = commentService;
+            _userId = userId;
+            _comment = comment;
+        }
 
-		public async Task ExecuteAsync()
-		{
-			await _commentService.AddCommentAsync(_comment, _userId);
-		}
-	}
+        public async Task ExecuteAsync()
+        {
+            await _commentService.AddCommentAsync(_comment, _userId);
+        }
+    }
 }

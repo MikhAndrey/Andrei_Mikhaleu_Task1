@@ -18,7 +18,7 @@ _ = builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 MapperConfiguration mapperConfig = new(mc =>
 {
-	mc.AddProfile(new MappingProfile());
+    mc.AddProfile(new MappingProfile());
 });
 
 IMapper mapper = mapperConfig.CreateMapper();
@@ -28,8 +28,8 @@ WebApplication app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-	_ = app.UseExceptionHandler("/Home/Error");
-	_ = app.UseHsts();
+    _ = app.UseExceptionHandler("/Home/Error");
+    _ = app.UseHsts();
 }
 
 _ = app.UseHttpsRedirection();
@@ -46,7 +46,7 @@ _ = app.UseAuthentication();
 _ = app.UseAuthorization();
 
 _ = app.MapControllerRoute(
-	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

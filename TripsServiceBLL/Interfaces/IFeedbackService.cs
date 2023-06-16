@@ -2,8 +2,8 @@
 
 namespace TripsServiceBLL.Interfaces
 {
-	public interface IFeedbackService
-	{
-		Task AddAsync(CreateFeedbackDTO feedback);
-	}
+    public interface IFeedbackService
+    {
+        Task AddAsync(CreateFeedbackDTO feedback);
+    }
 }

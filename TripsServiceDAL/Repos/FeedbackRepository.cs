@@ -4,8 +4,8 @@ using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Repos
 {
-	internal class FeedbackRepository : EFGenericRepository<Feedback>, IFeedbackRepository
-	{
-		public FeedbackRepository(TripsDBContext context) : base(context) { }
-	}
+    internal class FeedbackRepository : EFGenericRepository<Feedback>, IFeedbackRepository
+    {
+        public FeedbackRepository(TripsDBContext context) : base(context) { }
+    }
 }

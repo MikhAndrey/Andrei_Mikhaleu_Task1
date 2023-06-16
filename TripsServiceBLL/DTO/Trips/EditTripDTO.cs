@@ -3,16 +3,16 @@ using TripsServiceBLL.DTO.RoutePoints;
 
 namespace TripsServiceBLL.DTO.Trips
 {
-	public class EditTripDTO : CreateTripDTO
-	{
-		public List<ImageDTO> Images { get; set; }
+    public class EditTripDTO : CreateTripDTO
+    {
+        public List<ImageDTO> Images { get; set; }
 
-		public List<RoutePointDTO> RoutePoints { get; set; }
+        public List<RoutePointDTO> RoutePoints { get; set; }
 
-		public int Id { get; set; }
+        public int Id { get; set; }
 
-		public int UserId { get; set; }
+        public int UserId { get; set; }
 
-		public EditTripDTO() { }
-	}
+        public EditTripDTO() { }
+    }
 }
