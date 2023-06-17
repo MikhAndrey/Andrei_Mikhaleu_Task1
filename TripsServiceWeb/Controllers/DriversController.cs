@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using TripsServiceBLL.Commands.Drivers;
 using TripsServiceBLL.DTO.Drivers;
 using TripsServiceBLL.Infrastructure;
@@ -29,6 +31,18 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             IEnumerable<ReadDriverDTO> drivers = new GetDriversOverallCommand(_driverService).Execute();
             return View(drivers);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult List()
+        {
+            IEnumerable<ReadDriverDTO> drivers = new GetDriversOverallCommand(_driverService).Execute();
+            JsonSerializerOptions options = new()
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            };
+            return Json(drivers, options);
         }
 
         [Authorize]

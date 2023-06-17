@@ -22,5 +22,7 @@ namespace TripsServiceBLL.DTO.Trips
         public int StartTimeZoneOffset { get; set; }
 
         public int FinishTimeZoneOffset { get; set; }
+
+        public int? DriverId { get; set; }
     }
 }

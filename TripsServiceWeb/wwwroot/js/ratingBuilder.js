@@ -16,12 +16,20 @@
 	}
 }
 
+function getRatingValueFromContainer(ratingContainer) {
+	const decimalSeparator = (1.1).toLocaleString().substring(1, 2);
+	const nonLocalRating = $(ratingContainer).text().replace(decimalSeparator, ".");
+	return parseFloat(nonLocalRating);
+}
+
+function setRatingValueContainerColor(rating, ratingContainer) {
+	$(ratingContainer).css('background-color', `rgb(${255 - 51 * rating}, ${51 * rating}, 0)`);
+}
+
 $('.rating-container').each(function () {
 	const ratingValueContainer = $(this).find('.rating-value')
 	const starContainer = $(this).find('.star-container');
-	const decimalSeparator = (1.1).toLocaleString().substring(1, 2);
-	const nonLocalRating = $(ratingValueContainer).text().replace(decimalSeparator, ".");
-	const rating = parseFloat(nonLocalRating);
+	const rating = getRatingValueFromContainer(ratingValueContainer);
 	buildRating(rating, starContainer);
-	$(ratingValueContainer).css('background-color', `rgb(${255 - 51 * rating}, ${51 * rating}, 0)`);
+	setRatingValueContainerColor(rating, ratingValueContainer);
 });
