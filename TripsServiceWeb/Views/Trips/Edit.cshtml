@@ -62,12 +62,22 @@
             }
         </div> 
     </div>
+    <div class="tp-label mt-2 mb-2">
+        Trip's driver: <span id="trip-driver-name"></span>
+    </div>
+    <input type="hidden" id="DriverId" name="DriverId" asp-for="DriverId" />
     <div>
-        <button class="btn btn-primary mt-3" type="submit">Save</button>
+        <button type="button" class="btn btn-primary mt-2 mb-3 drivers-invoker" data-bs-toggle="modal" data-bs-target="#driverListModal">Select driver</button>
+    </div>
+    <div>
+        <button class="btn btn-success mt-3" type="submit">Save</button>
     </div>
 </form>
+
+@await Html.PartialAsync("_DisplayDrivers")
+
 @section scripts {
-    <script src="@Url.Content("~/js/RouteBuilder.js")"></script> 
+    <script src="@Url.Content("~/js/RouteBuilder.js")"></script>    
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap"></script> 
     <script>
     @{
@@ -120,4 +130,5 @@
     <script>
         sendDataHandler(false);
     </script>
+    @await Html.PartialAsync("_TripDriverManagingScript")
  }

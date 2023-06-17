@@ -68,7 +68,6 @@
 
 @section Scripts {
     <script src="@Url.Content("~/js/RouteBuilder.js")"></script>
-    <script src="~/js/ratingBuilder.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap"></script> 
 	<script>
 		initMap(51.5085, 0, 6);
@@ -78,53 +77,5 @@
     <script>
         sendDataHandler(true);
     </script>
-    <script>
-        let driversInfo;
-        $(document).ready(async function(){
-            try {
-                const response = await fetch('/Drivers/List');
-                const data = await response.json();
-                driversInfo = data["$values"];
-                fillDriversModal();
-            } catch (error) {
-                alert(`An error occured while loading drivers list: ${error.message}`);
-            }
-        });
-
-        function fillDriversModal(){
-            $('#drivers-container').append('<div class = "row row-cols-2" id = "drivers-table"></div>')
-            let i = 0;
-            driversInfo.forEach((el) => {
-                const fullImagePath = `@(driversImageCommonPath)${el.Id}/${el.FirstPhoto.Link}`;
-                $('#drivers-table').append(`<div class="col mb-4"></div>`);               
-                $('.col.mb-4').eq(i).append(`<div class="card h-100 tp-gradient-standard driver-button d-flex flex-row align-items-center" data-driver-id=${el.Id}></div>`)
-                $('.driver-button').eq(i).append(`<div class="mr-3" style="width:30%"><img src="${fullImagePath}" alt="Driver Photo" style="width:100%;height:auto;border-radius:50%;" /></div>`);
-                $('.driver-button').eq(i).append('<div style="flex-grow:1;" class="main-driver-info"></div>');
-                $('.main-driver-info').eq(i).append(`<h5 style="display:inline-block;" class="tp-label mr-2">${el.Name}</h5>`);
-                $('.main-driver-info').eq(i).append(`<span class="rating-value text-light mt-2">${el.AverageRating}</span>`)
-                $('.main-driver-info').eq(i).append(`<p class="tp-label">Experience: ${el.Experience} years</p>`);
-                const ratingValueContainer = $('.rating-value').eq(i)
-                const rating = getRatingValueFromContainer(ratingValueContainer);
-                setRatingValueContainerColor(rating, ratingValueContainer);
-                i++;
-            });
-
-            $('.driver-button').on('click', function(){
-                const index = $('.driver-button').index(this);
-                $('#DriverId').val($(this).data('driver-id'));
-                $('#trip-driver-name').text(driversInfo[index].Name);
-                $('.driver-button').removeClass('active-driver-button');
-                $(this).addClass('active-driver-button');
-            });
-        };
-        $('#select-driver-later-button').on('click', function(){
-            $('.driver-button').removeClass('active-driver-button');
-            $('#DriverId').val('');
-            $('#trip-driver-name').text('');
-            $('#driverListModal').modal('hide');
-        });
-        $('#select-driver-button').on('click', function(){
-            $('#driverListModal').modal('hide');
-        });
-    </script>
+    @await Html.PartialAsync("_TripDriverManagingScript")
 }
