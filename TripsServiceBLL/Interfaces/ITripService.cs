@@ -36,5 +36,7 @@ namespace TripsServiceBLL.Interfaces
         YearsStatisticsDTO GetYearsOfUserTrips(int userId);
 
         Task<List<DurationInMonth>> GetTotalDurationByMonthsAsync(int year, int userId);
+
+        Task<EditPastTripDTO> GetPastTripForEditingAsync(int id);
     }
 }

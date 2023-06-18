@@ -110,6 +110,12 @@ namespace TripsServiceBLL.Services
             return trip == null ? throw new EntityNotFoundException(Constants.TripNotExistsMessage) : _mapper.Map<EditTripDTO>(trip);
         }
 
+        public async Task<EditPastTripDTO> GetPastTripForEditingAsync(int tripId)
+        {
+            Trip? trip = await _unitOfWork.Trips.GetByIdForMinimalEditingAsync(tripId);
+            return trip == null ? throw new EntityNotFoundException(Constants.TripNotExistsMessage) : _mapper.Map<EditPastTripDTO>(trip);
+        }
+
         public IQueryable<ReadTripDTOExtended> GetOthersPublicTrips(int userId)
         {
             bool userExists = _unitOfWork.Users.Exists(userId);

@@ -171,6 +171,21 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> EditPast(int id)
+        {
+            try
+            {
+                EditPastTripDTO trip = await new GetPastTripByIdCommand(_tripService, id).ExecuteAsync();
+                return View(trip);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
         [HttpPut]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditTripDTO trip, List<IFormFile> images, string routePoints)
@@ -191,7 +206,28 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             return View(trip);
         }
 
-        [Authorize]
+		[HttpPut]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> EditPast(int id, EditPastTripDTO trip, List<IFormFile> images)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					await new EditPastTripCommand(trip, id, images, _imageService,
+					_tripService, _environment.WebRootPath, _mapper).ExecuteAsync();
+				}
+				catch (EntityNotFoundException ex)
+				{
+					return NotFound(ex.Message);
+				}
+				return RedirectToAction(nameof(Index));
+			}
+
+			return View(trip);
+		}
+
+		[Authorize]
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {

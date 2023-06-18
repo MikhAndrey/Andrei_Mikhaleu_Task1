@@ -1,9 +1,10 @@
 ﻿using TripsServiceBLL.DTO.Images;
 using TripsServiceBLL.DTO.RoutePoints;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.DTO.Trips
 {
-    public class EditTripDTO : CreateTripDTO
+    public class EditTripDTO : CreateTripDTO, IMinimalTripChanges
     {
         public List<ImageDTO> Images { get; set; }
 

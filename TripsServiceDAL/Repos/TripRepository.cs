@@ -21,6 +21,14 @@ namespace TripsServiceDAL.Repos
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
+        public async Task<Trip?> GetByIdForMinimalEditingAsync(int id)
+        {
+            return await _dbSet
+                .Include(t => t.Images)
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(t => t.Id == id);
+        }
+
         public IQueryable<int> GetYearsOfUserTrips(int userId)
         {
             return _dbSet.Include(t => t.User).Where(t => t.UserId == userId)
