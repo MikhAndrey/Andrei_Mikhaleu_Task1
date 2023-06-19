@@ -5,36 +5,40 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Interfaces
 {
-	public interface ITripService
-	{
-		Task<Trip?> GetByIdAsync(int id);
+    public interface ITripService
+    {
+        Task<Trip?> GetByIdWithImagesAsync(int id);
 
-		void SetNewTimeForStartingTrip(Trip trip);
+        Task<Trip?> GetByIdWithImagesAndRoutePointsAsync(int id);
 
-		void SetNewTimeForEndingTrip(Trip trip);
+        void SetNewTimeForStartingTrip(Trip trip);
 
-		Task EndTripAsync(int tripId);
+        void SetNewTimeForEndingTrip(Trip trip);
 
-		Task StartTripAsync(int tripId);
+        Task EndTripAsync(int tripId);
 
-		Task UpdateAsync(Trip trip);
+        Task StartTripAsync(int tripId);
 
-		Task DeleteAsync(Trip trip);
+        Task UpdateAsync(Trip trip);
 
-		Task AddAsync(Trip trip);
+        Task DeleteAsync(int tripId);
 
-		Task<TripDetailsDTO> GetTripDetailsAsync(int tripId, int userId);
+        Task AddAsync(Trip trip);
 
-		Task<EditTripDTO> GetTripForEditingAsync(int tripId);
+        Task<TripDetailsDTO> GetTripDetailsAsync(int tripId, int userId);
 
-		IQueryable<ReadTripDTOExtended> GetOthersPublicTrips(int userId);
+        Task<EditTripDTO> GetTripForEditingAsync(int tripId);
 
-		IQueryable<ReadTripDTO> GetHistoryOfTripsByUserId(int userId);
+        IQueryable<ReadTripDTOExtended> GetOthersPublicTrips(int userId);
 
-		IQueryable<ReadTripDTO> GetTripsByUserId(int userId);
+        IQueryable<ReadTripDTO> GetHistoryOfTripsByUserId(int userId);
 
-		YearsStatisticsDTO GetYearsOfUserTrips(int userId);
+        IQueryable<ReadTripDTO> GetTripsByUserId(int userId);
 
-		Task<List<DurationInMonth>> GetTotalDurationByMonthsAsync(int year, int userId);
-	}
+        YearsStatisticsDTO GetYearsOfUserTrips(int userId);
+
+        Task<List<DurationInMonth>> GetTotalDurationByMonthsAsync(int year, int userId);
+
+        Task<EditPastTripDTO> GetPastTripForEditingAsync(int id);
+    }
 }

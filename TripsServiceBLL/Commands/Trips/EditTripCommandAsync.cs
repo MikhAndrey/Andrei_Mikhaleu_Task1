@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using TripsServiceBLL.DTO.Trips;
-using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
@@ -53,13 +53,13 @@ namespace TripsServiceBLL.Commands.Trips
 
         public async Task ExecuteAsync()
         {
-            Trip? trip = await _tripService.GetByIdAsync(_id);
+            Trip? trip = await _tripService.GetByIdWithImagesAndRoutePointsAsync(_id);
             if (trip == null)
             {
-                throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
-            _ = _mapper.Map(_trip, trip);
+            _mapper.Map(_trip, trip);
             await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
             trip.RoutePoints.Clear();
             _routePointService.ParseAndAddRoutePoints(trip, _routePoints);

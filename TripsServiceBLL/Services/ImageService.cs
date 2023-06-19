@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
@@ -27,13 +27,13 @@ namespace TripsServiceBLL.Services
                     string userFilePath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.UserId.ToString());
                     if (!Directory.Exists(userFilePath))
                     {
-                        _ = Directory.CreateDirectory(userFilePath);
+                        Directory.CreateDirectory(userFilePath);
                     }
 
                     string tripFilePath = Path.Combine(userFilePath, trip.Id.ToString());
                     if (!Directory.Exists(tripFilePath))
                     {
-                        _ = Directory.CreateDirectory(tripFilePath);
+                        Directory.CreateDirectory(tripFilePath);
                     }
 
                     string filePath = Path.Combine(tripFilePath, newFileName);
@@ -54,19 +54,19 @@ namespace TripsServiceBLL.Services
             Image? image = await _unitOfWork.Images.GetByIdAsync(imageId);
             if (image == null)
             {
-                throw new EntityNotFoundException(Constants.ImageNotExistsMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("message"));
             }
 
             bool tripExists = _unitOfWork.Trips.Exists(tripId);
             if (!tripExists)
             {
-                throw new EntityNotFoundException(Constants.TripNotFoundMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("trip"));
             }
 
             bool userExists = _unitOfWork.Users.Exists(userId);
             if (!userExists)
             {
-                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
             }
 
             _unitOfWork.Images.Delete(image);
@@ -80,17 +80,23 @@ namespace TripsServiceBLL.Services
             }
         }
 
-        public void DeleteTripImages(Trip trip, string webRootPath)
+        public async Task DeleteTripImages(int tripId, string webRootPath)
         {
+            Trip? trip = await _unitOfWork.Trips.GetByIdWithImagesAsync(tripId);
+            if (trip == null)
+            {
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
+            }
+
             foreach (Image image in trip.Images)
             {
-                string path = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.Id.ToString(), trip.Id.ToString(), image.Link);
+                string path = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.UserId.ToString(), trip.Id.ToString(), image.Link);
                 if (File.Exists(path))
                 {
                     File.Delete(path);
                 }
             }
-            string tripDirectoryPath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.Id.ToString(), trip.Id.ToString());
+            string tripDirectoryPath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.UserId.ToString(), trip.Id.ToString());
             if (Directory.Exists(tripDirectoryPath))
             {
                 Directory.Delete(tripDirectoryPath);
@@ -103,7 +109,7 @@ namespace TripsServiceBLL.Services
 
             if (!Directory.Exists(path))
             {
-                _ = Directory.CreateDirectory(path);
+                Directory.CreateDirectory(path);
             }
         }
     }

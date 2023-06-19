@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TripsServiceBLL.DTO.Users;
-using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
@@ -57,13 +57,13 @@ namespace TripsServiceBLL.Services
             User? existingUser = await GetByUserNameAsync(user.UserName);
             if (existingUser != null)
             {
-                throw new ValidationException(Constants.ExistingUserNameMessage, "UserName");
+                throw new ValidationException(Constants.GetExistingCredentialMessage("username"), "UserName");
             }
 
             existingUser = await GetByEmailAsync(user.Email);
             if (existingUser != null)
             {
-                throw new ValidationException(Constants.ExistingEmailMessage, "Email");
+                throw new ValidationException(Constants.GetExistingCredentialMessage("email"), "Email");
             }
 
             User newUser = new()

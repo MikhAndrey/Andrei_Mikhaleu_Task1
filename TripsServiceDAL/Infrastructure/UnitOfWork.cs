@@ -12,6 +12,8 @@ namespace TripsServiceDAL.Infrastructure
         private IRoutePointRepository _routePointRepository;
         private ITripRepository _tripRepository;
         private IUserRepository _userRepository;
+        private IDriverRepository _driverRepository;
+        private IFeedbackRepository _feedbackRepository;
 
         public UnitOfWork(TripsDBContext context)
         {
@@ -63,9 +65,27 @@ namespace TripsServiceDAL.Infrastructure
             }
         }
 
+        public IDriverRepository Drivers
+        {
+            get
+            {
+                _driverRepository ??= new DriverRepository(_context);
+                return _driverRepository;
+            }
+        }
+
+        public IFeedbackRepository Feedbacks
+        {
+            get
+            {
+                _feedbackRepository ??= new FeedbackRepository(_context);
+                return _feedbackRepository;
+            }
+        }
+
         public async Task SaveAsync()
         {
-            _ = await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         private bool disposed = false;

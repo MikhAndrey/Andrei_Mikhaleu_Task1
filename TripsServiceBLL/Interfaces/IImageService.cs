@@ -9,7 +9,7 @@ namespace TripsServiceBLL.Interfaces
 
         Task DeleteByIdAsync(int imageId, int tripId, int userId, string webRootPath);
 
-        void DeleteTripImages(Trip trip, string webRootPath);
+        Task DeleteTripImages(int tripId, string webRootPath);
 
         void CreateImagesDirectory(string webRootPath);
     }

@@ -2,13 +2,11 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.DTO.Trips;
-using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Utils;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
@@ -170,6 +168,21 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> EditPast(int id)
+        {
+            try
+            {
+                EditPastTripDTO trip = await _tripService.GetPastTripForEditingAsync(id);
+                return View(trip);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
         [HttpPut]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditTripDTO trip, List<IFormFile> images, string routePoints)
@@ -190,13 +203,34 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             return View(trip);
         }
 
+        [HttpPut]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPast(int id, EditPastTripDTO trip, List<IFormFile> images)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await new EditPastTripCommandAsync(trip, id, images, _imageService,
+                    _tripService, _environment.WebRootPath, _mapper).ExecuteAsync();
+                }
+                catch (EntityNotFoundException ex)
+                {
+                    return NotFound(ex.Message);
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(trip);
+        }
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             try
             {
-                int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
+                int userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
                 TripDetailsDTO trip = await _tripService.GetTripDetailsAsync(id, userId);
                 return View(trip);
             }

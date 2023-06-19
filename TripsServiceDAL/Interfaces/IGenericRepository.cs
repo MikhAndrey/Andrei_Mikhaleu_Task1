@@ -2,6 +2,7 @@
 {
     public interface IGenericRepository<TEntity> where TEntity : class, IIdentifiable
     {
+        IQueryable<TEntity> GetAll();
         Task<TEntity?> GetByIdAsync(int id);
         Task AddAsync(TEntity item);
         void Update(TEntity item);

@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.DTO.Trips
 {
-    public class CreateTripDTO
+    public class CreateTripDTO : IMinimalTripFactory
     {
         [Required(ErrorMessage = "Please enter a name for your trip")]
         public string? Name { get; set; }
@@ -22,5 +23,7 @@ namespace TripsServiceBLL.DTO.Trips
         public int StartTimeZoneOffset { get; set; }
 
         public int FinishTimeZoneOffset { get; set; }
+
+        public int? DriverId { get; set; }
     }
 }

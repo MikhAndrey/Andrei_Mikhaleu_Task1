@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using TripsServiceBLL.DTO.Trips;
-using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
@@ -60,7 +60,7 @@ namespace TripsServiceBLL.Commands.Trips
             bool userExists = _userService.Exists(_userId);
             if (!userExists)
             {
-                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
             }
 
             Trip trip = _mapper.Map<Trip>(_trip);

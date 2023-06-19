@@ -20,19 +20,21 @@ namespace Andrei_Mikhaleu_Task1
         public static void AddServices(IServiceCollection services)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            _ = services.AddDbContext<TripsDBContext>(options =>
+            services.AddDbContext<TripsDBContext>(options =>
                 options.UseSqlServer(connectionString));
-            _ = services.AddScoped<IUnitOfWork, UnitOfWork>();
-            _ = services.AddScoped<IUserService, UserService>();
-            _ = services.AddScoped<ICommentService, CommentService>();
-            _ = services.AddScoped<IImageService, ImageService>();
-            _ = services.AddScoped<IRoutePointService, RoutePointService>();
-            _ = services.AddScoped<ITripService, TripService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IRoutePointService, RoutePointService>();
+            services.AddScoped<ITripService, TripService>();
+            services.AddScoped<IDriverService, DriverService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
         }
 
         public static void AddAuthentication(IServiceCollection services)
         {
-            _ = services.AddAuthentication(options =>
+            services.AddAuthentication(options =>
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -55,7 +57,7 @@ namespace Andrei_Mikhaleu_Task1
 
         public static void AddJwtTokenToRequests(WebApplication app)
         {
-            _ = app.Use(async (context, next) =>
+            app.Use(async (context, next) =>
             {
                 string? jwtToken = context.Request.Cookies[Constants.JwtTokenCookiesAlias];
                 if (!string.IsNullOrEmpty(jwtToken))
@@ -68,7 +70,7 @@ namespace Andrei_Mikhaleu_Task1
 
         public static void AddUnauthorizedStateRedirection(WebApplication app)
         {
-            _ = app.UseStatusCodePages(async context =>
+            app.UseStatusCodePages(async context =>
             {
                 HttpRequest request = context.HttpContext.Request;
                 HttpResponse response = context.HttpContext.Response;

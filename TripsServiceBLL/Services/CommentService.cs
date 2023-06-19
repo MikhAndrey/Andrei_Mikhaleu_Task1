@@ -1,5 +1,5 @@
 ﻿using TripsServiceBLL.DTO.Comments;
-using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
@@ -21,13 +21,13 @@ namespace TripsServiceBLL.Services
             bool tripExists = _unitOfWork.Trips.Exists(comment.TripId);
             if (!tripExists)
             {
-                throw new EntityNotFoundException(Constants.TripNotFoundMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("trip"));
             }
 
             bool userExists = _unitOfWork.Users.Exists(userId);
             if (!userExists)
             {
-                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
             }
 
             await _unitOfWork.Comments.AddAsync(new Comment
@@ -46,7 +46,7 @@ namespace TripsServiceBLL.Services
             Comment? commentToDelete = await _unitOfWork.Comments.GetByIdAsync(commentId);
             if (commentToDelete == null)
             {
-                throw new EntityNotFoundException(Constants.CommentNotExistsMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("comment"));
             }
 
             _unitOfWork.Comments.Delete(commentToDelete);

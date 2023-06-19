@@ -1,51 +1,57 @@
 using Andrei_Mikhaleu_Task1;
 using AutoMapper;
 using System.Reflection;
-using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Infrastructure.Mappers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 ProgramHelper.AddServices(builder.Services);
 
-_ = builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpContextAccessor();
 
-_ = builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews();
 
 ProgramHelper.AddAuthentication(builder.Services);
-_ = builder.Services.AddAuthorization();
+builder.Services.AddAuthorization();
 
-_ = builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 MapperConfiguration mapperConfig = new(mc =>
 {
-    mc.AddProfile(new MappingProfile());
+    mc.AddProfile(new TripMapper());
+    mc.AddProfile(new CommentMapper());
+    mc.AddProfile(new DriverMapper());
+    mc.AddProfile(new FeedbackMapper());
+    mc.AddProfile(new ImageMapper());
+    mc.AddProfile(new RoutePointMapper());
+    mc.AddProfile(new UserMapper());
 });
 
 IMapper mapper = mapperConfig.CreateMapper();
-_ = builder.Services.AddSingleton(mapper);
+builder.Services.AddSingleton(mapper);
 
 WebApplication app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    _ = app.UseExceptionHandler("/Home/Error");
-    _ = app.UseHsts();
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 
-_ = app.UseHttpsRedirection();
-_ = app.UseStaticFiles();
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 
-_ = app.UseRouting();
+app.UseRouting();
 
-_ = app.UseCors("AllowAll");
+app.UseCors("AllowAll");
 
 ProgramHelper.AddJwtTokenToRequests(app);
 ProgramHelper.AddUnauthorizedStateRedirection(app);
 
-_ = app.UseAuthentication();
-_ = app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
-_ = app.MapControllerRoute(
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 

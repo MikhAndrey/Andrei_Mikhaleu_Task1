@@ -1,4 +1,5 @@
 ﻿@model TripsServiceBLL.DTO.Trips.CreateTripDTO
+@using TripsServiceBLL.Utils;
 
 @{
     ViewData["Title"] = "New Trip";
@@ -35,8 +36,8 @@
     </div>
     <div class="tp-label">Click on the map to place trip points</div>
     <div id="map" class="form-group tp-form-group"></div>
-    <div class="tp-label mt-2 mb-2">Trip's distance: <span class="tp-input-desc" id="route-length-view">0</span>&nbsp km</div>
-    <div class="tp-label mt-2 mb-2">Trip's duration: <span class="tp-input-desc" id="route-duration-view">0 minutes</span></div>
+    <div class="tp-label mt-2 mb-2">Trip's distance: <span id="route-length-view">0</span>&nbsp km</div>
+    <div class="tp-label mt-2 mb-2">Trip's duration: <span id="route-duration-view">0 minutes</span></div>
     <input type="hidden" name="routePoints"/>
     <input type="hidden" name="Distance" asp-for="Distance" />
     <input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset" />
@@ -47,10 +48,23 @@
         <div class="tp-input-desc">Upload photos of your trip</div>
     </div>
     <div id="imagesList"></div>
+    <div class="tp-label mt-2 mb-2">
+        Trip's driver: <span id="trip-driver-name"></span>
+    </div>
+    <input type="hidden" id="DriverId" name="DriverId" asp-for="DriverId" />
     <div>
-        <button class="btn btn-primary tp-submit-btn mt-3" type="submit">Create trip</button>
+        <button type="button" class="btn btn-primary mt-2 mb-3 drivers-invoker" data-bs-toggle="modal" data-bs-target="#driverListModal">Select driver</button>
+    </div>
+    <div>
+        <button class="btn btn-success tp-submit-btn mt-3" type="submit">Create trip</button>
     </div>
 </form>
+
+@await Html.PartialAsync("_DisplayDrivers")
+
+@{
+    string driversImageCommonPath = $"/{Constants.ImagesFolderName}/{Constants.DriversFolderName}/";
+}
 
 @section Scripts {
     <script src="@Url.Content("~/js/RouteBuilder.js")"></script>
@@ -63,4 +77,5 @@
     <script>
         sendDataHandler(true);
     </script>
+    @await Html.PartialAsync("_TripDriverManagingScript")
 }

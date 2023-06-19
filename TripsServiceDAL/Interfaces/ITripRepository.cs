@@ -15,5 +15,17 @@ namespace TripsServiceDAL.Interfaces
         IQueryable<Trip> GetOthersPublicTrips(int userId);
 
         IQueryable<Trip> GetHistoryOfTripsByUserId(int userId);
+
+        Task<Trip?> GetByIdForMinimalEditingAsync(int id);
+
+        Task<Trip?> GetByIdForEditingAsync(int id);
+
+        Task<Trip?> GetByIdForDetailsAsync(int id);
+
+        Task<Trip?> GetByIdWithImagesAsync(int id);
+
+        Task<Trip?> GetByIdWithImagesAndRoutePointsAsync(int id);
+
+        Task<Trip?> GetByIdForDeleteAsync(int id);
     }
 }

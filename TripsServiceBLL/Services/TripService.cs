@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TripsServiceBLL.DTO.Statistics;
 using TripsServiceBLL.DTO.Trips;
-using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
@@ -22,9 +22,14 @@ namespace TripsServiceBLL.Services
             _mapper = mapper;
         }
 
-        public async Task<Trip?> GetByIdAsync(int id)
+        public async Task<Trip?> GetByIdWithImagesAsync(int id)
         {
-            return await _unitOfWork.Trips.GetByIdAsync(id);
+            return await _unitOfWork.Trips.GetByIdWithImagesAsync(id);
+        }
+
+        public async Task<Trip?> GetByIdWithImagesAndRoutePointsAsync(int id)
+        {
+            return await _unitOfWork.Trips.GetByIdWithImagesAndRoutePointsAsync(id);
         }
 
         public void SetNewTimeForStartingTrip(Trip trip)
@@ -37,10 +42,10 @@ namespace TripsServiceBLL.Services
 
         public async Task StartTripAsync(int tripId)
         {
-            Trip? trip = await GetByIdAsync(tripId);
+            Trip? trip = await _unitOfWork.Trips.GetByIdAsync(tripId);
             if (trip == null)
             {
-                throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
             if (trip.StartTime > DateTime.UtcNow)
@@ -58,10 +63,10 @@ namespace TripsServiceBLL.Services
 
         public async Task EndTripAsync(int tripId)
         {
-            Trip? trip = await GetByIdAsync(tripId);
+            Trip? trip = await _unitOfWork.Trips.GetByIdAsync(tripId);
             if (trip == null)
             {
-                throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
             if (trip.StartTime < DateTime.UtcNow && trip.EndTime > DateTime.UtcNow)
@@ -77,8 +82,30 @@ namespace TripsServiceBLL.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task DeleteAsync(Trip trip)
+        public async Task DeleteAsync(int id)
         {
+            Trip? trip = await _unitOfWork.Trips.GetByIdForDeleteAsync(id);
+            if (trip == null)
+            {
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
+            }
+
+            foreach (Image image in trip.Images)
+            {
+                _unitOfWork.Images.Delete(image);
+            }
+
+            foreach (Comment comment in trip.Comments)
+            {
+                _unitOfWork.Comments.Delete(comment);
+            }
+
+            foreach (RoutePoint routePoint in trip.RoutePoints)
+            {
+                _unitOfWork.RoutePoints.Delete(routePoint);
+            }
+
+            _unitOfWork.Feedbacks.Delete(trip.Feedback);
             _unitOfWork.Trips.Delete(trip);
             await _unitOfWork.SaveAsync();
         }
@@ -91,23 +118,31 @@ namespace TripsServiceBLL.Services
 
         public async Task<TripDetailsDTO> GetTripDetailsAsync(int tripId, int userId)
         {
-            Trip? trip = await GetByIdAsync(tripId);
+            Trip? trip = await _unitOfWork.Trips.GetByIdForDetailsAsync(tripId);
             if (trip == null)
             {
-                throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
             bool userExists = _unitOfWork.Users.Exists(userId);
             return !userExists
-                ? throw new EntityNotFoundException(Constants.UserNotFoundMessage)
+                ? throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"))
                 : _mapper.Map<Trip, TripDetailsDTO>(trip, opt =>
                 opt.AfterMap((src, dest) => dest.IsCurrentUserTrip = src.User.Id == userId));
         }
 
         public async Task<EditTripDTO> GetTripForEditingAsync(int tripId)
         {
-            Trip? trip = await GetByIdAsync(tripId);
-            return trip == null ? throw new EntityNotFoundException(Constants.TripNotExistsMessage) : _mapper.Map<EditTripDTO>(trip);
+            Trip? trip = await _unitOfWork.Trips.GetByIdForEditingAsync(tripId);
+            return trip == null ? throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"))
+                : _mapper.Map<EditTripDTO>(trip);
+        }
+
+        public async Task<EditPastTripDTO> GetPastTripForEditingAsync(int tripId)
+        {
+            Trip? trip = await _unitOfWork.Trips.GetByIdForMinimalEditingAsync(tripId);
+            return trip == null ? throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"))
+                : _mapper.Map<EditPastTripDTO>(trip);
         }
 
         public IQueryable<ReadTripDTOExtended> GetOthersPublicTrips(int userId)
@@ -115,7 +150,7 @@ namespace TripsServiceBLL.Services
             bool userExists = _unitOfWork.Users.Exists(userId);
             if (!userExists)
             {
-                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
             }
 
             IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetOthersPublicTrips(userId);
@@ -127,7 +162,7 @@ namespace TripsServiceBLL.Services
             bool userExists = _unitOfWork.Users.Exists(userId);
             if (!userExists)
             {
-                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
             }
 
             IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetHistoryOfTripsByUserId(userId);
@@ -139,7 +174,7 @@ namespace TripsServiceBLL.Services
             bool userExists = _unitOfWork.Users.Exists(userId);
             if (!userExists)
             {
-                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
             }
 
             IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetTripsByUserId(userId);

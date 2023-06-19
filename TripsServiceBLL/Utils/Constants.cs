@@ -12,9 +12,10 @@
 
         public const string ImagesFolderName = "images";
 
-        public const string ExistingUserNameMessage = "This username is already taken";
-
-        public const string ExistingEmailMessage = "This email is already taken";
+        public static string GetExistingCredentialMessage(string credential)
+        {
+            return $"This {credential} is already taken";
+        }
 
         public const double AuthorizationExpirationInDays = 7;
 
@@ -26,14 +27,16 @@
 
         public const string JwtTokenCookiesAlias = "jwt";
 
-        public const string TripNotFoundMessage = "Corresponding trip was not found";
+        public static string GetEntityNotFoundMessage(string entityName)
+        {
+            return $"Corresponding {entityName} was not found";
+        }
 
-        public const string UserNotFoundMessage = "Corresponding user was not found";
+        public static string GetEntityNotExistsMessage(string entityName)
+        {
+            return $"This {entityName} doesn't exist anymore";
+        }
 
-        public const string CommentNotExistsMessage = "This comment doesn't exist anymore";
-
-        public const string ImageNotExistsMessage = "This image doesn't exist anymore";
-
-        public const string TripNotExistsMessage = "This trip doesn't exist anymore";
+        public const string DriversFolderName = "drivers";
     }
 }

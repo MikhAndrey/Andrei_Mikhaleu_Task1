@@ -12,6 +12,10 @@
 
         IUserRepository Users { get; }
 
+        IDriverRepository Drivers { get; }
+
+        IFeedbackRepository Feedbacks { get; }
+
         Task SaveAsync();
     }
 }
