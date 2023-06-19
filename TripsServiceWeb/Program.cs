@@ -1,7 +1,7 @@
 using Andrei_Mikhaleu_Task1;
 using AutoMapper;
 using System.Reflection;
-using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Infrastructure.Mappers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +18,13 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 MapperConfiguration mapperConfig = new(mc =>
 {
-    mc.AddProfile(new MappingProfile());
+    mc.AddProfile(new TripMapper());
+    mc.AddProfile(new CommentMapper());
+    mc.AddProfile(new DriverMapper());
+    mc.AddProfile(new FeedbackMapper());
+    mc.AddProfile(new ImageMapper());
+    mc.AddProfile(new RoutePointMapper());
+    mc.AddProfile(new UserMapper());
 });
 
 IMapper mapper = mapperConfig.CreateMapper();

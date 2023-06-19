@@ -1,26 +1,15 @@
 ﻿using AutoMapper;
-using TripsServiceBLL.DTO.Comments;
-using TripsServiceBLL.DTO.Drivers;
-using TripsServiceBLL.DTO.Feedbacks;
-using TripsServiceBLL.DTO.Images;
-using TripsServiceBLL.DTO.RoutePoints;
 using TripsServiceBLL.DTO.Trips;
-using TripsServiceBLL.DTO.Users;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 
-namespace TripsServiceBLL.Infrastructure
+namespace TripsServiceBLL.Infrastructure.Mappers
 {
-    public class MappingProfile : Profile
+    public class TripMapper : Profile
     {
-        public MappingProfile()
+        public TripMapper() 
         {
-            CreateMap<Comment, CommentDTO>();
-            CreateMap<Image, ImageDTO>();
-            CreateMap<RoutePoint, RoutePointDTO>();
             CreateMap<Trip, ReadTripDTO>();
-            CreateMap<User, UserDTO>();
-            CreateMap<UserSignupDTO, UserLoginDTO>();
             CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
             CreateMap<Trip, EditPastTripDTO>();
             CreateMap<EditPastTripDTO, Trip>()
@@ -65,15 +54,6 @@ namespace TripsServiceBLL.Infrastructure
                 .ForMember(dest => dest.IsCurrentUserTrip, opt => opt.Ignore())
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src =>
                 TimeUtils.GetTimeSpanString(src.EndTime - src.StartTime)));
-            CreateMap<Trip, ReadFeedbackDTO>()
-                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Feedback.Text))
-                .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Feedback.Rating))
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
-            CreateMap<Driver, ReadDriverDTO>()
-                .ForMember(dest => dest.FirstPhoto, opt => opt.MapFrom(src => src.Photos.FirstOrDefault()));
-            CreateMap<Driver, DriverDetailsDTO>()
-                .ForMember(dest => dest.Feedbacks, opt => opt.MapFrom(src => src.Trips.Where(t => t.Feedback != null)));
-            CreateMap<CreateFeedbackDTO, Feedback>();
         }
     }
 }
