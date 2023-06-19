@@ -206,28 +206,28 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             return View(trip);
         }
 
-		[HttpPut]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> EditPast(int id, EditPastTripDTO trip, List<IFormFile> images)
-		{
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					await new EditPastTripCommand(trip, id, images, _imageService,
-					_tripService, _environment.WebRootPath, _mapper).ExecuteAsync();
-				}
-				catch (EntityNotFoundException ex)
-				{
-					return NotFound(ex.Message);
-				}
-				return RedirectToAction(nameof(Index));
-			}
+        [HttpPut]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPast(int id, EditPastTripDTO trip, List<IFormFile> images)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await new EditPastTripCommand(trip, id, images, _imageService,
+                    _tripService, _environment.WebRootPath, _mapper).ExecuteAsync();
+                }
+                catch (EntityNotFoundException ex)
+                {
+                    return NotFound(ex.Message);
+                }
+                return RedirectToAction(nameof(Index));
+            }
 
-			return View(trip);
-		}
+            return View(trip);
+        }
 
-		[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {

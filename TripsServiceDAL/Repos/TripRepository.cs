@@ -31,7 +31,7 @@ namespace TripsServiceDAL.Repos
             return await _dbSet
                 .Include(t => t.RoutePoints)
                 .Include(t => t.Images)
-                .Include (t => t.User)
+                .Include(t => t.User)
                 .Include(t => t.Driver)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using TripsServiceBLL.Commands.Drivers;
 using TripsServiceBLL.DTO.Drivers;
 using TripsServiceBLL.Infrastructure;

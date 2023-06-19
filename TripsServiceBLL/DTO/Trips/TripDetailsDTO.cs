@@ -2,7 +2,6 @@
 using TripsServiceBLL.DTO.Drivers;
 using TripsServiceBLL.DTO.Images;
 using TripsServiceBLL.DTO.RoutePoints;
-using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.DTO.Trips
 {
