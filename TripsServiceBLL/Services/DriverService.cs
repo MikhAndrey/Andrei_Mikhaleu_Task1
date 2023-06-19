@@ -24,9 +24,8 @@ namespace TripsServiceBLL.Services
         public IEnumerable<ReadDriverDTO> GetDriversOverall()
         {
             IEnumerable<Driver> drivers = _unitOfWork.Drivers.GetAll().AsEnumerable();
-            return drivers.Select(d => _mapper.Map<Driver, ReadDriverDTO>(d, opt =>
-                opt.AfterMap((src, dest) => dest.AverageRating = ComputeAverageRating(src))))
-                .OrderByDescending(d => d.AverageRating);
+            return drivers.Select(_mapper.Map<Driver, ReadDriverDTO>)
+                .OrderByDescending(el => el.AverageRating);
         }
 
         public async Task<DriverDetailsDTO> GetDriverDetailsAsync(int driverId)
@@ -37,17 +36,10 @@ namespace TripsServiceBLL.Services
                 : _mapper.Map<Driver, DriverDetailsDTO>(driver, opt =>
                 opt.AfterMap((src, dest) =>
                 {
-                    dest.AverageRating = ComputeAverageRating(src);
                     dest.Feedbacks = src.Trips.Where(t => t.Feedback != null)
                     .Select(t => _mapper.Map<ReadFeedbackDTO>(t));
                 })
             );
-        }
-
-        private double ComputeAverageRating(Driver driver)
-        {
-            return Math.Round(driver.Trips.Where(t => t.Feedback != null)
-                .Average(t => (double?)t.Feedback.Rating) ?? 0, 1);
         }
     }
 }

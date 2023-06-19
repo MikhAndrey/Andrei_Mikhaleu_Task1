@@ -1,6 +1,9 @@
 ﻿using TripsServiceBLL.DTO.Comments;
+using TripsServiceBLL.DTO.Drivers;
 using TripsServiceBLL.DTO.Images;
 using TripsServiceBLL.DTO.RoutePoints;
+using TripsServiceDAL.Entities;
+
 namespace TripsServiceBLL.DTO.Trips
 {
     public class TripDetailsDTO : ReadTripDTO
@@ -24,6 +27,8 @@ namespace TripsServiceBLL.DTO.Trips
         public string Duration { get; set; }
 
         public decimal Distance { get; set; }
+
+        public ReadDriverDTO? Driver { get; set; }
 
         public TripDetailsDTO() { }
     }

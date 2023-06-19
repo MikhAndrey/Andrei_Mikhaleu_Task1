@@ -18,6 +18,11 @@ namespace TripsServiceDAL.Repos
                     .ThenInclude(c => c.User)
                 .Include(t => t.User)
                 .Include(t => t.Feedback)
+                .Include(t => t.Driver)
+                    .ThenInclude(d => d.Photos)
+                .Include(t => t.Driver)
+                    .ThenInclude(d => d.Trips)
+                    .ThenInclude(t => t.Feedback)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 

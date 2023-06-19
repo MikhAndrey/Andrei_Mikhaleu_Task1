@@ -108,6 +108,23 @@
         }
     </div>
 
+    @if (Model.Driver != null){
+        string driverPhotoLink = $"/{Constants.ImagesFolderName}/{Constants.DriversFolderName}/{Model.Driver.Id}/{Model.Driver?.FirstPhoto?.Link}";
+        <h5 class="tp-label mb-2">Trip driver:</h5>
+        <div class="w-50 tp-gradient-standard driver-button d-flex flex-row align-items-center">
+            <div class="mr-3" style="width:30%">
+                <img src="@driverPhotoLink" alt="Driver Photo" style="width:100%;height:auto;border-radius:50%;" />
+            </div>
+            <div style="flex-grow:1;" class="main-driver-info">
+                <h5 style="display:inline-block;" class="tp-label mr-2">@Model.Driver.Name</h5>
+                <div class="rating-container" style="display:inline-block;">
+                    <span class="rating-value text-light mt-2">@Model.Driver.AverageRating</span>
+                </div>
+                <p class="tp-label">Experience: @(Model.Driver.Experience) years</p>
+            </div>
+        </div>
+    }
+
     <h3 class="mt-3 tp-label">Leave a comment</h3>
 
     @await Html.PartialAsync("_AddComment", new TripsServiceBLL.DTO.Comments.CreateCommentDTO {TripId = Model.Id})
@@ -150,6 +167,7 @@
 
 @section Scripts {
     <script src="@Url.Content("~/js/RouteBuilder.js")"></script>
+    <script src="@Url.Content("~/js/ratingBuilder.js")"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap"></script>
     <script>
     @{
@@ -190,7 +208,5 @@
                 }
             });
         });                
-    </script>
-    <script src="@Url.Content("~/js/ratingBuilder.js")">
     </script>
 }

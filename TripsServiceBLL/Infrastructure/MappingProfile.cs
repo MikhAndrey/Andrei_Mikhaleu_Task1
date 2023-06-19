@@ -70,10 +70,10 @@ namespace TripsServiceBLL.Infrastructure
                 .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Feedback.Rating))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
             _ = CreateMap<Driver, ReadDriverDTO>()
-                .ForMember(dest => dest.AverageRating, opt => opt.Ignore())
+                .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => DriverUtils.ComputeAverageRating(src)))
                 .ForMember(dest => dest.FirstPhoto, opt => opt.MapFrom(src => src.Photos.FirstOrDefault()));
             _ = CreateMap<Driver, DriverDetailsDTO>()
-                .ForMember(dest => dest.AverageRating, opt => opt.Ignore())
+                .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => DriverUtils.ComputeAverageRating(src)))
                 .ForMember(dest => dest.Feedbacks, opt => opt.Ignore());
             _ = CreateMap<CreateFeedbackDTO, Feedback>();
         }
