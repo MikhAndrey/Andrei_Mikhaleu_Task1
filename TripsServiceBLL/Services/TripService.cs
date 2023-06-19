@@ -22,9 +22,14 @@ namespace TripsServiceBLL.Services
             _mapper = mapper;
         }
 
-        public async Task<Trip?> GetByIdAsync(int id)
+        public async Task<Trip?> GetByIdWithImagesAsync(int id)
         {
-            return await _unitOfWork.Trips.GetByIdAsync(id);
+            return await _unitOfWork.Trips.GetByIdWithImagesAsync(id);
+        }
+
+        public async Task<Trip?> GetByIdWithImagesAndRoutePointsAsync(int id)
+        {
+            return await _unitOfWork.Trips.GetByIdWithImagesAndRoutePointsAsync(id);
         }
 
         public void SetNewTimeForStartingTrip(Trip trip)
@@ -37,7 +42,7 @@ namespace TripsServiceBLL.Services
 
         public async Task StartTripAsync(int tripId)
         {
-            Trip? trip = await GetByIdAsync(tripId);
+            Trip? trip = await _unitOfWork.Trips.GetByIdAsync(tripId);
             if (trip == null)
             {
                 throw new EntityNotFoundException(Constants.TripNotExistsMessage);
@@ -58,7 +63,7 @@ namespace TripsServiceBLL.Services
 
         public async Task EndTripAsync(int tripId)
         {
-            Trip? trip = await GetByIdAsync(tripId);
+            Trip? trip = await _unitOfWork.Trips.GetByIdAsync(tripId);
             if (trip == null)
             {
                 throw new EntityNotFoundException(Constants.TripNotExistsMessage);
@@ -91,7 +96,7 @@ namespace TripsServiceBLL.Services
 
         public async Task<TripDetailsDTO> GetTripDetailsAsync(int tripId, int userId)
         {
-            Trip? trip = await GetByIdAsync(tripId);
+            Trip? trip = await _unitOfWork.Trips.GetByIdForDetailsAsync(tripId);
             if (trip == null)
             {
                 throw new EntityNotFoundException(Constants.TripNotExistsMessage);
@@ -106,7 +111,7 @@ namespace TripsServiceBLL.Services
 
         public async Task<EditTripDTO> GetTripForEditingAsync(int tripId)
         {
-            Trip? trip = await GetByIdAsync(tripId);
+            Trip? trip = await _unitOfWork.Trips.GetByIdForEditingAsync(tripId);
             return trip == null ? throw new EntityNotFoundException(Constants.TripNotExistsMessage) : _mapper.Map<EditTripDTO>(trip);
         }
 

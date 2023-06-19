@@ -45,7 +45,7 @@ namespace TripsServiceBLL.Commands.Trips
 
         public async Task ExecuteAsync()
         {
-            Trip? trip = await _tripService.GetByIdAsync(_id);
+            Trip? trip = await _tripService.GetByIdWithImagesAsync(_id);
             if (trip == null)
             {
                 throw new EntityNotFoundException(Constants.TripNotExistsMessage);

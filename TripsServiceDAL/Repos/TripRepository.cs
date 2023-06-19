@@ -9,7 +9,7 @@ namespace TripsServiceDAL.Repos
     {
         public TripRepository(TripsDBContext context) : base(context) { }
 
-        public new async Task<Trip?> GetByIdAsync(int id)
+        public async Task<Trip?> GetByIdForDetailsAsync(int id)
         {
             return await _dbSet
                 .Include(t => t.RoutePoints)
@@ -26,11 +26,36 @@ namespace TripsServiceDAL.Repos
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
+        public async Task<Trip?> GetByIdForEditingAsync(int id)
+        {
+            return await _dbSet
+                .Include(t => t.RoutePoints)
+                .Include(t => t.Images)
+                .Include (t => t.User)
+                .Include(t => t.Driver)
+                .FirstOrDefaultAsync(t => t.Id == id);
+        }
+
         public async Task<Trip?> GetByIdForMinimalEditingAsync(int id)
         {
             return await _dbSet
                 .Include(t => t.Images)
                 .Include(t => t.User)
+                .FirstOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task<Trip?> GetByIdWithImagesAsync(int id)
+        {
+            return await _dbSet
+                .Include(t => t.Images)
+                .FirstOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task<Trip?> GetByIdWithImagesAndRoutePointsAsync(int id)
+        {
+            return await _dbSet
+                .Include(t => t.Images)
+                .Include(t => t.RoutePoints)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
@@ -42,7 +67,7 @@ namespace TripsServiceDAL.Repos
 
         public IQueryable<Trip> GetUserTripsWithUser(int userId)
         {
-            return _dbSet.Include(t => t.User).Where(t => t.UserId == userId);
+            return _dbSet.Where(t => t.UserId == userId).Include(t => t.User);
         }
 
         public IQueryable<Trip> GetTripsByUserId(int userId)

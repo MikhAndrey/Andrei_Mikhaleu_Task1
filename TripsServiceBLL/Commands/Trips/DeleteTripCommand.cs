@@ -25,7 +25,7 @@ namespace TripsServiceBLL.Commands.Trips
 
         public async Task ExecuteAsync()
         {
-            Trip? tripToDelete = await _tripService.GetByIdAsync(_id);
+            Trip? tripToDelete = await _tripService.GetByIdWithImagesAsync(_id);
             if (tripToDelete == null)
             {
                 throw new EntityNotFoundException(Constants.TripNotExistsMessage);
