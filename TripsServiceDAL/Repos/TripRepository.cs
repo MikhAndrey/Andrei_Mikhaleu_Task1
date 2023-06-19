@@ -36,6 +36,16 @@ namespace TripsServiceDAL.Repos
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
+        public async Task<Trip?> GetByIdForDeleteAsync(int id)
+        {
+            return await _dbSet
+                .Include(t => t.RoutePoints)
+                .Include(t => t.Images)
+                .Include(t => t.Comments)
+                .Include(t => t.Feedback)
+                .FirstOrDefaultAsync(t => t.Id == id);
+        }
+
         public async Task<Trip?> GetByIdForMinimalEditingAsync(int id)
         {
             return await _dbSet

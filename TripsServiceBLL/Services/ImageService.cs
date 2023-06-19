@@ -80,8 +80,14 @@ namespace TripsServiceBLL.Services
             }
         }
 
-        public void DeleteTripImages(Trip trip, string webRootPath)
+        public async Task DeleteTripImages(int tripId, string webRootPath)
         {
+            Trip? trip = await _unitOfWork.Trips.GetByIdWithImagesAsync(tripId);
+            if (trip == null)
+            {
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
+            }
+
             foreach (Image image in trip.Images)
             {
                 string path = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.UserId.ToString(), trip.Id.ToString(), image.Link);

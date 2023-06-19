@@ -25,5 +25,7 @@ namespace TripsServiceDAL.Interfaces
         Task<Trip?> GetByIdWithImagesAsync(int id);
 
         Task<Trip?> GetByIdWithImagesAndRoutePointsAsync(int id);
+
+        Task<Trip?> GetByIdForDeleteAsync(int id);
     }
 }

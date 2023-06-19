@@ -21,7 +21,7 @@ namespace TripsServiceBLL.Interfaces
 
         Task UpdateAsync(Trip trip);
 
-        Task DeleteAsync(Trip trip);
+        Task DeleteAsync(int tripId);
 
         Task AddAsync(Trip trip);
 

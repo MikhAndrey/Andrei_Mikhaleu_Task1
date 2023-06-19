@@ -25,13 +25,13 @@ namespace TripsServiceDAL.Infrastructure
                 .HasOne(t => t.User)
                 .WithMany(u => u.Trips)
                 .HasForeignKey(t => t.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<RoutePoint>()
                 .HasOne(t => t.Trip)
                 .WithMany(u => u.RoutePoints)
                 .HasForeignKey(t => t.TripId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Comment>()
                 .HasOne(c => c.User)
@@ -43,19 +43,19 @@ namespace TripsServiceDAL.Infrastructure
                 .HasOne(c => c.Trip)
                 .WithMany(t => t.Comments)
                 .HasForeignKey(c => c.TripId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Image>()
                 .HasOne(i => i.Trip)
                 .WithMany(t => t.Images)
                 .HasForeignKey(i => i.TripId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Feedback>()
                 .HasOne(f => f.Trip)
                 .WithOne(t => t.Feedback)
                 .HasForeignKey<Feedback>(f => f.TripId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Trip>()
                .HasOne(t => t.Driver)
@@ -67,7 +67,7 @@ namespace TripsServiceDAL.Infrastructure
                .HasOne(dp => dp.Driver)
                .WithMany(d => d.Photos)
                .HasForeignKey(dp => dp.DriverId)
-               .OnDelete(DeleteBehavior.Cascade);
+               .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
