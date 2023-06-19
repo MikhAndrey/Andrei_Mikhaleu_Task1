@@ -234,7 +234,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             try
             {
                 int userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-                TripDetailsDTO trip = await new GetTripDetailsCommand(_tripService, id, userId).ExecuteAsync();
+                TripDetailsDTO trip = await _tripService.GetTripDetailsAsync(id, userId);
                 return View(trip);
             }
             catch (ArgumentNullException)
