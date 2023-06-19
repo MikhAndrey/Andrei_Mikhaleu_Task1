@@ -5,7 +5,7 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Commands.Trips
 {
-    public class DeleteTripCommand : IAsyncCommand
+    public class DeleteTripCommandAsync : ICommandAsync
     {
         private readonly int _id;
 
@@ -15,7 +15,7 @@ namespace TripsServiceBLL.Commands.Trips
 
         private readonly string _webRootPath;
 
-        public DeleteTripCommand(int id, ITripService tripService, IImageService imageService, string webRootPath)
+        public DeleteTripCommandAsync(int id, ITripService tripService, IImageService imageService, string webRootPath)
         {
             _id = id;
             _tripService = tripService;

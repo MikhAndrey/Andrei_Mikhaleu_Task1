@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using TripsServiceBLL.Commands.RoutePoints;
-using TripsServiceBLL.Commands.Statistics;
 using TripsServiceBLL.DTO.RoutePoints;
 using TripsServiceBLL.DTO.Statistics;
 using TripsServiceBLL.Interfaces;
@@ -27,11 +25,11 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> TotalDuration()
+        public IActionResult TotalDuration()
         {
             try
             {
-                YearsStatisticsDTO model = await GetDistinctYearsModel();
+                YearsStatisticsDTO model = GetDistinctYearsModel();
                 return View(model);
             }
             catch (ArgumentNullException)
@@ -53,17 +51,17 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            List<DurationInMonth> durations = await new GetTripDurationsByYearCommand(_tripService, userId, year).ExecuteAsync();
+            List<DurationInMonth> durations = await _tripService.GetTotalDurationByMonthsAsync(year, userId);
             return Json(durations);
         }
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> HeatMap()
+        public IActionResult HeatMap()
         {
             try
             {
-                YearsStatisticsDTO model = await GetDistinctYearsModel();
+                YearsStatisticsDTO model = GetDistinctYearsModel();
                 return View(model);
             }
             catch (ArgumentNullException)
@@ -85,7 +83,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 return RedirectToAction("Login", "Account");
             };
-            IQueryable<RoutePointCoordinatesDTO> result = new GetRoutePointsCoordinatesCommand(_routePointService, userId, year).Execute();
+            IQueryable<RoutePointCoordinatesDTO> result = _routePointService.GetRoutePointsByYear(year, userId);
             JsonSerializerOptions options = new()
             {
                 ReferenceHandler = ReferenceHandler.Preserve
@@ -93,10 +91,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             return Json(result, options);
         }
 
-        private async Task<YearsStatisticsDTO> GetDistinctYearsModel()
+        private YearsStatisticsDTO GetDistinctYearsModel()
         {
             int userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-            return await new GetDistinctTripYearsCommand(_tripService, userId).ExecuteAsync();
+            return _tripService.GetYearsOfUserTrips(userId);
         }
     }
 }

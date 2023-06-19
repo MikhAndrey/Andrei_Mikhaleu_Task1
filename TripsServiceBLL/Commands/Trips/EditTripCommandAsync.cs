@@ -8,7 +8,7 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Commands.Trips
 {
-    public class EditTripCommand : IAsyncCommand
+    public class EditTripCommandAsync : ICommandAsync
     {
         private readonly EditTripDTO _trip;
 
@@ -28,7 +28,7 @@ namespace TripsServiceBLL.Commands.Trips
 
         private readonly IMapper _mapper;
 
-        public EditTripCommand(
+        public EditTripCommandAsync(
             EditTripDTO trip,
             int id,
             List<IFormFile> images,
