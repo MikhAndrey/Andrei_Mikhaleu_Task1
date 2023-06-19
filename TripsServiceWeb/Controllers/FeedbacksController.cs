@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TripsServiceBLL.Commands.Feedbacks;
 using TripsServiceBLL.DTO.Feedbacks;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
@@ -21,7 +20,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             try
             {
-                await new CreateFeedbackCommand(_feedbackService, feedback).ExecuteAsync();
+                await _feedbackService.AddAsync(feedback);
                 return Redirect(Request.Headers["Referer"].ToString());
             }
             catch (EntityNotFoundException ex)

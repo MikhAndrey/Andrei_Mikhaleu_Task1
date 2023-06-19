@@ -177,7 +177,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             try
             {
-                EditPastTripDTO trip = await new GetPastTripByIdCommand(_tripService, id).ExecuteAsync();
+                EditPastTripDTO trip = await _tripService.GetPastTripForEditingAsync(id);
                 return View(trip);
             }
             catch (EntityNotFoundException ex)
@@ -214,7 +214,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 try
                 {
-                    await new EditPastTripCommand(trip, id, images, _imageService,
+                    await new EditPastTripCommandAsync(trip, id, images, _imageService,
                     _tripService, _environment.WebRootPath, _mapper).ExecuteAsync();
                 }
                 catch (EntityNotFoundException ex)

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using TripsServiceBLL.Commands.Drivers;
 using TripsServiceBLL.DTO.Drivers;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
@@ -14,22 +13,18 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         private readonly IDriverService _driverService;
 
-        private readonly IWebHostEnvironment _environment;
-
         public DriversController(
-            IDriverService driverService,
-            IWebHostEnvironment environment
+            IDriverService driverService
             )
         {
             _driverService = driverService;
-            _environment = environment;
         }
 
         [Authorize]
         [HttpGet]
         public IActionResult Index()
         {
-            IEnumerable<ReadDriverDTO> drivers = new GetDriversOverallCommand(_driverService).Execute();
+            IEnumerable<ReadDriverDTO> drivers = _driverService.GetDriversOverall();
             return View(drivers);
         }
 
@@ -37,7 +32,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            IEnumerable<ReadDriverDTO> drivers = new GetDriversOverallCommand(_driverService).Execute();
+            IEnumerable<ReadDriverDTO> drivers = _driverService.GetDriversOverall();
             JsonSerializerOptions options = new()
             {
                 ReferenceHandler = ReferenceHandler.Preserve
@@ -51,7 +46,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             try
             {
-                DriverDetailsDTO driver = await new GetDriverDetailsCommand(_driverService, id).ExecuteAsync();
+                DriverDetailsDTO driver = await _driverService.GetDriverDetailsAsync(id);
                 return View(driver);
             }
             catch (EntityNotFoundException ex)
