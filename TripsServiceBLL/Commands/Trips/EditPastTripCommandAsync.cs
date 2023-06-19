@@ -48,7 +48,7 @@ namespace TripsServiceBLL.Commands.Trips
             Trip? trip = await _tripService.GetByIdWithImagesAsync(_id);
             if (trip == null)
             {
-                throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
             _mapper.Map(_trip, trip);

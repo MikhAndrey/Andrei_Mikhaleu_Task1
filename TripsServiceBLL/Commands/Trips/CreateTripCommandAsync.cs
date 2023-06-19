@@ -60,7 +60,7 @@ namespace TripsServiceBLL.Commands.Trips
             bool userExists = _userService.Exists(_userId);
             if (!userExists)
             {
-                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
             }
 
             Trip trip = _mapper.Map<Trip>(_trip);

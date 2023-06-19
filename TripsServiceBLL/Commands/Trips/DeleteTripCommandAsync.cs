@@ -28,7 +28,7 @@ namespace TripsServiceBLL.Commands.Trips
             Trip? tripToDelete = await _tripService.GetByIdWithImagesAsync(_id);
             if (tripToDelete == null)
             {
-                throw new EntityNotFoundException(Constants.TripNotExistsMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
             _imageService.DeleteTripImages(tripToDelete, _webRootPath);

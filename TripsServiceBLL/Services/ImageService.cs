@@ -54,19 +54,19 @@ namespace TripsServiceBLL.Services
             Image? image = await _unitOfWork.Images.GetByIdAsync(imageId);
             if (image == null)
             {
-                throw new EntityNotFoundException(Constants.ImageNotExistsMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("message"));
             }
 
             bool tripExists = _unitOfWork.Trips.Exists(tripId);
             if (!tripExists)
             {
-                throw new EntityNotFoundException(Constants.TripNotFoundMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("trip"));
             }
 
             bool userExists = _unitOfWork.Users.Exists(userId);
             if (!userExists)
             {
-                throw new EntityNotFoundException(Constants.UserNotFoundMessage);
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
             }
 
             _unitOfWork.Images.Delete(image);
