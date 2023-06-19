@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using TripsServiceBLL.DTO.Drivers;
-using TripsServiceBLL.DTO.Feedbacks;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
@@ -33,13 +32,7 @@ namespace TripsServiceBLL.Services
             Driver? driver = await _unitOfWork.Drivers.GetByIdAsync(driverId);
             return driver == null
                 ? throw new EntityNotFoundException(Constants.DriverNotExistsMessage)
-                : _mapper.Map<Driver, DriverDetailsDTO>(driver, opt =>
-                opt.AfterMap((src, dest) =>
-                {
-                    dest.Feedbacks = src.Trips.Where(t => t.Feedback != null)
-                    .Select(t => _mapper.Map<ReadFeedbackDTO>(t));
-                })
-            );
+                : _mapper.Map<Driver, DriverDetailsDTO>(driver);
         }
     }
 }

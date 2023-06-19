@@ -72,7 +72,7 @@ namespace TripsServiceBLL.Infrastructure
             CreateMap<Driver, ReadDriverDTO>()
                 .ForMember(dest => dest.FirstPhoto, opt => opt.MapFrom(src => src.Photos.FirstOrDefault()));
             CreateMap<Driver, DriverDetailsDTO>()
-                .ForMember(dest => dest.Feedbacks, opt => opt.Ignore());
+                .ForMember(dest => dest.Feedbacks, opt => opt.MapFrom(src => src.Trips.Where(t => t.Feedback != null)));
             CreateMap<CreateFeedbackDTO, Feedback>();
         }
     }
