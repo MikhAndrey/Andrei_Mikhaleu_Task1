@@ -51,7 +51,7 @@ namespace TripsServiceBLL.Commands.Trips
                 throw new EntityNotFoundException(Constants.TripNotExistsMessage);
             }
 
-            _ = _mapper.Map(_trip, trip);
+            _mapper.Map(_trip, trip);
             await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
             await _tripService.UpdateAsync(trip);
         }

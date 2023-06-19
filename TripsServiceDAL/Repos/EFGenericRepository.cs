@@ -12,14 +12,19 @@ namespace TripsServiceDAL.Repos
             _dbSet = context.Set<TEntity>();
         }
 
+        public IQueryable<TEntity> GetAll()
+        {
+            return _dbSet;
+        }
+
         public async Task AddAsync(TEntity entity)
         {
-            _ = await _dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity);
         }
 
         public void Update(TEntity entity)
         {
-            _ = _dbSet.Update(entity);
+            _dbSet.Update(entity);
         }
 
         public async Task<TEntity?> GetByIdAsync(int id)
@@ -29,7 +34,7 @@ namespace TripsServiceDAL.Repos
 
         public void Delete(TEntity entity)
         {
-            _ = _dbSet.Remove(entity);
+            _dbSet.Remove(entity);
         }
 
         public bool Exists(int id)

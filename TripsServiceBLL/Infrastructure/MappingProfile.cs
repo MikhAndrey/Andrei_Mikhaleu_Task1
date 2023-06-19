@@ -15,32 +15,32 @@ namespace TripsServiceBLL.Infrastructure
     {
         public MappingProfile()
         {
-            _ = CreateMap<Comment, CommentDTO>();
-            _ = CreateMap<Image, ImageDTO>();
-            _ = CreateMap<RoutePoint, RoutePointDTO>();
-            _ = CreateMap<Trip, ReadTripDTO>();
-            _ = CreateMap<User, UserDTO>();
-            _ = CreateMap<UserSignupDTO, UserLoginDTO>();
-            _ = CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
-            _ = CreateMap<Trip, EditPastTripDTO>();
-            _ = CreateMap<EditPastTripDTO, Trip>()
+            CreateMap<Comment, CommentDTO>();
+            CreateMap<Image, ImageDTO>();
+            CreateMap<RoutePoint, RoutePointDTO>();
+            CreateMap<Trip, ReadTripDTO>();
+            CreateMap<User, UserDTO>();
+            CreateMap<UserSignupDTO, UserLoginDTO>();
+            CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
+            CreateMap<Trip, EditPastTripDTO>();
+            CreateMap<EditPastTripDTO, Trip>()
                 .ForMember(trip => trip.Id, opt => opt.Ignore())
                 .ForMember(trip => trip.UserId, opt => opt.Ignore())
                 .ForMember(trip => trip.Images, opt => opt.Ignore());
-            _ = CreateMap<CreateTripDTO, Trip>()
+            CreateMap<CreateTripDTO, Trip>()
                 .ForMember(trip => trip.StartTime, opt => opt.MapFrom
                 (src => src.StartTime.AddSeconds(-src.StartTimeZoneOffset)))
                 .ForMember(trip => trip.EndTime, opt => opt.MapFrom
                 (src => src.EndTime.AddSeconds(-src.FinishTimeZoneOffset)));
-            _ = CreateMap<EditTripDTO, Trip>()
+            CreateMap<EditTripDTO, Trip>()
                 .IncludeBase<CreateTripDTO, Trip>()
                 .ForMember(trip => trip.Id, opt => opt.Ignore())
                 .ForMember(trip => trip.UserId, opt => opt.Ignore())
                 .ForMember(trip => trip.Images, opt => opt.Ignore());
-            _ = CreateMap<Trip, EditTripDTO>()
+            CreateMap<Trip, EditTripDTO>()
                 .ForMember(dto => dto.StartTime, opt => opt.MapFrom(src => src.StartTime.AddSeconds(src.StartTimeZoneOffset)))
                 .ForMember(dto => dto.EndTime, opt => opt.MapFrom(src => src.EndTime.AddSeconds(src.FinishTimeZoneOffset)));
-            _ = CreateMap<Trip, ReadTripDTO>()
+            CreateMap<Trip, ReadTripDTO>()
                 .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime.AddSeconds(src.StartTimeZoneOffset)))
                 .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime.AddSeconds(src.FinishTimeZoneOffset)))
                 .ForMember(dest => dest.IsCurrent, opt => opt.MapFrom(src => DateTime.UtcNow >= src.StartTime && DateTime.UtcNow <= src.EndTime))
@@ -57,25 +57,23 @@ namespace TripsServiceBLL.Infrastructure
                 {
                     return src.DriverId != null && src.Feedback == null && dest.IsPast ? null : (src.Feedback?.Rating);
                 }));
-            _ = CreateMap<Trip, ReadTripDTOExtended>()
+            CreateMap<Trip, ReadTripDTOExtended>()
                 .IncludeBase<Trip, ReadTripDTO>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
-            _ = CreateMap<Trip, TripDetailsDTO>()
+            CreateMap<Trip, TripDetailsDTO>()
                 .IncludeBase<Trip, ReadTripDTO>()
                 .ForMember(dest => dest.IsCurrentUserTrip, opt => opt.Ignore())
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src =>
                 TimeUtils.GetTimeSpanString(src.EndTime - src.StartTime)));
-            _ = CreateMap<Trip, ReadFeedbackDTO>()
+            CreateMap<Trip, ReadFeedbackDTO>()
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Feedback.Text))
                 .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Feedback.Rating))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
-            _ = CreateMap<Driver, ReadDriverDTO>()
-                .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => DriverUtils.ComputeAverageRating(src)))
+            CreateMap<Driver, ReadDriverDTO>()
                 .ForMember(dest => dest.FirstPhoto, opt => opt.MapFrom(src => src.Photos.FirstOrDefault()));
-            _ = CreateMap<Driver, DriverDetailsDTO>()
-                .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => DriverUtils.ComputeAverageRating(src)))
+            CreateMap<Driver, DriverDetailsDTO>()
                 .ForMember(dest => dest.Feedbacks, opt => opt.Ignore());
-            _ = CreateMap<CreateFeedbackDTO, Feedback>();
+            CreateMap<CreateFeedbackDTO, Feedback>();
         }
     }
 }

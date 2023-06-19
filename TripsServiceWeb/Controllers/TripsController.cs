@@ -2,14 +2,11 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Utils;
-using TripsServiceDAL.Entities;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

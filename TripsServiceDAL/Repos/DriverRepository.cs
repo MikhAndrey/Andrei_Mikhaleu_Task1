@@ -9,7 +9,7 @@ namespace TripsServiceDAL.Repos
     {
         public DriverRepository(TripsDBContext context) : base(context) { }
 
-        public IQueryable<Driver> GetAll()
+        public new IQueryable<Driver> GetAll()
         {
             return _dbSet.Include(d => d.Photos).Include(d => d.Trips).ThenInclude(t => t.Feedback);
         }

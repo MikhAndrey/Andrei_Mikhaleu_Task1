@@ -85,7 +85,7 @@ namespace TripsServiceDAL.Infrastructure
 
         public async Task SaveAsync()
         {
-            _ = await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         private bool disposed = false;

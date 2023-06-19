@@ -27,13 +27,13 @@ namespace TripsServiceBLL.Services
                     string userFilePath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.UserId.ToString());
                     if (!Directory.Exists(userFilePath))
                     {
-                        _ = Directory.CreateDirectory(userFilePath);
+                        Directory.CreateDirectory(userFilePath);
                     }
 
                     string tripFilePath = Path.Combine(userFilePath, trip.Id.ToString());
                     if (!Directory.Exists(tripFilePath))
                     {
-                        _ = Directory.CreateDirectory(tripFilePath);
+                        Directory.CreateDirectory(tripFilePath);
                     }
 
                     string filePath = Path.Combine(tripFilePath, newFileName);
@@ -103,7 +103,7 @@ namespace TripsServiceBLL.Services
 
             if (!Directory.Exists(path))
             {
-                _ = Directory.CreateDirectory(path);
+                Directory.CreateDirectory(path);
             }
         }
     }
