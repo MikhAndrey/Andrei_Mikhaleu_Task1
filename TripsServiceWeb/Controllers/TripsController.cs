@@ -10,6 +10,7 @@ using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
+using TripsServiceDAL.Entities;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
@@ -233,7 +234,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             try
             {
-                int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
+                int userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
                 TripDetailsDTO trip = await new GetTripDetailsCommand(_tripService, id, userId).ExecuteAsync();
                 return View(trip);
             }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Andrei_Mikhaleu_Task1.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -28,14 +29,30 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [Authorize]
         public async Task<IActionResult> TotalDuration()
         {
-            return View(await GetDistinctYearsModel());
+            try
+            {
+                YearsStatisticsDTO model = await GetDistinctYearsModel();
+                return View(model);
+            }
+            catch (ArgumentNullException)
+            {
+                return RedirectToAction("Login", "Account");
+            };
         }
 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> TotalDurationData(int year)
         {
-            int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
+            int userId;
+            try
+            {
+                userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
+            }
+            catch (ArgumentNullException)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             List<DurationInMonth> durations = await new GetTripDurationsByYearCommand(_tripService, userId, year).ExecuteAsync();
             return Json(durations);
         }
@@ -44,14 +61,30 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         [Authorize]
         public async Task<IActionResult> HeatMap()
         {
-            return View(await GetDistinctYearsModel());
+            try
+            {
+                YearsStatisticsDTO model = await GetDistinctYearsModel();
+                return View(model);
+            }
+            catch (ArgumentNullException)
+            {
+                return RedirectToAction("Login", "Account");
+            };
         }
 
         [HttpPost]
         [Authorize]
         public IActionResult HeatMapData(int year)
         {
-            int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
+            int userId;
+            try
+            {
+                userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
+            }
+            catch (ArgumentNullException)
+            {
+                return RedirectToAction("Login", "Account");
+            };
             IQueryable<RoutePointCoordinatesDTO> result = new GetRoutePointsCoordinatesCommand(_routePointService, userId, year).Execute();
             JsonSerializerOptions options = new()
             {
@@ -62,7 +95,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         private async Task<YearsStatisticsDTO> GetDistinctYearsModel()
         {
-            int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
+            int userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
             return await new GetDistinctTripYearsCommand(_tripService, userId).ExecuteAsync();
         }
     }
