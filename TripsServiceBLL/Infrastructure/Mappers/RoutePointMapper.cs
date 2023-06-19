@@ -6,8 +6,8 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 {
     public class RoutePointMapper : Profile
     {
-        public RoutePointMapper() 
-        {           
+        public RoutePointMapper()
+        {
             CreateMap<RoutePoint, RoutePointDTO>();
         }
     }

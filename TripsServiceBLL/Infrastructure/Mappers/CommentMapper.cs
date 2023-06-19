@@ -6,9 +6,9 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 {
     public class CommentMapper : Profile
     {
-        public CommentMapper() 
+        public CommentMapper()
         {
             CreateMap<Comment, CommentDTO>();
-        }  
+        }
     }
 }

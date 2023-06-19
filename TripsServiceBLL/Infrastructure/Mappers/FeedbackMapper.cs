@@ -6,7 +6,7 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 {
     public class FeedbackMapper : Profile
     {
-        public FeedbackMapper() 
+        public FeedbackMapper()
         {
             CreateMap<Trip, ReadFeedbackDTO>()
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Feedback.Text))

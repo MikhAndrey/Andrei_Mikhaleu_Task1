@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using TripsServiceBLL.DTO.Drivers;
-using TripsServiceBLL.Infrastructure;
+using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;

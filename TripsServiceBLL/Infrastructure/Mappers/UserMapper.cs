@@ -6,7 +6,7 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 {
     public class UserMapper : Profile
     {
-        public UserMapper() 
+        public UserMapper()
         {
             CreateMap<User, UserDTO>();
             CreateMap<UserSignupDTO, UserLoginDTO>();

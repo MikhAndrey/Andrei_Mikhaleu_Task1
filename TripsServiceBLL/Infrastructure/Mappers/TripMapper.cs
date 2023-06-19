@@ -7,7 +7,7 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 {
     public class TripMapper : Profile
     {
-        public TripMapper() 
+        public TripMapper()
         {
             CreateMap<Trip, ReadTripDTO>();
             CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();

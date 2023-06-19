@@ -6,7 +6,7 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 {
     public class DriverMapper : Profile
     {
-        public DriverMapper() 
+        public DriverMapper()
         {
             CreateMap<Driver, ReadDriverDTO>()
                 .ForMember(dest => dest.FirstPhoto, opt => opt.MapFrom(src => src.Photos.FirstOrDefault()));
