@@ -2,8 +2,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TripsServiceBLL.Commands.Comments;
-using TripsServiceBLL.Commands.Images;
+using System.Security.Cryptography;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.DTO.Trips;
@@ -71,7 +70,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 {
                     return RedirectToAction("Login", "Account");
                 }
-                await new CreateTripCommand(trip, images, _routePointService, _imageService,
+                await new CreateTripCommandAsync(trip, images, _routePointService, _imageService,
                     _tripService, _userService, _mapper, _environment.WebRootPath, routePoints, userId).ExecuteAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -86,7 +85,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             try
             {
                 userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-                IQueryable<ReadTripDTO> trips = new GetUserTripsCommand(_tripService, userId).Execute();
+                IQueryable<ReadTripDTO> trips = _tripService.GetTripsByUserId(userId);
                 return View(trips);
             }
             catch (ArgumentNullException)
@@ -107,7 +106,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             try
             {
                 userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-                IQueryable<ReadTripDTO> trips = new GetTripsHistoryCommand(_tripService, userId).Execute();
+                IQueryable<ReadTripDTO> trips = _tripService.GetHistoryOfTripsByUserId(userId);
                 return View(trips);
             }
             catch (ArgumentNullException)
@@ -128,7 +127,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             try
             {
                 userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-                IQueryable<ReadTripDTOExtended> trips = new GetOthersPublicTripsCommand(_tripService, userId).Execute();
+                IQueryable<ReadTripDTOExtended> trips = _tripService.GetOthersPublicTrips(userId);
                 return View(trips);
             }
             catch (ArgumentNullException)
@@ -147,7 +146,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             try
             {
-                await new DeleteTripCommand(id, _tripService, _imageService, _environment.WebRootPath).ExecuteAsync();
+                await new DeleteTripCommandAsync(id, _tripService, _imageService, _environment.WebRootPath).ExecuteAsync();
             }
             catch (EntityNotFoundException ex)
             {
@@ -162,7 +161,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             try
             {
-                EditTripDTO trip = await new GetTripByIdCommand(_tripService, id).ExecuteAsync();
+                EditTripDTO trip = await _tripService.GetTripForEditingAsync(id);
                 return View(trip);
             }
             catch (EntityNotFoundException ex)
@@ -179,7 +178,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 try
                 {
-                    await new EditTripCommand(trip, id, images, _routePointService, _imageService,
+                    await new EditTripCommandAsync(trip, id, images, _routePointService, _imageService,
                     _tripService, _environment.WebRootPath, routePoints, _mapper).ExecuteAsync();
                 }
                 catch (EntityNotFoundException ex)
@@ -198,7 +197,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             try
             {
                 int userId = int.Parse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
-                TripDetailsDTO trip = await new GetTripDetailsCommand(_tripService, id, userId).ExecuteAsync();
+                TripDetailsDTO trip = await _tripService.GetTripDetailsAsync(id, userId);
                 return View(trip);
             }
             catch (ArgumentNullException)
@@ -217,7 +216,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             try
             {
-                await new StartTripCommand(_tripService, id).ExecuteAsync();
+                await _tripService.StartTripAsync(id);
             }
             catch (EntityNotFoundException ex)
             {
@@ -232,7 +231,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             try
             {
-                await new EndTripCommand(_tripService, id).ExecuteAsync();
+                await _tripService.EndTripAsync(id);
             }
             catch (EntityNotFoundException ex)
             {
@@ -250,7 +249,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 try
                 {
                     userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-                    await new AddCommentCommand(_commentService, comment, userId).ExecuteAsync();
+                    await _commentService.AddCommentAsync(comment, userId);
                 }
                 catch (ArgumentNullException)
                 {
@@ -270,7 +269,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             try
             {
-                await new DeleteCommentCommand(_commentService, commentId).ExecuteAsync();
+                await _commentService.DeleteCommentAsync(commentId);
             }
             catch (EntityNotFoundException ex)
             {
@@ -287,7 +286,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             try
             {
                 userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-                await new DeleteImageCommand(_environment.WebRootPath, imageId, tripId, userId, _imageService).ExecuteAsync();
+                await _imageService.DeleteByIdAsync(imageId, tripId, userId, _environment.WebRootPath);
             }
             catch (ArgumentNullException)
             {

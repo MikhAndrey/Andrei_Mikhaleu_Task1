@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TripsServiceBLL.Commands.Users;
 using TripsServiceBLL.DTO.Users;
 using TripsServiceBLL.Infrastructure;
 using TripsServiceBLL.Interfaces;
@@ -34,7 +33,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 try
                 {
-                    await new RegisterUserCommand(_userService, user).ExecuteAsync();
+                    await _userService.TryToRegisterNewUserAsync(user);
                 }
                 catch (ValidationException ex)
                 {
@@ -64,7 +63,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 try
                 {
-                    string jwtToken = await new GetLoginJWTTokenCommand(_userService, user).ExecuteAsync();
+                    string jwtToken = await _userService.GetJWTTokenAsync(user);
                     DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(Constants.AuthorizationExpirationInDays) : null;
                     HttpContext.Response.Cookies.Append(Constants.JwtTokenCookiesAlias, jwtToken, new CookieOptions
                     {

@@ -1,11 +1,11 @@
 ﻿namespace TripsServiceBLL.Interfaces
 {
-    public interface IAsyncCommand
+    public interface ICommandAsync
     {
         Task ExecuteAsync();
     }
 
-    public interface IAsyncCommand<T> where T : class
+    public interface ICommandAsync<T> where T : class
     {
         Task<T> ExecuteAsync();
     }

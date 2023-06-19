@@ -8,7 +8,7 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Commands.Trips
 {
-    public class CreateTripCommand : IAsyncCommand
+    public class CreateTripCommandAsync : ICommandAsync
     {
         private readonly CreateTripDTO _trip;
 
@@ -30,7 +30,7 @@ namespace TripsServiceBLL.Commands.Trips
 
         private readonly IMapper _mapper;
 
-        public CreateTripCommand(
+        public CreateTripCommandAsync(
             CreateTripDTO trip,
             List<IFormFile> images,
             IRoutePointService routePointService,
