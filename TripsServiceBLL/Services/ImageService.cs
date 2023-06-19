@@ -84,13 +84,13 @@ namespace TripsServiceBLL.Services
         {
             foreach (Image image in trip.Images)
             {
-                string path = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.Id.ToString(), trip.Id.ToString(), image.Link);
+                string path = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.UserId.ToString(), trip.Id.ToString(), image.Link);
                 if (File.Exists(path))
                 {
                     File.Delete(path);
                 }
             }
-            string tripDirectoryPath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.User.Id.ToString(), trip.Id.ToString());
+            string tripDirectoryPath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.UserId.ToString(), trip.Id.ToString());
             if (Directory.Exists(tripDirectoryPath))
             {
                 Directory.Delete(tripDirectoryPath);

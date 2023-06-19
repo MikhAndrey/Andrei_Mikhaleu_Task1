@@ -55,7 +55,7 @@
         }
     }
 
-    <h2 class="mt-5 tp-label">Trip gallery</h2>
+    <h3 class="mt-5 tp-label">Trip gallery</h3>
 
     @if (Model.Images.Count == 0)
     {
@@ -98,19 +98,10 @@
         </div>
     }
 
-    <div class="mt-4">
-        @if (Model.IsNeedToBeRated)
-        {
-            <button type="button" class="btn btn-primary rate-invoker" data-trip-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#rateDriverModal">Rate driver of this trip</button>
-        } else if (Model.Rating != null)
-        {
-            @await Html.PartialAsync("_DisplayTripRating", Model)	
-        }
-    </div>
-
-    @if (Model.Driver != null){
+    @if (Model.Driver != null)
+    {
         string driverPhotoLink = $"/{Constants.ImagesFolderName}/{Constants.DriversFolderName}/{Model.Driver.Id}/{Model.Driver?.FirstPhoto?.Link}";
-        <h5 class="tp-label mb-2">Trip driver:</h5>
+        <h3 class="tp-label mb-2">Trip driver</h3>
         <div class="w-50 tp-gradient-standard driver-button d-flex flex-row align-items-center">
             <div class="mr-3" style="width:30%">
                 <img src="@driverPhotoLink" alt="Driver Photo" style="width:100%;height:auto;border-radius:50%;" />
@@ -125,11 +116,21 @@
         </div>
     }
 
+    <div class="mt-4">
+        @if (Model.IsNeedToBeRated)
+        {
+            <button type="button" class="btn btn-primary rate-invoker" data-trip-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#rateDriverModal">Rate driver of this trip</button>
+        } else if (Model.Rating != null)
+        {
+            @await Html.PartialAsync("_DisplayTripRating", Model)	
+        }
+    </div>
+
     <h3 class="mt-3 tp-label">Leave a comment</h3>
 
     @await Html.PartialAsync("_AddComment", new TripsServiceBLL.DTO.Comments.CreateCommentDTO {TripId = Model.Id})
 
-    <h2 class="mt-5 tp-label">Comments</h2>
+    <h3 class="mt-5 tp-label">Comments</h3>
 
     <ul>
         @if (Model.Comments.Count == 0)
@@ -139,7 +140,7 @@
         else foreach (var comment in Model.Comments)
         {
             <li class="mt-3">
-                <p><strong>@comment.User.UserName</strong> - @comment.Date.ToString("dd.MM.yyyy HH:mm")</p>
+                <p><strong class="tp-label">@comment.User.UserName</strong> - @comment.Date.ToString("dd.MM.yyyy HH:mm")</p>
                 <p>@comment.Message</p>
                 @if (ViewContext?.HttpContext?.User?.Identity?.Name == comment.User.UserName)
                 {
