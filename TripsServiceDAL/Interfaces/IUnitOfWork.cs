@@ -1,4 +1,6 @@
-﻿namespace TripsServiceDAL.Interfaces
+﻿using Microsoft.EntityFrameworkCore.Storage;
+
+namespace TripsServiceDAL.Interfaces
 {
     public interface IUnitOfWork
     {
@@ -17,5 +19,7 @@
         IFeedbackRepository Feedbacks { get; }
 
         Task SaveAsync();
+
+        IDbContextTransaction BeginTransaction();
     }
 }

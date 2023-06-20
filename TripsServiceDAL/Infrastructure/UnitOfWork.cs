@@ -1,4 +1,5 @@
-﻿using TripsServiceDAL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using TripsServiceDAL.Interfaces;
 using TripsServiceDAL.Repos;
 
 namespace TripsServiceDAL.Infrastructure
@@ -86,6 +87,11 @@ namespace TripsServiceDAL.Infrastructure
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            return _context.Database.BeginTransaction();
         }
 
         private bool disposed = false;

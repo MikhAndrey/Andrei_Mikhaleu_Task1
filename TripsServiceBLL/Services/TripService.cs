@@ -90,24 +90,33 @@ namespace TripsServiceBLL.Services
                 throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
-            foreach (Image image in trip.Images)
+            using var transaction = _unitOfWork.BeginTransaction();
+            try
             {
-                _unitOfWork.Images.Delete(image);
-            }
+                foreach (Image image in trip.Images)
+                {
+                    _unitOfWork.Images.Delete(image);
+                }
 
-            foreach (Comment comment in trip.Comments)
+                foreach (Comment comment in trip.Comments)
+                {
+                    _unitOfWork.Comments.Delete(comment);
+                }
+
+                foreach (RoutePoint routePoint in trip.RoutePoints)
+                {
+                    _unitOfWork.RoutePoints.Delete(routePoint);
+                }
+
+                _unitOfWork.Feedbacks.Delete(trip.Feedback);
+                _unitOfWork.Trips.Delete(trip);
+                await _unitOfWork.SaveAsync();
+                transaction.Commit();
+            }
+            catch (Exception)
             {
-                _unitOfWork.Comments.Delete(comment);
+                transaction.Rollback();
             }
-
-            foreach (RoutePoint routePoint in trip.RoutePoints)
-            {
-                _unitOfWork.RoutePoints.Delete(routePoint);
-            }
-
-            _unitOfWork.Feedbacks.Delete(trip.Feedback);
-            _unitOfWork.Trips.Delete(trip);
-            await _unitOfWork.SaveAsync();
         }
 
         public async Task AddAsync(Trip trip)
