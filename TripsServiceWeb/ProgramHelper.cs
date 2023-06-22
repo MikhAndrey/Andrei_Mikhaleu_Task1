@@ -36,6 +36,7 @@ namespace Andrei_Mikhaleu_Task1
 		public static void AddCommands(IServiceCollection services)
 		{
 			services.AddScoped<CreateTripCommandAsync>();
+            services.AddScoped<DeleteTripCommandAsync>();
 		}
 
 		public static void AddAuthentication(IServiceCollection services)

@@ -5,7 +5,7 @@
         Task ExecuteAsync();
     }
 
-    public interface ICommandAsync<T> where T : class
+    public interface ICommandAsync<T>
     {
         Task ExecuteAsync(T model);
     }

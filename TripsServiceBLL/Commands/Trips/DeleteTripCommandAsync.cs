@@ -1,29 +1,31 @@
-﻿using TripsServiceBLL.Interfaces;
+﻿using Microsoft.AspNetCore.Hosting;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Trips
 {
-    public class DeleteTripCommandAsync : ICommandAsync
+    public class DeleteTripCommandAsync : ICommandAsync<int>
     {
-        private readonly int _id;
 
         private readonly ITripService _tripService;
 
         private readonly IImageService _imageService;
 
-        private readonly string _webRootPath;
+        private readonly IWebHostEnvironment _env;
 
-        public DeleteTripCommandAsync(int id, ITripService tripService, IImageService imageService, string webRootPath)
+        public DeleteTripCommandAsync(
+            ITripService tripService, 
+            IImageService imageService, 
+            IWebHostEnvironment env)
         {
-            _id = id;
             _tripService = tripService;
             _imageService = imageService;
-            _webRootPath = webRootPath;
+            _env = env;
         }
 
-        public async Task ExecuteAsync()
+        public async Task ExecuteAsync(int id)
         {
-            await _imageService.DeleteTripImages(_id, _webRootPath);
-            await _tripService.DeleteAsync(_id);
+            await _imageService.DeleteTripImages(id, _env.WebRootPath);
+            await _tripService.DeleteAsync(id);
         }
     }
 }

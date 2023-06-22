@@ -29,6 +29,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         private readonly CreateTripCommandAsync _createTripCommand;
 
+        private readonly DeleteTripCommandAsync _deleteTripCommand;
+
         public TripsController(
             ICommentService service,
             IRoutePointService routePointService,
@@ -37,7 +39,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             IUserService userService,
             IWebHostEnvironment environment,
             IMapper mapper,
-            CreateTripCommandAsync createTripCommand
+            CreateTripCommandAsync createTripCommand,
+            DeleteTripCommandAsync deleteTripCommand
             )
         {
             _commentService = service;
@@ -48,6 +51,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             _environment = environment;
             _mapper = mapper;
             _createTripCommand = createTripCommand;
+            _deleteTripCommand = deleteTripCommand;
         }
 
         [Authorize]
@@ -149,7 +153,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
         {
             try
             {
-                await new DeleteTripCommandAsync(id, _tripService, _imageService, _environment.WebRootPath).ExecuteAsync();
+                await _deleteTripCommand.ExecuteAsync(id);
             }
             catch (EntityNotFoundException ex)
             {
