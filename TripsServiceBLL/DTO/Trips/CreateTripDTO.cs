@@ -27,8 +27,8 @@ namespace TripsServiceBLL.DTO.Trips
 
         public int? DriverId { get; set; }
 
-        public string RoutePoints { get; set; }
+        public string RoutePointsAsString { get; set; }
 
-        public List<IFormFile> Images { get; set; }
+        public List<IFormFile>? ImagesAsFiles { get; set; }
     }
 }

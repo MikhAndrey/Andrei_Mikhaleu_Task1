@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
@@ -8,51 +8,39 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Commands.Trips
 {
-    public class EditPastTripCommandAsync : ICommandAsync
+    public class EditPastTripCommandAsync : ICommandAsync<EditPastTripDTO>
     {
-        private readonly EditPastTripDTO _trip;
-
         private readonly IImageService _imageService;
 
         private readonly ITripService _tripService;
 
-        private readonly int _id;
-
-        private readonly List<IFormFile> _images;
-
-        private readonly string _webRootPath;
+        private readonly IWebHostEnvironment _env;
 
         private readonly IMapper _mapper;
 
         public EditPastTripCommandAsync(
-            EditPastTripDTO trip,
-            int id,
-            List<IFormFile> images,
             IImageService imageService,
             ITripService tripService,
-            string webRootPath,
+            IWebHostEnvironment env,
             IMapper mapper
         )
         {
-            _trip = trip;
-            _id = id;
-            _images = images;
             _imageService = imageService;
             _tripService = tripService;
-            _webRootPath = webRootPath;
+            _env = env;
             _mapper = mapper;
         }
 
-        public async Task ExecuteAsync()
+        public async Task ExecuteAsync(EditPastTripDTO dto)
         {
-            Trip? trip = await _tripService.GetByIdWithImagesAsync(_id);
+            Trip? trip = await _tripService.GetByIdWithImagesAsync(dto.Id);
             if (trip == null)
             {
                 throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
-            _mapper.Map(_trip, trip);
-            await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
+            _mapper.Map(dto, trip);
+            await _imageService.UploadImagesAsync(trip, dto.ImagesAsFiles, _env.WebRootPath);
             await _tripService.UpdateAsync(trip);
         }
     }

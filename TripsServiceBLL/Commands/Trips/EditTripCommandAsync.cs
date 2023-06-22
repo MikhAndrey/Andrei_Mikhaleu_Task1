@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
@@ -8,61 +8,39 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Commands.Trips
 {
-    public class EditTripCommandAsync : ICommandAsync
+    public class EditTripCommandAsync : ICommandAsync<EditTripDTO>
     {
-        private readonly EditTripDTO _trip;
-
-        private readonly IRoutePointService _routePointService;
-
         private readonly IImageService _imageService;
 
         private readonly ITripService _tripService;
 
-        private readonly int _id;
-
-        private readonly List<IFormFile> _images;
-
-        private readonly string _webRootPath;
-
-        private readonly string _routePoints;
+        private readonly IWebHostEnvironment _env;
 
         private readonly IMapper _mapper;
 
         public EditTripCommandAsync(
-            EditTripDTO trip,
-            int id,
-            List<IFormFile> images,
-            IRoutePointService routePointService,
             IImageService imageService,
             ITripService tripService,
-            string webRootPath,
-            string routePoints,
+            IWebHostEnvironment env,
             IMapper mapper
         )
         {
-            _trip = trip;
-            _id = id;
-            _images = images;
-            _routePointService = routePointService;
             _imageService = imageService;
             _tripService = tripService;
-            _webRootPath = webRootPath;
-            _routePoints = routePoints;
+            _env = env;
             _mapper = mapper;
         }
 
-        public async Task ExecuteAsync()
+        public async Task ExecuteAsync(EditTripDTO dto)
         {
-            Trip? trip = await _tripService.GetByIdWithImagesAndRoutePointsAsync(_id);
+            Trip? trip = await _tripService.GetByIdWithImagesAndRoutePointsAsync(dto.Id);
             if (trip == null)
             {
                 throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
-            _mapper.Map(_trip, trip);
-            await _imageService.UploadImagesAsync(trip, _images, _webRootPath);
-            trip.RoutePoints.Clear();
-            _routePointService.ParseAndAddRoutePoints(trip, _routePoints);
+            _mapper.Map(dto, trip);
+            await _imageService.UploadImagesAsync(trip, dto.ImagesAsFiles, _env.WebRootPath);
             await _tripService.UpdateAsync(trip);
         }
     }

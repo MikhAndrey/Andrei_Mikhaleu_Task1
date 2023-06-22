@@ -31,6 +31,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         private readonly DeleteTripCommandAsync _deleteTripCommand;
 
+        private readonly EditTripCommandAsync _editTripCommand;
+
+        private readonly EditPastTripCommandAsync _editPastTripCommand;
+
         public TripsController(
             ICommentService service,
             IRoutePointService routePointService,
@@ -40,7 +44,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             IWebHostEnvironment environment,
             IMapper mapper,
             CreateTripCommandAsync createTripCommand,
-            DeleteTripCommandAsync deleteTripCommand
+            DeleteTripCommandAsync deleteTripCommand,
+            EditTripCommandAsync editTripCommand,
+            EditPastTripCommandAsync editPastTripCommand
             )
         {
             _commentService = service;
@@ -52,6 +58,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             _mapper = mapper;
             _createTripCommand = createTripCommand;
             _deleteTripCommand = deleteTripCommand;
+            _editTripCommand = editTripCommand;
+            _editPastTripCommand = editPastTripCommand;
         }
 
         [Authorize]
@@ -81,7 +89,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 					return NotFound(ex.Message);
 				}
 			}
-            return View(trip);
+			return View(trip);
         }
 
         [Authorize]
@@ -194,14 +202,13 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         [HttpPut]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EditTripDTO trip, List<IFormFile> images, string routePoints)
+        public async Task<IActionResult> Edit(int id, EditTripDTO trip)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await new EditTripCommandAsync(trip, id, images, _routePointService, _imageService,
-                    _tripService, _environment.WebRootPath, routePoints, _mapper).ExecuteAsync();
+                    await _editTripCommand.ExecuteAsync(trip);
                 }
                 catch (EntityNotFoundException ex)
                 {
@@ -214,14 +221,13 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         [HttpPut]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPast(int id, EditPastTripDTO trip, List<IFormFile> images)
+        public async Task<IActionResult> EditPast(int id, EditPastTripDTO trip)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await new EditPastTripCommandAsync(trip, id, images, _imageService,
-                    _tripService, _environment.WebRootPath, _mapper).ExecuteAsync();
+                    await _editPastTripCommand.ExecuteAsync(trip);
                 }
                 catch (EntityNotFoundException ex)
                 {

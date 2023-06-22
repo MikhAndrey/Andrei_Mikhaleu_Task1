@@ -5,7 +5,7 @@ namespace TripsServiceBLL.Interfaces
 {
     public interface IImageService
     {
-        Task UploadImagesAsync(Trip trip, List<IFormFile> images, string webRootPath);
+        Task UploadImagesAsync(Trip trip, List<IFormFile>? images, string webRootPath);
 
         Task DeleteByIdAsync(int imageId, int tripId, int userId, string webRootPath);
 

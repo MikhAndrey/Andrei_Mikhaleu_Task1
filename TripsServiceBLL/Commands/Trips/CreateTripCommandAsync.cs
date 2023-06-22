@@ -53,7 +53,7 @@ namespace TripsServiceBLL.Commands.Trips
             Trip trip = _mapper.Map<Trip>(dto);
             trip.UserId = userId;
             await _tripService.AddAsync(trip);
-            await _imageService.UploadImagesAsync(trip, dto.Images, _env.WebRootPath);
+            await _imageService.UploadImagesAsync(trip, dto.ImagesAsFiles, _env.WebRootPath);
             await _tripService.UpdateAsync(trip);
         }
     }

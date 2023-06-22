@@ -108,7 +108,8 @@ namespace TripsServiceBLL.Services
                     _unitOfWork.RoutePoints.Delete(routePoint);
                 }
 
-                _unitOfWork.Feedbacks.Delete(trip.Feedback);
+                if (trip.Feedback != null)
+                    _unitOfWork.Feedbacks.Delete(trip.Feedback);
                 _unitOfWork.Trips.Delete(trip);
                 await _unitOfWork.SaveAsync();
                 transaction.Commit();

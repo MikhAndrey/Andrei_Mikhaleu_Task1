@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 using TripsServiceBLL.DTO.Images;
 using TripsServiceBLL.Interfaces;
 
@@ -18,5 +19,7 @@ namespace TripsServiceBLL.DTO.Trips
         public int Id { get; set; }
 
         public int UserId { get; set; }
+
+        public List<IFormFile>? ImagesAsFiles { get; set; }
     }
 }

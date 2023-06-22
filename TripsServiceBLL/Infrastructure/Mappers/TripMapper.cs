@@ -22,13 +22,12 @@ namespace TripsServiceBLL.Infrastructure.Mappers
                 (src => src.StartTime.AddSeconds(-src.StartTimeZoneOffset)))
                 .ForMember(trip => trip.EndTime, opt => opt.MapFrom
                 (src => src.EndTime.AddSeconds(-src.FinishTimeZoneOffset)))
-                .ForMember(trip => trip.RoutePoints, opt => opt.MapFrom(src => JsonSerializer.Deserialize<List<RoutePoint>>(src.RoutePoints, null as JsonSerializerOptions)))
+                .ForMember(trip => trip.RoutePoints, opt => opt.MapFrom(src => JsonSerializer.Deserialize<List<RoutePoint>>(src.RoutePointsAsString, null as JsonSerializerOptions)))
                 .ForMember(trip => trip.Images, opt => opt.Ignore());
             CreateMap<EditTripDTO, Trip>()
                 .IncludeBase<CreateTripDTO, Trip>()
                 .ForMember(trip => trip.Id, opt => opt.Ignore())
-                .ForMember(trip => trip.UserId, opt => opt.Ignore())
-                .ForMember(trip => trip.Images, opt => opt.Ignore());
+                .ForMember(trip => trip.UserId, opt => opt.Ignore());
             CreateMap<Trip, EditTripDTO>()
                 .ForMember(dto => dto.StartTime, opt => opt.MapFrom(src => src.StartTime.AddSeconds(src.StartTimeZoneOffset)))
                 .ForMember(dto => dto.EndTime, opt => opt.MapFrom(src => src.EndTime.AddSeconds(src.FinishTimeZoneOffset)));

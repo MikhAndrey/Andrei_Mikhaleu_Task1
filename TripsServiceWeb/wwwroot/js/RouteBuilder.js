@@ -158,7 +158,7 @@ function storeRoutePoints() {
             Latitude: marker.marker.position.lat()
         };
     });
-    $("input[name='routePoints']").val(JSON.stringify(routePoints));
+    $("input[name='RoutePointsAsString']").val(JSON.stringify(routePoints));
 }
 
 function storeDistance(distance) {
