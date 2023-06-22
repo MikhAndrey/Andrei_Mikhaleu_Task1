@@ -10,12 +10,12 @@
         Task ExecuteAsync(T model);
     }
 
-	public interface ICommandAsync<T, TResult> where T : class where TResult : class
-	{
-		Task<T> ExecuteAsync(TResult model);
-	}
+    public interface ICommandAsync<T, TResult> where T : class where TResult : class
+    {
+        Task<T> ExecuteAsync(TResult model);
+    }
 
-	public interface ICommand<T> where T : class
+    public interface ICommand<T> where T : class
     {
         T Execute();
     }

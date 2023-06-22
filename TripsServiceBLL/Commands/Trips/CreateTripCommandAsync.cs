@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using TripsServiceBLL.Helpers;
 using TripsServiceBLL.DTO.Trips;
+using TripsServiceBLL.Helpers;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
@@ -25,9 +25,9 @@ namespace TripsServiceBLL.Commands.Trips
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CreateTripCommandAsync(
-            IImageService imageService,  
-            ITripService tripService,  
-            IUserService userService,  
+            IImageService imageService,
+            ITripService tripService,
+            IUserService userService,
             IMapper mapper,
             IWebHostEnvironment env,
             IHttpContextAccessor httpContextAccessor
@@ -43,8 +43,8 @@ namespace TripsServiceBLL.Commands.Trips
 
         public async Task ExecuteAsync(CreateTripDTO dto)
         {
-			int userId = UserHelper.GetUserIdFromClaims(_httpContextAccessor.HttpContext.User.Claims);
-			bool userExists = _userService.Exists(userId);
+            int userId = UserHelper.GetUserIdFromClaims(_httpContextAccessor.HttpContext.User.Claims);
+            bool userExists = _userService.Exists(userId);
             if (!userExists)
             {
                 throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));

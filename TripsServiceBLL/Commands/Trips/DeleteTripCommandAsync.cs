@@ -13,8 +13,8 @@ namespace TripsServiceBLL.Commands.Trips
         private readonly IWebHostEnvironment _env;
 
         public DeleteTripCommandAsync(
-            ITripService tripService, 
-            IImageService imageService, 
+            ITripService tripService,
+            IImageService imageService,
             IWebHostEnvironment env)
         {
             _tripService = tripService;

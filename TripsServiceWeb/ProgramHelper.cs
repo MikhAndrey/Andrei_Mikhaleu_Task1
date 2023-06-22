@@ -33,15 +33,15 @@ namespace Andrei_Mikhaleu_Task1
             services.AddScoped<IFeedbackService, FeedbackService>();
         }
 
-		public static void AddCommands(IServiceCollection services)
-		{
-			services.AddScoped<CreateTripCommandAsync>();
+        public static void AddCommands(IServiceCollection services)
+        {
+            services.AddScoped<CreateTripCommandAsync>();
             services.AddScoped<DeleteTripCommandAsync>();
             services.AddScoped<EditTripCommandAsync>();
             services.AddScoped<EditPastTripCommandAsync>();
-		}
+        }
 
-		public static void AddAuthentication(IServiceCollection services)
+        public static void AddAuthentication(IServiceCollection services)
         {
             services.AddAuthentication(options =>
             {

@@ -1,10 +1,10 @@
-﻿using TripsServiceBLL.Helpers;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.DTO.Trips;
+using TripsServiceBLL.Helpers;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 
@@ -77,19 +77,19 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 try
                 {
-					await _createTripCommand.ExecuteAsync(trip);
-					return RedirectToAction(nameof(Index));
-				}
+                    await _createTripCommand.ExecuteAsync(trip);
+                    return RedirectToAction(nameof(Index));
+                }
                 catch (ArgumentNullException)
                 {
                     return RedirectToAction("Login", "Account");
                 }
-				catch (EntityNotFoundException ex)
-				{
-					return NotFound(ex.Message);
-				}
-			}
-			return View(trip);
+                catch (EntityNotFoundException ex)
+                {
+                    return NotFound(ex.Message);
+                }
+            }
+            return View(trip);
         }
 
         [Authorize]

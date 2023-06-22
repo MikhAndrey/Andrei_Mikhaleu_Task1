@@ -90,7 +90,7 @@ namespace TripsServiceBLL.Services
                 throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
-            using var transaction = _unitOfWork.BeginTransaction();
+            using Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction transaction = _unitOfWork.BeginTransaction();
             try
             {
                 foreach (Image image in trip.Images)
@@ -109,7 +109,10 @@ namespace TripsServiceBLL.Services
                 }
 
                 if (trip.Feedback != null)
+                {
                     _unitOfWork.Feedbacks.Delete(trip.Feedback);
+                }
+
                 _unitOfWork.Trips.Delete(trip);
                 await _unitOfWork.SaveAsync();
                 transaction.Commit();
