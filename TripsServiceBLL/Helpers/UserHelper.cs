@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using TripsServiceBLL.Utils;
 
-namespace Andrei_Mikhaleu_Task1.Helpers
+namespace TripsServiceBLL.Helpers
 {
     public static class UserHelper
     {

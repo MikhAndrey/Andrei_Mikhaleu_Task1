@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Text.Json;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
@@ -20,7 +21,9 @@ namespace TripsServiceBLL.Infrastructure.Mappers
                 .ForMember(trip => trip.StartTime, opt => opt.MapFrom
                 (src => src.StartTime.AddSeconds(-src.StartTimeZoneOffset)))
                 .ForMember(trip => trip.EndTime, opt => opt.MapFrom
-                (src => src.EndTime.AddSeconds(-src.FinishTimeZoneOffset)));
+                (src => src.EndTime.AddSeconds(-src.FinishTimeZoneOffset)))
+                .ForMember(trip => trip.RoutePoints, opt => opt.MapFrom(src => JsonSerializer.Deserialize<List<RoutePoint>>(src.RoutePoints, null as JsonSerializerOptions)))
+                .ForMember(trip => trip.Images, opt => opt.Ignore());
             CreateMap<EditTripDTO, Trip>()
                 .IncludeBase<CreateTripDTO, Trip>()
                 .ForMember(trip => trip.Id, opt => opt.Ignore())

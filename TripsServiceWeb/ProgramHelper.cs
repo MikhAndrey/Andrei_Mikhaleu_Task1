@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
+using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Services;
 using TripsServiceBLL.Utils;
@@ -32,7 +33,12 @@ namespace Andrei_Mikhaleu_Task1
             services.AddScoped<IFeedbackService, FeedbackService>();
         }
 
-        public static void AddAuthentication(IServiceCollection services)
+		public static void AddCommands(IServiceCollection services)
+		{
+			services.AddScoped<CreateTripCommandAsync>();
+		}
+
+		public static void AddAuthentication(IServiceCollection services)
         {
             services.AddAuthentication(options =>
             {

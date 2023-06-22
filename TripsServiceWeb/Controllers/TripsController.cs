@@ -1,4 +1,4 @@
-﻿using Andrei_Mikhaleu_Task1.Helpers;
+﻿using TripsServiceBLL.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +27,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         private readonly IMapper _mapper;
 
+        private readonly CreateTripCommandAsync _createTripCommand;
+
         public TripsController(
             ICommentService service,
             IRoutePointService routePointService,
@@ -34,7 +36,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             ITripService tripService,
             IUserService userService,
             IWebHostEnvironment environment,
-            IMapper mapper
+            IMapper mapper,
+            CreateTripCommandAsync createTripCommand
             )
         {
             _commentService = service;
@@ -44,6 +47,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             _userService = userService;
             _environment = environment;
             _mapper = mapper;
+            _createTripCommand = createTripCommand;
         }
 
         [Authorize]
@@ -55,23 +59,24 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateTripDTO trip, List<IFormFile> images, string routePoints)
+        public async Task<IActionResult> Create(CreateTripDTO trip)
         {
             if (ModelState.IsValid)
             {
-                int userId;
                 try
                 {
-                    userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-                }
+					await _createTripCommand.ExecuteAsync(trip);
+					return RedirectToAction(nameof(Index));
+				}
                 catch (ArgumentNullException)
                 {
                     return RedirectToAction("Login", "Account");
                 }
-                await new CreateTripCommandAsync(trip, images, _routePointService, _imageService,
-                    _tripService, _userService, _mapper, _environment.WebRootPath, routePoints, userId).ExecuteAsync();
-                return RedirectToAction(nameof(Index));
-            }
+				catch (EntityNotFoundException ex)
+				{
+					return NotFound(ex.Message);
+				}
+			}
             return View(trip);
         }
 

@@ -35,7 +35,7 @@ function sendDataHandler(shouldDataBePosted) {
         if ($(this).valid()) {
             const formData = new FormData(this);
             for (const file of files) {
-                formData.append('images', file, file.name);
+                formData.append('Images', file, file.name);
             }
             fetch(this.action, {
                 method: shouldDataBePosted ? "POST" : "PUT",

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.DTO.Trips
@@ -25,5 +26,9 @@ namespace TripsServiceBLL.DTO.Trips
         public int FinishTimeZoneOffset { get; set; }
 
         public int? DriverId { get; set; }
+
+        public string RoutePoints { get; set; }
+
+        public List<IFormFile> Images { get; set; }
     }
 }

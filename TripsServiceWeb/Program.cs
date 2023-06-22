@@ -5,9 +5,10 @@ using TripsServiceBLL.Infrastructure.Mappers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-ProgramHelper.AddServices(builder.Services);
-
 builder.Services.AddHttpContextAccessor();
+
+ProgramHelper.AddServices(builder.Services);
+ProgramHelper.AddCommands(builder.Services);
 
 builder.Services.AddControllersWithViews();
 
