@@ -22,11 +22,6 @@ namespace TripsServiceBLL.Services
             _mapper = mapper;
         }
 
-        public async Task<Trip?> GetByIdWithImagesAsync(int id)
-        {
-            return await _unitOfWork.Trips.GetByIdWithImagesAsync(id);
-        }
-
         public async Task<Trip?> GetByIdAsync(int id)
         {
             return await _unitOfWork.Trips.GetByIdAsync(id);

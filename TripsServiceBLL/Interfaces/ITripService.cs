@@ -7,8 +7,6 @@ namespace TripsServiceBLL.Interfaces
 {
     public interface ITripService
     {
-        Task<Trip?> GetByIdWithImagesAsync(int id);
-
         Task<Trip?> GetByIdAsync(int id);
 
         void SetNewTimeForStartingTrip(Trip trip);

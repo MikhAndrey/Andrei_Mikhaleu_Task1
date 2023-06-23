@@ -22,7 +22,7 @@ namespace TripsServiceBLL.Services
 
         public IEnumerable<ReadDriverDTO> GetDriversOverall()
         {
-            IEnumerable<Driver> drivers = _unitOfWork.Drivers.GetAll().AsEnumerable();
+            IEnumerable<Driver> drivers = _unitOfWork.Drivers.GetAll();
             return drivers.Select(_mapper.Map<Driver, ReadDriverDTO>)
                 .OrderByDescending(el => el.AverageRating);
         }

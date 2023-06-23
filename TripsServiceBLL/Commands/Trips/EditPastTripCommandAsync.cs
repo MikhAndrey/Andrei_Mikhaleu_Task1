@@ -33,7 +33,7 @@ namespace TripsServiceBLL.Commands.Trips
 
         public async Task ExecuteAsync(EditPastTripDTO dto)
         {
-            Trip? trip = await _tripService.GetByIdWithImagesAsync(dto.Id);
+            Trip? trip = await _tripService.GetByIdAsync(dto.Id);
             if (trip == null)
             {
                 throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));

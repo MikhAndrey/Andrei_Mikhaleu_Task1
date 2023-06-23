@@ -79,7 +79,7 @@ namespace Andrei_Mikhaleu_Task1
 
         public static void AddUnauthorizedStateRedirection(WebApplication app)
         {
-            app.UseStatusCodePages(context =>
+            app.UseStatusCodePages(async context =>
             {
                 HttpRequest request = context.HttpContext.Request;
                 HttpResponse response = context.HttpContext.Response;

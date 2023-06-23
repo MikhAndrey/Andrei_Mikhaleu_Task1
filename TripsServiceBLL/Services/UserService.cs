@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,9 +16,12 @@ namespace TripsServiceBLL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<User?> GetByUserNameAsync(string userName)
@@ -66,14 +70,7 @@ namespace TripsServiceBLL.Services
                 throw new ValidationException(Constants.GetExistingCredentialMessage("email"), "Email");
             }
 
-            User newUser = new()
-            {
-                UserName = user.UserName,
-                Password = Encryptor.Encrypt(user.Password),
-                Email = user.Email
-            };
-
-            await AddAsync(newUser);
+            await AddAsync(_mapper.Map<User>(user));
         }
 
         public async Task<string> GetJWTTokenAsync(UserLoginDTO user)

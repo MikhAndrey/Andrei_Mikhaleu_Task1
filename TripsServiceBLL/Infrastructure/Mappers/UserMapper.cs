@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TripsServiceBLL.DTO.Users;
+using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Infrastructure.Mappers
@@ -10,6 +11,8 @@ namespace TripsServiceBLL.Infrastructure.Mappers
         {
             CreateMap<User, UserDTO>();
             CreateMap<UserSignupDTO, UserLoginDTO>();
+            CreateMap<UserSignupDTO, User>()
+                .ForMember(user => user.Password, opt => opt.MapFrom(src => Encryptor.Encrypt(src.Password)));
         }
     }
 }
