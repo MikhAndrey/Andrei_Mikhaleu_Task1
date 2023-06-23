@@ -7,5 +7,7 @@ namespace TripsServiceBLL.Interfaces
         Task AddCommentAsync(CreateCommentDTO comment, int userId);
 
         Task DeleteCommentAsync(int commentId);
+
+        Task DeleteByTripIdAsync(int tripId);
     }
 }

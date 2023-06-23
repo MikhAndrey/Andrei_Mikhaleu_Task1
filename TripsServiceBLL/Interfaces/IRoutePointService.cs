@@ -1,13 +1,16 @@
 ﻿using TripsServiceBLL.DTO.RoutePoints;
+using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Interfaces
 {
     public interface IRoutePointService
     {
-        Task ParseAndAddRoutePoints(int tripId, string routePoints);
+        List<RoutePoint>? ParseRoutePointsFromString(string routePoints);
+
+        Task AddTripRoutePointsAsync(int tripId, List<RoutePoint>? routePoints);
 
         IQueryable<RoutePointCoordinatesDTO> GetRoutePointsByYear(int year, int userId);
 
-        void DeleteByTripId(int tripId);
+        Task DeleteByTripIdAsync(int tripId);
     }
 }

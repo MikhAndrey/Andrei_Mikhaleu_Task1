@@ -38,5 +38,7 @@
         }
 
         public const string DriversFolderName = "drivers";
+
+        public const string DefaultDatabaseExceptionMessage = "Oops, something went wrong. Please, try again";
     }
 }

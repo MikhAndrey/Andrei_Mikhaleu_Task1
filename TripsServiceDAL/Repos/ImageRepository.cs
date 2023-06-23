@@ -8,5 +8,9 @@ namespace TripsServiceDAL.Repos
     {
         public ImageRepository(TripsDBContext context) : base(context) { }
 
+        public IQueryable<Image> GetByTripId(int tripId)
+        {
+            return _dbSet.Where(i => i.TripId == tripId);
+        }
     }
 }

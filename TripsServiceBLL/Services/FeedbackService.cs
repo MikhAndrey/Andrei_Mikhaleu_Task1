@@ -31,5 +31,15 @@ namespace TripsServiceBLL.Services
             await _unitOfWork.Feedbacks.AddAsync(_mapper.Map<Feedback>(feedback));
             await _unitOfWork.SaveAsync();
         }
+
+        public async Task DeleteByTripIdAsync(int tripId)
+        {
+            Feedback? feedback = await _unitOfWork.Feedbacks.GetByTripId(tripId);
+            if (feedback != null)
+            {
+                _unitOfWork.Feedbacks.Delete(feedback);
+                await _unitOfWork.SaveAsync();
+            }
+        }
     }
 }

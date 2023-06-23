@@ -1,5 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using TripsServiceBLL.Helpers;
+using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Utils;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Trips
 {
@@ -10,22 +15,70 @@ namespace TripsServiceBLL.Commands.Trips
 
         private readonly IImageService _imageService;
 
+        private readonly IRoutePointService _routePointService;
+
+        private readonly ICommentService _commentService;
+
+        private readonly IFeedbackService _feedbackService;
+
+        private readonly IUserService _userService;
+
         private readonly IWebHostEnvironment _env;
+
+        private readonly IUnitOfWork _unitOfWork;
+
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public DeleteTripCommandAsync(
             ITripService tripService,
             IImageService imageService,
-            IWebHostEnvironment env)
+            IRoutePointService routePointService,
+            ICommentService commentService,
+            IFeedbackService feedbackService,
+            IUserService userService,
+            IWebHostEnvironment env,
+            IUnitOfWork unitOfWork,
+            IHttpContextAccessor httpContextAccessor)
         {
             _tripService = tripService;
             _imageService = imageService;
+            _routePointService = routePointService;
+            _commentService = commentService;
+            _feedbackService = feedbackService;
+            _userService = userService;
             _env = env;
+            _unitOfWork = unitOfWork;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task ExecuteAsync(int id)
         {
-            await _imageService.DeleteTripImages(id, _env.WebRootPath);
-            await _tripService.DeleteAsync(id);
+            int userId = UserHelper.GetUserIdFromClaims(_httpContextAccessor.HttpContext.User.Claims);
+            bool userExists = _userService.Exists(userId);
+            if (!userExists)
+            {
+                throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
+            }
+
+            using (Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction transaction = _unitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    await _imageService.DeleteByTripIdAsync(id);
+                    await _routePointService.DeleteByTripIdAsync(id);
+                    await _commentService.DeleteByTripIdAsync(id);
+                    await _feedbackService.DeleteByTripIdAsync(id);
+                    await _tripService.DeleteAsync(id);
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw new DbOperationException();
+                }
+            }
+
+            _imageService.DeleteTripImagesFiles(id, userId, _env.WebRootPath);
         }
     }
 }

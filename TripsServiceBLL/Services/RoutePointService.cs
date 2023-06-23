@@ -15,22 +15,26 @@ namespace TripsServiceBLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public void DeleteByTripId(int tripId)
+        public async Task DeleteByTripIdAsync(int tripId)
         {
             IQueryable<RoutePoint> routePointsToDelete = _unitOfWork.RoutePoints.GetRoutePointsByTripId(tripId);
             foreach (RoutePoint routePoint in routePointsToDelete)
             {
                 _unitOfWork.RoutePoints.Delete(routePoint);
             }
+            await _unitOfWork.SaveAsync();
         }
 
-        public async Task ParseAndAddRoutePoints(int tripId, string routePoints)
+        public List<RoutePoint>? ParseRoutePointsFromString(string routePoints)
         {
-            List<RoutePoint>? parsedRoutePoints = JsonSerializer.Deserialize<List<RoutePoint>>(routePoints);
+            return JsonSerializer.Deserialize<List<RoutePoint>>(routePoints);
+        }
 
-            if (parsedRoutePoints != null)
+        public async Task AddTripRoutePointsAsync(int tripId, List<RoutePoint>? routePoints)
+        {
+            if (routePoints != null)
             {
-                foreach (RoutePoint routePoint in parsedRoutePoints)
+                foreach (RoutePoint routePoint in routePoints)
                 {
                     routePoint.TripId = tripId;
                     await _unitOfWork.RoutePoints.AddAsync(routePoint);

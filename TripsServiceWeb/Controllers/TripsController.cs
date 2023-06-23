@@ -88,6 +88,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 {
                     return NotFound(ex.Message);
                 }
+                catch (DbOperationException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
             return View(trip);
         }
@@ -167,6 +171,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
             {
                 return NotFound(ex.Message);
             }
+            catch (DbOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok();
         }
 
@@ -214,6 +222,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 {
                     return NotFound(ex.Message);
                 }
+                catch (DbOperationException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(trip);
@@ -232,6 +244,10 @@ namespace Andrei_Mikhaleu_Task1.Controllers
                 catch (EntityNotFoundException ex)
                 {
                     return NotFound(ex.Message);
+                }
+                catch (DbOperationException ex)
+                {
+                    return BadRequest(ex.Message);
                 }
                 return RedirectToAction(nameof(Index));
             }

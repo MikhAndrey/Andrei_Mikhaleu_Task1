@@ -79,43 +79,14 @@ namespace TripsServiceBLL.Services
 
         public async Task DeleteAsync(int id)
         {
-            Trip? trip = await _unitOfWork.Trips.GetByIdForDeleteAsync(id);
+            Trip? trip = await _unitOfWork.Trips.GetByIdAsync(id);
             if (trip == null)
             {
                 throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
-            using Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction transaction = _unitOfWork.BeginTransaction();
-            try
-            {
-                foreach (Image image in trip.Images)
-                {
-                    _unitOfWork.Images.Delete(image);
-                }
-
-                foreach (Comment comment in trip.Comments)
-                {
-                    _unitOfWork.Comments.Delete(comment);
-                }
-
-                foreach (RoutePoint routePoint in trip.RoutePoints)
-                {
-                    _unitOfWork.RoutePoints.Delete(routePoint);
-                }
-
-                if (trip.Feedback != null)
-                {
-                    _unitOfWork.Feedbacks.Delete(trip.Feedback);
-                }
-
-                _unitOfWork.Trips.Delete(trip);
-                await _unitOfWork.SaveAsync();
-                transaction.Commit();
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-            }
+            _unitOfWork.Trips.Delete(trip);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task AddAsync(Trip trip)

@@ -52,5 +52,15 @@ namespace TripsServiceBLL.Services
             _unitOfWork.Comments.Delete(commentToDelete);
             await _unitOfWork.SaveAsync();
         }
+
+        public async Task DeleteByTripIdAsync(int tripId)
+        {
+            IQueryable<Comment> commentsToDelete = _unitOfWork.Comments.GetByTripId(tripId);
+            foreach (Comment comment in commentsToDelete)
+            {
+                _unitOfWork.Comments.Delete(comment);
+            }
+            await _unitOfWork.SaveAsync();
+        }
     }
 }
