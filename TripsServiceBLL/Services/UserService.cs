@@ -34,11 +34,6 @@ namespace TripsServiceBLL.Services
             return await _unitOfWork.Users.GetByEmailAsync(email);
         }
 
-        public async Task<User?> GetByIdAsync(int id)
-        {
-            return await _unitOfWork.Users.GetByIdAsync(id);
-        }
-
         public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
         {
             User? userFromDB = await GetByUserNameAsync(user.UserName);
