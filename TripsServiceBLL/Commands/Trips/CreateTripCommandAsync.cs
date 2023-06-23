@@ -18,6 +18,8 @@ namespace TripsServiceBLL.Commands.Trips
 
         private readonly IUserService _userService;
 
+        private readonly IRoutePointService _routePointService;
+
         private readonly IMapper _mapper;
 
         private readonly IWebHostEnvironment _env;
@@ -28,6 +30,7 @@ namespace TripsServiceBLL.Commands.Trips
             IImageService imageService,
             ITripService tripService,
             IUserService userService,
+            IRoutePointService routePointService,
             IMapper mapper,
             IWebHostEnvironment env,
             IHttpContextAccessor httpContextAccessor
@@ -36,6 +39,7 @@ namespace TripsServiceBLL.Commands.Trips
             _imageService = imageService;
             _tripService = tripService;
             _userService = userService;
+            _routePointService = routePointService;
             _mapper = mapper;
             _env = env;
             _httpContextAccessor = httpContextAccessor;
@@ -53,8 +57,8 @@ namespace TripsServiceBLL.Commands.Trips
             Trip trip = _mapper.Map<Trip>(dto);
             trip.UserId = userId;
             await _tripService.AddAsync(trip);
-            await _imageService.UploadImagesAsync(trip, dto.ImagesAsFiles, _env.WebRootPath);
-            await _tripService.UpdateAsync(trip);
+            await _routePointService.ParseAndAddRoutePoints(trip.Id, dto.RoutePointsAsString);
+            await _imageService.UploadImagesAsync(trip.Id, userId, dto.ImagesAsFiles, _env.WebRootPath);
         }
     }
 }

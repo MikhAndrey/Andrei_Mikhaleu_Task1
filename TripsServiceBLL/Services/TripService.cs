@@ -27,9 +27,9 @@ namespace TripsServiceBLL.Services
             return await _unitOfWork.Trips.GetByIdWithImagesAsync(id);
         }
 
-        public async Task<Trip?> GetByIdWithImagesAndRoutePointsAsync(int id)
+        public async Task<Trip?> GetByIdAsync(int id)
         {
-            return await _unitOfWork.Trips.GetByIdWithImagesAndRoutePointsAsync(id);
+            return await _unitOfWork.Trips.GetByIdAsync(id);
         }
 
         public void SetNewTimeForStartingTrip(Trip trip)

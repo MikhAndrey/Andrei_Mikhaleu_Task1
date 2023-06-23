@@ -6,8 +6,6 @@ namespace TripsServiceDAL.Interfaces
     {
         IQueryable<int> GetYearsOfUserTrips(int userId);
 
-        IQueryable<Trip> GetUserTripsWithUser(int userId);
-
         IQueryable<Trip> GetTripsByUserId(int userId);
 
         IQueryable<Trip> GetTripsByYearAndUserId(int year, int userId);
@@ -23,8 +21,6 @@ namespace TripsServiceDAL.Interfaces
         Task<Trip?> GetByIdForDetailsAsync(int id);
 
         Task<Trip?> GetByIdWithImagesAsync(int id);
-
-        Task<Trip?> GetByIdWithImagesAndRoutePointsAsync(int id);
 
         Task<Trip?> GetByIdForDeleteAsync(int id);
     }

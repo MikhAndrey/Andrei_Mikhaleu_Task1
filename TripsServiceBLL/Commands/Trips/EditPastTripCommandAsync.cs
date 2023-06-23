@@ -40,7 +40,7 @@ namespace TripsServiceBLL.Commands.Trips
             }
 
             _mapper.Map(dto, trip);
-            await _imageService.UploadImagesAsync(trip, dto.ImagesAsFiles, _env.WebRootPath);
+            await _imageService.UploadImagesAsync(trip.Id, trip.UserId, dto.ImagesAsFiles, _env.WebRootPath);
             await _tripService.UpdateAsync(trip);
         }
     }

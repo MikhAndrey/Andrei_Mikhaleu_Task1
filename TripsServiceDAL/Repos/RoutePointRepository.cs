@@ -26,9 +26,7 @@ namespace TripsServiceDAL.Repos
 
         public IQueryable<RoutePoint> GetRoutePointsByTripId(int tripId)
         {
-            return _dbSet
-                .Include(rp => rp.Trip)
-                .Where(rp => rp.TripId == tripId);
+            return _dbSet.Where(rp => rp.TripId == tripId);
         }
     }
 }

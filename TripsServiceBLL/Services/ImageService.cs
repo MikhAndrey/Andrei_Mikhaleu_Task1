@@ -16,7 +16,7 @@ namespace TripsServiceBLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task UploadImagesAsync(Trip trip, List<IFormFile>? images, string webRootPath)
+        public async Task UploadImagesAsync(int tripId, int userId, List<IFormFile>? images, string webRootPath)
         {
             if (images != null)
             {
@@ -26,13 +26,13 @@ namespace TripsServiceBLL.Services
                     {
                         string? extension = Path.GetExtension(image.FileName);
                         string newFileName = $"{Guid.NewGuid()}{extension}";
-                        string userFilePath = Path.Combine(webRootPath, Constants.ImagesFolderName, trip.UserId.ToString());
+                        string userFilePath = Path.Combine(webRootPath, Constants.ImagesFolderName, userId.ToString());
                         if (!Directory.Exists(userFilePath))
                         {
                             Directory.CreateDirectory(userFilePath);
                         }
 
-                        string tripFilePath = Path.Combine(userFilePath, trip.Id.ToString());
+                        string tripFilePath = Path.Combine(userFilePath, tripId.ToString());
                         if (!Directory.Exists(tripFilePath))
                         {
                             Directory.CreateDirectory(tripFilePath);
@@ -43,12 +43,14 @@ namespace TripsServiceBLL.Services
                         {
                             await image.CopyToAsync(fileStream);
                         }
-                        trip.Images.Add(new Image
+                        await _unitOfWork.Images.AddAsync(new Image
                         {
+                            TripId = tripId,
                             Link = newFileName
                         });
                     }
                 }
+                await _unitOfWork.SaveAsync();
             }
         }
 

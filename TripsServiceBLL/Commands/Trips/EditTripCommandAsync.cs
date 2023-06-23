@@ -14,6 +14,8 @@ namespace TripsServiceBLL.Commands.Trips
 
         private readonly ITripService _tripService;
 
+        private readonly IRoutePointService _routePointService;
+
         private readonly IWebHostEnvironment _env;
 
         private readonly IMapper _mapper;
@@ -21,26 +23,30 @@ namespace TripsServiceBLL.Commands.Trips
         public EditTripCommandAsync(
             IImageService imageService,
             ITripService tripService,
+            IRoutePointService routePointService,
             IWebHostEnvironment env,
             IMapper mapper
         )
         {
             _imageService = imageService;
             _tripService = tripService;
+            _routePointService = routePointService;
             _env = env;
             _mapper = mapper;
         }
 
         public async Task ExecuteAsync(EditTripDTO dto)
         {
-            Trip? trip = await _tripService.GetByIdWithImagesAndRoutePointsAsync(dto.Id);
+            Trip? trip = await _tripService.GetByIdAsync(dto.Id);
             if (trip == null)
             {
                 throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
             }
 
             _mapper.Map(dto, trip);
-            await _imageService.UploadImagesAsync(trip, dto.ImagesAsFiles, _env.WebRootPath);
+            _routePointService.DeleteByTripId(trip.Id);
+            await _routePointService.ParseAndAddRoutePoints(trip.Id, dto.RoutePointsAsString);
+            await _imageService.UploadImagesAsync(trip.Id, trip.UserId, dto.ImagesAsFiles, _env.WebRootPath);
             await _tripService.UpdateAsync(trip);
         }
     }

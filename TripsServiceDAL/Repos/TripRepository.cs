@@ -61,23 +61,10 @@ namespace TripsServiceDAL.Repos
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task<Trip?> GetByIdWithImagesAndRoutePointsAsync(int id)
-        {
-            return await _dbSet
-                .Include(t => t.Images)
-                .Include(t => t.RoutePoints)
-                .FirstOrDefaultAsync(t => t.Id == id);
-        }
-
         public IQueryable<int> GetYearsOfUserTrips(int userId)
         {
             return _dbSet.Include(t => t.User).Where(t => t.UserId == userId)
                 .Select(t => t.StartTime.Year).Distinct().OrderByDescending(el => el);
-        }
-
-        public IQueryable<Trip> GetUserTripsWithUser(int userId)
-        {
-            return _dbSet.Where(t => t.UserId == userId).Include(t => t.User);
         }
 
         public IQueryable<Trip> GetTripsByUserId(int userId)
