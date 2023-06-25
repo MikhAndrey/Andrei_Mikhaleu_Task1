@@ -40,5 +40,9 @@
         public const string DriversFolderName = "drivers";
 
         public const string DefaultDatabaseExceptionMessage = "Oops, something went wrong. Please, try again";
+
+        public const double DaysInYear = 365.25;
+
+        public const double DaysInMonth = 30.4375;
     }
 }
