@@ -4,11 +4,11 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Infrastructure.Mappers
 {
-    public class CommentMapper : Profile
-    {
-        public CommentMapper()
-        {
-            CreateMap<Comment, CommentDTO>();
-        }
-    }
+	public class CommentMapper : Profile
+	{
+		public CommentMapper()
+		{
+			CreateMap<Comment, CommentDTO>();
+		}
+	}
 }

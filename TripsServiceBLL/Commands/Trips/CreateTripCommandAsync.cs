@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Storage;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Helpers;
 using TripsServiceBLL.Infrastructure.Exceptions;
@@ -66,7 +67,7 @@ namespace TripsServiceBLL.Commands.Trips
 
             List<string> fileNames = _imageService.GenerateImagesFileNames(dto.ImagesAsFiles);
 
-            using (Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction transaction = _unitOfWork.BeginTransaction())
+            using (IDbContextTransaction transaction = _unitOfWork.BeginTransaction())
             {
                 try
                 {

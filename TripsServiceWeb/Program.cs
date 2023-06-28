@@ -19,13 +19,13 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 MapperConfiguration mapperConfig = new(mc =>
 {
-    mc.AddProfile(new TripMapper());
-    mc.AddProfile(new CommentMapper());
-    mc.AddProfile(new DriverMapper());
-    mc.AddProfile(new FeedbackMapper());
-    mc.AddProfile(new ImageMapper());
-    mc.AddProfile(new RoutePointMapper());
-    mc.AddProfile(new UserMapper());
+	mc.AddProfile(new TripMapper());
+	mc.AddProfile(new CommentMapper());
+	mc.AddProfile(new DriverMapper());
+	mc.AddProfile(new FeedbackMapper());
+	mc.AddProfile(new ImageMapper());
+	mc.AddProfile(new RoutePointMapper());
+	mc.AddProfile(new UserMapper());
 });
 
 IMapper mapper = mapperConfig.CreateMapper();
@@ -35,8 +35,8 @@ WebApplication app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+	app.UseExceptionHandler("/Home/Error");
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -53,7 +53,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+	name: "default",
+	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

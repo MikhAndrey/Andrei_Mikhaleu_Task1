@@ -3,20 +3,20 @@ using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Entities
 {
-    public class Driver : IIdentifiable
-    {
-        public int Id { get; set; }
+	public class Driver : IIdentifiable
+	{
+		public int Id { get; set; }
 
-        public string Name { get; set; }
+		public string Name { get; set; }
 
-        public List<DriverPhoto> Photos { get; set; }
+		public List<DriverPhoto> Photos { get; set; }
 
-        public int Experience { get; set; }
+		public int Experience { get; set; }
 
-        public List<Trip> Trips { get; set; }
+		public List<Trip> Trips { get; set; }
 
-        [NotMapped]
-        public double AverageRating => Math.Round(Trips.Where(t => t.Feedback != null)
-               .Average(t => (double?)t.Feedback.Rating) ?? 0, 1);
-    }
+		[NotMapped]
+		public double AverageRating => Math.Round(Trips.Where(t => t.Feedback != null)
+			   .Average(t => (double?)t.Feedback.Rating) ?? 0, 1);
+	}
 }
