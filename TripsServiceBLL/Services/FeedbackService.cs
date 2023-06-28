@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using TripsServiceBLL.DTO.Feedbacks;
-using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
 

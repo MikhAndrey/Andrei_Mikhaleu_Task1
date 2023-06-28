@@ -37,8 +37,8 @@ namespace TripsServiceBLL.Services
 		public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
 		{
 			User? userFromDB = await GetByUserNameAsync(user.UserName);
-			return (userFromDB != null && userFromDB.Password == UtilEncryptor.Encrypt(user.Password)) 
-				? userFromDB.Id 
+			return (userFromDB != null && userFromDB.Password == UtilEncryptor.Encrypt(user.Password))
+				? userFromDB.Id
 				: null;
 		}
 

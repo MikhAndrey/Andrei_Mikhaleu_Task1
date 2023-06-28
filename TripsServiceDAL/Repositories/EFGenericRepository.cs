@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TripsServiceDAL.Interfaces;
 using TripsServiceDAL.Infrastructure.Exceptions;
+using TripsServiceDAL.Interfaces;
 using TripsServiceDAL.Utils;
 
 namespace TripsServiceDAL.Repos
@@ -44,9 +44,9 @@ namespace TripsServiceDAL.Repos
 			return _dbSet.Any(item => item.Id == id);
 		}
 
-		public void ThrowErrorIfNotExists(int id) 
+		public void ThrowErrorIfNotExists(int id)
 		{
-			if (!Exists(id)) 
+			if (!Exists(id))
 			{
 				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage<TEntity>()());
 			}

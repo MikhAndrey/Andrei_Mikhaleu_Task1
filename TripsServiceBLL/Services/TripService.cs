@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using TripsServiceBLL.DTO.Statistics;
 using TripsServiceBLL.DTO.Trips;
-using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Services
@@ -114,7 +114,10 @@ namespace TripsServiceBLL.Services
 		{
 			Trip? trip = await _unitOfWork.Trips.GetByIdForEditingAsync(tripId);
 			if (trip == null)
+			{
 				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Trip>()());
+			}
+
 			EditTripDTO dto = _mapper.Map<EditTripDTO>(trip);
 			return dto;
 		}
@@ -123,7 +126,10 @@ namespace TripsServiceBLL.Services
 		{
 			Trip? trip = await _unitOfWork.Trips.GetByIdForMinimalEditingAsync(tripId);
 			if (trip == null)
+			{
 				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Trip>()());
+			}
+
 			EditPastTripDTO dto = _mapper.Map<EditPastTripDTO>(trip);
 			return dto;
 		}
@@ -182,11 +188,11 @@ namespace TripsServiceBLL.Services
 						.Where(t => t.StartTime.Year == year && t.StartTime.Month <= month && t.EndTime.Year == year && t.EndTime.Month >= month)
 						.Select(t =>
 						{
-							DateTime start = t.StartTime <= new DateTime(year, month, 1) 
-								? new DateTime(year, month, 1) 
+							DateTime start = t.StartTime <= new DateTime(year, month, 1)
+								? new DateTime(year, month, 1)
 								: t.StartTime;
-							DateTime end = t.EndTime >= new DateTime(year, month, DateTime.DaysInMonth(year, month)) 
-								? new DateTime(year, month, DateTime.DaysInMonth(year, month)) 
+							DateTime end = t.EndTime >= new DateTime(year, month, DateTime.DaysInMonth(year, month))
+								? new DateTime(year, month, DateTime.DaysInMonth(year, month))
 								: t.EndTime;
 							return (end - start).TotalHours;
 						})

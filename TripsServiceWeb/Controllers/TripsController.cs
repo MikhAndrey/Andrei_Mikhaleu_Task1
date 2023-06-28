@@ -5,9 +5,9 @@ using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Helpers;
-using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
+using TripsServiceDAL.Infrastructure.Exceptions;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

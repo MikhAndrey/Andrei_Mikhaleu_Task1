@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using TripsServiceBLL.DTO.Drivers;
-using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
+using TripsServiceDAL.Infrastructure.Exceptions;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

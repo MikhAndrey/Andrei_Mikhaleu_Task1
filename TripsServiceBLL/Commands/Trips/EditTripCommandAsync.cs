@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore.Storage;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Infrastructure.Exceptions;
-using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
-using TripsServiceDAL.Utils;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceDAL.Interfaces;
+using TripsServiceDAL.Utils;
 
 namespace TripsServiceBLL.Commands.Trips
 {

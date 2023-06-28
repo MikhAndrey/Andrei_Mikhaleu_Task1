@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.DTO.Feedbacks;
-using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
+using TripsServiceDAL.Infrastructure.Exceptions;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {

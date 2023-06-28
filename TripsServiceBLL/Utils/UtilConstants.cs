@@ -12,7 +12,7 @@
 
 		public const string ImagesFolderName = "images";
 
-		public static UtilDelegates.StringMapperDelegate GetExistingCredentialMessage = 
+		public static UtilDelegates.StringMapperDelegate GetExistingCredentialMessage =
 			(credential) => $"This {credential} is already taken";
 
 		public const double AuthorizationExpirationInDays = 7;

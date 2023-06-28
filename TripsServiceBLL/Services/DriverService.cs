@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using TripsServiceBLL.DTO.Drivers;
-using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
-using TripsServiceDAL.Utils;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceDAL.Interfaces;
+using TripsServiceDAL.Utils;
 
 namespace TripsServiceBLL.Services
 {
@@ -31,7 +31,8 @@ namespace TripsServiceBLL.Services
 		public async Task<DriverDetailsDTO> GetDriverDetailsAsync(int driverId)
 		{
 			Driver? driver = await _unitOfWork.Drivers.GetByIdAsync(driverId);
-			if (driver == null) {
+			if (driver == null)
+			{
 				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage<Driver>()());
 			}
 			DriverDetailsDTO dto = _mapper.Map<Driver, DriverDetailsDTO>(driver);
