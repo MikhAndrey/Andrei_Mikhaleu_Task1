@@ -25,12 +25,6 @@
 
 		public const string JwtTokenCookiesAlias = "jwt";
 
-		public static UtilDelegates.StringMapperDelegate GetEntityNotFoundMessage = 
-			(entityName) => $"Corresponding {entityName} was not found";
-
-		public static UtilDelegates.StringMapperDelegate GetEntityNotExistsMessage = 
-			(entityName) => $"This {entityName} doesn't exist anymore";
-
 		public const string DriversFolderName = "drivers";
 
 		public const string DefaultDatabaseExceptionMessage = "Oops, something went wrong. Please, try again";

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TripsServiceBLL.DTO.Statistics;
 using TripsServiceBLL.DTO.Trips;
-using TripsServiceBLL.Infrastructure.Exceptions;
+using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
@@ -40,7 +40,7 @@ namespace TripsServiceBLL.Services
 			Trip? trip = await _unitOfWork.Trips.GetByIdAsync(tripId);
 			if (trip == null)
 			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
+				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Trip>()());
 			}
 
 			if (trip.StartTime > DateTime.UtcNow)
@@ -61,7 +61,7 @@ namespace TripsServiceBLL.Services
 			Trip? trip = await _unitOfWork.Trips.GetByIdAsync(tripId);
 			if (trip == null)
 			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
+				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Trip>()());
 			}
 
 			if (trip.StartTime < DateTime.UtcNow && trip.EndTime > DateTime.UtcNow)
@@ -82,7 +82,7 @@ namespace TripsServiceBLL.Services
 			Trip? trip = await _unitOfWork.Trips.GetByIdAsync(id);
 			if (trip == null)
 			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
+				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Trip>()());
 			}
 
 			_unitOfWork.Trips.Delete(trip);
@@ -100,64 +100,59 @@ namespace TripsServiceBLL.Services
 			Trip? trip = await _unitOfWork.Trips.GetByIdForDetailsAsync(tripId);
 			if (trip == null)
 			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
+				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Trip>()());
 			}
 
-			bool userExists = _unitOfWork.Users.Exists(userId);
-			return !userExists
-				? throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"))
-				: _mapper.Map<Trip, TripDetailsDTO>(trip, opt =>
+			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
+
+			TripDetailsDTO dto = _mapper.Map<Trip, TripDetailsDTO>(trip, opt =>
 				opt.AfterMap((src, dest) => dest.IsCurrentUserTrip = src.User.Id == userId));
+			return dto;
 		}
 
 		public async Task<EditTripDTO> GetTripForEditingAsync(int tripId)
 		{
 			Trip? trip = await _unitOfWork.Trips.GetByIdForEditingAsync(tripId);
-			return trip == null ? throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"))
-				: _mapper.Map<EditTripDTO>(trip);
+			if (trip == null)
+				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Trip>()());
+			EditTripDTO dto = _mapper.Map<EditTripDTO>(trip);
+			return dto;
 		}
 
 		public async Task<EditPastTripDTO> GetPastTripForEditingAsync(int tripId)
 		{
 			Trip? trip = await _unitOfWork.Trips.GetByIdForMinimalEditingAsync(tripId);
-			return trip == null ? throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"))
-				: _mapper.Map<EditPastTripDTO>(trip);
+			if (trip == null)
+				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Trip>()());
+			EditPastTripDTO dto = _mapper.Map<EditPastTripDTO>(trip);
+			return dto;
 		}
 
 		public IQueryable<ReadTripDTOExtended> GetOthersPublicTrips(int userId)
 		{
-			bool userExists = _unitOfWork.Users.Exists(userId);
-			if (!userExists)
-			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"));
-			}
+			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
 
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetOthersPublicTrips(userId);
-			return rawTrips.Select(el => _mapper.Map<ReadTripDTOExtended>(el));
+			IQueryable<ReadTripDTOExtended> mappedTrips = rawTrips.Select(el => _mapper.Map<ReadTripDTOExtended>(el));
+			return mappedTrips;
 		}
 
 		public IQueryable<ReadTripDTO> GetHistoryOfTripsByUserId(int userId)
 		{
-			bool userExists = _unitOfWork.Users.Exists(userId);
-			if (!userExists)
-			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"));
-			}
+			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
 
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetHistoryOfTripsByUserId(userId);
-			return rawTrips.Select(el => _mapper.Map<ReadTripDTO>(el));
+			IQueryable<ReadTripDTO> mappedTrips = rawTrips.Select(el => _mapper.Map<ReadTripDTO>(el));
+			return mappedTrips;
 		}
 
 		public IQueryable<ReadTripDTO> GetTripsByUserId(int userId)
 		{
-			bool userExists = _unitOfWork.Users.Exists(userId);
-			if (!userExists)
-			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"));
-			}
+			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
 
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetTripsByUserId(userId);
-			return rawTrips.Select(el => _mapper.Map<ReadTripDTO>(el));
+			IQueryable<ReadTripDTO> mappedTrips = rawTrips.Select(el => _mapper.Map<ReadTripDTO>(el));
+			return mappedTrips;
 		}
 
 		public YearsStatisticsDTO GetYearsOfUserTrips(int userId)
@@ -187,9 +182,12 @@ namespace TripsServiceBLL.Services
 						.Where(t => t.StartTime.Year == year && t.StartTime.Month <= month && t.EndTime.Year == year && t.EndTime.Month >= month)
 						.Select(t =>
 						{
-							DateTime start = t.StartTime <= new DateTime(year, month, 1) ? new DateTime(year, month, 1) : t.StartTime;
-							DateTime end = t.EndTime >= new DateTime(year, month, DateTime.DaysInMonth(year, month)) ?
-							new DateTime(year, month, DateTime.DaysInMonth(year, month)) : t.EndTime;
+							DateTime start = t.StartTime <= new DateTime(year, month, 1) 
+								? new DateTime(year, month, 1) 
+								: t.StartTime;
+							DateTime end = t.EndTime >= new DateTime(year, month, DateTime.DaysInMonth(year, month)) 
+								? new DateTime(year, month, DateTime.DaysInMonth(year, month)) 
+								: t.EndTime;
 							return (end - start).TotalHours;
 						})
 					.DefaultIfEmpty(0)

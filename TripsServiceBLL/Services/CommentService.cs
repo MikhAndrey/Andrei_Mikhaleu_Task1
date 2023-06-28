@@ -1,7 +1,6 @@
 ﻿using TripsServiceBLL.DTO.Comments;
-using TripsServiceBLL.Infrastructure.Exceptions;
+using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
 
@@ -18,17 +17,8 @@ namespace TripsServiceBLL.Services
 
 		public async Task AddCommentAsync(CreateCommentDTO comment, int userId)
 		{
-			bool tripExists = _unitOfWork.Trips.Exists(comment.TripId);
-			if (!tripExists)
-			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("trip"));
-			}
-
-			bool userExists = _unitOfWork.Users.Exists(userId);
-			if (!userExists)
-			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"));
-			}
+			_unitOfWork.Trips.ThrowErrorIfNotExists(comment.TripId);
+			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
 
 			await _unitOfWork.Comments.AddAsync(new Comment
 			{
@@ -46,7 +36,7 @@ namespace TripsServiceBLL.Services
 			Comment? commentToDelete = await _unitOfWork.Comments.GetByIdAsync(commentId);
 			if (commentToDelete == null)
 			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("comment"));
+				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Comment>()());
 			}
 
 			_unitOfWork.Comments.Delete(commentToDelete);

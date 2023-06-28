@@ -6,7 +6,6 @@ using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Helpers;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
 
@@ -54,11 +53,7 @@ namespace TripsServiceBLL.Commands.Trips
         public async Task ExecuteAsync(CreateTripDTO dto)
         {
             int userId = UserHelper.GetUserIdFromClaims(_httpContextAccessor.HttpContext.User.Claims);
-            bool userExists = _userService.Exists(userId);
-            if (!userExists)
-            {
-                throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"));
-            }
+            _unitOfWork.Users.ThrowErrorIfNotExists(userId);
 
             Trip trip = _mapper.Map<Trip>(dto);
             trip.UserId = userId;

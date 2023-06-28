@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using TripsServiceBLL.Helpers;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Utils;
 using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Trips
@@ -55,11 +54,7 @@ namespace TripsServiceBLL.Commands.Trips
 		public async Task ExecuteAsync(int id)
 		{
 			int userId = UserHelper.GetUserIdFromClaims(_httpContextAccessor.HttpContext.User.Claims);
-			bool userExists = _userService.Exists(userId);
-			if (!userExists)
-			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"));
-			}
+			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
 
 			using (IDbContextTransaction transaction = _unitOfWork.BeginTransaction())
 			{

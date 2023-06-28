@@ -8,5 +8,6 @@
 		void Update(TEntity item);
 		void Delete(TEntity item);
 		bool Exists(int id);
+		void ThrowErrorIfNotExists(int id);
 	}
 }

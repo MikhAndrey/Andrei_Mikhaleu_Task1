@@ -37,7 +37,9 @@ namespace TripsServiceBLL.Services
 		public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
 		{
 			User? userFromDB = await GetByUserNameAsync(user.UserName);
-			return (userFromDB != null && userFromDB.Password == UtilEncryptor.Encrypt(user.Password)) ? userFromDB.Id : null;
+			return (userFromDB != null && userFromDB.Password == UtilEncryptor.Encrypt(user.Password)) 
+				? userFromDB.Id 
+				: null;
 		}
 
 		public async Task AddAsync(User user)
@@ -65,7 +67,8 @@ namespace TripsServiceBLL.Services
 				throw new ValidationException(UtilConstants.GetExistingCredentialMessage("email"), "Email");
 			}
 
-			await AddAsync(_mapper.Map<User>(user));
+			User userToAdd = _mapper.Map<User>(user);
+			await AddAsync(userToAdd);
 		}
 
 		public async Task<string> GetJWTTokenAsync(UserLoginDTO user)

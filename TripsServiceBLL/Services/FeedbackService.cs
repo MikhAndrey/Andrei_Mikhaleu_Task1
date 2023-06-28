@@ -22,13 +22,10 @@ namespace TripsServiceBLL.Services
 
 		public async Task AddAsync(CreateFeedbackDTO feedback)
 		{
-			bool tripExists = _unitOfWork.Trips.Exists(feedback.TripId);
-			if (!tripExists)
-			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
-			}
+			_unitOfWork.Trips.ThrowErrorIfNotExists(feedback.TripId);
 
-			await _unitOfWork.Feedbacks.AddAsync(_mapper.Map<Feedback>(feedback));
+			Feedback feedbackToAdd = _mapper.Map<Feedback>(feedback);
+			await _unitOfWork.Feedbacks.AddAsync(feedbackToAdd);
 			await _unitOfWork.SaveAsync();
 		}
 

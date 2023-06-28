@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using TripsServiceBLL.DTO.Drivers;
-using TripsServiceBLL.Infrastructure.Exceptions;
+using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Utils;
+using TripsServiceDAL.Utils;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
 
@@ -23,16 +23,19 @@ namespace TripsServiceBLL.Services
 		public IEnumerable<ReadDriverDTO> GetDriversOverall()
 		{
 			IEnumerable<Driver> drivers = _unitOfWork.Drivers.GetAll();
-			return drivers.Select(_mapper.Map<Driver, ReadDriverDTO>)
+			IEnumerable<ReadDriverDTO> mappedDrivers = drivers.Select(_mapper.Map<Driver, ReadDriverDTO>)
 				.OrderByDescending(el => el.AverageRating);
+			return mappedDrivers;
 		}
 
 		public async Task<DriverDetailsDTO> GetDriverDetailsAsync(int driverId)
 		{
 			Driver? driver = await _unitOfWork.Drivers.GetByIdAsync(driverId);
-			return driver == null
-				? throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("driver"))
-				: _mapper.Map<Driver, DriverDetailsDTO>(driver);
+			if (driver == null) {
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage<Driver>()());
+			}
+			DriverDetailsDTO dto = _mapper.Map<Driver, DriverDetailsDTO>(driver);
+			return dto;
 		}
 	}
 }

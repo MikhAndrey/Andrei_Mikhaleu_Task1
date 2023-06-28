@@ -1,4 +1,4 @@
-﻿namespace TripsServiceBLL.Infrastructure.Exceptions
+﻿namespace TripsServiceDAL.Infrastructure.Exceptions
 {
 	public class EntityNotFoundException : Exception
 	{

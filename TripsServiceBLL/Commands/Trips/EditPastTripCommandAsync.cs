@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore.Storage;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Infrastructure.Exceptions;
+using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
-using TripsServiceBLL.Utils;
+using TripsServiceDAL.Utils;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
 
@@ -42,7 +43,7 @@ namespace TripsServiceBLL.Commands.Trips
 			Trip? trip = await _tripService.GetByIdAsync(dto.Id);
 			if (trip == null)
 			{
-				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage<Trip>()());
 			}
 
 			_mapper.Map(dto, trip);

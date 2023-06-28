@@ -27,7 +27,8 @@ namespace TripsServiceBLL.Services
 
 		public List<RoutePoint>? ParseRoutePointsFromString(string routePoints)
 		{
-			return JsonSerializer.Deserialize<List<RoutePoint>>(routePoints);
+			List<RoutePoint>? parsedRoutePoints = JsonSerializer.Deserialize<List<RoutePoint>>(routePoints);
+			return parsedRoutePoints;
 		}
 
 		public async Task AddTripRoutePointsAsync(int tripId, List<RoutePoint>? routePoints)
