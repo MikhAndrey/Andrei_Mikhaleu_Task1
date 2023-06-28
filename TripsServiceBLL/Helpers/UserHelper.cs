@@ -7,7 +7,7 @@ namespace TripsServiceBLL.Helpers
 	{
 		public static int GetUserIdFromClaims(IEnumerable<Claim> claims)
 		{
-			return int.Parse(claims.FirstOrDefault(c => c.Type == Constants.UserIdClaimName)?.Value);
+			return int.Parse(claims.FirstOrDefault(c => c.Type == UtilConstants.UserIdClaimName)?.Value);
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿namespace TripsServiceBLL.Utils
 {
-	public static class Constants
+	public static class UtilConstants
 	{
 		public const string JwtKey = "9NniFIgxk18oQt48SdNb0zKxyCRfo1Ed";
 
@@ -8,14 +8,12 @@
 
 		public const string AesKey = "cgJOF9VOMJ2FM1ZRCfPdvWcNWr5fPPsd";
 
-		public const string AesIV = "Nl8NaASrhR77xy6t";
+		public const string AesSecret = "Nl8NaASrhR77xy6t";
 
 		public const string ImagesFolderName = "images";
 
-		public static string GetExistingCredentialMessage(string credential)
-		{
-			return $"This {credential} is already taken";
-		}
+		public static UtilDelegates.StringMapperDelegate GetExistingCredentialMessage = 
+			(credential) => $"This {credential} is already taken";
 
 		public const double AuthorizationExpirationInDays = 7;
 
@@ -27,15 +25,11 @@
 
 		public const string JwtTokenCookiesAlias = "jwt";
 
-		public static string GetEntityNotFoundMessage(string entityName)
-		{
-			return $"Corresponding {entityName} was not found";
-		}
+		public static UtilDelegates.StringMapperDelegate GetEntityNotFoundMessage = 
+			(entityName) => $"Corresponding {entityName} was not found";
 
-		public static string GetEntityNotExistsMessage(string entityName)
-		{
-			return $"This {entityName} doesn't exist anymore";
-		}
+		public static UtilDelegates.StringMapperDelegate GetEntityNotExistsMessage = 
+			(entityName) => $"This {entityName} doesn't exist anymore";
 
 		public const string DriversFolderName = "drivers";
 

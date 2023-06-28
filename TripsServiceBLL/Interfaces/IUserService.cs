@@ -18,5 +18,7 @@ namespace TripsServiceBLL.Interfaces
 		Task TryToRegisterNewUserAsync(UserSignupDTO user);
 
 		Task<string> GetJWTTokenAsync(UserLoginDTO user);
+
+		void ThrowErrorIfNotExists(int id);
 	}
 }

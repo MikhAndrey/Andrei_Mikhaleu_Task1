@@ -31,7 +31,7 @@ namespace TripsServiceBLL.Services
 		{
 			Driver? driver = await _unitOfWork.Drivers.GetByIdAsync(driverId);
 			return driver == null
-				? throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("driver"))
+				? throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("driver"))
 				: _mapper.Map<Driver, DriverDetailsDTO>(driver);
 		}
 	}

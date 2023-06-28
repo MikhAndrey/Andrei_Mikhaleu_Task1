@@ -25,12 +25,12 @@
     @{if (Model.IsCurrent)
     {
         TimeSpan ElapsedTime = DateTime.UtcNow.AddSeconds(Model.StartTimeZoneOffset).Subtract(Model.StartTime);
-        <p class="tp-label">Elapsed time: @TimeUtils.GetTimeSpanString(ElapsedTime)</p>
+        <p class="tp-label">Elapsed time: @UtilDateTimeFunctions.GetTimeSpanString(ElapsedTime)</p>
     }
     else if (Model.IsFuture)
     {
         TimeSpan TimeUntilTrip = Model.StartTime.AddSeconds(-Model.StartTimeZoneOffset).Subtract(DateTime.UtcNow);
-        <p class="tp-label">Time until trip: @TimeUtils.GetTimeSpanString(TimeUntilTrip)</p>
+        <p class="tp-label">Time until trip: @UtilDateTimeFunctions.GetTimeSpanString(TimeUntilTrip)</p>
     }
     else
     {
@@ -79,7 +79,7 @@
                     <div class="carousel-inner">
                     @foreach (var image in Model.Images)
                     {
-                        string imagePath = $"/{Constants.ImagesFolderName}/{Model.UserId.ToString()}/{Model.Id.ToString()}/{image.Link}";
+                        string imagePath = $"/{UtilConstants.ImagesFolderName}/{Model.UserId.ToString()}/{Model.Id.ToString()}/{image.Link}";
                                 <div class="carousel-item @((image.Id == Model.Images.FirstOrDefault().Id) ? "active" : "")">
                                             <img src="@imagePath" class="d-block w-100 img-responsive" style="object-fit: contain; height: 400px" alt="Trip photo">
                                 </div>
@@ -100,7 +100,7 @@
 
     @if (Model.Driver != null)
     {
-        string driverPhotoLink = $"/{Constants.ImagesFolderName}/{Constants.DriversFolderName}/{Model.Driver.Id}/{Model.Driver?.FirstPhoto?.Link}";
+        string driverPhotoLink = $"/{UtilConstants.ImagesFolderName}/{UtilConstants.DriversFolderName}/{Model.Driver.Id}/{Model.Driver?.FirstPhoto?.Link}";
         <h3 class="tp-label mb-2">Trip driver</h3>
         <div class="w-50 tp-gradient-standard driver-button d-flex flex-row align-items-center">
             <div class="mr-3" style="width:30%">
@@ -140,7 +140,7 @@
         else foreach (var comment in Model.Comments)
         {
             <li class="mt-3">
-                <p><strong class="tp-label">@comment.User.UserName</strong> - @TimeUtils.GetTimeAgoFromNow(comment.Date)</p>
+                <p><strong class="tp-label">@comment.User.UserName</strong> - @UtilDateTimeFunctions.GetTimeAgoFromNow(comment.Date)</p>
                 <p>@comment.Message</p>
                 @if (ViewContext?.HttpContext?.User?.Identity?.Name == comment.User.UserName)
                 {

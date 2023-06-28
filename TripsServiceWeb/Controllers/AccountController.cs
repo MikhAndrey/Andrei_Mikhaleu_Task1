@@ -64,8 +64,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 				try
 				{
 					string jwtToken = await _userService.GetJWTTokenAsync(user);
-					DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(Constants.AuthorizationExpirationInDays) : null;
-					HttpContext.Response.Cookies.Append(Constants.JwtTokenCookiesAlias, jwtToken, new CookieOptions
+					DateTime? cookieExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(UtilConstants.AuthorizationExpirationInDays) : null;
+					HttpContext.Response.Cookies.Append(UtilConstants.JwtTokenCookiesAlias, jwtToken, new CookieOptions
 					{
 						HttpOnly = true,
 						Secure = true,
@@ -87,7 +87,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public IActionResult Logout()
 		{
-			HttpContext.Response.Cookies.Delete(Constants.JwtTokenCookiesAlias);
+			HttpContext.Response.Cookies.Delete(UtilConstants.JwtTokenCookiesAlias);
 			return RedirectToAction("Index", "Home");
 		}
 

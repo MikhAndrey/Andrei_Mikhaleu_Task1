@@ -37,7 +37,7 @@ namespace TripsServiceBLL.Services
 		public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
 		{
 			User? userFromDB = await GetByUserNameAsync(user.UserName);
-			return (userFromDB != null && userFromDB.Password == Encryptor.Encrypt(user.Password)) ? userFromDB.Id : null;
+			return (userFromDB != null && userFromDB.Password == UtilEncryptor.Encrypt(user.Password)) ? userFromDB.Id : null;
 		}
 
 		public async Task AddAsync(User user)
@@ -56,13 +56,13 @@ namespace TripsServiceBLL.Services
 			User? existingUser = await GetByUserNameAsync(user.UserName);
 			if (existingUser != null)
 			{
-				throw new ValidationException(Constants.GetExistingCredentialMessage("username"), "UserName");
+				throw new ValidationException(UtilConstants.GetExistingCredentialMessage("username"), "UserName");
 			}
 
 			existingUser = await GetByEmailAsync(user.Email);
 			if (existingUser != null)
 			{
-				throw new ValidationException(Constants.GetExistingCredentialMessage("email"), "Email");
+				throw new ValidationException(UtilConstants.GetExistingCredentialMessage("email"), "Email");
 			}
 
 			await AddAsync(_mapper.Map<User>(user));
@@ -73,19 +73,19 @@ namespace TripsServiceBLL.Services
 			int? idOfUserFromDb = await GetUserIdForLoginAsync(user);
 			if (idOfUserFromDb != null)
 			{
-				DateTime jwtExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(Constants.AuthorizationExpirationInDays)
-					: DateTime.UtcNow.AddHours(Constants.JwtExpirationInHours);
+				DateTime jwtExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(UtilConstants.AuthorizationExpirationInDays)
+					: DateTime.UtcNow.AddHours(UtilConstants.JwtExpirationInHours);
 				JwtSecurityTokenHandler tokenHandler = new();
-				byte[] key = Encoding.ASCII.GetBytes(Constants.JwtKey);
+				byte[] key = Encoding.ASCII.GetBytes(UtilConstants.JwtKey);
 				SecurityTokenDescriptor tokenDescriptor = new()
 				{
 					Subject = new ClaimsIdentity(new Claim[]
 					{
 							new Claim(ClaimTypes.Name, user.UserName),
-							new Claim (Constants.UserIdClaimName, idOfUserFromDb.ToString())
+							new Claim (UtilConstants.UserIdClaimName, idOfUserFromDb.ToString())
 					}),
-					Audience = Constants.JwtIssuer,
-					Issuer = Constants.JwtIssuer,
+					Audience = UtilConstants.JwtIssuer,
+					Issuer = UtilConstants.JwtIssuer,
 					Expires = jwtExpiresUTC,
 					SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 				};
@@ -94,7 +94,7 @@ namespace TripsServiceBLL.Services
 			}
 			else
 			{
-				throw new ValidationException(Constants.InvalidCredentialsMessage, "");
+				throw new ValidationException(UtilConstants.InvalidCredentialsMessage, "");
 			}
 		}
 	}

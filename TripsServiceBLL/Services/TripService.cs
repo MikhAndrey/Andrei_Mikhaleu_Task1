@@ -40,7 +40,7 @@ namespace TripsServiceBLL.Services
 			Trip? trip = await _unitOfWork.Trips.GetByIdAsync(tripId);
 			if (trip == null)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
 			}
 
 			if (trip.StartTime > DateTime.UtcNow)
@@ -61,7 +61,7 @@ namespace TripsServiceBLL.Services
 			Trip? trip = await _unitOfWork.Trips.GetByIdAsync(tripId);
 			if (trip == null)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
 			}
 
 			if (trip.StartTime < DateTime.UtcNow && trip.EndTime > DateTime.UtcNow)
@@ -82,7 +82,7 @@ namespace TripsServiceBLL.Services
 			Trip? trip = await _unitOfWork.Trips.GetByIdAsync(id);
 			if (trip == null)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
 			}
 
 			_unitOfWork.Trips.Delete(trip);
@@ -100,12 +100,12 @@ namespace TripsServiceBLL.Services
 			Trip? trip = await _unitOfWork.Trips.GetByIdForDetailsAsync(tripId);
 			if (trip == null)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
 			}
 
 			bool userExists = _unitOfWork.Users.Exists(userId);
 			return !userExists
-				? throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"))
+				? throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"))
 				: _mapper.Map<Trip, TripDetailsDTO>(trip, opt =>
 				opt.AfterMap((src, dest) => dest.IsCurrentUserTrip = src.User.Id == userId));
 		}
@@ -113,14 +113,14 @@ namespace TripsServiceBLL.Services
 		public async Task<EditTripDTO> GetTripForEditingAsync(int tripId)
 		{
 			Trip? trip = await _unitOfWork.Trips.GetByIdForEditingAsync(tripId);
-			return trip == null ? throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"))
+			return trip == null ? throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"))
 				: _mapper.Map<EditTripDTO>(trip);
 		}
 
 		public async Task<EditPastTripDTO> GetPastTripForEditingAsync(int tripId)
 		{
 			Trip? trip = await _unitOfWork.Trips.GetByIdForMinimalEditingAsync(tripId);
-			return trip == null ? throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"))
+			return trip == null ? throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"))
 				: _mapper.Map<EditPastTripDTO>(trip);
 		}
 
@@ -129,7 +129,7 @@ namespace TripsServiceBLL.Services
 			bool userExists = _unitOfWork.Users.Exists(userId);
 			if (!userExists)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"));
 			}
 
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetOthersPublicTrips(userId);
@@ -141,7 +141,7 @@ namespace TripsServiceBLL.Services
 			bool userExists = _unitOfWork.Users.Exists(userId);
 			if (!userExists)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"));
 			}
 
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetHistoryOfTripsByUserId(userId);
@@ -153,7 +153,7 @@ namespace TripsServiceBLL.Services
 			bool userExists = _unitOfWork.Users.Exists(userId);
 			if (!userExists)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"));
 			}
 
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetTripsByUserId(userId);
@@ -170,7 +170,7 @@ namespace TripsServiceBLL.Services
 			};
 		}
 
-		public async Task<List<DurationInMonth>> GetTotalDurationByMonthsAsync(int year, int userId)
+		public async Task<List<UtilDurationInMonth>> GetTotalDurationByMonthsAsync(int year, int userId)
 		{
 			List<Trip> trips = await _unitOfWork.Trips.GetTripsByYearAndUserId(year, userId).ToListAsync();
 
@@ -179,8 +179,8 @@ namespace TripsServiceBLL.Services
 				return new();
 			}
 
-			List<DurationInMonth> result = Enumerable.Range(1, 12)
-				.Select(month => new DurationInMonth()
+			List<UtilDurationInMonth> result = Enumerable.Range(1, 12)
+				.Select(month => new UtilDurationInMonth()
 				{
 					Month = new DateTime(year, month, 1).ToString("MMMM"),
 					TotalDuration = trips

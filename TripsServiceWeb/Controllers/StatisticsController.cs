@@ -51,7 +51,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			{
 				return RedirectToAction("Login", "Account");
 			}
-			List<DurationInMonth> durations = await _tripService.GetTotalDurationByMonthsAsync(year, userId);
+			List<UtilDurationInMonth> durations = await _tripService.GetTotalDurationByMonthsAsync(year, userId);
 			return Json(durations);
 		}
 

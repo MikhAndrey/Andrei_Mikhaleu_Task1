@@ -1,6 +1,6 @@
 ﻿namespace TripsServiceBLL.Utils
 {
-	public static class TimeUtils
+	public static class UtilDateTimeFunctions
 	{
 		public static string GetTimeSpanString(TimeSpan time)
 		{
@@ -14,13 +14,13 @@
 		{
 			DateTime utcNow = DateTime.UtcNow;
 			TimeSpan dateDiff = utcNow - date;
-			int years = (int)(dateDiff.TotalDays / Constants.DaysInYear);
+			int years = (int)(dateDiff.TotalDays / UtilConstants.DaysInYear);
 			if (years > 0)
 			{
 				return $"{years} years ago";
 			}
 
-			int months = (int)(dateDiff.TotalDays / Constants.DaysInMonth);
+			int months = (int)(dateDiff.TotalDays / UtilConstants.DaysInMonth);
 			if (months > 0)
 			{
 				return $"{months} months ago";

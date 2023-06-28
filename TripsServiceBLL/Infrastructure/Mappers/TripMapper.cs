@@ -54,7 +54,7 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 				.IncludeBase<Trip, ReadTripDTO>()
 				.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.Ignore())
 				.ForMember(dest => dest.Duration, opt => opt.MapFrom(src =>
-				TimeUtils.GetTimeSpanString(src.EndTime - src.StartTime)));
+				UtilDateTimeFunctions.GetTimeSpanString(src.EndTime - src.StartTime)));
 		}
 	}
 }

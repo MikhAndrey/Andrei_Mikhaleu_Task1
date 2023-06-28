@@ -3,10 +3,10 @@ using System.Text;
 
 namespace TripsServiceBLL.Utils
 {
-	public static class Encryptor
+	public static class UtilEncryptor
 	{
-		private static readonly byte[] _aesKey = Encoding.ASCII.GetBytes(Constants.AesKey);
-		private static readonly byte[] _aesIV = Encoding.ASCII.GetBytes(Constants.AesIV);
+		private static readonly byte[] _aesKey = Encoding.ASCII.GetBytes(UtilConstants.AesKey);
+		private static readonly byte[] _aesSecret = Encoding.ASCII.GetBytes(UtilConstants.AesSecret);
 
 		public static string Encrypt(string text)
 		{
@@ -14,7 +14,7 @@ namespace TripsServiceBLL.Utils
 			using (Aes aes = Aes.Create())
 			{
 				aes.Key = _aesKey;
-				aes.IV = _aesIV;
+				aes.IV = _aesSecret;
 				using MemoryStream memoryStream = new();
 				using CryptoStream cryptoStream = new(memoryStream, aes.CreateEncryptor(aes.Key, aes.IV), CryptoStreamMode.Write);
 				using (StreamWriter streamWriter = new(cryptoStream))

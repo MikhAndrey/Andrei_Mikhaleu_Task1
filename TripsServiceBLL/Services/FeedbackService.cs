@@ -25,7 +25,7 @@ namespace TripsServiceBLL.Services
 			bool tripExists = _unitOfWork.Trips.Exists(feedback.TripId);
 			if (!tripExists)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
 			}
 
 			await _unitOfWork.Feedbacks.AddAsync(_mapper.Map<Feedback>(feedback));

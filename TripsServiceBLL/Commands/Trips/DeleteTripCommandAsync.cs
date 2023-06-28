@@ -58,7 +58,7 @@ namespace TripsServiceBLL.Commands.Trips
 			bool userExists = _userService.Exists(userId);
 			if (!userExists)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"));
 			}
 
 			using (IDbContextTransaction transaction = _unitOfWork.BeginTransaction())

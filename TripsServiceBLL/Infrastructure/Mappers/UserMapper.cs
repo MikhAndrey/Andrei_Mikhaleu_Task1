@@ -12,7 +12,7 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 			CreateMap<User, UserDTO>();
 			CreateMap<UserSignupDTO, UserLoginDTO>();
 			CreateMap<UserSignupDTO, User>()
-				.ForMember(user => user.Password, opt => opt.MapFrom(src => Encryptor.Encrypt(src.Password)));
+				.ForMember(user => user.Password, opt => opt.MapFrom(src => UtilEncryptor.Encrypt(src.Password)));
 		}
 	}
 }

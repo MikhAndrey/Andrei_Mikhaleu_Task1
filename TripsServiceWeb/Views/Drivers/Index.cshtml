@@ -19,7 +19,7 @@
 					<div class="card-body bg-light br-20 d-flex flex-row align-items-center">
 						<div class="mr-4" style="width:30%">
 								@{
-									string imagePath = $"/{Constants.ImagesFolderName}/{Constants.DriversFolderName}/{driver.Id.ToString()}/{driver.FirstPhoto.Link}";
+									string imagePath = $"/{UtilConstants.ImagesFolderName}/{UtilConstants.DriversFolderName}/{driver.Id.ToString()}/{driver.FirstPhoto.Link}";
 								}
 							<img src="@imagePath" alt="Driver Photo" style="width:100%;height:auto;border-radius:50%;" />
 						</div>

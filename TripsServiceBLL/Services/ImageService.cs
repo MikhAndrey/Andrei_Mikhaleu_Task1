@@ -69,7 +69,7 @@ namespace TripsServiceBLL.Services
 				{
 					if (images[i] != null && images[i].Length > 0)
 					{
-						string userFilePath = Path.Combine(webRootPath, Constants.ImagesFolderName, userId.ToString());
+						string userFilePath = Path.Combine(webRootPath, UtilConstants.ImagesFolderName, userId.ToString());
 						if (!Directory.Exists(userFilePath))
 						{
 							Directory.CreateDirectory(userFilePath);
@@ -95,25 +95,25 @@ namespace TripsServiceBLL.Services
 			Image? image = await _unitOfWork.Images.GetByIdAsync(imageId);
 			if (image == null)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("message"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("message"));
 			}
 
 			bool tripExists = _unitOfWork.Trips.Exists(tripId);
 			if (!tripExists)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("trip"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("trip"));
 			}
 
 			bool userExists = _unitOfWork.Users.Exists(userId);
 			if (!userExists)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotFoundMessage("user"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotFoundMessage("user"));
 			}
 
 			_unitOfWork.Images.Delete(image);
 			await _unitOfWork.SaveAsync();
 
-			string path = Path.Combine(webRootPath, Constants.ImagesFolderName, userId.ToString(), tripId.ToString(), image.Link);
+			string path = Path.Combine(webRootPath, UtilConstants.ImagesFolderName, userId.ToString(), tripId.ToString(), image.Link);
 
 			if (File.Exists(path))
 			{
@@ -123,7 +123,7 @@ namespace TripsServiceBLL.Services
 
 		public void DeleteTripImagesFiles(int tripId, int userId, string webRootPath)
 		{
-			string tripDirectoryPath = Path.Combine(webRootPath, Constants.ImagesFolderName, userId.ToString(), tripId.ToString());
+			string tripDirectoryPath = Path.Combine(webRootPath, UtilConstants.ImagesFolderName, userId.ToString(), tripId.ToString());
 			if (Directory.Exists(tripDirectoryPath))
 			{
 				Directory.Delete(tripDirectoryPath, true);
@@ -132,7 +132,7 @@ namespace TripsServiceBLL.Services
 
 		public void CreateImagesDirectory(string webRootPath)
 		{
-			string path = Path.Combine(webRootPath, Constants.ImagesFolderName);
+			string path = Path.Combine(webRootPath, UtilConstants.ImagesFolderName);
 
 			if (!Directory.Exists(path))
 			{

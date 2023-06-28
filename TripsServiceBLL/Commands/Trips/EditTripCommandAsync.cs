@@ -46,7 +46,7 @@ namespace TripsServiceBLL.Commands.Trips
 			Trip? trip = await _tripService.GetByIdAsync(dto.Id);
 			if (trip == null)
 			{
-				throw new EntityNotFoundException(Constants.GetEntityNotExistsMessage("trip"));
+				throw new EntityNotFoundException(UtilConstants.GetEntityNotExistsMessage("trip"));
 			}
 
 			_mapper.Map(dto, trip);

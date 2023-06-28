@@ -1,6 +1,6 @@
 ﻿namespace TripsServiceBLL.Utils
 {
-	public class DurationInMonth
+	public class UtilDurationInMonth
 	{
 		public string? Month { get; set; }
 

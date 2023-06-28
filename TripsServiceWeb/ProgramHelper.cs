@@ -57,9 +57,9 @@ namespace Andrei_Mikhaleu_Task1
                     ValidateLifetime = true,
                     RequireExpirationTime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = Constants.JwtIssuer,
-                    ValidAudience = Constants.JwtIssuer,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.JwtKey))
+                    ValidIssuer = UtilConstants.JwtIssuer,
+                    ValidAudience = UtilConstants.JwtIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(UtilConstants.JwtKey))
                 };
             });
         }
@@ -68,7 +68,7 @@ namespace Andrei_Mikhaleu_Task1
         {
             app.Use(async (context, next) =>
             {
-                string? jwtToken = context.Request.Cookies[Constants.JwtTokenCookiesAlias];
+                string? jwtToken = context.Request.Cookies[UtilConstants.JwtTokenCookiesAlias];
                 if (!string.IsNullOrEmpty(jwtToken))
                 {
                     context.Request.Headers.Add("Authorization", "Bearer " + jwtToken);
