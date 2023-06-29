@@ -4,7 +4,7 @@ using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Entities
 {
-	public class Trip : IIdentifiable
+	public class Trip : IIdentifiable, ISoftDelete
 	{
 		public Trip()
 		{
@@ -47,5 +47,7 @@ namespace TripsServiceDAL.Entities
 		public Driver? Driver { get; set; }
 
 		public Feedback Feedback { get; set; }
+
+		public bool IsDeleted { get; set; }
 	}
 }

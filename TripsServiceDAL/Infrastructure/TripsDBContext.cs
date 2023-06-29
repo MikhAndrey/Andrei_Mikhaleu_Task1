@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Infrastructure
 {
@@ -18,7 +19,26 @@ namespace TripsServiceDAL.Infrastructure
 		{
 			Database.EnsureCreated();
 		}
+	
+		public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		{
+			HandleSoftDelete();
+			return await base.SaveChangesAsync(cancellationToken);
+		}
 
+		private void HandleSoftDelete()
+		{
+			var entities = ChangeTracker.Entries();
+			foreach (var entity in entities)
+			{
+				if (entity.Entity is ISoftDelete itemToDelete && entity.State == EntityState.Deleted && !itemToDelete.IsDeleted)
+				{
+					entity.State = EntityState.Modified;
+					itemToDelete.IsDeleted = true;
+				}
+			}
+		}
+		
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<Trip>()
@@ -68,6 +88,15 @@ namespace TripsServiceDAL.Infrastructure
 			   .WithMany(d => d.Photos)
 			   .HasForeignKey(dp => dp.DriverId)
 			   .OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Comment>().HasQueryFilter(item => !item.IsDeleted);
+			modelBuilder.Entity<Driver>().HasQueryFilter(item => !item.IsDeleted);
+			modelBuilder.Entity<DriverPhoto>().HasQueryFilter(item => !item.IsDeleted);
+			modelBuilder.Entity<Feedback>().HasQueryFilter(item => !item.IsDeleted);
+			modelBuilder.Entity<Image>().HasQueryFilter(item => !item.IsDeleted);
+			modelBuilder.Entity<RoutePoint>().HasQueryFilter(item => !item.IsDeleted);
+			modelBuilder.Entity<Trip>().HasQueryFilter(item => !item.IsDeleted);
+			modelBuilder.Entity<User>().HasQueryFilter(item => !item.IsDeleted);
 		}
 	}
 }

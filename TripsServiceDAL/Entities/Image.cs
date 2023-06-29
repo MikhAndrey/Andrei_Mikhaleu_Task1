@@ -2,7 +2,7 @@
 
 namespace TripsServiceDAL.Entities
 {
-	public class Image : IIdentifiable
+	public class Image : IIdentifiable, ISoftDelete
 	{
 		public int Id { get; set; }
 
@@ -12,5 +12,6 @@ namespace TripsServiceDAL.Entities
 
 		public Trip? Trip { get; set; }
 
+		public bool IsDeleted { get; set; }
 	}
 }

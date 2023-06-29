@@ -60,11 +60,11 @@ namespace TripsServiceBLL.Commands.Trips
 			{
 				try
 				{
+					await _tripService.DeleteAsync(id);
 					await _imageService.DeleteByTripIdAsync(id);
 					await _routePointService.DeleteByTripIdAsync(id);
 					await _commentService.DeleteByTripIdAsync(id);
 					await _feedbackService.DeleteByTripIdAsync(id);
-					await _tripService.DeleteAsync(id);
 					await transaction.CommitAsync();
 				}
 				catch (Exception)

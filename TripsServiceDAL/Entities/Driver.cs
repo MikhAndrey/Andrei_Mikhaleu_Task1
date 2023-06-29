@@ -3,7 +3,7 @@ using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Entities
 {
-	public class Driver : IIdentifiable
+	public class Driver : IIdentifiable, ISoftDelete
 	{
 		public int Id { get; set; }
 
@@ -14,6 +14,8 @@ namespace TripsServiceDAL.Entities
 		public int Experience { get; set; }
 
 		public List<Trip> Trips { get; set; }
+
+		public bool IsDeleted { get; set; }
 
 		[NotMapped]
 		public double AverageRating => Math.Round(Trips.Where(t => t.Feedback != null)

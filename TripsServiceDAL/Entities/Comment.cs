@@ -2,7 +2,7 @@
 
 namespace TripsServiceDAL.Entities
 {
-	public class Comment : IIdentifiable
+	public class Comment : IIdentifiable, ISoftDelete
 	{
 		public int Id { get; set; }
 
@@ -17,6 +17,8 @@ namespace TripsServiceDAL.Entities
 		public int TripId { get; set; }
 
 		public Trip? Trip { get; set; }
+
+		public bool IsDeleted { get; set; }
 
 	}
 }

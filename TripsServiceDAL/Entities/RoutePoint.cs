@@ -4,7 +4,7 @@ using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceDAL.Entities
 {
-	public class RoutePoint : IIdentifiable
+	public class RoutePoint : IIdentifiable, ISoftDelete
 	{
 		public int Id { get; set; }
 
@@ -19,5 +19,7 @@ namespace TripsServiceDAL.Entities
 		public int TripId { get; set; }
 
 		public Trip? Trip { get; set; }
+
+		public bool IsDeleted { get; set; }
 	}
 }
