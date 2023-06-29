@@ -31,7 +31,7 @@ namespace TripsServiceDAL.Infrastructure
 			var entities = ChangeTracker.Entries();
 			foreach (var entity in entities)
 			{
-				if (entity.Entity is ISoftDelete itemToDelete && entity.State == EntityState.Deleted && !itemToDelete.IsDeleted)
+				if (entity.Entity is ISoftDelete itemToDelete && entity.State == EntityState.Deleted)
 				{
 					entity.State = EntityState.Modified;
 					itemToDelete.IsDeleted = true;

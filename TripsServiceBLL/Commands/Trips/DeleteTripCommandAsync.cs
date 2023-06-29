@@ -21,8 +21,6 @@ namespace TripsServiceBLL.Commands.Trips
 
 		private readonly IFeedbackService _feedbackService;
 
-		private readonly IUserService _userService;
-
 		private readonly IWebHostEnvironment _env;
 
 		private readonly IUnitOfWork _unitOfWork;
@@ -35,7 +33,6 @@ namespace TripsServiceBLL.Commands.Trips
 			IRoutePointService routePointService,
 			ICommentService commentService,
 			IFeedbackService feedbackService,
-			IUserService userService,
 			IWebHostEnvironment env,
 			IUnitOfWork unitOfWork,
 			IHttpContextAccessor httpContextAccessor)
@@ -45,7 +42,6 @@ namespace TripsServiceBLL.Commands.Trips
 			_routePointService = routePointService;
 			_commentService = commentService;
 			_feedbackService = feedbackService;
-			_userService = userService;
 			_env = env;
 			_unitOfWork = unitOfWork;
 			_httpContextAccessor = httpContextAccessor;
@@ -74,7 +70,7 @@ namespace TripsServiceBLL.Commands.Trips
 				}
 			}
 
-			_imageService.DeleteTripImagesFiles(id, userId, _env.WebRootPath);
+			//_imageService.DeleteTripImagesFiles(id, userId, _env.WebRootPath); TODO: Physical images removal is under discussion
 		}
 	}
 }
