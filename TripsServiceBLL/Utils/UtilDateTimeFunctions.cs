@@ -32,6 +32,12 @@
 				return $"{days} days ago";
 			}
 
+			int hours = dateDiff.Hours;
+			if (hours > 0)
+			{
+				return $"{hours} hours ago";
+			}
+
 			int minutes = dateDiff.Minutes;
 			return $"{minutes} minutes ago";
 		}
