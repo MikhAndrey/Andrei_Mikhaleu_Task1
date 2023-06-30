@@ -1,4 +1,5 @@
 using Andrei_Mikhaleu_Task1;
+using Andrei_Mikhaleu_Task1.Hubs;
 using System.Reflection;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ builder.Services.AddControllersWithViews();
 
 ProgramHelper.AddAuthentication(builder.Services);
 builder.Services.AddAuthorization();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -38,6 +41,8 @@ ProgramHelper.AddUnauthorizedStateRedirection(app);
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHub<FeedbacksHub>("/feedbackshub");
 
 app.MapControllerRoute(
     name: "default",

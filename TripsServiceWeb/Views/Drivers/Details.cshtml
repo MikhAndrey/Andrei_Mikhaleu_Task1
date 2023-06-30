@@ -112,5 +112,16 @@
     </ul>
     </div>
 @section Scripts{
-        <script src="@Url.Content("~/js/ratingBuilder.js")"></script>
+    <script src="@Url.Content("~/js/ratingBuilder.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder().withUrl("/feedbackshub").build();
+        connection.on("FeedbackDelete", function (id) {
+            console.log(id);
+        });
+        connection.on("FeedbackCreate", function (feedback) {
+            console.log(feedback);
+        });
+        connection.start();
+    </script>
 }

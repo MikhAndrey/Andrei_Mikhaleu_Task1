@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Andrei_Mikhaleu_Task1.Hubs;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using TripsServiceBLL.DTO.Feedbacks;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Infrastructure.Exceptions;
@@ -9,9 +11,14 @@ namespace Andrei_Mikhaleu_Task1.Controllers
     {
         private readonly IFeedbackService _feedbackService;
 
-        public FeedbacksController(IFeedbackService feedbackService)
+        private readonly IHubContext<FeedbacksHub> _feedbackHubContext;
+
+        public FeedbacksController(
+			IFeedbackService feedbackService, 
+			IHubContext<FeedbacksHub> feedbackHubContext)
         {
             _feedbackService = feedbackService;
+			_feedbackHubContext = feedbackHubContext;
         }
 
 		[HttpPost]
@@ -21,7 +28,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			try
 			{
 				await _feedbackService.AddAsync(feedback);
-				return Redirect(Request.Headers["Referer"].ToString());
+                await _feedbackHubContext.Clients.All.SendAsync("FeedbackCreate", feedback);
+                return Redirect(Request.Headers["Referer"].ToString());
 			}
 			catch (EntityNotFoundException ex)
 			{
@@ -35,7 +43,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			try
 			{
 				await _feedbackService.DeleteAsync(id);
-				return Ok();
+                await _feedbackHubContext.Clients.All.SendAsync("FeedbackDelete", id);
+                return Ok();
 			}
 			catch (EntityNotFoundException ex)
 			{
