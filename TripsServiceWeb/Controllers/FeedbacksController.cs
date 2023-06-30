@@ -5,14 +5,14 @@ using TripsServiceDAL.Infrastructure.Exceptions;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
-	public class FeedbacksController : Controller
-	{
-		private readonly IFeedbackService _feedbackService;
+    public class FeedbacksController : Controller
+    {
+        private readonly IFeedbackService _feedbackService;
 
-		public FeedbacksController(IFeedbackService feedbackService)
-		{
-			_feedbackService = feedbackService;
-		}
+        public FeedbacksController(IFeedbackService feedbackService)
+        {
+            _feedbackService = feedbackService;
+        }
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]

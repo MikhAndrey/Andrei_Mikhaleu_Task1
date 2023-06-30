@@ -6,9 +6,9 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Infrastructure.Mappers
 {
-	public class TripMapper : Profile
-	{
-		private readonly CurrentUserTripResolver _currentUserTripResolver;
+    public class TripMapper : Profile
+    {
+        private readonly CurrentUserTripResolver _currentUserTripResolver;
 
 		public TripMapper(CurrentUserTripResolver currentUserTripResolver)
 		{

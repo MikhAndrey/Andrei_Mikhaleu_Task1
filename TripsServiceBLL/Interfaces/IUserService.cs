@@ -3,22 +3,18 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Interfaces
 {
-	public interface IUserService
-	{
-		Task<User?> GetByUserNameAsync(string userName);
+    public interface IUserService
+    {
+        Task<int?> GetUserIdForLoginAsync(UserLoginDTO user);
 
-		Task<User?> GetByEmailAsync(string email);
+        Task AddAsync(User user);
 
-		Task<int?> GetUserIdForLoginAsync(UserLoginDTO user);
+        bool Exists(int id);
 
-		Task AddAsync(User user);
+        Task TryToRegisterNewUserAsync(UserSignupDTO user);
 
-		bool Exists(int id);
+        Task<string> GetJWTTokenAsync(UserLoginDTO user);
 
-		Task TryToRegisterNewUserAsync(UserSignupDTO user);
-
-		Task<string> GetJWTTokenAsync(UserLoginDTO user);
-
-		int GetCurrentUserId();
-	}
+        int GetCurrentUserId();
+    }
 }

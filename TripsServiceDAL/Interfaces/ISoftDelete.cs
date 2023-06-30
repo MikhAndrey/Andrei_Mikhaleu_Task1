@@ -1,7 +1,7 @@
 ﻿namespace TripsServiceDAL.Interfaces
 {
-	public interface ISoftDelete
-	{
-		public bool IsDeleted { get; set; }
-	}
+    public interface ISoftDelete
+    {
+        public bool IsDeleted { get; set; }
+    }
 }

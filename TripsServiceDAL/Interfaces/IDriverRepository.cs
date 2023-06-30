@@ -2,7 +2,7 @@
 
 namespace TripsServiceDAL.Interfaces
 {
-	public interface IDriverRepository : IGenericRepository<Driver>
-	{
-	}
+    public interface IDriverRepository : IGenericRepository<Driver>
+    {
+    }
 }

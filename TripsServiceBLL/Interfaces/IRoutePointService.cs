@@ -3,14 +3,14 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Interfaces
 {
-	public interface IRoutePointService
-	{
-		List<RoutePoint>? ParseRoutePointsFromString(string routePoints);
+    public interface IRoutePointService
+    {
+        List<RoutePoint>? ParseRoutePointsFromString(string routePoints);
 
-		Task AddTripRoutePointsAsync(int tripId, List<RoutePoint>? routePoints);
+        Task AddTripRoutePointsAsync(int tripId, List<RoutePoint>? routePoints);
 
-		IQueryable<RoutePointCoordinatesDTO> GetRoutePointsByYear(int year);
+        IQueryable<RoutePointCoordinatesDTO> GetRoutePointsByYear(int year);
 
-		Task DeleteByTripIdAsync(int tripId);
-	}
+        Task DeleteByTripIdAsync(int tripId);
+    }
 }

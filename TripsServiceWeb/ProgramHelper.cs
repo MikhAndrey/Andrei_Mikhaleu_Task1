@@ -38,9 +38,9 @@ namespace Andrei_Mikhaleu_Task1
 
         public static void AddValueResolvers(IServiceCollection services)
         {
-			services.AddScoped<CurrentUserTripResolver>();
+            services.AddScoped<CurrentUserTripResolver>();
             services.AddScoped<CommentUserIdResolver>();
-		}
+        }
 
         public static void AddCommands(IServiceCollection services)
         {
@@ -52,23 +52,23 @@ namespace Andrei_Mikhaleu_Task1
 
         public static void AddMapper(IServiceCollection services)
         {
-			var serviceProvider = services.BuildServiceProvider();
+            ServiceProvider serviceProvider = services.BuildServiceProvider();
 
-			MapperConfiguration mapperConfig = new(mc =>
-			{
-				mc.ConstructServicesUsing(serviceProvider.GetService);
-				mc.AddProfile(new TripMapper(serviceProvider.GetService<CurrentUserTripResolver>()));
-				mc.AddProfile(new CommentMapper(serviceProvider.GetService<CommentUserIdResolver>()));
-				mc.AddProfile(new DriverMapper());
-				mc.AddProfile(new FeedbackMapper());
-				mc.AddProfile(new ImageMapper());
-				mc.AddProfile(new RoutePointMapper());
-				mc.AddProfile(new UserMapper());
-			});
+            MapperConfiguration mapperConfig = new(mc =>
+            {
+                mc.ConstructServicesUsing(serviceProvider.GetService);
+                mc.AddProfile(new TripMapper(serviceProvider.GetService<CurrentUserTripResolver>()));
+                mc.AddProfile(new CommentMapper(serviceProvider.GetService<CommentUserIdResolver>()));
+                mc.AddProfile(new DriverMapper());
+                mc.AddProfile(new FeedbackMapper());
+                mc.AddProfile(new ImageMapper());
+                mc.AddProfile(new RoutePointMapper());
+                mc.AddProfile(new UserMapper());
+            });
 
-			IMapper mapper = mapperConfig.CreateMapper();
-			services.AddSingleton(mapper);
-		}
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+        }
 
         public static void AddAuthentication(IServiceCollection services)
         {
