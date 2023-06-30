@@ -92,7 +92,6 @@ namespace TripsServiceDAL.Infrastructure
 			modelBuilder.Entity<Comment>().HasQueryFilter(item => !item.IsDeleted);
 			modelBuilder.Entity<Driver>().HasQueryFilter(item => !item.IsDeleted);
 			modelBuilder.Entity<DriverPhoto>().HasQueryFilter(item => !item.IsDeleted);
-			modelBuilder.Entity<Feedback>().HasQueryFilter(item => !item.IsDeleted);
 			modelBuilder.Entity<Image>().HasQueryFilter(item => !item.IsDeleted);
 			modelBuilder.Entity<RoutePoint>().HasQueryFilter(item => !item.IsDeleted);
 			modelBuilder.Entity<Trip>().HasQueryFilter(item => !item.IsDeleted);
