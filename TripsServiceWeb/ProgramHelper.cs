@@ -40,6 +40,7 @@ namespace Andrei_Mikhaleu_Task1
         {
             services.AddScoped<CurrentUserTripResolver>();
             services.AddScoped<CommentUserIdResolver>();
+            services.AddScoped<FeedbackUserResolver>();
         }
 
         public static void AddCommands(IServiceCollection services)
@@ -60,7 +61,7 @@ namespace Andrei_Mikhaleu_Task1
                 mc.AddProfile(new TripMapper(serviceProvider.GetService<CurrentUserTripResolver>()));
                 mc.AddProfile(new CommentMapper(serviceProvider.GetService<CommentUserIdResolver>()));
                 mc.AddProfile(new DriverMapper());
-                mc.AddProfile(new FeedbackMapper());
+                mc.AddProfile(new FeedbackMapper(serviceProvider.GetService<FeedbackUserResolver>()));
                 mc.AddProfile(new ImageMapper());
                 mc.AddProfile(new RoutePointMapper());
                 mc.AddProfile(new UserMapper());

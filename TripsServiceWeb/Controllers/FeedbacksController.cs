@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using TripsServiceBLL.DTO.Feedbacks;
 using TripsServiceBLL.Interfaces;
+using TripsServiceDAL.Entities;
 using TripsServiceDAL.Infrastructure.Exceptions;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
@@ -27,8 +28,8 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		{
 			try
 			{
-				await _feedbackService.AddAsync(feedback);
-                await _feedbackHubContext.Clients.All.SendAsync("FeedbackCreate", feedback);
+				ReadFeedbackDTO addedFeedback = await _feedbackService.AddAsync(feedback);
+                await _feedbackHubContext.Clients.All.SendAsync("FeedbackCreate", addedFeedback);
                 return Redirect(Request.Headers["Referer"].ToString());
 			}
 			catch (EntityNotFoundException ex)

@@ -16,5 +16,7 @@ namespace TripsServiceBLL.Interfaces
         Task<string> GetJWTTokenAsync(UserLoginDTO user);
 
         int GetCurrentUserId();
+
+        string? GetCurrentUserName();
     }
 }

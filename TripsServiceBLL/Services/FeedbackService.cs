@@ -19,13 +19,16 @@ namespace TripsServiceBLL.Services
             _mapper = mapper;
         }
 
-        public async Task AddAsync(CreateFeedbackDTO feedback)
+        public async Task<ReadFeedbackDTO> AddAsync(CreateFeedbackDTO feedback)
         {
             _unitOfWork.Trips.ThrowErrorIfNotExists(feedback.TripId);
 
             Feedback feedbackToAdd = _mapper.Map<Feedback>(feedback);
             await _unitOfWork.Feedbacks.AddAsync(feedbackToAdd);
             await _unitOfWork.SaveAsync();
+			ReadFeedbackDTO dto = _mapper.Map<ReadFeedbackDTO>(feedback);
+			dto.Id = feedbackToAdd.Id;
+			return dto;
         }
 
 		public async Task DeleteAsync(int id)

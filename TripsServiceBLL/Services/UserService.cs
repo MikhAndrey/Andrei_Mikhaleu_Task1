@@ -38,6 +38,11 @@ namespace TripsServiceBLL.Services
             return userId;
         }
 
+        public string? GetCurrentUserName()
+        {
+            return _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+        }
+
         public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
         {
             User? userFromDB = await _unitOfWork.Users.GetByUsernameAsync(user.UserName);
