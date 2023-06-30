@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
 using TripsServiceBLL.Commands.Trips;
+using TripsServiceBLL.Infrastructure.Mappers;
 using TripsServiceBLL.Infrastructure.ValueResolvers;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Services;
@@ -47,6 +49,26 @@ namespace Andrei_Mikhaleu_Task1
             services.AddScoped<EditTripCommandAsync>();
             services.AddScoped<EditPastTripCommandAsync>();
         }
+
+        public static void AddMapper(IServiceCollection services)
+        {
+			var serviceProvider = services.BuildServiceProvider();
+
+			MapperConfiguration mapperConfig = new(mc =>
+			{
+				mc.ConstructServicesUsing(serviceProvider.GetService);
+				mc.AddProfile(new TripMapper(serviceProvider.GetService<CurrentUserTripResolver>()));
+				mc.AddProfile(new CommentMapper(serviceProvider.GetService<CommentUserIdResolver>()));
+				mc.AddProfile(new DriverMapper());
+				mc.AddProfile(new FeedbackMapper());
+				mc.AddProfile(new ImageMapper());
+				mc.AddProfile(new RoutePointMapper());
+				mc.AddProfile(new UserMapper());
+			});
+
+			IMapper mapper = mapperConfig.CreateMapper();
+			services.AddSingleton(mapper);
+		}
 
         public static void AddAuthentication(IServiceCollection services)
         {
