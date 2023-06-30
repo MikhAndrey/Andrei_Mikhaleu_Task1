@@ -59,7 +59,7 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 				.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.Ignore())
 				.ForMember(dest => dest.Duration, opt => opt.MapFrom(src =>
 				UtilDateTimeFunctions.GetTimeSpanString(src.EndTime - src.StartTime)))
-				.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.MapFrom(_currentUserTripResolver.Resolve));
+				.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.MapFrom(_currentUserTripResolver));
 		}
 	}
 }

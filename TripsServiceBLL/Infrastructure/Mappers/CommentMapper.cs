@@ -15,7 +15,7 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 			CreateMap<Comment, CommentDTO>();
 			CreateMap<CreateCommentDTO, Comment>()
 				.ForMember(dest => dest.Date, opt => opt.MapFrom(src => DateTime.UtcNow))
-				.ForMember(dest => dest.UserId, opt => opt.MapFrom(_commentUserIdResolver.Resolve));
+				.ForMember(dest => dest.UserId, opt => opt.MapFrom(_commentUserIdResolver));
 		}
 	}
 }
