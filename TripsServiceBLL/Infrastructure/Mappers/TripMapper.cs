@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TripsServiceBLL.DTO.Trips;
+using TripsServiceBLL.Infrastructure.ValueResolvers;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 
@@ -7,8 +8,11 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 {
 	public class TripMapper : Profile
 	{
-		public TripMapper()
+		private readonly CurrentUserTripResolver _currentUserTripResolver;
+
+		public TripMapper(CurrentUserTripResolver currentUserTripResolver)
 		{
+			_currentUserTripResolver = currentUserTripResolver;
 			CreateMap<Trip, ReadTripDTO>();
 			CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
 			CreateMap<Trip, EditPastTripDTO>();
@@ -54,7 +58,8 @@ namespace TripsServiceBLL.Infrastructure.Mappers
 				.IncludeBase<Trip, ReadTripDTO>()
 				.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.Ignore())
 				.ForMember(dest => dest.Duration, opt => opt.MapFrom(src =>
-				UtilDateTimeFunctions.GetTimeSpanString(src.EndTime - src.StartTime)));
+				UtilDateTimeFunctions.GetTimeSpanString(src.EndTime - src.StartTime)))
+				.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.MapFrom(_currentUserTripResolver.Resolve));
 		}
 	}
 }

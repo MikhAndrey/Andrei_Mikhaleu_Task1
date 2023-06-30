@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,10 +19,23 @@ namespace TripsServiceBLL.Services
 
 		private readonly IMapper _mapper;
 
-		public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+		private readonly IHttpContextAccessor _httpContextAccessor;
+
+		public UserService(
+			IUnitOfWork unitOfWork, 
+			IMapper mapper, 
+			IHttpContextAccessor httpContextAccessor)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
+			_httpContextAccessor = httpContextAccessor;
+		}
+
+		public int GetCurrentUserId()
+		{
+			int userId = int.Parse(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == UtilConstants.UserIdClaimName)?.Value);
+			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
+			return userId;
 		}
 
 		public async Task<User?> GetByUserNameAsync(string userName)

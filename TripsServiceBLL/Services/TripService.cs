@@ -16,10 +16,13 @@ namespace TripsServiceBLL.Services
 
 		private readonly IMapper _mapper;
 
-		public TripService(IUnitOfWork unitOfWork, IMapper mapper)
+		private readonly IUserService _userService;
+
+		public TripService(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
+			_userService = userService;
 		}
 
 		public async Task<Trip?> GetByIdAsync(int id)
@@ -95,7 +98,7 @@ namespace TripsServiceBLL.Services
 			await _unitOfWork.SaveAsync();
 		}
 
-		public async Task<TripDetailsDTO> GetTripDetailsAsync(int tripId, int userId)
+		public async Task<TripDetailsDTO> GetTripDetailsAsync(int tripId)
 		{
 			Trip? trip = await _unitOfWork.Trips.GetByIdForDetailsAsync(tripId);
 			if (trip == null)
@@ -103,10 +106,7 @@ namespace TripsServiceBLL.Services
 				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Trip>()());
 			}
 
-			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
-
-			TripDetailsDTO dto = _mapper.Map<Trip, TripDetailsDTO>(trip, opt =>
-				opt.AfterMap((src, dest) => dest.IsCurrentUserTrip = src.User.Id == userId));
+			TripDetailsDTO dto = _mapper.Map<TripDetailsDTO>(trip);
 			return dto;
 		}
 
@@ -134,8 +134,9 @@ namespace TripsServiceBLL.Services
 			return dto;
 		}
 
-		public IQueryable<ReadTripDTOExtended> GetOthersPublicTrips(int userId)
+		public IQueryable<ReadTripDTOExtended> GetOthersPublicTrips()
 		{
+			int userId = _userService.GetCurrentUserId();
 			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
 
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetOthersPublicTrips(userId);
@@ -143,8 +144,9 @@ namespace TripsServiceBLL.Services
 			return mappedTrips;
 		}
 
-		public IQueryable<ReadTripDTO> GetHistoryOfTripsByUserId(int userId)
+		public IQueryable<ReadTripDTO> GetCurrentUserHistoryOfTrips()
 		{
+			int userId = _userService.GetCurrentUserId();
 			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
 
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetHistoryOfTripsByUserId(userId);
@@ -152,8 +154,9 @@ namespace TripsServiceBLL.Services
 			return mappedTrips;
 		}
 
-		public IQueryable<ReadTripDTO> GetTripsByUserId(int userId)
+		public IQueryable<ReadTripDTO> GetCurrentUserTrips()
 		{
+			int userId = _userService.GetCurrentUserId();
 			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
 
 			IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetTripsByUserId(userId);
@@ -161,8 +164,9 @@ namespace TripsServiceBLL.Services
 			return mappedTrips;
 		}
 
-		public YearsStatisticsDTO GetYearsOfUserTrips(int userId)
+		public YearsStatisticsDTO GetYearsOfCurrentUserTrips()
 		{
+			int userId = _userService.GetCurrentUserId();
 			IQueryable<int> years = _unitOfWork.Trips.GetYearsOfUserTrips(userId);
 			return new()
 			{
@@ -171,8 +175,9 @@ namespace TripsServiceBLL.Services
 			};
 		}
 
-		public async Task<List<UtilDurationInMonth>> GetTotalDurationByMonthsAsync(int year, int userId)
+		public async Task<List<UtilDurationInMonth>> GetTotalDurationByMonthsAsync(int year)
 		{
+			int userId = _userService.GetCurrentUserId();
 			List<Trip> trips = await _unitOfWork.Trips.GetTripsByYearAndUserId(year, userId).ToListAsync();
 
 			if (trips.Count == 0)

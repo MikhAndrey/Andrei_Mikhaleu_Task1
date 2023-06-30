@@ -23,19 +23,19 @@ namespace TripsServiceBLL.Interfaces
 
 		Task AddAsync(Trip trip);
 
-		Task<TripDetailsDTO> GetTripDetailsAsync(int tripId, int userId);
+		Task<TripDetailsDTO> GetTripDetailsAsync(int tripId);
 
 		Task<EditTripDTO> GetTripForEditingAsync(int tripId);
 
-		IQueryable<ReadTripDTOExtended> GetOthersPublicTrips(int userId);
+		IQueryable<ReadTripDTOExtended> GetOthersPublicTrips();
 
-		IQueryable<ReadTripDTO> GetHistoryOfTripsByUserId(int userId);
+		IQueryable<ReadTripDTO> GetCurrentUserHistoryOfTrips();
 
-		IQueryable<ReadTripDTO> GetTripsByUserId(int userId);
+		IQueryable<ReadTripDTO> GetCurrentUserTrips();
 
-		YearsStatisticsDTO GetYearsOfUserTrips(int userId);
+		YearsStatisticsDTO GetYearsOfCurrentUserTrips();
 
-		Task<List<UtilDurationInMonth>> GetTotalDurationByMonthsAsync(int year, int userId);
+		Task<List<UtilDurationInMonth>> GetTotalDurationByMonthsAsync(int year);
 
 		Task<EditPastTripDTO> GetPastTripForEditingAsync(int id);
 	}

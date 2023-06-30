@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.DTO.Trips;
-using TripsServiceBLL.Helpers;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Infrastructure.Exceptions;
@@ -101,11 +100,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public IActionResult Index()
 		{
-			int userId;
 			try
 			{
-				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-				IQueryable<ReadTripDTO> trips = _tripService.GetTripsByUserId(userId);
+				IQueryable<ReadTripDTO> trips = _tripService.GetCurrentUserTrips();
 				return View(trips);
 			}
 			catch (ArgumentNullException)
@@ -122,11 +119,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public IActionResult History()
 		{
-			int userId;
 			try
 			{
-				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-				IQueryable<ReadTripDTO> trips = _tripService.GetHistoryOfTripsByUserId(userId);
+				IQueryable<ReadTripDTO> trips = _tripService.GetCurrentUserHistoryOfTrips();
 				return View(trips);
 			}
 			catch (ArgumentNullException)
@@ -143,11 +138,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpGet]
 		public IActionResult Public()
 		{
-			int userId;
 			try
 			{
-				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-				IQueryable<ReadTripDTOExtended> trips = _tripService.GetOthersPublicTrips(userId);
+				IQueryable<ReadTripDTOExtended> trips = _tripService.GetOthersPublicTrips();
 				return View(trips);
 			}
 			catch (ArgumentNullException)
@@ -262,8 +255,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		{
 			try
 			{
-				int userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-				TripDetailsDTO trip = await _tripService.GetTripDetailsAsync(id, userId);
+				TripDetailsDTO trip = await _tripService.GetTripDetailsAsync(id);
 				return View(trip);
 			}
 			catch (ArgumentNullException)
@@ -311,11 +303,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				int userId;
 				try
 				{
-					userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-					await _commentService.AddCommentAsync(comment, userId);
+					await _commentService.AddCommentAsync(comment);
 				}
 				catch (ArgumentNullException)
 				{
@@ -348,11 +338,9 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[HttpDelete]
 		public async Task<IActionResult> DeleteImage(int imageId, int tripId)
 		{
-			int userId;
 			try
 			{
-				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-				await _imageService.DeleteByIdAsync(imageId, tripId, userId, _environment.WebRootPath);
+				await _imageService.DeleteByIdAsync(imageId, tripId, _environment.WebRootPath);
 			}
 			catch (ArgumentNullException)
 			{

@@ -1,4 +1,5 @@
-﻿using TripsServiceBLL.DTO.Comments;
+﻿using AutoMapper;
+using TripsServiceBLL.DTO.Comments;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Infrastructure.Exceptions;
@@ -10,24 +11,20 @@ namespace TripsServiceBLL.Services
 	{
 		private readonly IUnitOfWork _unitOfWork;
 
-		public CommentService(IUnitOfWork unitOfWork)
+		private readonly IMapper _mapper;
+
+		public CommentService(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
+			_mapper = mapper;
 		}
 
-		public async Task AddCommentAsync(CreateCommentDTO comment, int userId)
+		public async Task AddCommentAsync(CreateCommentDTO comment)
 		{
 			_unitOfWork.Trips.ThrowErrorIfNotExists(comment.TripId);
-			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
-
-			await _unitOfWork.Comments.AddAsync(new Comment
-			{
-				Message = comment.Message,
-				TripId = comment.TripId,
-				Date = DateTime.UtcNow,
-				UserId = userId
-			});
-
+			
+			Comment commentToAdd = _mapper.Map<Comment>(comment);
+			await _unitOfWork.Comments.AddAsync(commentToAdd);	
 			await _unitOfWork.SaveAsync();
 		}
 

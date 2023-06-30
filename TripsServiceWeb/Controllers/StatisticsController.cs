@@ -4,9 +4,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using TripsServiceBLL.DTO.RoutePoints;
 using TripsServiceBLL.DTO.Statistics;
-using TripsServiceBLL.Helpers;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
+using TripsServiceDAL.Entities;
 
 namespace Andrei_Mikhaleu_Task1.Controllers
 {
@@ -42,17 +42,15 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[Authorize]
 		public async Task<IActionResult> TotalDurationData(int year)
 		{
-			int userId;
 			try
 			{
-				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
+				List<UtilDurationInMonth> durations = await _tripService.GetTotalDurationByMonthsAsync(year);
+				return Json(durations);
 			}
 			catch (ArgumentNullException)
 			{
 				return RedirectToAction("Login", "Account");
-			}
-			List<UtilDurationInMonth> durations = await _tripService.GetTotalDurationByMonthsAsync(year, userId);
-			return Json(durations);
+			}			
 		}
 
 		[HttpGet]
@@ -74,27 +72,24 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 		[Authorize]
 		public IActionResult HeatMapData(int year)
 		{
-			int userId;
 			try
 			{
-				userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
+				IQueryable<RoutePointCoordinatesDTO> result = _routePointService.GetRoutePointsByYear(year);
+				JsonSerializerOptions options = new()
+				{
+					ReferenceHandler = ReferenceHandler.Preserve
+				};
+				return Json(result, options);
 			}
 			catch (ArgumentNullException)
 			{
 				return RedirectToAction("Login", "Account");
-			};
-			IQueryable<RoutePointCoordinatesDTO> result = _routePointService.GetRoutePointsByYear(year, userId);
-			JsonSerializerOptions options = new()
-			{
-				ReferenceHandler = ReferenceHandler.Preserve
-			};
-			return Json(result, options);
+			};			
 		}
 
 		private YearsStatisticsDTO GetDistinctYearsModel()
 		{
-			int userId = UserHelper.GetUserIdFromClaims(HttpContext.User.Claims);
-			return _tripService.GetYearsOfUserTrips(userId);
+			return _tripService.GetYearsOfCurrentUserTrips();
 		}
 	}
 }

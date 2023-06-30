@@ -9,10 +9,12 @@ namespace TripsServiceBLL.Services
 	public class ImageService : IImageService
 	{
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IUserService _userService;
 
-		public ImageService(IUnitOfWork unitOfWork)
+		public ImageService(IUnitOfWork unitOfWork, IUserService userService)
 		{
 			_unitOfWork = unitOfWork;
+			_userService = userService;
 		}
 
 		public List<string> GenerateImagesFileNames(List<IFormFile>? images)
@@ -89,7 +91,7 @@ namespace TripsServiceBLL.Services
 			}
 		}
 
-		public async Task DeleteByIdAsync(int imageId, int tripId, int userId, string webRootPath)
+		public async Task DeleteByIdAsync(int imageId, int tripId, string webRootPath)
 		{
 			Image? image = await _unitOfWork.Images.GetByIdAsync(imageId);
 			if (image == null)
@@ -98,17 +100,17 @@ namespace TripsServiceBLL.Services
 			}
 
 			_unitOfWork.Trips.ThrowErrorIfNotExists(tripId);
-			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
 
 			_unitOfWork.Images.Delete(image);
 			await _unitOfWork.SaveAsync();
 
-			string path = Path.Combine(webRootPath, Utils.UtilConstants.ImagesFolderName, userId.ToString(), tripId.ToString(), image.Link);
+			int userId = _userService.GetCurrentUserId();
+			/*string path = Path.Combine(webRootPath, Utils.UtilConstants.ImagesFolderName, userId.ToString(), tripId.ToString(), image.Link);
 
 			if (File.Exists(path))
 			{
 				File.Delete(path);
-			}
+			}*/ //TODO: What to do with physical images is under discussion
 		}
 
 		public void DeleteTripImagesFiles(int tripId, int userId, string webRootPath)

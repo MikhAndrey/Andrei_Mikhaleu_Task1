@@ -2,12 +2,14 @@ using Andrei_Mikhaleu_Task1;
 using AutoMapper;
 using System.Reflection;
 using TripsServiceBLL.Infrastructure.Mappers;
+using TripsServiceBLL.Infrastructure.ValueResolvers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
 
 ProgramHelper.AddServices(builder.Services);
+ProgramHelper.AddValueResolvers(builder.Services);
 ProgramHelper.AddCommands(builder.Services);
 
 builder.Services.AddControllersWithViews();
@@ -17,10 +19,13 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+var serviceProvider = builder.Services.BuildServiceProvider();
+
 MapperConfiguration mapperConfig = new(mc =>
 {
-	mc.AddProfile(new TripMapper());
-	mc.AddProfile(new CommentMapper());
+	mc.ConstructServicesUsing(serviceProvider.GetService);
+	mc.AddProfile(new TripMapper(serviceProvider.GetService<CurrentUserTripResolver>()));
+	mc.AddProfile(new CommentMapper(serviceProvider.GetService<CommentUserIdResolver>()));
 	mc.AddProfile(new DriverMapper());
 	mc.AddProfile(new FeedbackMapper());
 	mc.AddProfile(new ImageMapper());

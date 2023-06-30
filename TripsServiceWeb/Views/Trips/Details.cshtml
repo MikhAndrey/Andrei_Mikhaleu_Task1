@@ -117,7 +117,7 @@
     }
 
     <div class="mt-4">
-        @if (Model.IsNeedToBeRated)
+        @if (Model.IsNeedToBeRated && Model.IsCurrentUserTrip)
         {
             <button type="button" class="btn btn-primary rate-invoker" data-trip-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#rateDriverModal">Rate driver of this trip</button>
         } else if (Model.Rating != null)

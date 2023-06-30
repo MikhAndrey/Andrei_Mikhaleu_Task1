@@ -10,9 +10,12 @@ namespace TripsServiceBLL.Services
 	{
 		private readonly IUnitOfWork _unitOfWork;
 
-		public RoutePointService(IUnitOfWork unitOfWork)
+		private readonly IUserService _userService;
+
+		public RoutePointService(IUnitOfWork unitOfWork, IUserService userService)
 		{
 			_unitOfWork = unitOfWork;
+			_userService = userService;
 		}
 
 		public async Task DeleteByTripIdAsync(int tripId)
@@ -44,8 +47,9 @@ namespace TripsServiceBLL.Services
 			}
 		}
 
-		public IQueryable<RoutePointCoordinatesDTO> GetRoutePointsByYear(int year, int userId)
+		public IQueryable<RoutePointCoordinatesDTO> GetRoutePointsByYear(int year)
 		{
+			int userId = _userService.GetCurrentUserId();
 			IQueryable<RoutePointCoordinatesDTO> dataPoints = _unitOfWork.RoutePoints
 				.GetRoutePointsByYear(year, userId)
 				.Select(rp => new RoutePointCoordinatesDTO() { Latitude = rp.Latitude, Longitude = rp.Longitude });

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Storage;
 using TripsServiceBLL.DTO.Trips;
-using TripsServiceBLL.Helpers;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
@@ -14,11 +13,8 @@ namespace TripsServiceBLL.Commands.Trips
 	public class CreateTripCommandAsync : ICommandAsync<CreateTripDTO>
 	{
 		private readonly IImageService _imageService;
-
 		private readonly ITripService _tripService;
-
 		private readonly IUserService _userService;
-
 		private readonly IRoutePointService _routePointService;
 
 		private readonly IMapper _mapper;
@@ -52,8 +48,7 @@ namespace TripsServiceBLL.Commands.Trips
 
 		public async Task ExecuteAsync(CreateTripDTO dto)
 		{
-			int userId = UserHelper.GetUserIdFromClaims(_httpContextAccessor.HttpContext.User.Claims);
-			_unitOfWork.Users.ThrowErrorIfNotExists(userId);
+			int userId = _userService.GetCurrentUserId();
 
 			Trip trip = _mapper.Map<Trip>(dto);
 			trip.UserId = userId;

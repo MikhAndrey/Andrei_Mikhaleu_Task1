@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
 using TripsServiceBLL.Commands.Trips;
+using TripsServiceBLL.Infrastructure.ValueResolvers;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Services;
 using TripsServiceBLL.Utils;
@@ -32,6 +33,12 @@ namespace Andrei_Mikhaleu_Task1
             services.AddScoped<IDriverService, DriverService>();
             services.AddScoped<IFeedbackService, FeedbackService>();
         }
+
+        public static void AddValueResolvers(IServiceCollection services)
+        {
+			services.AddScoped<CurrentUserTripResolver>();
+            services.AddScoped<CommentUserIdResolver>();
+		}
 
         public static void AddCommands(IServiceCollection services)
         {

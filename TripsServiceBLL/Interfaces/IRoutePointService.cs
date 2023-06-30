@@ -9,7 +9,7 @@ namespace TripsServiceBLL.Interfaces
 
 		Task AddTripRoutePointsAsync(int tripId, List<RoutePoint>? routePoints);
 
-		IQueryable<RoutePointCoordinatesDTO> GetRoutePointsByYear(int year, int userId);
+		IQueryable<RoutePointCoordinatesDTO> GetRoutePointsByYear(int year);
 
 		Task DeleteByTripIdAsync(int tripId);
 	}

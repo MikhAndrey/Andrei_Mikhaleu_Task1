@@ -10,7 +10,7 @@ namespace TripsServiceBLL.Interfaces
 
 		Task SaveTripImagesFilesAsync(int tripId, int userId, List<string> fileNames, List<IFormFile>? images, string webRootPath);
 
-		Task DeleteByIdAsync(int imageId, int tripId, int userId, string webRootPath);
+		Task DeleteByIdAsync(int imageId, int tripId, string webRootPath);
 
 		void DeleteTripImagesFiles(int tripId, int userId, string webRootPath);
 
