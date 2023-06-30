@@ -7,5 +7,7 @@ namespace TripsServiceBLL.Interfaces
 		Task AddAsync(CreateFeedbackDTO feedback);
 
 		Task DeleteByTripIdAsync(int tripId);
+
+		Task DeleteAsync(int id);
 	}
 }

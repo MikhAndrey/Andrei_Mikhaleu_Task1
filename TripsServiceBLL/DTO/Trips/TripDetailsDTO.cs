@@ -29,6 +29,10 @@ namespace TripsServiceBLL.DTO.Trips
 
 		public ReadDriverDTO? Driver { get; set; }
 
+		public string FeedbackText { get; set; }
+
+		public int FeedbackId { get; set; }
+
 		public TripDetailsDTO() { }
 	}
 }

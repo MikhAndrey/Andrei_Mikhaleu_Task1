@@ -2,6 +2,7 @@
 using TripsServiceBLL.DTO.Feedbacks;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Services
@@ -24,6 +25,18 @@ namespace TripsServiceBLL.Services
 
 			Feedback feedbackToAdd = _mapper.Map<Feedback>(feedback);
 			await _unitOfWork.Feedbacks.AddAsync(feedbackToAdd);
+			await _unitOfWork.SaveAsync();
+		}
+
+		public async Task DeleteAsync(int id)
+		{
+			Feedback? feedback = await _unitOfWork.Feedbacks.GetByIdAsync(id);
+			if (feedback == null)
+			{
+				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Feedback>()());
+			}
+			_unitOfWork.Trips.ThrowErrorIfNotExists(feedback.TripId);
+			_unitOfWork.Feedbacks.Delete(feedback);
 			await _unitOfWork.SaveAsync();
 		}
 

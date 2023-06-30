@@ -28,5 +28,19 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 				return NotFound(ex.Message);
 			}
 		}
+
+		[HttpDelete]
+		public async Task<IActionResult> Delete(int id)
+		{
+			try
+			{
+				await _feedbackService.DeleteAsync(id);
+				return Ok();
+			}
+			catch (EntityNotFoundException ex)
+			{
+				return NotFound(ex.Message);
+			}
+		}
 	}
 }
