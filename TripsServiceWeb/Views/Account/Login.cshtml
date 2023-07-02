@@ -1,25 +1,25 @@
 ﻿@model TripsServiceBLL.DTO.Users.UserLoginDTO
 
-<form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="bootstrap-form tp-form">
-    <h2 class="tp-label">Login</h2>
-    <div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action = "Login" asp-route-returnUrl = "@ViewData["ReturnUrl"]" class = "bootstrap-form tp-form">
+	<h2 class = "tp-label">Login</h2>
+	<div asp-validation-summary = "All" class = "text-danger"></div>
 
-    <div class="form-group tp-form-group">
-        <label asp-for="UserName" class="tp-label"></label>
-        <input type="text" asp-for="UserName" class="form-control tp-text-input">
-        <span asp-validation-for="UserName" class="text-danger"></span>
-    </div>
+	<div class = "form-group tp-form-group">
+		<label asp-for = "UserName" class = "tp-label"></label>
+		<input type = "text" asp-for = "UserName" class = "form-control tp-text-input">
+		<span asp-validation-for = "UserName" class = "text-danger"></span>
+	</div>
 
-    <div class="form-group tp-form-group">
-        <label asp-for="Password" class="tp-label"></label>
-        <input type="password" asp-for="Password" class="form-control tp-text-input">
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
+	<div class = "form-group tp-form-group">
+		<label asp-for = "Password" class = "tp-label"></label>
+		<input type = "password" asp-for = "Password" class = "form-control tp-text-input">
+		<span asp-validation-for = "Password" class = "text-danger"></span>
+	</div>
 
-    <div class="form-group tp-form-group">
-        <input type="checkbox" asp-for="RememberMe">
-        <label asp-for="RememberMe" class="tp-label"></label>
-    </div>
+	<div class = "form-group tp-form-group">
+		<input type = "checkbox" asp-for = "RememberMe">
+		<label asp-for = "RememberMe" class = "tp-label"></label>
+	</div>
 
-    <button type="submit" class="btn btn-primary mt-3">Login</button>
+	<button type = "submit" class = "btn btn-primary mt-3">Login</button>
 </form>

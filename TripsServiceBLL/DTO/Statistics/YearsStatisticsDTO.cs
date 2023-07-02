@@ -1,9 +1,7 @@
-﻿namespace TripsServiceBLL.DTO.Statistics
-{
-    public class YearsStatisticsDTO
-    {
-        public IQueryable<int>? Years { get; set; }
+﻿namespace TripsServiceBLL.DTO.Statistics;
 
-        public int SelectedYear;
-    }
+public class YearsStatisticsDTO
+{
+    public int SelectedYear;
+    public IQueryable<int>? Years { get; set; }
 }

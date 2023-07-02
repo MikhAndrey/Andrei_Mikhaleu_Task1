@@ -1,9 +1,8 @@
 ﻿using TripsServiceDAL.Entities;
 
-namespace TripsServiceDAL.Interfaces
+namespace TripsServiceDAL.Interfaces;
+
+public interface IFeedbackRepository : IGenericRepository<Feedback>
 {
-    public interface IFeedbackRepository : IGenericRepository<Feedback>
-    {
-        Task<Feedback> GetByTripId(int tripId);
-    }
+    Task<Feedback> GetByTripId(int tripId);
 }

@@ -1,8 +1,8 @@
-﻿$('#remove-trip-button').on('click', function (e) {
+﻿$("#remove-trip-button").on("click", function (e) {
 	e.preventDefault();
-	var url = $(this).attr('href');
+	const url = $(this).attr("href");
 	fetch(url, {
-		method: 'DELETE'
+		method: "DELETE"
 	})
 		.then(response => {
 			if (response.ok) {
@@ -12,6 +12,6 @@
 			}
 		})
 		.catch(error => {
-			console.error('Error:', error);
+			console.error("Error:", error);
 		});
 });

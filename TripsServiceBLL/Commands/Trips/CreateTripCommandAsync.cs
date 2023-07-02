@@ -7,68 +7,66 @@ using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
 
-namespace TripsServiceBLL.Commands.Trips
+namespace TripsServiceBLL.Commands.Trips;
+
+public class CreateTripCommandAsync : ICommandAsync<CreateTripDTO>
 {
-    public class CreateTripCommandAsync : ICommandAsync<CreateTripDTO>
+    private readonly IWebHostEnvironment _env;
+    private readonly IImageService _imageService;
+
+    private readonly IMapper _mapper;
+    private readonly IRoutePointService _routePointService;
+    private readonly ITripService _tripService;
+
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IUserService _userService;
+
+    public CreateTripCommandAsync(
+        IImageService       imageService,
+        ITripService        tripService,
+        IUserService        userService,
+        IRoutePointService  routePointService,
+        IMapper             mapper,
+        IWebHostEnvironment env,
+        IUnitOfWork         unitOfWork
+    )
     {
-        private readonly IImageService _imageService;
-        private readonly ITripService _tripService;
-        private readonly IUserService _userService;
-        private readonly IRoutePointService _routePointService;
+        _imageService = imageService;
+        _tripService = tripService;
+        _userService = userService;
+        _routePointService = routePointService;
+        _mapper = mapper;
+        _env = env;
+        _unitOfWork = unitOfWork;
+    }
 
-        private readonly IMapper _mapper;
+    public async Task ExecuteAsync(CreateTripDTO dto)
+    {
+        int userId = _userService.GetCurrentUserId();
 
-        private readonly IWebHostEnvironment _env;
+        Trip trip = _mapper.Map<Trip>(dto);
+        trip.UserId = userId;
 
-        private readonly IUnitOfWork _unitOfWork;
+        List<RoutePoint>? routePoints = _routePointService.ParseRoutePointsFromString(dto.RoutePointsAsString);
 
-        public CreateTripCommandAsync(
-            IImageService imageService,
-            ITripService tripService,
-            IUserService userService,
-            IRoutePointService routePointService,
-            IMapper mapper,
-            IWebHostEnvironment env,
-            IUnitOfWork unitOfWork
-        )
+        List<string> fileNames = _imageService.GenerateImagesFileNames(dto.ImagesAsFiles);
+
+        using (IDbContextTransaction transaction = _unitOfWork.BeginTransaction())
         {
-            _imageService = imageService;
-            _tripService = tripService;
-            _userService = userService;
-            _routePointService = routePointService;
-            _mapper = mapper;
-            _env = env;
-            _unitOfWork = unitOfWork;
-        }
-
-        public async Task ExecuteAsync(CreateTripDTO dto)
-        {
-            int userId = _userService.GetCurrentUserId();
-
-            Trip trip = _mapper.Map<Trip>(dto);
-            trip.UserId = userId;
-
-            List<RoutePoint>? routePoints = _routePointService.ParseRoutePointsFromString(dto.RoutePointsAsString);
-
-            List<string> fileNames = _imageService.GenerateImagesFileNames(dto.ImagesAsFiles);
-
-            using (IDbContextTransaction transaction = _unitOfWork.BeginTransaction())
+            try
             {
-                try
-                {
-                    await _tripService.AddAsync(trip);
-                    await _routePointService.AddTripRoutePointsAsync(trip.Id, routePoints);
-                    await _imageService.AddTripImagesAsync(fileNames, trip.Id);
-                    await transaction.CommitAsync();
-                }
-                catch (Exception)
-                {
-                    await transaction.RollbackAsync();
-                    throw new DbOperationException();
-                }
+                await _tripService.AddAsync(trip);
+                await _routePointService.AddTripRoutePointsAsync(trip.Id, routePoints);
+                await _imageService.AddTripImagesAsync(fileNames, trip.Id);
+                await transaction.CommitAsync();
             }
-
-            await _imageService.SaveTripImagesFilesAsync(trip.Id, userId, fileNames, dto.ImagesAsFiles, _env.WebRootPath);
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw new DbOperationException();
+            }
         }
+
+        await _imageService.SaveTripImagesFilesAsync(trip.Id, userId, fileNames, dto.ImagesAsFiles, _env.WebRootPath);
     }
 }

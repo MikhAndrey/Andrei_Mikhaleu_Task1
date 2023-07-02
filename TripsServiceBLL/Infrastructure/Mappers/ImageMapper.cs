@@ -2,13 +2,12 @@
 using TripsServiceBLL.DTO.Images;
 using TripsServiceDAL.Entities;
 
-namespace TripsServiceBLL.Infrastructure.Mappers
+namespace TripsServiceBLL.Infrastructure.Mappers;
+
+public class ImageMapper : Profile
 {
-    public class ImageMapper : Profile
+    public ImageMapper()
     {
-        public ImageMapper()
-        {
-            CreateMap<Image, ImageDTO>();
-        }
+        CreateMap<Image, ImageDTO>();
     }
 }

@@ -4,34 +4,32 @@ using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
 
-namespace TripsServiceBLL.Services
+namespace TripsServiceBLL.Services;
+
+public class FeedbackService : IFeedbackService
 {
-    public class FeedbackService : IFeedbackService
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public FeedbackService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        private readonly IUnitOfWork _unitOfWork;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
 
-        private readonly IMapper _mapper;
+    public async Task AddAsync(CreateFeedbackDTO feedback)
+    {
+        _unitOfWork.Trips.ThrowErrorIfNotExists(feedback.TripId);
 
-        public FeedbackService(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
+        Feedback feedbackToAdd = _mapper.Map<Feedback>(feedback);
+        await _unitOfWork.Feedbacks.AddAsync(feedbackToAdd);
+        await _unitOfWork.SaveAsync();
+    }
 
-        public async Task AddAsync(CreateFeedbackDTO feedback)
-        {
-            _unitOfWork.Trips.ThrowErrorIfNotExists(feedback.TripId);
-
-            Feedback feedbackToAdd = _mapper.Map<Feedback>(feedback);
-            await _unitOfWork.Feedbacks.AddAsync(feedbackToAdd);
-            await _unitOfWork.SaveAsync();
-        }
-
-        public async Task DeleteByTripIdAsync(int tripId)
-        {
-            Feedback feedback = await _unitOfWork.Feedbacks.GetByTripId(tripId);
-            _unitOfWork.Feedbacks.Delete(feedback);
-            await _unitOfWork.SaveAsync();
-        }
+    public async Task DeleteByTripIdAsync(int tripId)
+    {
+        Feedback feedback = await _unitOfWork.Feedbacks.GetByTripId(tripId);
+        _unitOfWork.Feedbacks.Delete(feedback);
+        await _unitOfWork.SaveAsync();
     }
 }

@@ -1,50 +1,43 @@
-﻿@model IQueryable<TripsServiceBLL.DTO.Trips.ReadTripDTOExtended>
+﻿@using TripsServiceBLL.DTO.Trips
+@model IQueryable<TripsServiceBLL.DTO.Trips.ReadTripDTOExtended>
 
 @{
 	ViewData["Title"] = "Other's trips";
 }
-<h1 class="tp-label">Other trips</h1>
+<h1 class = "tp-label">Other trips</h1>
 
-<div class="row row-cols-2">
-@if (Model.Count() == 0)
-{
-	<p class="tp-label">No trips here so far.</p>
-}
-else
-{
-	@foreach (var trip in Model)
-	{ 
-		<div class="col mb-4">
-			<div class="card h-100 br-20">					
-				<div class="card-header text-light tp-gradient-standard">
-					<h5 class="card-title tp-label">@trip.Name by @trip.UserName</h5>
-				</div>
-				<div class="card-body">
-					<p class="card-text tp-label">@trip.Description</p>
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item text-right tp-label text-muted">Departure time: @trip.UtcStartTimeZone</li>
-						<li class="list-group-item text-right tp-label text-muted">Arrival time: @trip.UtcFinishTimeZone</li>
-						<li class="list-group-item tp-label"> Status: 
-							@if (trip.IsCurrent)
-							{
-								<span class="badge badge-pill badge-info">Ongoing</span>
-							}
-							else if (trip.IsFuture)
-							{
-								<span class="badge badge-pill badge-warning">Planned</span>
-							}
-							else if (trip.IsPast)
-							{
-								<span class="badge badge-pill badge-success">Completed</span>
-							} 
-						</li>
-					</ul>
-					<div class="tp-gradient-reverse"> 
-						<a href="@Url.Action("Details", new { id = trip.Id })" class="btn btn-primary ml-3 mt-2 mb-3">Details</a> 
+<div class = "row row-cols-2">
+	@if (Model.Count() == 0) {
+		<p class = "tp-label">No trips here so far.</p>
+	} else {
+		@foreach (ReadTripDTOExtended trip in Model) {
+			<div class = "col mb-4">
+				<div class = "card h-100 br-20">
+					<div class = "card-header text-light tp-gradient-standard">
+						<h5 class = "card-title tp-label">@trip.Name by @trip.UserName</h5>
+					</div>
+					<div class = "card-body">
+						<p class = "card-text tp-label">@trip.Description</p>
+						<ul class = "list-group list-group-flush">
+							<li class = "list-group-item text-right tp-label text-muted">Departure time: @trip.UtcStartTimeZone</li>
+							<li class = "list-group-item text-right tp-label text-muted">Arrival time: @trip.UtcFinishTimeZone</li>
+							<li class = "list-group-item tp-label">
+								Status:
+								@if (trip.IsCurrent) {
+									<span class = "badge badge-pill badge-info">Ongoing</span>
+								} else if (trip.IsFuture) {
+									<span class = "badge badge-pill badge-warning">Planned</span>
+								} else if (trip.IsPast) {
+									<span class = "badge badge-pill badge-success">Completed</span>
+								}
+							</li>
+						</ul>
+						<div class = "tp-gradient-reverse">
+							<a href = "@Url.Action("Details", new {id = trip.Id})" class = "btn btn-primary ml-3 mt-2 mb-3">Details</a>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	}        
-}
+		}
+	}
 </div>

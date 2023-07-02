@@ -3,30 +3,29 @@ using TripsServiceBLL.DTO.Feedbacks;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Infrastructure.Exceptions;
 
-namespace Andrei_Mikhaleu_Task1.Controllers
+namespace Andrei_Mikhaleu_Task1.Controllers;
+
+public class FeedbacksController : Controller
 {
-    public class FeedbacksController : Controller
+    private readonly IFeedbackService _feedbackService;
+
+    public FeedbacksController(IFeedbackService feedbackService)
     {
-        private readonly IFeedbackService _feedbackService;
+        _feedbackService = feedbackService;
+    }
 
-        public FeedbacksController(IFeedbackService feedbackService)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreateFeedbackDTO feedback)
+    {
+        try
         {
-            _feedbackService = feedbackService;
+            await _feedbackService.AddAsync(feedback);
+            return Redirect(Request.Headers["Referer"].ToString());
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateFeedbackDTO feedback)
+        catch (EntityNotFoundException ex)
         {
-            try
-            {
-                await _feedbackService.AddAsync(feedback);
-                return Redirect(Request.Headers["Referer"].ToString());
-            }
-            catch (EntityNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            return NotFound(ex.Message);
         }
     }
 }

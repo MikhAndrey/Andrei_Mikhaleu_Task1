@@ -2,13 +2,12 @@
 using TripsServiceBLL.DTO.RoutePoints;
 using TripsServiceDAL.Entities;
 
-namespace TripsServiceBLL.Infrastructure.Mappers
+namespace TripsServiceBLL.Infrastructure.Mappers;
+
+public class RoutePointMapper : Profile
 {
-    public class RoutePointMapper : Profile
+    public RoutePointMapper()
     {
-        public RoutePointMapper()
-        {
-            CreateMap<RoutePoint, RoutePointDTO>();
-        }
+        CreateMap<RoutePoint, RoutePointDTO>();
     }
 }
