@@ -94,7 +94,9 @@
                         rating: $('#feedback-rating').val()
                     }
                 },
-                success: location.reload()
+                success: function (){
+                    location.reload();
+                }
             });
         }
     });
