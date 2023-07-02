@@ -17,6 +17,7 @@ namespace TripsServiceBLL.Infrastructure.Mappers
             CreateMap<CreateFeedbackDTO, Feedback>();
             CreateMap<CreateFeedbackDTO, ReadFeedbackDTO>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(feedbackUserResolver));
+            CreateMap<UpdateFeedbackDTO, Feedback>();
         }
     }
 }

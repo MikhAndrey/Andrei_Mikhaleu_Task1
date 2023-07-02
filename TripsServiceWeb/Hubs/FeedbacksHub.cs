@@ -14,5 +14,10 @@ namespace Andrei_Mikhaleu_Task1.Hubs
         {
             await Clients.All.SendAsync("FeedbackCreate", feedback);
         }
+        
+        public async Task Update(UpdateFeedbackDTO feedback)
+        {
+            await Clients.All.SendAsync("FeedbackUpdate", feedback);
+        }
     }
 }

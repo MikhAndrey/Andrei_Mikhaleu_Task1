@@ -130,6 +130,7 @@
                 <p>@Model.FeedbackText</p>
                 @if (Model.IsCurrentUserTrip)
                 {
+                    <button type="button" class="btn btn-secondary" id="edit-feedback-btn">Edit</button>
                     <form class="feedback-delete-form" action="@Url.Action("Delete", "Feedbacks")">
                         <input type="hidden" name="feedbackId" value="@Model.FeedbackId" />
                         <button type="submit" class="btn btn-danger">Delete</button>
@@ -169,15 +170,6 @@
 </div>
 
 @await Html.PartialAsync("_AddFeedback", new TripsServiceBLL.DTO.Feedbacks.CreateFeedbackDTO())
-
-<script>
-    $(".rate-invoker").on('click', function(){
-        $("#feedback-trip-id").val($(this).data('trip-id'));
-    });
-    $("#rate-driver-visible").on('click', () => {
-        $("#rate-driver-hidden").click();
-    });
-</script>
 
 @section Scripts {
     <script src="@Url.Content("~/js/RouteBuilder.js")"></script>
@@ -238,5 +230,25 @@
                 }
             });
         });
+    </script>
+    <script>
+        $(".rate-invoker").on('click', function(){
+            $("#feedback-trip-id").val($(this).data('trip-id'));
+        });
+        $("#rate-driver-visible").on('click', () => {
+            $("#rate-driver-hidden").click();
+        });
+    </script>
+
+    <script>
+        $('#edit-feedback-btn').click(function (){
+            $('#trip-rating-form').attr('action', '/Feedbacks/Update');
+            $('#trip-rating-form').attr('asp-action', 'Update');
+            $('#feedback-text').text("@Model.FeedbackText");
+            $('#feedback-id').val("@Model.FeedbackId");
+            $('form .star').eq(@(Model.Rating - 1)).mouseenter();
+            $('form .star').eq(@(Model.Rating - 1)).click();
+            $('#rateDriverModal').modal('show');
+        });   
     </script>
 }

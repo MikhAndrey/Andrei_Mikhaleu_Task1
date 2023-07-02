@@ -38,6 +38,21 @@ namespace Andrei_Mikhaleu_Task1.Controllers
 			}
 		}
 
+		[HttpPut]
+		public async Task<IActionResult> Update(UpdateFeedbackDTO dto)
+		{
+			try
+			{
+				await _feedbackService.UpdateAsync(dto);
+				await _feedbackHubContext.Clients.All.SendAsync("FeedbackUpdate", dto);
+				return Ok();
+			}
+			catch (EntityNotFoundException ex)
+			{
+				return NotFound(ex.Message);
+			}
+		}
+
 		[HttpDelete]
 		public async Task<IActionResult> Delete(int id)
 		{

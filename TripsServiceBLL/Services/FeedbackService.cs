@@ -30,14 +30,19 @@ namespace TripsServiceBLL.Services
 			dto.Id = feedbackToAdd.Id;
 			return dto;
         }
-
+        
+        public async Task UpdateAsync(UpdateFeedbackDTO dto)
+        {
+	        Feedback feedback = await _unitOfWork.Feedbacks.GetByIdAsync(dto.Id);
+	        _unitOfWork.Trips.ThrowErrorIfNotExists(feedback.TripId);
+	        _mapper.Map(dto, feedback);
+	        _unitOfWork.Feedbacks.Update(feedback);
+	        await _unitOfWork.SaveAsync();
+        }
+        
 		public async Task DeleteAsync(int id)
 		{
-			Feedback? feedback = await _unitOfWork.Feedbacks.GetByIdAsync(id);
-			if (feedback == null)
-			{
-				throw new EntityNotFoundException(TripsServiceDAL.Utils.UtilConstants.GetEntityNotExistsMessage<Feedback>()());
-			}
+			Feedback feedback = await _unitOfWork.Feedbacks.GetByIdAsync(id);
 			_unitOfWork.Trips.ThrowErrorIfNotExists(feedback.TripId);
 			_unitOfWork.Feedbacks.Delete(feedback);
 			await _unitOfWork.SaveAsync();
@@ -45,12 +50,9 @@ namespace TripsServiceBLL.Services
 
 		public async Task DeleteByTripIdAsync(int tripId)
 		{
-			Feedback? feedback = await _unitOfWork.Feedbacks.GetByTripId(tripId);
-			if (feedback != null)
-			{
-				_unitOfWork.Feedbacks.Delete(feedback);
-				await _unitOfWork.SaveAsync();
-			}
+			Feedback feedback = await _unitOfWork.Feedbacks.GetByTripId(tripId);
+			_unitOfWork.Feedbacks.Delete(feedback);
+			await _unitOfWork.SaveAsync();
 		}
 	}
 }

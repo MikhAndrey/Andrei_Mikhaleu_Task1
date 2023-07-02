@@ -9,5 +9,7 @@ namespace TripsServiceBLL.Interfaces
 		Task DeleteByTripIdAsync(int tripId);
 
 		Task DeleteAsync(int id);
+		
+		Task UpdateAsync(UpdateFeedbackDTO dto);
 	}
 }
