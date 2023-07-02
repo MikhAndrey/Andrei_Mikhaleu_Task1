@@ -105,12 +105,12 @@
                     </span>
                 </span>
             </p>
-            <p>@feedback.Text</p>
+            <p class="feedback-text">@feedback.Text</p>
             <hr/>
         </li>
     }
     </ul>
-    </div>
+</div>
 @section Scripts{
     <script src="@Url.Content("~/js/ratingBuilder.js")"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
@@ -171,6 +171,13 @@
                 </li>
             `);
             applyRatingToElement($(".feedback-container").last());
+            recomputeAverageRating();
+        });
+        connection.on("FeedbackUpdate", function (feedback) {
+            const updatedFeedbackContainer = $(`.feedback-container[data-feedback-id=${feedback.id}]`);
+            updatedFeedbackContainer.find(".feedback-text").text(feedback.text);
+            updatedFeedbackContainer.find(".rating-value").text(feedback.rating);
+            applyRatingToElement(updatedFeedbackContainer);
             recomputeAverageRating();
         });
         connection.start();
