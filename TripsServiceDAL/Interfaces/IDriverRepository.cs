@@ -1,7 +1,8 @@
 ﻿using TripsServiceDAL.Entities;
 
-namespace TripsServiceDAL.Interfaces;
-
-public interface IDriverRepository : IGenericRepository<Driver>
+namespace TripsServiceDAL.Interfaces
 {
+    public interface IDriverRepository : IGenericRepository<Driver>
+    {
+    }
 }

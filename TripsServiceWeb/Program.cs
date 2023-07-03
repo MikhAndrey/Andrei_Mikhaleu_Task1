@@ -1,6 +1,6 @@
-using System.Reflection;
 using Andrei_Mikhaleu_Task1;
 using Andrei_Mikhaleu_Task1.Hubs;
+using System.Reflection;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +25,8 @@ WebApplication app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-	app.UseExceptionHandler("/Home/Error");
-	app.UseHsts();
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -45,7 +45,7 @@ app.UseAuthorization();
 app.MapHub<FeedbacksHub>("/feedbackshub");
 
 app.MapControllerRoute(
-	"default",
-	"{controller=Home}/{action=Index}/{id?}");
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

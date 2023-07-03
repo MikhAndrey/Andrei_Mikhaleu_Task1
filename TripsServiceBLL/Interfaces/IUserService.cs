@@ -1,21 +1,22 @@
 ﻿using TripsServiceBLL.DTO.Users;
 using TripsServiceDAL.Entities;
 
-namespace TripsServiceBLL.Interfaces;
-
-public interface IUserService
+namespace TripsServiceBLL.Interfaces
 {
-	Task<int?> GetUserIdForLoginAsync(UserLoginDTO user);
+    public interface IUserService
+    {
+        Task<int?> GetUserIdForLoginAsync(UserLoginDTO user);
 
-	Task AddAsync(User user);
+        Task AddAsync(User user);
 
-	bool Exists(int id);
+        bool Exists(int id);
 
-	Task TryToRegisterNewUserAsync(UserSignupDTO user);
+        Task TryToRegisterNewUserAsync(UserSignupDTO user);
 
-	Task<string> GetJWTTokenAsync(UserLoginDTO user);
+        Task<string> GetJWTTokenAsync(UserLoginDTO user);
 
-	int GetCurrentUserId();
+        int GetCurrentUserId();
 
-	string? GetCurrentUserName();
+        string? GetCurrentUserName();
+    }
 }

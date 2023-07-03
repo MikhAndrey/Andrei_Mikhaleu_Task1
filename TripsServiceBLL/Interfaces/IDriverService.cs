@@ -1,10 +1,11 @@
 ﻿using TripsServiceBLL.DTO.Drivers;
 
-namespace TripsServiceBLL.Interfaces;
-
-public interface IDriverService
+namespace TripsServiceBLL.Interfaces
 {
-	IEnumerable<ReadDriverDTO> GetDriversOverall();
+    public interface IDriverService
+    {
+        IEnumerable<ReadDriverDTO> GetDriversOverall();
 
-	Task<DriverDetailsDTO> GetDriverDetailsAsync(int id);
+        Task<DriverDetailsDTO> GetDriverDetailsAsync(int id);
+    }
 }

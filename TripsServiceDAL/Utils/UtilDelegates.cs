@@ -1,6 +1,7 @@
-﻿namespace TripsServiceDAL.Utils;
-
-public static class UtilDelegates
+﻿namespace TripsServiceDAL.Utils
 {
-	public delegate string StringGeneratorGenericDelegate<T>();
+    public static class UtilDelegates
+    {
+        public delegate string StringGeneratorGenericDelegate<T>();
+    }
 }

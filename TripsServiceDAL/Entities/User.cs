@@ -1,26 +1,27 @@
 ﻿using TripsServiceDAL.Interfaces;
 
-namespace TripsServiceDAL.Entities;
-
-public class User : IIdentifiable, ISoftDelete
+namespace TripsServiceDAL.Entities
 {
-	public User()
-	{
-		Trips = new List<Trip>();
-		Comments = new List<Comment>();
-	}
+    public class User : IIdentifiable, ISoftDelete
+    {
+        public User()
+        {
+            Trips = new();
+            Comments = new();
+        }
 
-	public string UserName { get; set; }
+        public int Id { get; set; }
 
-	public string Password { get; set; }
+        public string UserName { get; set; }
 
-	public string? Email { get; set; }
+        public string Password { get; set; }
 
-	public List<Trip> Trips { get; set; }
+        public string? Email { get; set; }
 
-	public List<Comment> Comments { get; set; }
+        public List<Trip> Trips { get; set; }
 
-	public int Id { get; set; }
+        public List<Comment> Comments { get; set; }
 
-	public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
+    }
 }

@@ -1,65 +1,65 @@
-﻿@using TripsServiceBLL.DTO.Drivers
+﻿@model IEnumerable<TripsServiceBLL.DTO.Drivers.ReadDriverDTO>
 @using TripsServiceBLL.Utils
-@model IEnumerable<TripsServiceBLL.DTO.Drivers.ReadDriverDTO>
 @{
 	ViewData["Title"] = "Our drivers";
 }
-<h1 class = "tp-label">Our drivers</h1>
-<div class = "row row-cols-2">
-	@if (Model.Count() == 0) {
-		<p class = "tp-label">No drivers here yet.</p>
-	} else {
-		@foreach (ReadDriverDTO driver in Model) {
-			<div class = "col mb-4">
-				<div class = "card h-100 br-20">
-					<div class = "card-header text-light tp-gradient-standard">
-						<h5 class = "card-title tp-label">@driver.Name</h5>
-					</div>
-					<div class = "card-body bg-light br-20 d-flex flex-row align-items-center">
-						<div class = "mr-4" style = "width:30%">
-							@{
-								string imagePath = $"/{UtilConstants.ImagesFolderName}/{UtilConstants.DriversFolderName}/{driver.Id.ToString()}/{driver.FirstPhoto.Link}";
-							}
-							<img src = "@imagePath" alt = "Driver Photo" style = "width:100%;height:auto;border-radius:50%;"/>
+<h1 class="tp-label">Our drivers</h1>
+<div class="row row-cols-2">
+	@if (Model.Count() == 0)
+	{ 
+			<p class="tp-label">No drivers here yet.</p>
+	}
+	else
+	{ 
+		@foreach (var driver in Model)
+		{ 
+			<div class="col mb-4">
+				<div class="card h-100 br-20">
+					<div class="card-header text-light tp-gradient-standard"><h5 class="card-title tp-label">@driver.Name</h5></div>
+					<div class="card-body bg-light br-20 d-flex flex-row align-items-center">
+						<div class="mr-4" style="width:30%">
+								@{
+									string imagePath = $"/{UtilConstants.ImagesFolderName}/{UtilConstants.DriversFolderName}/{driver.Id.ToString()}/{driver.FirstPhoto.Link}";
+								}
+							<img src="@imagePath" alt="Driver Photo" style="width:100%;height:auto;border-radius:50%;" />
 						</div>
-						<div style = "flex-grow:1;">
-							<p class = "tp-label">Experience: @driver.Experience years</p>
-							<div class = "rating-container tp-label mb-3" style = "display: flex; flex-wrap: wrap;">
-								<span class = "rating-value text-light mt-2" style = "order: 1;">@driver.AverageRating</span>
-								<span class = "star-container" style = "flex-basis: 100%;">
-									<span class = "star">
-										<span class = "star-filled" style = "width: 100%;"></span>
-										<span class = "star-outline"></span>
+						<div style="flex-grow:1;">
+							<p class="tp-label">Experience: @driver.Experience years</p>
+							<div class="rating-container tp-label mb-3" style="display: flex; flex-wrap: wrap;">
+								<span class="rating-value text-light mt-2" style="order: 1;">@driver.AverageRating</span>
+								<span class="star-container" style="flex-basis: 100%;">
+									<span class="star">
+										<span class="star-filled" style="width: 100%;"></span>
+										<span class="star-outline"></span>
 									</span>
-									<span class = "star">
-										<span class = "star-filled" style = "width: 100%;"></span>
-										<span class = "star-outline"></span>
+									<span class="star">
+										<span class="star-filled" style="width: 100%;"></span>
+										<span class="star-outline"></span>
 									</span>
-									<span class = "star">
-										<span class = "star-filled" style = "width: 100%;"></span>
-										<span class = "star-outline"></span>
+									<span class="star">
+										<span class="star-filled" style="width: 100%;"></span>
+										<span class="star-outline"></span>
 									</span>
-									<span class = "star">
-										<span class = "star-filled" style = "width: 100%;"></span>
-										<span class = "star-outline"></span>
+									<span class="star">
+										<span class="star-filled" style="width: 100%;"></span>
+										<span class="star-outline"></span>
 									</span>
-									<span class = "star">
-										<span class = "star-filled" style = "width: 100%;"></span>
-										<span class = "star-outline"></span>
+									<span class="star">
+										<span class="star-filled" style="width: 100%;"></span>
+										<span class="star-outline"></span>
 									</span>
 								</span>
 							</div>
 						</div>
 					</div>
-					<div class = "tp-gradient-reverse br-20">
-						<a href = "@Url.Action("Details", "Drivers", new {id = driver.Id})" class = "btn btn-primary ml-3 mt-2 mb-3">Details</a>
+					<div class="tp-gradient-reverse br-20">
+						<a href="@Url.Action("Details", "Drivers", new { id = driver.Id })" class="btn btn-primary ml-3 mt-2 mb-3">Details</a>
 					</div>
 				</div>
 			</div>
-		}
-	}
+		}        
+	} 
 </div>
-
 @section Scripts{
-	<script src = "@Url.Content("~/js/ratingBuilder.js")"></script>
+	<script src="@Url.Content("~/js/ratingBuilder.js")"></script>
 }

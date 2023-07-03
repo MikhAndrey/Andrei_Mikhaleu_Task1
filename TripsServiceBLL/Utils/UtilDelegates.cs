@@ -1,6 +1,7 @@
-﻿namespace TripsServiceBLL.Utils;
-
-public static class UtilDelegates
+﻿namespace TripsServiceBLL.Utils
 {
-	public delegate string StringMapperDelegate(string str);
+    public static class UtilDelegates
+    {
+        public delegate string StringMapperDelegate(string str);
+    }
 }

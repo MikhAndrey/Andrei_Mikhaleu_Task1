@@ -1,14 +1,13 @@
 ﻿@model TripsServiceBLL.DTO.Statistics.YearsStatisticsDTO
 
-<h4 class = "tp-label" id = "no-content">You have no trips yet</h4>
-<div id = "main-content" class = "tp-form">
-	<h5 class = "tp-label">Select year for displaying statistics:</h5>
-	@Html.DropDownListFor(m => m.SelectedYear, new SelectList(Model.Years), new {@class = "form-control tp-form-group"})
-	<div id = "heatMap" style = "width:100%; height:600px"></div>
+<h4 class="tp-label" id="no-content">You have no trips yet</h4>
+<div id="main-content" class="tp-form">
+    <h5 class="tp-label">Select year for displaying statistics:</h5>
+    @Html.DropDownListFor(m => m.SelectedYear, new SelectList(Model.Years), new { @class = "form-control tp-form-group" })
+    <div id="heatMap" style="width:100%; height:600px"></div>
 </div>
-
 @section Scripts {
-	<script>
+    <script>
         let map;
         let heatmapLayers = [];
         
@@ -81,6 +80,6 @@
 
         $(document).ready(loadDataForProperYear);
     </script>
-	<script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&libraries=visualization&callback=initMap">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&libraries=visualization&callback=initMap">
     </script>
 }

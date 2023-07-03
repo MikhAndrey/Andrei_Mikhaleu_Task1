@@ -1,105 +1,97 @@
-﻿@using TripsServiceBLL.DTO.Images
-@using TripsServiceBLL.DTO.RoutePoints
+﻿@model TripsServiceBLL.DTO.Trips.EditTripDTO
 @using TripsServiceBLL.Utils
-@model TripsServiceBLL.DTO.Trips.EditTripDTO
 
 @{
-	ViewData["Title"] = "Edit Trip";
+    ViewData["Title"] = "Edit Trip";
 }
 
-<form class = "bootstrap-form tp-form" id = "main-form" asp-action = "Edit" asp-route-id = "@Model.Id" enctype = "multipart/form-data">
-	<div class = "form-group tp-form-group">
-		<label for = "nameInput" class = "tp-label">Your trip name:</label>
-		<input class = "form-control tp-text-input" type = "text" asp-for = "Name" id = "nameInput"/>
-		<div class = "tp-input-desc">Enter name of your trip</div>
-		<span asp-validation-for = "Name" class = "text-danger"></span>
-	</div>
-	<div class = "form-group tp-form-group">
-		<label for = "startTimeInput" class = "tp-label">Departure Time:</label>
-		<input class = "form-control tp-datetime-input" type = "datetime-local" asp-for = "StartTime" id = "startTimeInput"/>
-		<div class = "tp-input-desc">Select the start time of your trip in terms of start point timezone</div>
-		<span asp-validation-for = "StartTime" class = "text-danger"></span>
-	</div>
-	<div class = "form-group tp-form-group">
-		<label for = "endTimeInput" class = "tp-label">Arrival Time:</label>
-		<input class = "form-control tp-datetime-input" type = "datetime-local" asp-for = "EndTime" readonly id = "endTimeInput"/>
-		<div class = "tp-input-desc">End time of your trip will be calculated automatically</div>
-		<span asp-validation-for = "EndTime" class = "text-danger"></span>
-	</div>
-	<div class = "form-check tp-form-check">
-		<input class = "form-check-input tp-check-input" type = "checkbox" asp-for = "Public" id = "publicCheck"/>
-		<label class = "form-check-label tp-label" for = "publicCheck">Public</label>
-		<div class = "tp-input-desc">Make your trip visible to everyone</div>
-	</div>
-	<div class = "form-group tp-form-group">
-		<label for = "descriptionInput" class = "tp-label">Description:</label>
-		<textarea class="form-control tp-textarea" asp-for="Description" id="descriptionInput"></textarea>
-		<div class = "tp-input-desc">Enter a couple of phrases describing your trip</div>
-		<span asp-validation-for = "Description" class = "text-danger"></span>
-	</div>
-	<div class = "tp-label">Click on the map to place trip points</div>
-	<div id = "map" class = "form-group tp-form-group"></div>
-	<div class = "tp-label mt-2 mb-2">
-		Trip's distance:
-		<span id = "route-length-view" class = "tp-input-desc">@Model.Distance</span>&nbsp km
-	</div>
-	<div class = "tp-label mt-2 mb-2">
-		Trip's duration:
-		<span class = "tp-input-desc" id = "route-duration-view">0 minutes</span>
-	</div>
-	<input type = "hidden" name = "RoutePointsAsString" asp-for = "RoutePointsAsString" id = "route-points-input"/>
-	<input type = "hidden" name = "RoutePoints" asp-for = "RoutePoints"/>
-	<input type = "hidden" name = "Distance" asp-for = "Distance" value = "@Model.Distance"/>
-	<input type = "hidden" name = "StartTimeZoneOffset" asp-for = "StartTimeZoneOffset"/>
-	<input type = "hidden" name = "FinishTimeZoneOffset" asp-for = "FinishTimeZoneOffset"/>
-	<div class = "form-group">
-		<label for = "imageUpload" class = "tp-label">Upload your images here:</label>
-		<input class = "form-control-file tp-file-upload" type = "file" id = "imageUpload" name = "Images" accept = "image/*" multiple/>
-		<div class = "tp-label">New images:</div>
-		<div id = "imagesList" class = "row"></div>
-		<div class = "tp-label">Previously loaded images:</div>
-		<div class = "row">
-			@foreach (ImageDTO image in Model.Images) {
-				<div class = "col-4 mb-3 preload-image-container">
-					@{
-						string imagePath = $"/{UtilConstants.ImagesFolderName}/{Model.UserId.ToString()}/{Model.Id.ToString()}/{image.Link}";
-					}
-					<img src = "@imagePath" class = "img-fluid d-block" style = "object-fit: cover; height: 250px"/>
-					<button type = "button" class = "btn btn-danger remove-image mt-2" data-image-id = "@image.Id">Delete</button>
-				</div>
-			}
-		</div>
-	</div>
-	<div class = "tp-label mt-2 mb-2">
-		Trip's driver:
-		<span id = "trip-driver-name"></span>
-	</div>
-	<input type = "hidden" id = "DriverId" name = "DriverId" asp-for = "DriverId"/>
-	<div>
-		<button type = "button" class = "btn btn-primary mt-2 mb-3 drivers-invoker" data-bs-toggle = "modal" data-bs-target = "#driverListModal">Select driver</button>
-	</div>
-	<div>
-		<button class = "btn btn-success mt-3" type = "submit">Save</button>
-	</div>
+<form class="bootstrap-form tp-form" id="main-form" asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+    <div class="form-group tp-form-group">
+        <label for="nameInput" class="tp-label">Your trip name:</label>
+        <input class="form-control tp-text-input" type="text" asp-for="Name" id="nameInput" />
+        <div class="tp-input-desc">Enter name of your trip</div>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group tp-form-group">
+        <label for="startTimeInput" class="tp-label">Departure Time:</label>
+        <input class="form-control tp-datetime-input" type="datetime-local" asp-for="StartTime" id="startTimeInput" />
+        <div class="tp-input-desc">Select the start time of your trip in terms of start point timezone</div>
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+    <div class="form-group tp-form-group">
+        <label for="endTimeInput" class="tp-label">Arrival Time:</label>
+        <input class="form-control tp-datetime-input" type="datetime-local" asp-for="EndTime" readonly id="endTimeInput" />
+        <div class="tp-input-desc">End time of your trip will be calculated automatically</div>
+        <span asp-validation-for="EndTime" class="text-danger"></span>
+    </div>
+    <div class="form-check tp-form-check">
+        <input class="form-check-input tp-check-input" type="checkbox" asp-for="Public" id="publicCheck" />
+        <label class="form-check-label tp-label" for="publicCheck">Public</label>
+        <div class="tp-input-desc">Make your trip visible to everyone</div>
+    </div>
+    <div class="form-group tp-form-group">
+        <label for="descriptionInput" class="tp-label">Description:</label>
+        <textarea class="form-control tp-textarea" asp-for="Description" id="descriptionInput"></textarea>
+        <div class="tp-input-desc">Enter a couple of phrases describing your trip</div>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="tp-label">Click on the map to place trip points</div>
+    <div id="map" class="form-group tp-form-group"></div>
+    <div class="tp-label mt-2 mb-2">Trip's distance: <span id="route-length-view" class="tp-input-desc">@Model.Distance</span>&nbsp km</div>
+    <div class="tp-label mt-2 mb-2">Trip's duration: <span class="tp-input-desc" id="route-duration-view">0 minutes</span></div>
+    <input type="hidden" name="RoutePointsAsString" asp-for="RoutePointsAsString" id="route-points-input"/>
+    <input type="hidden" name="RoutePoints" asp-for="RoutePoints"/>
+    <input type="hidden" name="Distance" asp-for="Distance" value="@Model.Distance" />
+    <input type="hidden" name="StartTimeZoneOffset" asp-for="StartTimeZoneOffset"/>
+    <input type="hidden" name="FinishTimeZoneOffset" asp-for="FinishTimeZoneOffset"/>
+    <div class="form-group">
+        <label for="imageUpload" class="tp-label">Upload your images here:</label>
+        <input class="form-control-file tp-file-upload" type="file" id="imageUpload" name="Images" accept="image/*" multiple />
+        <div class="tp-label">New images:</div>
+        <div id="imagesList" class="row"></div>
+        <div class="tp-label">Previously loaded images:</div>
+        <div class="row">
+        @foreach (var image in Model.Images)
+            {
+                <div class="col-4 mb-3 preload-image-container"> 
+                    @{
+                        string imagePath = $"/{UtilConstants.ImagesFolderName}/{Model.UserId.ToString()}/{Model.Id.ToString()}/{image.Link}";
+                    }
+                    <img src="@imagePath" class="img-fluid d-block" style="object-fit: cover; height: 250px"/> 
+                    <button type="button" class="btn btn-danger remove-image mt-2" data-image-id="@image.Id">Delete</button> 
+                </div>
+            }
+        </div> 
+    </div>
+    <div class="tp-label mt-2 mb-2">
+        Trip's driver: <span id="trip-driver-name"></span>
+    </div>
+    <input type="hidden" id="DriverId" name="DriverId" asp-for="DriverId" />
+    <div>
+        <button type="button" class="btn btn-primary mt-2 mb-3 drivers-invoker" data-bs-toggle="modal" data-bs-target="#driverListModal">Select driver</button>
+    </div>
+    <div>
+        <button class="btn btn-success mt-3" type="submit">Save</button>
+    </div>
 </form>
 
 @await Html.PartialAsync("_DisplayDrivers")
 
 @section scripts {
-	<script src = "@Url.Content("~/js/RouteBuilder.js")"></script>
-	<script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap"></script>
-	<script>
+    <script src="@Url.Content("~/js/RouteBuilder.js")"></script>    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap"></script> 
+    <script>
     @{
-	    IOrderedEnumerable<RoutePointDTO> routePoints = Model.RoutePoints.OrderBy(rp => rp.Ordinal);
-	    RoutePointDTO firstRoutePoint = routePoints.First();
+        var routePoints = Model.RoutePoints.OrderBy(rp => rp.Ordinal);
+        var firstRoutePoint = routePoints.First();
     }
         const initLatitude = @Html.Raw(Json.Serialize(firstRoutePoint.Latitude));
         const initLongitude = @Html.Raw(Json.Serialize(firstRoutePoint.Longitude));
         initMap(initLatitude, initLongitude, 12);
         addClickOnMap();
     @{
-	    IEnumerable<decimal> latitudes = routePoints.Select(rp => rp.Latitude);
-	    IEnumerable<decimal> longitudes = routePoints.Select(rp => rp.Longitude);
+        var latitudes = routePoints.Select(rp => rp.Latitude);
+        var longitudes = routePoints.Select(rp => rp.Longitude);
     }
         const latitudes = @Html.Raw(Json.Serialize(latitudes));
         const longitudes = @Html.Raw(Json.Serialize(longitudes));
@@ -117,7 +109,7 @@
         calculateAndDisplayRoute(false);
         storeRoutePoints();
     </script>
-	<script> 
+    <script> 
         $(".remove-image").on("click", function () {
             const index = $('.remove-image').index(this);
             const imageId = $(this).data("image-id");
@@ -135,9 +127,9 @@
             });
         });
     </script>
-	<script src = "~/js/ImagesLoading.js"></script>
-	<script>
+    <script src="~/js/ImagesLoading.js"></script>
+    <script>
         sendDataHandler(false);
     </script>
-	@await Html.PartialAsync("_TripDriverManagingScript")
-}
+    @await Html.PartialAsync("_TripDriverManagingScript")
+ }

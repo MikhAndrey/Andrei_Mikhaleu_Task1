@@ -1,8 +1,7 @@
-﻿namespace TripsServiceDAL.Infrastructure.Exceptions;
-
-public class EntityNotFoundException : Exception
+﻿namespace TripsServiceDAL.Infrastructure.Exceptions
 {
-	public EntityNotFoundException(string message) : base(message)
-	{
-	}
+    public class EntityNotFoundException : Exception
+    {
+        public EntityNotFoundException(string message) : base(message) { }
+    }
 }

@@ -1,10 +1,11 @@
 ﻿using TripsServiceDAL.Entities;
 
-namespace TripsServiceDAL.Interfaces;
-
-public interface IUserRepository : IGenericRepository<User>
+namespace TripsServiceDAL.Interfaces
 {
-	Task<User?> GetByUsernameAsync(string username);
+    public interface IUserRepository : IGenericRepository<User>
+    {
+        Task<User?> GetByUsernameAsync(string username);
 
-	Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByEmailAsync(string email);
+    }
 }
