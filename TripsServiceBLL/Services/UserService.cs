@@ -15,93 +15,94 @@ namespace TripsServiceBLL.Services;
 
 public class UserService : IUserService
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
+	private readonly IHttpContextAccessor _httpContextAccessor;
 
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
+	private readonly IMapper _mapper;
+	
+	private readonly IUnitOfWork _unitOfWork;
 
-    public UserService(
-        IUnitOfWork          unitOfWork,
-        IMapper              mapper,
-        IHttpContextAccessor httpContextAccessor)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-        _httpContextAccessor = httpContextAccessor;
-    }
+	public UserService(
+		IUnitOfWork unitOfWork,
+		IMapper mapper,
+		IHttpContextAccessor httpContextAccessor)
+	{
+		_unitOfWork = unitOfWork;
+		_mapper = mapper;
+		_httpContextAccessor = httpContextAccessor;
+	}
 
-    public int GetCurrentUserId()
-    {
-        int userId = int.Parse(_httpContextAccessor.HttpContext.User.Claims
-            .FirstOrDefault(c => c.Type == UtilConstants.UserIdClaimName)?.Value);
-        _unitOfWork.Users.ThrowErrorIfNotExists(userId);
-        return userId;
-    }
+	public int GetCurrentUserId()
+	{
+		int userId = int.Parse(_httpContextAccessor.HttpContext.User.Claims
+			.FirstOrDefault(c => c.Type == UtilConstants.UserIdClaimName)?.Value);
+		_unitOfWork.Users.ThrowErrorIfNotExists(userId);
+		return userId;
+	}
 
-    public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
-    {
-        User? userFromDB = await _unitOfWork.Users.GetByUsernameAsync(user.UserName);
-        return userFromDB != null && userFromDB.Password == UtilEncryptor.Encrypt(user.Password)
-            ? userFromDB.Id
-            : null;
-    }
+	public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
+	{
+		User? userFromDB = await _unitOfWork.Users.GetByUsernameAsync(user.UserName);
+		return userFromDB != null && userFromDB.Password == UtilEncryptor.Encrypt(user.Password)
+			? userFromDB.Id
+			: null;
+	}
 
-    public async Task AddAsync(User user)
-    {
-        await _unitOfWork.Users.AddAsync(user);
-        await _unitOfWork.SaveAsync();
-    }
+	public async Task AddAsync(User user)
+	{
+		await _unitOfWork.Users.AddAsync(user);
+		await _unitOfWork.SaveAsync();
+	}
 
-    public bool Exists(int id)
-    {
-        return _unitOfWork.Users.Exists(id);
-    }
+	public bool Exists(int id)
+	{
+		return _unitOfWork.Users.Exists(id);
+	}
 
-    public async Task TryToRegisterNewUserAsync(UserSignupDTO user)
-    {
-        User? existingUser = await _unitOfWork.Users.GetByUsernameAsync(user.UserName);
-        if (existingUser != null)
-        {
-            throw new ValidationException(UtilConstants.GetExistingCredentialMessage("username"), "UserName");
-        }
+	public async Task TryToRegisterNewUserAsync(UserSignupDTO user)
+	{
+		User? existingUser = await _unitOfWork.Users.GetByUsernameAsync(user.UserName);
+		if (existingUser != null)
+		{
+			throw new ValidationException(UtilConstants.GetExistingCredentialMessage("username"), "UserName");
+		}
 
-        existingUser = await _unitOfWork.Users.GetByEmailAsync(user.Email);
-        if (existingUser != null)
-        {
-            throw new ValidationException(UtilConstants.GetExistingCredentialMessage("email"), "Email");
-        }
+		existingUser = await _unitOfWork.Users.GetByEmailAsync(user.Email);
+		if (existingUser != null)
+		{
+			throw new ValidationException(UtilConstants.GetExistingCredentialMessage("email"), "Email");
+		}
 
-        User userToAdd = _mapper.Map<User>(user);
-        await AddAsync(userToAdd);
-    }
+		User userToAdd = _mapper.Map<User>(user);
+		await AddAsync(userToAdd);
+	}
 
-    public async Task<string> GetJWTTokenAsync(UserLoginDTO user)
-    {
-        int? idOfUserFromDb = await GetUserIdForLoginAsync(user);
-        if (idOfUserFromDb != null)
-        {
-            DateTime jwtExpiresUTC = user.RememberMe
-                ? DateTime.UtcNow.AddDays(UtilConstants.AuthorizationExpirationInDays)
-                : DateTime.UtcNow.AddHours(UtilConstants.JwtExpirationInHours);
-            JwtSecurityTokenHandler tokenHandler = new();
-            byte[] key = Encoding.ASCII.GetBytes(UtilConstants.JwtKey);
-            SecurityTokenDescriptor tokenDescriptor = new()
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new(ClaimTypes.Name, user.UserName),
-                    new Claim(UtilConstants.UserIdClaimName, idOfUserFromDb.ToString())
-                }),
-                Audience = UtilConstants.JwtIssuer,
-                Issuer = UtilConstants.JwtIssuer,
-                Expires = jwtExpiresUTC,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
+	public async Task<string> GetJWTTokenAsync(UserLoginDTO user)
+	{
+		int? idOfUserFromDb = await GetUserIdForLoginAsync(user);
+		if (idOfUserFromDb != null)
+		{
+			DateTime jwtExpiresUTC = user.RememberMe
+				? DateTime.UtcNow.AddDays(UtilConstants.AuthorizationExpirationInDays)
+				: DateTime.UtcNow.AddHours(UtilConstants.JwtExpirationInHours);
+			JwtSecurityTokenHandler tokenHandler = new();
+			byte[] key = Encoding.ASCII.GetBytes(UtilConstants.JwtKey);
+			SecurityTokenDescriptor tokenDescriptor = new()
+			{
+				Subject = new ClaimsIdentity(new[]
+				{
+					new(ClaimTypes.Name, user.UserName),
+					new Claim(UtilConstants.UserIdClaimName, idOfUserFromDb.ToString())
+				}),
+				Audience = UtilConstants.JwtIssuer,
+				Issuer = UtilConstants.JwtIssuer,
+				Expires = jwtExpiresUTC,
+				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+					SecurityAlgorithms.HmacSha256Signature)
+			};
+			SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+			return tokenHandler.WriteToken(token);
+		}
 
-        throw new ValidationException(UtilConstants.InvalidCredentialsMessage, "");
-    }
+		throw new ValidationException(UtilConstants.InvalidCredentialsMessage, "");
+	}
 }

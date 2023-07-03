@@ -2,6 +2,6 @@
 
 public class YearsStatisticsDTO
 {
-    public int SelectedYear;
-    public IQueryable<int>? Years { get; set; }
+	public int SelectedYear;
+	public IQueryable<int>? Years { get; set; }
 }

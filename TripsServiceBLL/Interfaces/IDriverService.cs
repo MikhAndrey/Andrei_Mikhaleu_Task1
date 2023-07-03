@@ -4,7 +4,6 @@ namespace TripsServiceBLL.Interfaces;
 
 public interface IDriverService
 {
-    IEnumerable<ReadDriverDTO> GetDriversOverall();
-
-    Task<DriverDetailsDTO> GetDriverDetailsAsync(int id);
+	IEnumerable<ReadDriverDTO> GetDriversOverall();
+	Task<DriverDetailsDTO> GetDriverDetailsAsync(int id);
 }

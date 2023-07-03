@@ -4,5 +4,5 @@ namespace TripsServiceDAL.Interfaces;
 
 public interface ICommentRepository : IGenericRepository<Comment>
 {
-    IQueryable<Comment> GetByTripId(int tripId);
+	IQueryable<Comment> GetByTripId(int tripId);
 }

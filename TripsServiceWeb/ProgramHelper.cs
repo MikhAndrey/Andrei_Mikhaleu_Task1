@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TripsServiceBLL.Commands.Trips;
+using TripsServiceBLL.Commands.Users;
 using TripsServiceBLL.Infrastructure.Mappers;
 using TripsServiceBLL.Infrastructure.ValueResolvers;
 using TripsServiceBLL.Interfaces;
@@ -48,6 +49,7 @@ public static class ProgramHelper
         services.AddScoped<DeleteTripCommandAsync>();
         services.AddScoped<EditTripCommandAsync>();
         services.AddScoped<EditPastTripCommandAsync>();
+        services.AddScoped<LoginUserCommand>();
     }
 
     public static void AddMapper(IServiceCollection services)

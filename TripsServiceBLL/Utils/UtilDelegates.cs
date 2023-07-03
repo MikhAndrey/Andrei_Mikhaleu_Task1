@@ -2,5 +2,5 @@
 
 public static class UtilDelegates
 {
-    public delegate string StringMapperDelegate(string str);
+	public delegate string StringMapperDelegate(string str);
 }

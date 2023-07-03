@@ -11,53 +11,54 @@ namespace TripsServiceBLL.Commands.Trips;
 
 public class EditPastTripCommandAsync : ICommandAsync<EditPastTripDTO>
 {
-    private readonly IWebHostEnvironment _env;
-    private readonly IImageService _imageService;
+	private readonly IWebHostEnvironment _env;
 
-    private readonly IMapper _mapper;
-    private readonly ITripService _tripService;
+	private readonly IMapper _mapper;
 
-    private readonly IUnitOfWork _unitOfWork;
+	private readonly IImageService _imageService;
+	private readonly ITripService _tripService;
 
-    public EditPastTripCommandAsync(
-        IImageService       imageService,
-        ITripService        tripService,
-        IWebHostEnvironment env,
-        IMapper             mapper,
-        IUnitOfWork         unitOfWork
-    )
-    {
-        _imageService = imageService;
-        _tripService = tripService;
-        _env = env;
-        _mapper = mapper;
-        _unitOfWork = unitOfWork;
-    }
+	private readonly IUnitOfWork _unitOfWork;
 
-    public async Task ExecuteAsync(EditPastTripDTO dto)
-    {
-        Trip trip = await _unitOfWork.Trips.GetByIdAsync(dto.Id);
+	public EditPastTripCommandAsync(
+		IImageService imageService,
+		ITripService tripService,
+		IWebHostEnvironment env,
+		IMapper mapper,
+		IUnitOfWork unitOfWork
+	)
+	{
+		_imageService = imageService;
+		_tripService = tripService;
+		_env = env;
+		_mapper = mapper;
+		_unitOfWork = unitOfWork;
+	}
 
-        _mapper.Map(dto, trip);
+	public async Task ExecuteAsync(EditPastTripDTO dto)
+	{
+		Trip trip = await _unitOfWork.Trips.GetByIdAsync(dto.Id);
 
-        List<string> fileNames = _imageService.GenerateImagesFileNames(dto.ImagesAsFiles);
+		_mapper.Map(dto, trip);
 
-        using (IDbContextTransaction transaction = _unitOfWork.BeginTransaction())
-        {
-            try
-            {
-                await _tripService.UpdateAsync(trip);
-                await _imageService.AddTripImagesAsync(fileNames, trip.Id);
-                await transaction.CommitAsync();
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                throw new DbOperationException();
-            }
-        }
+		List<string> fileNames = _imageService.GenerateImagesFileNames(dto.ImagesAsFiles);
 
-        await _imageService.SaveTripImagesFilesAsync(trip.Id, trip.UserId, fileNames, dto.ImagesAsFiles,
-            _env.WebRootPath);
-    }
+		using (IDbContextTransaction transaction = _unitOfWork.BeginTransaction())
+		{
+			try
+			{
+				await _tripService.UpdateAsync(trip);
+				await _imageService.AddTripImagesAsync(fileNames, trip.Id);
+				await transaction.CommitAsync();
+			}
+			catch (Exception)
+			{
+				await transaction.RollbackAsync();
+				throw new DbOperationException();
+			}
+		}
+
+		await _imageService.SaveTripImagesFilesAsync(trip.Id, trip.UserId, fileNames, dto.ImagesAsFiles,
+			_env.WebRootPath);
+	}
 }

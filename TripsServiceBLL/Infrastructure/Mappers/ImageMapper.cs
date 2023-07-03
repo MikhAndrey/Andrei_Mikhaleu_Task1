@@ -6,8 +6,8 @@ namespace TripsServiceBLL.Infrastructure.Mappers;
 
 public class ImageMapper : Profile
 {
-    public ImageMapper()
-    {
-        CreateMap<Image, ImageDTO>();
-    }
+	public ImageMapper()
+	{
+		CreateMap<Image, ImageDTO>();
+	}
 }

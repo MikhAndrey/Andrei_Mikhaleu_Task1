@@ -2,5 +2,5 @@
 
 public class ReadTripDTOExtended : ReadTripDTO
 {
-    public string? UserName { get; set; }
+	public string? UserName { get; set; }
 }
