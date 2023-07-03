@@ -1,6 +1,7 @@
-﻿namespace TripsServiceBLL.Interfaces;
-
-public interface ICommandAsync<T>
+﻿namespace TripsServiceBLL.Interfaces
 {
-	Task ExecuteAsync(T model);
+    public interface ICommandAsync<T>
+    {
+        Task ExecuteAsync(T model);
+    }
 }

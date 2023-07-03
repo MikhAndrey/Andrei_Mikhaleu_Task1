@@ -1,11 +1,11 @@
-﻿namespace TripsServiceBLL.Infrastructure.Exceptions;
-
-public class ValidationException : Exception
+﻿namespace TripsServiceBLL.Infrastructure.Exceptions
 {
-	public ValidationException(string message, string prop) : base(message)
-	{
-		Property = prop;
-	}
-
-	public string Property { get; protected set; }
+    public class ValidationException : Exception
+    {
+        public string Property { get; protected set; }
+        public ValidationException(string message, string prop) : base(message)
+        {
+            Property = prop;
+        }
+    }
 }

@@ -7,64 +7,64 @@ using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
 
-namespace TripsServiceBLL.Commands.Trips;
-
-public class EditTripCommandAsync : ICommandAsync<EditTripDTO>
+namespace TripsServiceBLL.Commands.Trips
 {
-	private readonly IImageService _imageService;
-	private readonly IRoutePointService _routePointService;
-	private readonly ITripService _tripService;
+    public class EditTripCommandAsync : ICommandAsync<EditTripDTO>
+    {
+        private readonly IImageService _imageService;
+        private readonly ITripService _tripService;
+        private readonly IRoutePointService _routePointService;
 
-	private readonly IWebHostEnvironment _env;
+        private readonly IWebHostEnvironment _env;
 
-	private readonly IMapper _mapper;
-	
-	private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-	public EditTripCommandAsync(
-		IImageService imageService,
-		ITripService tripService,
-		IRoutePointService routePointService,
-		IWebHostEnvironment env,
-		IMapper mapper,
-		IUnitOfWork unitOfWork
-	)
-	{
-		_imageService = imageService;
-		_tripService = tripService;
-		_routePointService = routePointService;
-		_env = env;
-		_mapper = mapper;
-		_unitOfWork = unitOfWork;
-	}
+        private readonly IUnitOfWork _unitOfWork;
 
-	public async Task ExecuteAsync(EditTripDTO dto)
-	{
-		Trip trip = await _unitOfWork.Trips.GetByIdAsync(dto.Id);
-		_mapper.Map(dto, trip);
+        public EditTripCommandAsync(
+            IImageService imageService,
+            ITripService tripService,
+            IRoutePointService routePointService,
+            IWebHostEnvironment env,
+            IMapper mapper,
+            IUnitOfWork unitOfWork
+        )
+        {
+            _imageService = imageService;
+            _tripService = tripService;
+            _routePointService = routePointService;
+            _env = env;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+        }
 
-		List<RoutePoint>? routePoints = _routePointService.ParseRoutePointsFromString(dto.RoutePointsAsString);
+        public async Task ExecuteAsync(EditTripDTO dto)
+        {
+            Trip trip = await _unitOfWork.Trips.GetByIdAsync(dto.Id);
+            _mapper.Map(dto, trip);
 
-		List<string> fileNames = _imageService.GenerateImagesFileNames(dto.ImagesAsFiles);
+            List<RoutePoint>? routePoints = _routePointService.ParseRoutePointsFromString(dto.RoutePointsAsString);
 
-		using (IDbContextTransaction transaction = _unitOfWork.BeginTransaction())
-		{
-			try
-			{
-				await _tripService.UpdateAsync(trip);
-				await _routePointService.DeleteByTripIdAsync(trip.Id);
-				await _routePointService.AddTripRoutePointsAsync(trip.Id, routePoints);
-				await _imageService.AddTripImagesAsync(fileNames, trip.Id);
-				await transaction.CommitAsync();
-			}
-			catch (Exception)
-			{
-				await transaction.RollbackAsync();
-				throw new DbOperationException();
-			}
-		}
+            List<string> fileNames = _imageService.GenerateImagesFileNames(dto.ImagesAsFiles);
 
-		await _imageService.SaveTripImagesFilesAsync(trip.Id, trip.UserId, fileNames, dto.ImagesAsFiles,
-			_env.WebRootPath);
-	}
+            using (IDbContextTransaction transaction = _unitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    await _tripService.UpdateAsync(trip);
+                    await _routePointService.DeleteByTripIdAsync(trip.Id);
+                    await _routePointService.AddTripRoutePointsAsync(trip.Id, routePoints);
+                    await _imageService.AddTripImagesAsync(fileNames, trip.Id);
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw new DbOperationException();
+                }
+            }
+
+            await _imageService.SaveTripImagesFilesAsync(trip.Id, trip.UserId, fileNames, dto.ImagesAsFiles, _env.WebRootPath);
+        }
+    }
 }
