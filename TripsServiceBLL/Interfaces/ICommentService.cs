@@ -1,13 +1,12 @@
 ﻿using TripsServiceBLL.DTO.Comments;
 
-namespace TripsServiceBLL.Interfaces
+namespace TripsServiceBLL.Interfaces;
+
+public interface ICommentService
 {
-    public interface ICommentService
-    {
-        Task AddCommentAsync(CreateCommentDTO comment);
+	Task AddCommentAsync(CreateCommentDTO comment);
 
-        Task DeleteCommentAsync(int commentId);
+	Task DeleteCommentAsync(int commentId);
 
-        Task DeleteByTripIdAsync(int tripId);
-    }
+	Task DeleteByTripIdAsync(int tripId);
 }

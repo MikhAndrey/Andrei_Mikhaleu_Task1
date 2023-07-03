@@ -1,11 +1,11 @@
 ﻿@model TripsServiceBLL.DTO.Comments.CreateCommentDTO
 
-<form method="post" action="@Url.Action("AddComment", "Trips")">
-    <div class="form-group tp-form-group">
-        <input type="hidden" asp-for=@Model.TripId value="@Model.TripId" />
-        <label for="comment" class="tp-label">Comment:</label>
-        <textarea class="form-control" id="comment" asp-for="Message" rows="3"></textarea>
-        <span asp-validation-for="Message" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Add comment</button>
+<form method = "post" action = "@Url.Action("AddComment", "Trips")">
+	<div class = "form-group tp-form-group">
+		<input type = "hidden" asp-for = "@Model.TripId" value = "@Model.TripId"/>
+		<label for = "comment" class = "tp-label">Comment:</label>
+		<textarea class="form-control" id="comment" asp-for="Message" rows="3"></textarea>
+		<span asp-validation-for = "Message" class = "text-danger"></span>
+	</div>
+	<button type = "submit" class = "btn btn-primary">Add comment</button>
 </form>

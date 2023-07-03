@@ -1,7 +1,6 @@
-﻿namespace TripsServiceDAL.Interfaces
+﻿namespace TripsServiceDAL.Interfaces;
+
+public interface IIdentifiable
 {
-    public interface IIdentifiable
-    {
-        int Id { get; set; }
-    }
+	int Id { get; set; }
 }
