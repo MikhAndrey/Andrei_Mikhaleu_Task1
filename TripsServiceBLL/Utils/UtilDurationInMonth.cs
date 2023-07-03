@@ -1,9 +1,7 @@
-﻿namespace TripsServiceBLL.Utils
-{
-    public class UtilDurationInMonth
-    {
-        public string? Month { get; set; }
+﻿namespace TripsServiceBLL.Utils;
 
-        public double TotalDuration { get; set; }
-    }
+public class UtilDurationInMonth
+{
+	public string? Month { get; set; }
+	public double TotalDuration { get; set; }
 }
