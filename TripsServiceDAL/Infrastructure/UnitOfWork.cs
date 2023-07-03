@@ -2,116 +2,116 @@
 using TripsServiceDAL.Interfaces;
 using TripsServiceDAL.Repos;
 
-namespace TripsServiceDAL.Infrastructure
+namespace TripsServiceDAL.Infrastructure;
+
+public class UnitOfWork : IDisposable, IUnitOfWork
 {
-    public class UnitOfWork : IDisposable, IUnitOfWork
-    {
-        private readonly TripsDBContext _context;
+	private readonly TripsDBContext _context;
 
-        private ICommentRepository _commentRepository;
-        private IImageRepository _imageRepository;
-        private IRoutePointRepository _routePointRepository;
-        private ITripRepository _tripRepository;
-        private IUserRepository _userRepository;
-        private IDriverRepository _driverRepository;
-        private IFeedbackRepository _feedbackRepository;
+	private ICommentRepository _commentRepository;
+	private IDriverRepository _driverRepository;
+	private IFeedbackRepository _feedbackRepository;
+	private IImageRepository _imageRepository;
+	private IRoutePointRepository _routePointRepository;
+	private ITripRepository _tripRepository;
+	private IUserRepository _userRepository;
 
-        public UnitOfWork(TripsDBContext context)
-        {
-            _context = context;
-        }
+	private bool disposed;
 
-        public ICommentRepository Comments
-        {
-            get
-            {
-                _commentRepository ??= new CommentRepository(_context);
-                return _commentRepository;
-            }
-        }
+	public UnitOfWork(TripsDBContext context)
+	{
+		_context = context;
+	}
 
-        public IImageRepository Images
-        {
-            get
-            {
-                _imageRepository ??= new ImageRepository(_context);
-                return _imageRepository;
-            }
-        }
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
 
-        public IRoutePointRepository RoutePoints
-        {
-            get
-            {
-                _routePointRepository ??= new RoutePointRepository(_context);
-                return _routePointRepository;
-            }
-        }
+	public ICommentRepository Comments
+	{
+		get
+		{
+			_commentRepository ??= new CommentRepository(_context);
+			return _commentRepository;
+		}
+	}
 
-        public ITripRepository Trips
-        {
-            get
-            {
-                _tripRepository ??= new TripRepository(_context);
-                return _tripRepository;
-            }
-        }
+	public IImageRepository Images
+	{
+		get
+		{
+			_imageRepository ??= new ImageRepository(_context);
+			return _imageRepository;
+		}
+	}
 
-        public IUserRepository Users
-        {
-            get
-            {
-                _userRepository ??= new UserRepository(_context);
-                return _userRepository;
-            }
-        }
+	public IRoutePointRepository RoutePoints
+	{
+		get
+		{
+			_routePointRepository ??= new RoutePointRepository(_context);
+			return _routePointRepository;
+		}
+	}
 
-        public IDriverRepository Drivers
-        {
-            get
-            {
-                _driverRepository ??= new DriverRepository(_context);
-                return _driverRepository;
-            }
-        }
+	public ITripRepository Trips
+	{
+		get
+		{
+			_tripRepository ??= new TripRepository(_context);
+			return _tripRepository;
+		}
+	}
 
-        public IFeedbackRepository Feedbacks
-        {
-            get
-            {
-                _feedbackRepository ??= new FeedbackRepository(_context);
-                return _feedbackRepository;
-            }
-        }
+	public IUserRepository Users
+	{
+		get
+		{
+			_userRepository ??= new UserRepository(_context);
+			return _userRepository;
+		}
+	}
 
-        public async Task SaveAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
+	public IDriverRepository Drivers
+	{
+		get
+		{
+			_driverRepository ??= new DriverRepository(_context);
+			return _driverRepository;
+		}
+	}
 
-        public IDbContextTransaction BeginTransaction()
-        {
-            return _context.Database.BeginTransaction();
-        }
+	public IFeedbackRepository Feedbacks
+	{
+		get
+		{
+			_feedbackRepository ??= new FeedbackRepository(_context);
+			return _feedbackRepository;
+		}
+	}
 
-        private bool disposed = false;
+	public async Task SaveAsync()
+	{
+		await _context.SaveChangesAsync();
+	}
 
-        public virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-                disposed = true;
-            }
-        }
+	public IDbContextTransaction BeginTransaction()
+	{
+		return _context.Database.BeginTransaction();
+	}
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-    }
+	public virtual void Dispose(bool disposing)
+	{
+		if (!disposed)
+		{
+			if (disposing)
+			{
+				_context.Dispose();
+			}
+
+			disposed = true;
+		}
+	}
 }

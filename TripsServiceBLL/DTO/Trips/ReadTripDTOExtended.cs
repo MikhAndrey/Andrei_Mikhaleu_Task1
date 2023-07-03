@@ -1,7 +1,6 @@
-﻿namespace TripsServiceBLL.DTO.Trips
+﻿namespace TripsServiceBLL.DTO.Trips;
+
+public class ReadTripDTOExtended : ReadTripDTO
 {
-    public class ReadTripDTOExtended : ReadTripDTO
-    {
-        public string? UserName { get; set; }
-    }
+	public string? UserName { get; set; }
 }
