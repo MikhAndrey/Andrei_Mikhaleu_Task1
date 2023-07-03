@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -60,7 +62,7 @@ public static class ProgramHelper
             mc.AddProfile(new TripMapper(serviceProvider.GetService<CurrentUserTripResolver>()));
             mc.AddProfile(new CommentMapper(serviceProvider.GetService<CommentUserIdResolver>()));
             mc.AddProfile(new DriverMapper());
-            mc.AddProfile(new FeedbackMapper());
+            mc.AddProfile(new FeedbackMapper(serviceProvider.GetService<FeedbackUserResolver>()));
             mc.AddProfile(new ImageMapper());
             mc.AddProfile(new RoutePointMapper());
             mc.AddProfile(new UserMapper());

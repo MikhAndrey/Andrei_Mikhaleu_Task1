@@ -59,13 +59,12 @@ public class TripMapper : Profile
 				.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.Ignore())
 				.ForMember(dest => dest.Duration, opt => opt.MapFrom(src =>
 					UtilDateTimeFunctions.GetTimeSpanString(src.EndTime - src.StartTime)))
-				.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.MapFrom(_currentUserTripResolver))
+				.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.MapFrom(currentUserTripResolver))
 				.ForMember(dest => dest.FeedbackText, opt => opt.MapFrom((src, dest) =>
 					UtilTripFunctions.IsTripPastAndHasFeedback(src, dest) ? null : (src.Feedback?.Text)
 				))
 				.ForMember(dest => dest.FeedbackId, opt => opt.MapFrom((src, dest) =>				
 					UtilTripFunctions.IsTripPastAndHasFeedback(src, dest) ? null : (src.Feedback?.Id)
 				));
-        }
-	}
+    }
 }
