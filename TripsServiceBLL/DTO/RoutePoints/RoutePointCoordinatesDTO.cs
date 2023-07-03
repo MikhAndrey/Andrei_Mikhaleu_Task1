@@ -1,7 +1,9 @@
-﻿namespace TripsServiceBLL.DTO.RoutePoints;
-
-public class RoutePointCoordinatesDTO
+﻿namespace TripsServiceBLL.DTO.RoutePoints
 {
-	public decimal Latitude { get; set; }
-	public decimal Longitude { get; set; }
+    public class RoutePointCoordinatesDTO
+    {
+        public decimal Latitude { get; set; }
+
+        public decimal Longitude { get; set; }
+    }
 }

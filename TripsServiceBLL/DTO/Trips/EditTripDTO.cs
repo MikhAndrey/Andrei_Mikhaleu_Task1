@@ -2,12 +2,18 @@
 using TripsServiceBLL.DTO.RoutePoints;
 using TripsServiceBLL.Interfaces;
 
-namespace TripsServiceBLL.DTO.Trips;
-
-public class EditTripDTO : CreateTripDTO, IMinimalTripChanges
+namespace TripsServiceBLL.DTO.Trips
 {
-	public List<RoutePointDTO> RoutePoints { get; set; }
-	public List<ImageDTO> Images { get; set; }
-	public int Id { get; set; }
-	public int UserId { get; set; }
+    public class EditTripDTO : CreateTripDTO, IMinimalTripChanges
+    {
+        public List<ImageDTO> Images { get; set; }
+
+        public List<RoutePointDTO> RoutePoints { get; set; }
+
+        public int Id { get; set; }
+
+        public int UserId { get; set; }
+
+        public EditTripDTO() { }
+    }
 }

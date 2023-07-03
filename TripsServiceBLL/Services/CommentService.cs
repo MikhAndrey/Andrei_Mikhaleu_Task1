@@ -4,44 +4,45 @@ using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
 
-namespace TripsServiceBLL.Services;
-
-public class CommentService : ICommentService
+namespace TripsServiceBLL.Services
 {
-	private readonly IMapper _mapper;
-	private readonly IUnitOfWork _unitOfWork;
+    public class CommentService : ICommentService
+    {
+        private readonly IUnitOfWork _unitOfWork;
 
-	public CommentService(IUnitOfWork unitOfWork, IMapper mapper)
-	{
-		_unitOfWork = unitOfWork;
-		_mapper = mapper;
-	}
+        private readonly IMapper _mapper;
 
-	public async Task AddCommentAsync(CreateCommentDTO comment)
-	{
-		_unitOfWork.Trips.ThrowErrorIfNotExists(comment.TripId);
+        public CommentService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
-		Comment commentToAdd = _mapper.Map<Comment>(comment);
-		await _unitOfWork.Comments.AddAsync(commentToAdd);
-		await _unitOfWork.SaveAsync();
-	}
+        public async Task AddCommentAsync(CreateCommentDTO comment)
+        {
+            _unitOfWork.Trips.ThrowErrorIfNotExists(comment.TripId);
 
-	public async Task DeleteCommentAsync(int commentId)
-	{
-		Comment commentToDelete = await _unitOfWork.Comments.GetByIdAsync(commentId);
+            Comment commentToAdd = _mapper.Map<Comment>(comment);
+            await _unitOfWork.Comments.AddAsync(commentToAdd);
+            await _unitOfWork.SaveAsync();
+        }
 
-		_unitOfWork.Comments.Delete(commentToDelete);
-		await _unitOfWork.SaveAsync();
-	}
+        public async Task DeleteCommentAsync(int commentId)
+        {
+            Comment commentToDelete = await _unitOfWork.Comments.GetByIdAsync(commentId);
 
-	public async Task DeleteByTripIdAsync(int tripId)
-	{
-		IQueryable<Comment> commentsToDelete = _unitOfWork.Comments.GetByTripId(tripId);
-		foreach (Comment comment in commentsToDelete)
-		{
-			_unitOfWork.Comments.Delete(comment);
-		}
+            _unitOfWork.Comments.Delete(commentToDelete);
+            await _unitOfWork.SaveAsync();
+        }
 
-		await _unitOfWork.SaveAsync();
-	}
+        public async Task DeleteByTripIdAsync(int tripId)
+        {
+            IQueryable<Comment> commentsToDelete = _unitOfWork.Comments.GetByTripId(tripId);
+            foreach (Comment comment in commentsToDelete)
+            {
+                _unitOfWork.Comments.Delete(comment);
+            }
+            await _unitOfWork.SaveAsync();
+        }
+    }
 }

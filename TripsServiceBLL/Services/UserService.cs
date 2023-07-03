@@ -1,9 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using TripsServiceBLL.DTO.Users;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
@@ -11,98 +11,103 @@ using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
 
-namespace TripsServiceBLL.Services;
-
-public class UserService : IUserService
+namespace TripsServiceBLL.Services
 {
-	private readonly IHttpContextAccessor _httpContextAccessor;
+    public class UserService : IUserService
+    {
+        private readonly IUnitOfWork _unitOfWork;
 
-	private readonly IMapper _mapper;
-	
-	private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-	public UserService(
-		IUnitOfWork unitOfWork,
-		IMapper mapper,
-		IHttpContextAccessor httpContextAccessor)
-	{
-		_unitOfWork = unitOfWork;
-		_mapper = mapper;
-		_httpContextAccessor = httpContextAccessor;
-	}
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-	public int GetCurrentUserId()
-	{
-		int userId = int.Parse(_httpContextAccessor.HttpContext.User.Claims
-			.FirstOrDefault(c => c.Type == UtilConstants.UserIdClaimName)?.Value);
-		_unitOfWork.Users.ThrowErrorIfNotExists(userId);
-		return userId;
-	}
+        public UserService(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+        }
 
-	public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
-	{
-		User? userFromDB = await _unitOfWork.Users.GetByUsernameAsync(user.UserName);
-		return userFromDB != null && userFromDB.Password == UtilEncryptor.Encrypt(user.Password)
-			? userFromDB.Id
-			: null;
-	}
+        public int GetCurrentUserId()
+        {
+            int userId = int.Parse(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == UtilConstants.UserIdClaimName)?.Value);
+            _unitOfWork.Users.ThrowErrorIfNotExists(userId);
+            return userId;
+        }
 
-	public async Task AddAsync(User user)
-	{
-		await _unitOfWork.Users.AddAsync(user);
-		await _unitOfWork.SaveAsync();
-	}
+        public string? GetCurrentUserName()
+        {
+            return _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+        }
 
-	public bool Exists(int id)
-	{
-		return _unitOfWork.Users.Exists(id);
-	}
+        public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
+        {
+            User? userFromDB = await _unitOfWork.Users.GetByUsernameAsync(user.UserName);
+            return (userFromDB != null && userFromDB.Password == UtilEncryptor.Encrypt(user.Password))
+                ? userFromDB.Id
+                : null;
+        }
 
-	public async Task TryToRegisterNewUserAsync(UserSignupDTO user)
-	{
-		User? existingUser = await _unitOfWork.Users.GetByUsernameAsync(user.UserName);
-		if (existingUser != null)
-		{
-			throw new ValidationException(UtilConstants.GetExistingCredentialMessage("username"), "UserName");
-		}
+        public async Task AddAsync(User user)
+        {
+            await _unitOfWork.Users.AddAsync(user);
+            await _unitOfWork.SaveAsync();
+        }
 
-		existingUser = await _unitOfWork.Users.GetByEmailAsync(user.Email);
-		if (existingUser != null)
-		{
-			throw new ValidationException(UtilConstants.GetExistingCredentialMessage("email"), "Email");
-		}
+        public bool Exists(int id)
+        {
+            return _unitOfWork.Users.Exists(id);
+        }
 
-		User userToAdd = _mapper.Map<User>(user);
-		await AddAsync(userToAdd);
-	}
+        public async Task TryToRegisterNewUserAsync(UserSignupDTO user)
+        {
+            User? existingUser = await _unitOfWork.Users.GetByUsernameAsync(user.UserName);
+            if (existingUser != null)
+            {
+                throw new ValidationException(UtilConstants.GetExistingCredentialMessage("username"), "UserName");
+            }
 
-	public async Task<string> GetJWTTokenAsync(UserLoginDTO user)
-	{
-		int? idOfUserFromDb = await GetUserIdForLoginAsync(user);
-		if (idOfUserFromDb != null)
-		{
-			DateTime jwtExpiresUTC = user.RememberMe
-				? DateTime.UtcNow.AddDays(UtilConstants.AuthorizationExpirationInDays)
-				: DateTime.UtcNow.AddHours(UtilConstants.JwtExpirationInHours);
-			JwtSecurityTokenHandler tokenHandler = new();
-			byte[] key = Encoding.ASCII.GetBytes(UtilConstants.JwtKey);
-			SecurityTokenDescriptor tokenDescriptor = new()
-			{
-				Subject = new ClaimsIdentity(new[]
-				{
-					new(ClaimTypes.Name, user.UserName),
-					new Claim(UtilConstants.UserIdClaimName, idOfUserFromDb.ToString())
-				}),
-				Audience = UtilConstants.JwtIssuer,
-				Issuer = UtilConstants.JwtIssuer,
-				Expires = jwtExpiresUTC,
-				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-					SecurityAlgorithms.HmacSha256Signature)
-			};
-			SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-			return tokenHandler.WriteToken(token);
-		}
+            existingUser = await _unitOfWork.Users.GetByEmailAsync(user.Email);
+            if (existingUser != null)
+            {
+                throw new ValidationException(UtilConstants.GetExistingCredentialMessage("email"), "Email");
+            }
 
-		throw new ValidationException(UtilConstants.InvalidCredentialsMessage, "");
-	}
+            User userToAdd = _mapper.Map<User>(user);
+            await AddAsync(userToAdd);
+        }
+
+        public async Task<string> GetJWTTokenAsync(UserLoginDTO user)
+        {
+            int? idOfUserFromDb = await GetUserIdForLoginAsync(user);
+            if (idOfUserFromDb != null)
+            {
+                DateTime jwtExpiresUTC = user.RememberMe ? DateTime.UtcNow.AddDays(UtilConstants.AuthorizationExpirationInDays)
+                    : DateTime.UtcNow.AddHours(UtilConstants.JwtExpirationInHours);
+                JwtSecurityTokenHandler tokenHandler = new();
+                byte[] key = Encoding.ASCII.GetBytes(UtilConstants.JwtKey);
+                SecurityTokenDescriptor tokenDescriptor = new()
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                            new Claim(ClaimTypes.Name, user.UserName),
+                            new Claim (UtilConstants.UserIdClaimName, idOfUserFromDb.ToString())
+                    }),
+                    Audience = UtilConstants.JwtIssuer,
+                    Issuer = UtilConstants.JwtIssuer,
+                    Expires = jwtExpiresUTC,
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+                return tokenHandler.WriteToken(token);
+            }
+            else
+            {
+                throw new ValidationException(UtilConstants.InvalidCredentialsMessage, "");
+            }
+        }
+    }
 }

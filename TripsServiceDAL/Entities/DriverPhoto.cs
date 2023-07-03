@@ -1,12 +1,17 @@
 ﻿using TripsServiceDAL.Interfaces;
 
-namespace TripsServiceDAL.Entities;
-
-public class DriverPhoto : IIdentifiable, ISoftDelete
+namespace TripsServiceDAL.Entities
 {
-	public string? Link { get; set; }
-	public int DriverId { get; set; }
-	public Driver? Driver { get; set; }
-	public int Id { get; set; }
-	public bool IsDeleted { get; set; }
+    public class DriverPhoto : IIdentifiable, ISoftDelete
+    {
+        public int Id { get; set; }
+
+        public string? Link { get; set; }
+
+        public int DriverId { get; set; }
+
+        public Driver? Driver { get; set; }
+
+        public bool IsDeleted { get; set; }
+    }
 }
