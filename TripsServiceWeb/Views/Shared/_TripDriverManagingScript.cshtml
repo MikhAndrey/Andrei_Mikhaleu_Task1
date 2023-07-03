@@ -1,11 +1,11 @@
-﻿@model TripsServiceBLL.DTO.Trips.CreateTripDTO
-@using TripsServiceBLL.Utils
+﻿@using TripsServiceBLL.Utils
+@model TripsServiceBLL.DTO.Trips.CreateTripDTO
 
 @{
-    string driversImageCommonPath = $"/{UtilConstants.ImagesFolderName}/{UtilConstants.DriversFolderName}/";
+	string driversImageCommonPath = $"/{UtilConstants.ImagesFolderName}/{UtilConstants.DriversFolderName}/";
 }
 
-<script src="~/js/ratingBuilder.js"></script>
+<script src = "~/js/ratingBuilder.js"></script>
 <script>
     let driversInfo;
     $(document).ready(async function(){

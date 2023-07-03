@@ -1,56 +1,56 @@
-﻿@model TripsServiceBLL.DTO.Trips.EditPastTripDTO
+﻿@using TripsServiceBLL.DTO.Images
 @using TripsServiceBLL.Utils
+@model TripsServiceBLL.DTO.Trips.EditPastTripDTO
 
 @{
-    ViewData["Title"] = Model.Name;
+	ViewData["Title"] = Model.Name;
 }
 
-<form class="bootstrap-form tp-form" id="main-form" asp-action="EditPast" asp-route-id="@Model.Id" enctype="multipart/form-data">
-    <div class="form-group tp-form-group">
-        <label for="nameInput" class="tp-label">Your trip name:</label>
-        <input class="form-control tp-text-input" type="text" asp-for="Name" id="nameInput" />
-        <div class="tp-input-desc">Enter name of your trip</div>
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-check tp-form-check">
-        <input class="form-check-input tp-check-input" type="checkbox" asp-for="Public" id="publicCheck" />
-        <label class="form-check-label tp-label" for="publicCheck">Public</label>
-        <div class="tp-input-desc">Make your trip visible to everyone</div>
-    </div>
-    <div class="form-group tp-form-group">
-        <label for="descriptionInput" class="tp-label">Description:</label>
-        <textarea class="form-control tp-textarea" asp-for="Description" id="descriptionInput"></textarea>
-        <div class="tp-input-desc">Enter a couple of phrases describing your trip</div>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="imageUpload" class="tp-label">Upload your images here:</label>
-        <input class="form-control-file tp-file-upload" type="file" id="imageUpload" name="Images" accept="image/*" multiple />
-        <div class="tp-label">New images:</div>
-        <div id="imagesList" class="row"></div>
-        <div class="tp-label">Previously loaded images:</div>
-        <div class="row">
-            @foreach (var image in Model.Images)
-            {
-                    <div class="col-4 mb-3 preload-image-container"> 
-                    @{
-                        string imagePath = $"/{UtilConstants.ImagesFolderName}/{Model.UserId.ToString()}/{Model.Id.ToString()}/{image.Link}";
-                    }
-                        <img src="@imagePath" class="img-fluid d-block" style="object-fit: cover; height: 250px"/> 
-                        <button type="button" class="btn btn-danger remove-image mt-2" data-image-id="@image.Id">Delete</button> 
-                    </div>
-            }
-        </div> 
-    </div>
-    <div>
-        <button class="btn btn-success mt-3" type="submit">Save</button>
-    </div>
+<form class = "bootstrap-form tp-form" id = "main-form" asp-action = "EditPast" asp-route-id = "@Model.Id" enctype = "multipart/form-data">
+	<div class = "form-group tp-form-group">
+		<label for = "nameInput" class = "tp-label">Your trip name:</label>
+		<input class = "form-control tp-text-input" type = "text" asp-for = "Name" id = "nameInput"/>
+		<div class = "tp-input-desc">Enter name of your trip</div>
+		<span asp-validation-for = "Name" class = "text-danger"></span>
+	</div>
+	<div class = "form-check tp-form-check">
+		<input class = "form-check-input tp-check-input" type = "checkbox" asp-for = "Public" id = "publicCheck"/>
+		<label class = "form-check-label tp-label" for = "publicCheck">Public</label>
+		<div class = "tp-input-desc">Make your trip visible to everyone</div>
+	</div>
+	<div class = "form-group tp-form-group">
+		<label for = "descriptionInput" class = "tp-label">Description:</label>
+		<textarea class="form-control tp-textarea" asp-for="Description" id="descriptionInput"></textarea>
+		<div class = "tp-input-desc">Enter a couple of phrases describing your trip</div>
+		<span asp-validation-for = "Description" class = "text-danger"></span>
+	</div>
+	<div class = "form-group">
+		<label for = "imageUpload" class = "tp-label">Upload your images here:</label>
+		<input class = "form-control-file tp-file-upload" type = "file" id = "imageUpload" name = "Images" accept = "image/*" multiple/>
+		<div class = "tp-label">New images:</div>
+		<div id = "imagesList" class = "row"></div>
+		<div class = "tp-label">Previously loaded images:</div>
+		<div class = "row">
+			@foreach (ImageDTO image in Model.Images) {
+				<div class = "col-4 mb-3 preload-image-container">
+					@{
+						string imagePath = $"/{UtilConstants.ImagesFolderName}/{Model.UserId.ToString()}/{Model.Id.ToString()}/{image.Link}";
+					}
+					<img src = "@imagePath" class = "img-fluid d-block" style = "object-fit: cover; height: 250px"/>
+					<button type = "button" class = "btn btn-danger remove-image mt-2" data-image-id = "@image.Id">Delete</button>
+				</div>
+			}
+		</div>
+	</div>
+	<div>
+		<button class = "btn btn-success mt-3" type = "submit">Save</button>
+	</div>
 </form>
 
 @await Html.PartialAsync("_DisplayDrivers")
 
 @section scripts {
-        <script> 
+	<script> 
             $(".remove-image").on("click", function () {
                 const index = $('.remove-image').index(this);
                 const imageId = $(this).data("image-id");
@@ -68,8 +68,8 @@
                 });
             });
         </script>
-        <script src="~/js/ImagesLoading.js"></script>
-        <script>
+	<script src = "~/js/ImagesLoading.js"></script>
+	<script>
             sendDataHandler(false);
         </script>
- }
+}

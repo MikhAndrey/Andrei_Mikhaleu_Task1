@@ -6,11 +6,9 @@
 	for (let i = 0; i < stars.length; i++) {
 		if (i < intRating) {
 			stars.eq(i).css("width", "100%");
-		}
-		else if (i === intRating) {
+		} else if (i === intRating) {
 			stars.eq(i).css("width", `${fracRating * 100}%`);
-		}
-		else {
+		} else {
 			stars.eq(i).css("width", "0%");
 		}
 	}

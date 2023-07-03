@@ -1,61 +1,61 @@
 ﻿@model TripsServiceBLL.DTO.Trips.TripDetailsDTO
 @using TripsServiceBLL.Utils
+@using TripsServiceBLL.DTO.Images
+@using TripsServiceBLL.DTO.RoutePoints
+@using TripsServiceBLL.DTO.Comments
+@using TripsServiceBLL.DTO.Feedbacks
+@model TripsServiceBLL.DTO.Trips.TripDetailsDTO
 
 @{
-    ViewData["Title"] = $"{Model.Name}";
+	ViewData["Title"] = $"{Model.Name}";
 }
-<div class="tp-form">
-    <h1 class="mt-5 tp-label">@Model.Name</h1>
+<div class = "tp-form">
+	<h1 class = "mt-5 tp-label">@Model.Name</h1>
 
-    <h4 class="tp-label">@Model.Description</h4>
+	<h4 class = "tp-label">@Model.Description</h4>
 
-    @if (Model.Public)
-    {
-        <div class="tp-label">Publicity:&nbsp<span class="badge badge-pill badge-success">Public</span></div>
-    }
-    else
-    {
-        <div class="tp-label">Publicity:&nbsp<span class="badge badge-pill badge-danger">Private</span></div>
-    }
-    <p class="mt-3 tp-label">Distance: @Model.Distance &nbsp km</p>
-    <p class="tp-label">Departure time: @Model.UtcStartTimeZone</p>
-    <p class="tp-label">Arrival time: @Model.UtcFinishTimeZone</p>
-    <p class="tp-label">Total time of trip: @Model.Duration</p>
+	@if (Model.Public) {
+		<div class = "tp-label">
+			Publicity:&nbsp
+			<span class = "badge badge-pill badge-success">Public</span>
+		</div>
+	} else {
+		<div class = "tp-label">
+			Publicity:&nbsp
+			<span class = "badge badge-pill badge-danger">Private</span>
+		</div>
+	}
+	<p class = "mt-3 tp-label">Distance: @Model.Distance &nbsp km</p>
+	<p class = "tp-label">Departure time: @Model.UtcStartTimeZone</p>
+	<p class = "tp-label">Arrival time: @Model.UtcFinishTimeZone</p>
+	<p class = "tp-label">Total time of trip: @Model.Duration</p>
 
-    @{if (Model.IsCurrent)
-    {
-        TimeSpan ElapsedTime = DateTime.UtcNow.AddSeconds(Model.StartTimeZoneOffset).Subtract(Model.StartTime);
-        <p class="tp-label">Elapsed time: @UtilDateTimeFunctions.GetTimeSpanString(ElapsedTime)</p>
-    }
-    else if (Model.IsFuture)
-    {
-        TimeSpan TimeUntilTrip = Model.StartTime.AddSeconds(-Model.StartTimeZoneOffset).Subtract(DateTime.UtcNow);
-        <p class="tp-label">Time until trip: @UtilDateTimeFunctions.GetTimeSpanString(TimeUntilTrip)</p>
-    }
-    else
-    {
-        <span class="badge badge-pill badge-success">Completed</span>
-    }
-    }
-    <div id="map" class="mt-5"></div>
+	@{
+		if (Model.IsCurrent) {
+			TimeSpan ElapsedTime = DateTime.UtcNow.AddSeconds(Model.StartTimeZoneOffset).Subtract(Model.StartTime);
+			<p class = "tp-label">Elapsed time: @UtilDateTimeFunctions.GetTimeSpanString(ElapsedTime)</p>
+		} else if (Model.IsFuture) {
+			TimeSpan TimeUntilTrip = Model.StartTime.AddSeconds(-Model.StartTimeZoneOffset).Subtract(DateTime.UtcNow);
+			<p class = "tp-label">Time until trip: @UtilDateTimeFunctions.GetTimeSpanString(TimeUntilTrip)</p>
+		} else {
+			<span class = "badge badge-pill badge-success">Completed</span>
+		}
+	}
+	<div id = "map" class = "mt-5"></div>
 
-    @if (Model.IsCurrentUserTrip)
-    {
-        @if (Model.IsCurrent)
-        {
-            <form asp-controller="Trips" asp-action="EndTrip" asp-route-id="@Model.Id" method="post">
-                <button type="submit" class="btn btn-primary mt-3">End trip</button>
-            </form>
-        }
-        else if (Model.IsFuture)
-        {
-            <form asp-controller="Trips" asp-action="StartTrip" asp-route-id="@Model.Id" method="post">
-                <button type="submit" class="btn btn-primary mt-3">Start trip</button>
-            </form>
-        }
-    }
+	@if (Model.IsCurrentUserTrip) {
+		@if (Model.IsCurrent) {
+			<form asp-controller = "Trips" asp-action = "EndTrip" asp-route-id = "@Model.Id" method = "post">
+				<button type = "submit" class = "btn btn-primary mt-3">End trip</button>
+			</form>
+		} else if (Model.IsFuture) {
+			<form asp-controller = "Trips" asp-action = "StartTrip" asp-route-id = "@Model.Id" method = "post">
+				<button type = "submit" class = "btn btn-primary mt-3">Start trip</button>
+			</form>
+		}
+	}
 
-    <h3 class="mt-5 tp-label">Trip gallery</h3>
+	<h3 class = "mt-5 tp-label">Trip gallery</h3>
 
     @if (Model.Images.Count == 0)
     {
@@ -98,23 +98,22 @@
         </div>
     }
 
-    @if (Model.Driver != null)
-    {
-        string driverPhotoLink = $"/{UtilConstants.ImagesFolderName}/{UtilConstants.DriversFolderName}/{Model.Driver.Id}/{Model.Driver?.FirstPhoto?.Link}";
-        <h3 class="tp-label mb-2">Trip driver</h3>
-        <div class="w-50 tp-gradient-standard driver-button d-flex flex-row align-items-center">
-            <div class="mr-3" style="width:30%">
-                <img src="@driverPhotoLink" alt="Driver Photo" style="width:100%;height:auto;border-radius:50%;" />
-            </div>
-            <div style="flex-grow:1;" class="main-driver-info">
-                <h5 style="display:inline-block;" class="tp-label mr-2">@Model.Driver.Name</h5>
-                <div class="rating-container" style="display:inline-block;">
-                    <span class="rating-value text-light mt-2">@Model.Driver.AverageRating</span>
-                </div>
-                <p class="tp-label">Experience: @(Model.Driver.Experience) years</p>
-            </div>
-        </div>
-    }
+	@if (Model.Driver != null) {
+		string driverPhotoLink = $"/{UtilConstants.ImagesFolderName}/{UtilConstants.DriversFolderName}/{Model.Driver.Id}/{Model.Driver?.FirstPhoto?.Link}";
+		<h3 class = "tp-label mb-2">Trip driver</h3>
+		<div class = "w-50 tp-gradient-standard driver-button d-flex flex-row align-items-center">
+			<div class = "mr-3" style = "width:30%">
+				<img src = "@driverPhotoLink" alt = "Driver Photo" style = "width:100%;height:auto;border-radius:50%;"/>
+			</div>
+			<div style = "flex-grow:1;" class = "main-driver-info">
+				<h5 style = "display:inline-block;" class = "tp-label mr-2">@Model.Driver.Name</h5>
+				<div class = "rating-container" style = "display:inline-block;">
+					<span class = "rating-value text-light mt-2">@Model.Driver.AverageRating</span>
+				</div>
+				<p class = "tp-label">Experience: @(Model.Driver.Experience) years</p>
+			</div>
+		</div>
+	}
 
     <div class="mt-4">
         @if (Model.IsNeedToBeRated && Model.IsCurrentUserTrip)
@@ -169,23 +168,23 @@
     </ul>
 </div>
 
-@await Html.PartialAsync("_AddFeedback", new TripsServiceBLL.DTO.Feedbacks.CreateFeedbackDTO())
+@await Html.PartialAsync("_AddFeedback", new CreateFeedbackDTO())
 
 @section Scripts {
-    <script src="@Url.Content("~/js/RouteBuilder.js")"></script>
-    <script src="@Url.Content("~/js/ratingBuilder.js")"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap"></script>
-    <script>
+	<script src = "@Url.Content("~/js/RouteBuilder.js")"></script>
+	<script src = "@Url.Content("~/js/ratingBuilder.js")"></script>
+	<script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI&callback=initMap"></script>
+	<script>
     @{
-        var routePoints = Model.RoutePoints.OrderBy(rp => rp.Ordinal);
-        var firstRoutePoint = routePoints.First();
+	    IOrderedEnumerable<RoutePointDTO> routePoints = Model.RoutePoints.OrderBy(rp => rp.Ordinal);
+	    RoutePointDTO firstRoutePoint = routePoints.First();
     }
         const initLatitude = @Html.Raw(Json.Serialize(firstRoutePoint.Latitude));
         const initLongitude = @Html.Raw(Json.Serialize(firstRoutePoint.Longitude));
         initMap(initLatitude, initLongitude, 12);
     @{
-        var latitudes = routePoints.Select(rp => rp.Latitude);
-        var longitudes = routePoints.Select(rp => rp.Longitude);
+	    IEnumerable<decimal> latitudes = routePoints.Select(rp => rp.Latitude);
+	    IEnumerable<decimal> longitudes = routePoints.Select(rp => rp.Longitude);
     }
         const latitudes = @Html.Raw(Json.Serialize(latitudes));
         const longitudes = @Html.Raw(Json.Serialize(longitudes));
@@ -198,7 +197,7 @@
         }
         calculateAndDisplayRoute(true);
     </script>
-    <script>
+	<script>
         $(".comment-delete-form").on("submit", function (event) {
             event.preventDefault();
             const index = $(".comment-delete-form").index(this);
