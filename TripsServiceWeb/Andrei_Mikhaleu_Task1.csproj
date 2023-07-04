@@ -62,4 +62,8 @@
     <Folder Include="wwwroot\images\1\12\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\js\emojiPicker.js" />
+  </ItemGroup>
+
 </Project>

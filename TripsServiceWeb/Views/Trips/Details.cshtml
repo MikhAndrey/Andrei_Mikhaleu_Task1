@@ -1,5 +1,4 @@
-﻿@model TripsServiceBLL.DTO.Trips.TripDetailsDTO
-@using TripsServiceBLL.Utils
+﻿@using TripsServiceBLL.Utils
 @using TripsServiceBLL.DTO.Images
 @using TripsServiceBLL.DTO.RoutePoints
 @using TripsServiceBLL.DTO.Comments
@@ -57,46 +56,42 @@
 
 	<h3 class = "mt-5 tp-label">Trip gallery</h3>
 
-    @if (Model.Images.Count == 0)
-    {
-        <h4 class="tp-label">There's nothing to see here yet</h4>
-    }
-    else{
-        <div class="row mt-3">
-            <div class="col-md-6">
-                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-indicators">
-                    @{
-                        int i = 0;
-                        foreach (var image in Model.Images)
-                        {
-                            bool isCurrentPhotoFirst = image.Id == Model.Images.FirstOrDefault().Id;
-                                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@i" aria-current="@isCurrentPhotoFirst" aria-label="Slide @i" class="@(isCurrentPhotoFirst ? "active" : "")"></button>
-                            i++;
-                        }
-                    }
-                    </div>
-                    <div class="carousel-inner">
-                    @foreach (var image in Model.Images)
-                    {
-                        string imagePath = $"/{UtilConstants.ImagesFolderName}/{Model.UserId.ToString()}/{Model.Id.ToString()}/{image.Link}";
-                                <div class="carousel-item @((image.Id == Model.Images.FirstOrDefault().Id) ? "active" : "")">
-                                            <img src="@imagePath" class="d-block w-100 img-responsive" style="object-fit: contain; height: 400px" alt="Trip photo">
-                                </div>
-                    }
-                    </div>
-                    <a class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </a>
-                </div> 
-            </div>
-        </div>
-    }
+	@if (Model.Images.Count == 0) {
+		<h4 class = "tp-label">There's nothing to see here yet</h4>
+	} else {
+		<div class = "row mt-3">
+			<div class = "col-md-6">
+				<div id = "carouselExampleIndicators" class = "carousel slide" data-bs-ride = "carousel">
+					<div class = "carousel-indicators">
+						@{
+							int i = 0;
+							foreach (ImageDTO image in Model.Images) {
+								bool isCurrentPhotoFirst = image.Id == Model.Images.FirstOrDefault().Id;
+								<button type = "button" data-bs-target = "#carouselExampleIndicators" data-bs-slide-to = "@i" aria-current = "@isCurrentPhotoFirst" aria-label = "Slide @i" class = "@(isCurrentPhotoFirst ? "active" : "")"></button>
+								i++;
+							}
+						}
+					</div>
+					<div class = "carousel-inner">
+						@foreach (ImageDTO image in Model.Images) {
+							string imagePath = $"/{UtilConstants.ImagesFolderName}/{Model.UserId.ToString()}/{Model.Id.ToString()}/{image.Link}";
+							<div class = "carousel-item @(image.Id == Model.Images.FirstOrDefault().Id ? "active" : "")">
+								<img src = "@imagePath" class = "d-block w-100 img-responsive" style = "object-fit: contain; height: 400px" alt = "Trip photo">
+							</div>
+						}
+					</div>
+					<a class = "carousel-control-prev" type = "button" data-bs-target = "#carouselExampleIndicators" data-bs-slide = "prev">
+						<span class = "carousel-control-prev-icon" aria-hidden = "true"></span>
+						<span class = "visually-hidden">Previous</span>
+					</a>
+					<a class = "carousel-control-next" type = "button" data-bs-target = "#carouselExampleIndicators" data-bs-slide = "next">
+						<span class = "carousel-control-next-icon" aria-hidden = "true"></span>
+						<span class = "visually-hidden">Next</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	}
 
 	@if (Model.Driver != null) {
 		string driverPhotoLink = $"/{UtilConstants.ImagesFolderName}/{UtilConstants.DriversFolderName}/{Model.Driver.Id}/{Model.Driver?.FirstPhoto?.Link}";
@@ -115,45 +110,42 @@
 		</div>
 	}
 
-    <div class="mt-4">
-        @if (Model.IsNeedToBeRated && Model.IsCurrentUserTrip)
-        {
-            <button type="button" class="btn btn-primary rate-invoker" data-trip-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#rateDriverModal">Rate driver of this trip</button>
-        } else if (Model.Rating != null)
-        {
-            @await Html.PartialAsync("_DisplayTripRating", Model)
-            <div>
-                <h5 class="tp-label mb-2">
-                Trip driver's feedback:
-                </h5>
-                <p>@Model.FeedbackText</p>
-                @if (Model.IsCurrentUserTrip)
-                {
-                    <button type="button" class="btn btn-secondary" id="edit-feedback-btn">Edit</button>
-                    <form class="feedback-delete-form" action="@Url.Action("Delete", "Feedbacks")">
-                        <input type="hidden" name="feedbackId" value="@Model.FeedbackId" />
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                }
-            </div>
-        }
-    </div>
+	<div class = "mt-4">
+		@if (Model.IsNeedToBeRated && Model.IsCurrentUserTrip) {
+			<button type = "button" class = "btn btn-primary rate-invoker" data-trip-id = "@Model.Id" data-bs-toggle = "modal" data-bs-target = "#rateDriverModal">Rate driver of this trip</button>
+		} else if (Model.Rating != null) {
+			@await Html.PartialAsync("_DisplayTripRating", Model)
+			<div>
+				<h5 class = "tp-label mb-2">
+					Trip driver's feedback:
+				</h5>
+				<p>@Model.FeedbackText</p>
+				@if (Model.IsCurrentUserTrip) {
+					<button type = "button" class = "btn btn-secondary" id = "edit-feedback-btn">Edit</button>
+					<form class = "feedback-delete-form" action = "@Url.Action("Delete", "Feedbacks")">
+						<input type = "hidden" name = "feedbackId" value = "@Model.FeedbackId"/>
+						<button type = "submit" class = "btn btn-danger">Delete</button>
+					</form>
+				}
+			</div>
+		}
+	</div>
 
-    <h3 class="mt-3 tp-label">Leave a comment</h3>
+	<h3 class = "mt-3 tp-label">Leave a comment</h3>
 
-    @await Html.PartialAsync("_AddComment", new TripsServiceBLL.DTO.Comments.CreateCommentDTO {TripId = Model.Id})
+	@await Html.PartialAsync("_AddComment", new CreateCommentDTO {TripId = Model.Id})
 
-    <h3 class="mt-5 tp-label">Comments</h3>
+	<h3 class = "mt-5 tp-label">Comments</h3>
 
-    <ul>
-        @if (Model.Comments.Count == 0)
-        {
-                <h4 class="tp-label">There's nothing to see here yet</h4>
-        } else {
-	        foreach (var comment in Model.Comments) {
-		        <li class = "mt-3">
+	<ul>
+		@if (Model.Comments.Count == 0) {
+			<h4 class = "tp-label">There's nothing to see here yet</h4>
+		} else {
+			foreach (CommentDTO comment in Model.Comments) {
+				<li class = "mt-3">
 					<p>
-						<strong class = "tp-label">@comment.User.UserName</strong> - @UtilDateTimeFunctions.GetTimeAgoFromNow(comment.Date)</p>
+						<strong class = "tp-label">@comment.User.UserName</strong> - @UtilDateTimeFunctions.GetTimeAgoFromNow(comment.Date)
+					</p>
 					<p>@comment.Message</p>
 					@if (Model.IsCurrentUserTrip) {
 						<form class = "comment-delete-form" action = "@Url.Action("DeleteComment", "Trips")">
@@ -163,9 +155,9 @@
 					}
 					<hr/>
 				</li>
-	        }
-        }
-    </ul>
+			}
+		}
+	</ul>
 </div>
 
 @await Html.PartialAsync("_AddFeedback", new CreateFeedbackDTO())
@@ -230,7 +222,7 @@
             });
         });
     </script>
-    <script>
+	<script>
         $(".rate-invoker").on('click', function(){
             $("#feedback-trip-id").val($(this).data('trip-id'));
         });
@@ -239,7 +231,7 @@
         });
     </script>
 
-    <script>
+	<script>
         $('#edit-feedback-btn').click(function (){
             $('#trip-rating-form').attr('action', '/Feedbacks/Update');
             $('#trip-rating-form').attr('asp-action', 'Update');

@@ -21,17 +21,17 @@ function getRatingValueFromContainer(ratingContainer) {
 }
 
 function setRatingValueContainerColor(rating, ratingContainer) {
-	$(ratingContainer).css('background-color', `rgb(${255 - 51 * rating}, ${51 * rating}, 0)`);
+	$(ratingContainer).css("background-color", `rgb(${255 - 51 * rating}, ${51 * rating}, 0)`);
 }
 
 function applyRatingToElement(element) {
-	const ratingValueContainer = $(element).find('.rating-value');
-	const starContainer = $(element).find('.star-container');
+	const ratingValueContainer = $(element).find(".rating-value");
+	const starContainer = $(element).find(".star-container");
 	const rating = getRatingValueFromContainer(ratingValueContainer);
 	buildRating(rating, starContainer);
 	setRatingValueContainerColor(rating, ratingValueContainer);
 }
 
-$('.rating-container').each(function () {
+$(".rating-container").each(function () {
 	applyRatingToElement(this);
 });
