@@ -121,10 +121,12 @@
 				</h5>
 				<p>@Model.FeedbackText</p>
 				@if (Model.IsCurrentUserTrip) {
-					<button type = "button" class = "btn btn-secondary" id = "edit-feedback-btn">Edit</button>
-					<form class = "feedback-delete-form" action = "@Url.Action("Delete", "Feedbacks")">
-						<input type = "hidden" name = "feedbackId" value = "@Model.FeedbackId"/>
-						<button type = "submit" class = "btn btn-danger">Delete</button>
+					<span>
+						<button type = "button" class = "btn btn-secondary" id = "edit-feedback-btn">Edit</button>
+					</span>
+					<form class = "feedback-delete-form d-inline-block" action = "@Url.Action("Delete", "Feedbacks")">
+							<input type = "hidden" name = "feedbackId" value = "@Model.FeedbackId"/>
+							<button type = "submit" class = "btn btn-danger">Delete</button>
 					</form>
 				}
 			</div>
