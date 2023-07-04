@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.DTO.Comments;
@@ -16,13 +15,11 @@ public class TripsController : Controller
 	private readonly IImageService _imageService;
 	private readonly ITripService _tripService;
 
-	private readonly IWebHostEnvironment _environment;
-	
 	private readonly CreateTripCommandAsync _createTripCommand;
 	private readonly DeleteTripCommandAsync _deleteTripCommand;
 	private readonly EditPastTripCommandAsync _editPastTripCommand;
 	private readonly EditTripCommandAsync _editTripCommand;
-	
+
 	public TripsController(
 		ICommentService service,
 		IImageService imageService,
@@ -37,7 +34,6 @@ public class TripsController : Controller
 		_commentService = service;
 		_imageService = imageService;
 		_tripService = tripService;
-		_environment = environment;
 		_createTripCommand = createTripCommand;
 		_deleteTripCommand = deleteTripCommand;
 		_editTripCommand = editTripCommand;
@@ -85,7 +81,7 @@ public class TripsController : Controller
 	{
 		try
 		{
-			IQueryable<ReadTripDTO> trips = _tripService.GetCurrentUserTrips();
+			IEnumerable<ReadTripDTO> trips = _tripService.GetCurrentUserTrips();
 			return View(trips);
 		}
 		catch (ArgumentNullException)
@@ -104,7 +100,7 @@ public class TripsController : Controller
 	{
 		try
 		{
-			IQueryable<ReadTripDTO> trips = _tripService.GetCurrentUserHistoryOfTrips();
+			IEnumerable<ReadTripDTO> trips = _tripService.GetCurrentUserHistoryOfTrips();
 			return View(trips);
 		}
 		catch (ArgumentNullException)
@@ -123,7 +119,7 @@ public class TripsController : Controller
 	{
 		try
 		{
-			IQueryable<ReadTripDTOExtended> trips = _tripService.GetOthersPublicTrips();
+			IEnumerable<ReadTripDTOExtended> trips = _tripService.GetOthersPublicTrips();
 			return View(trips);
 		}
 		catch (ArgumentNullException)
@@ -331,7 +327,7 @@ public class TripsController : Controller
 	{
 		try
 		{
-			await _imageService.DeleteByIdAsync(imageId, tripId, _environment.WebRootPath);
+			await _imageService.DeleteByIdAsync(imageId, tripId);
 		}
 		catch (ArgumentNullException)
 		{

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore.Storage;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Infrastructure.Exceptions;
@@ -15,17 +14,14 @@ public class EditTripCommandAsync : ICommandAsync<EditTripDTO>
 	private readonly IRoutePointService _routePointService;
 	private readonly ITripService _tripService;
 
-	private readonly IWebHostEnvironment _env;
-
 	private readonly IMapper _mapper;
-	
+
 	private readonly IUnitOfWork _unitOfWork;
 
 	public EditTripCommandAsync(
 		IImageService imageService,
 		ITripService tripService,
 		IRoutePointService routePointService,
-		IWebHostEnvironment env,
 		IMapper mapper,
 		IUnitOfWork unitOfWork
 	)
@@ -33,7 +29,6 @@ public class EditTripCommandAsync : ICommandAsync<EditTripDTO>
 		_imageService = imageService;
 		_tripService = tripService;
 		_routePointService = routePointService;
-		_env = env;
 		_mapper = mapper;
 		_unitOfWork = unitOfWork;
 	}
@@ -43,28 +38,19 @@ public class EditTripCommandAsync : ICommandAsync<EditTripDTO>
 		Trip trip = await _unitOfWork.Trips.GetByIdAsync(dto.Id);
 		_mapper.Map(dto, trip);
 
-		List<RoutePoint>? routePoints = _routePointService.ParseRoutePointsFromString(dto.RoutePointsAsString);
-
-		List<string> fileNames = _imageService.GenerateImagesFileNames(dto.ImagesAsFiles);
-
-		using (IDbContextTransaction transaction = _unitOfWork.BeginTransaction())
+		using IDbContextTransaction transaction = _unitOfWork.BeginTransaction();
+		try
 		{
-			try
-			{
-				await _tripService.UpdateAsync(trip);
-				await _routePointService.DeleteByTripIdAsync(trip.Id);
-				await _routePointService.AddTripRoutePointsAsync(trip.Id, routePoints);
-				await _imageService.AddTripImagesAsync(fileNames, trip.Id);
-				await transaction.CommitAsync();
-			}
-			catch (Exception)
-			{
-				await transaction.RollbackAsync();
-				throw new DbOperationException();
-			}
+			await _tripService.UpdateAsync(trip);
+			await _routePointService.DeleteByTripIdAsync(trip.Id);
+			await _routePointService.AddTripRoutePointsAsync(trip.Id, dto.RoutePointsAsString);
+			await _imageService.SaveTripImagesAsync(trip.Id, dto.ImagesAsFiles);
+			await transaction.CommitAsync();
 		}
-
-		await _imageService.SaveTripImagesFilesAsync(trip.Id, trip.UserId, fileNames, dto.ImagesAsFiles,
-			_env.WebRootPath);
+		catch (Exception)
+		{
+			await transaction.RollbackAsync();
+			throw new DbOperationException();
+		}
 	}
 }

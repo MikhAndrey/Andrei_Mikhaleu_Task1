@@ -16,9 +16,9 @@ public interface ITripService
 	Task AddAsync(Trip trip);
 	Task<TripDetailsDTO> GetTripDetailsAsync(int tripId);
 	Task<EditTripDTO> GetTripForEditingAsync(int tripId);
-	IQueryable<ReadTripDTOExtended> GetOthersPublicTrips();
-	IQueryable<ReadTripDTO> GetCurrentUserHistoryOfTrips();
-	IQueryable<ReadTripDTO> GetCurrentUserTrips();
+	IEnumerable<ReadTripDTOExtended> GetOthersPublicTrips();
+	IEnumerable<ReadTripDTO> GetCurrentUserHistoryOfTrips();
+	IEnumerable<ReadTripDTO> GetCurrentUserTrips();
 	YearsStatisticsDTO GetYearsOfCurrentUserTrips();
 	Task<List<UtilDurationInMonth>> GetTotalDurationByMonthsAsync(int year);
 	Task<EditPastTripDTO> GetPastTripForEditingAsync(int id);

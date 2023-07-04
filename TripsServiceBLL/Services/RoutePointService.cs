@@ -29,14 +29,9 @@ public class RoutePointService : IRoutePointService
 		await _unitOfWork.SaveAsync();
 	}
 
-	public List<RoutePoint>? ParseRoutePointsFromString(string routePoints)
+	public async Task AddTripRoutePointsAsync(int tripId, string routePointsAsString)
 	{
-		List<RoutePoint>? parsedRoutePoints = JsonSerializer.Deserialize<List<RoutePoint>>(routePoints);
-		return parsedRoutePoints;
-	}
-
-	public async Task AddTripRoutePointsAsync(int tripId, List<RoutePoint>? routePoints)
-	{
+		List<RoutePoint>? routePoints = ParseRoutePointsFromString(routePointsAsString);
 		if (routePoints != null)
 		{
 			foreach (RoutePoint routePoint in routePoints)
@@ -49,12 +44,18 @@ public class RoutePointService : IRoutePointService
 		}
 	}
 
-	public IQueryable<RoutePointCoordinatesDTO> GetRoutePointsByYear(int year)
+	public IEnumerable<RoutePointCoordinatesDTO> GetRoutePointsByYear(int year)
 	{
 		int userId = _userService.GetCurrentUserId();
 		IQueryable<RoutePointCoordinatesDTO> dataPoints = _unitOfWork.RoutePoints
 			.GetRoutePointsByYear(year, userId)
 			.Select(rp => new RoutePointCoordinatesDTO {Latitude = rp.Latitude, Longitude = rp.Longitude});
 		return dataPoints;
+	}
+
+	private List<RoutePoint>? ParseRoutePointsFromString(string routePoints)
+	{
+		List<RoutePoint>? parsedRoutePoints = JsonSerializer.Deserialize<List<RoutePoint>>(routePoints);
+		return parsedRoutePoints;
 	}
 }

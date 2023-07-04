@@ -12,7 +12,7 @@ namespace TripsServiceBLL.Services;
 public class TripService : ITripService
 {
 	private readonly IMapper _mapper;
-	
+
 	private readonly IUnitOfWork _unitOfWork;
 
 	private readonly IUserService _userService;
@@ -100,27 +100,39 @@ public class TripService : ITripService
 		return dto;
 	}
 
-	public IQueryable<ReadTripDTOExtended> GetOthersPublicTrips()
+	public IEnumerable<ReadTripDTOExtended> GetOthersPublicTrips()
 	{
 		int userId = _userService.GetCurrentUserId();
-		IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetOthersPublicTrips(userId);
-		IQueryable<ReadTripDTOExtended> mappedTrips = rawTrips.Select(el => _mapper.Map<ReadTripDTOExtended>(el));
+		IEnumerable<Trip> rawTrips = _unitOfWork.Trips.GetOthersPublicTrips(userId);
+		IEnumerable<ReadTripDTOExtended> mappedTrips = rawTrips.Select(el =>
+		{
+			ReadTripDTOExtended mappedTrip = _mapper.Map<ReadTripDTOExtended>(el);
+			return mappedTrip;
+		});
 		return mappedTrips;
 	}
 
-	public IQueryable<ReadTripDTO> GetCurrentUserHistoryOfTrips()
+	public IEnumerable<ReadTripDTO> GetCurrentUserHistoryOfTrips()
 	{
 		int userId = _userService.GetCurrentUserId();
-		IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetHistoryOfTripsByUserId(userId);
-		IQueryable<ReadTripDTO> mappedTrips = rawTrips.Select(el => _mapper.Map<ReadTripDTO>(el));
+		IEnumerable<Trip> rawTrips = _unitOfWork.Trips.GetHistoryOfTripsByUserId(userId);
+		IEnumerable<ReadTripDTO> mappedTrips = rawTrips.Select(el =>
+		{
+			ReadTripDTO mappedTrip = _mapper.Map<ReadTripDTO>(el);
+			return mappedTrip;
+		});
 		return mappedTrips;
 	}
 
-	public IQueryable<ReadTripDTO> GetCurrentUserTrips()
+	public IEnumerable<ReadTripDTO> GetCurrentUserTrips()
 	{
 		int userId = _userService.GetCurrentUserId();
-		IQueryable<Trip> rawTrips = _unitOfWork.Trips.GetTripsByUserId(userId);
-		IQueryable<ReadTripDTO> mappedTrips = rawTrips.Select(el => _mapper.Map<ReadTripDTO>(el));
+		IEnumerable<Trip> rawTrips = _unitOfWork.Trips.GetTripsByUserId(userId);
+		IEnumerable<ReadTripDTO> mappedTrips = rawTrips.Select(el =>
+		{
+			ReadTripDTO mappedTrip = _mapper.Map<ReadTripDTO>(el);
+			return mappedTrip;
+		});
 		return mappedTrips;
 	}
 

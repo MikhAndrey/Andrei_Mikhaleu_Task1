@@ -71,7 +71,7 @@ public class StatisticsController : Controller
 	{
 		try
 		{
-			IQueryable<RoutePointCoordinatesDTO> result = _routePointService.GetRoutePointsByYear(year);
+			IEnumerable<RoutePointCoordinatesDTO> result = _routePointService.GetRoutePointsByYear(year);
 			JsonSerializerOptions options = new()
 			{
 				ReferenceHandler = ReferenceHandler.Preserve
