@@ -41,6 +41,7 @@ public static class ProgramHelper
     {
         services.AddScoped<CurrentUserTripResolver>();
         services.AddScoped<CommentUserIdResolver>();
+        services.AddScoped<FeedbackUserResolver>();
     }
 
     public static void AddCommands(IServiceCollection services)
