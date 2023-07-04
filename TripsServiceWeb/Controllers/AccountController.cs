@@ -11,7 +11,7 @@ namespace Andrei_Mikhaleu_Task1.Controllers;
 public class AccountController : Controller
 {
 	private readonly IMapper _mapper;
-	
+
 	private readonly IUserService _userService;
 
 	private readonly LoginUserCommand _loginUserCommand;
