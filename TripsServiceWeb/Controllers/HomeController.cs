@@ -7,21 +7,18 @@ namespace Andrei_Mikhaleu_Task1.Controllers;
 
 public class HomeController : Controller
 {
-	private readonly IWebHostEnvironment _environment;
-
 	private readonly IImageService _imageService;
 	private readonly ILogger<HomeController> _logger;
 
-	public HomeController(ILogger<HomeController> logger, IWebHostEnvironment environment, IImageService imageService)
+	public HomeController(ILogger<HomeController> logger, IImageService imageService)
 	{
 		_logger = logger;
-		_environment = environment;
 		_imageService = imageService;
 	}
 
 	public IActionResult Index()
 	{
-		_imageService.CreateImagesDirectory(_environment.WebRootPath);
+		_imageService.CreateImagesDirectory();
 		return View();
 	}
 

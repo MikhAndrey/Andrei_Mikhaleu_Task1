@@ -8,7 +8,7 @@ namespace TripsServiceBLL.Infrastructure.Mappers;
 
 public class TripMapper : Profile
 {
-	public TripMapper(CurrentUserTripResolver currentUserTripResolver)
+	public TripMapper(CurrentUserTripResolver currentUserTripResolver, NewTripUserIdResolver newTripUserIdResolver)
 	{
 		CreateMap<Trip, ReadTripDTO>();
 		CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
@@ -23,11 +23,11 @@ public class TripMapper : Profile
 			.ForMember(trip => trip.EndTime, opt => opt.MapFrom
 				(src => src.EndTime.AddSeconds(-src.FinishTimeZoneOffset)))
 			.ForMember(trip => trip.RoutePoints, opt => opt.Ignore())
-			.ForMember(trip => trip.Images, opt => opt.Ignore());
+			.ForMember(trip => trip.Images, opt => opt.Ignore())
+			.ForMember(trip => trip.UserId, opt => opt.MapFrom(newTripUserIdResolver));
 		CreateMap<EditTripDTO, Trip>()
 			.IncludeBase<CreateTripDTO, Trip>()
-			.ForMember(trip => trip.Id, opt => opt.Ignore())
-			.ForMember(trip => trip.UserId, opt => opt.Ignore());
+			.ForMember(trip => trip.Id, opt => opt.Ignore());
 		CreateMap<Trip, EditTripDTO>()
 			.ForMember(dto => dto.StartTime,
 				opt => opt.MapFrom(src => src.StartTime.AddSeconds(src.StartTimeZoneOffset)))

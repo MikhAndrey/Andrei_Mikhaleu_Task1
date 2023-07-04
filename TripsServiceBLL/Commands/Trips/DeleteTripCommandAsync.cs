@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Interfaces;
@@ -12,18 +11,16 @@ public class DeleteTripCommandAsync : ICommandAsync<int>
 	private readonly IFeedbackService _feedbackService;
 	private readonly IImageService _imageService;
 	private readonly IRoutePointService _routePointService;
-	private readonly IUserService _userService;
 	private readonly ITripService _tripService;
 
 	private readonly IUnitOfWork _unitOfWork;
-	
+
 	public DeleteTripCommandAsync(
 		ITripService tripService,
 		IImageService imageService,
 		IRoutePointService routePointService,
 		ICommentService commentService,
 		IFeedbackService feedbackService,
-		IUserService userService,
 		IUnitOfWork unitOfWork)
 	{
 		_tripService = tripService;
@@ -31,14 +28,11 @@ public class DeleteTripCommandAsync : ICommandAsync<int>
 		_routePointService = routePointService;
 		_commentService = commentService;
 		_feedbackService = feedbackService;
-		_userService = userService;
 		_unitOfWork = unitOfWork;
 	}
 
 	public async Task ExecuteAsync(int id)
 	{
-		_ = _userService.GetCurrentUserId();
-
 		using IDbContextTransaction transaction = _unitOfWork.BeginTransaction();
 		try
 		{
@@ -54,7 +48,5 @@ public class DeleteTripCommandAsync : ICommandAsync<int>
 			await transaction.RollbackAsync();
 			throw new DbOperationException();
 		}
-
-		//_imageService.DeleteTripImagesFiles(id, userId, _env.WebRootPath); TODO: Physical images removal is under discussion
 	}
 }

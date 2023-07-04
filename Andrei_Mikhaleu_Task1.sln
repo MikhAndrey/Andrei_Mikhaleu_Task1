@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{4CF194B1-928E-4DFA-83CB-C392DD4B7800}"
 	ProjectSection(SolutionItems) = preProject
 		.editorConfig = .editorConfig
+		.gitignore = .gitignore
 	EndProjectSection
 EndProject
 Global
