@@ -48,8 +48,11 @@ public class FeedbackService : IFeedbackService
 
 	public async Task DeleteByTripIdAsync(int tripId)
 	{
-		Feedback feedback = await _unitOfWork.Feedbacks.GetByTripId(tripId);
-		_unitOfWork.Feedbacks.Delete(feedback);
-		await _unitOfWork.SaveAsync();
+		Feedback? feedback = await _unitOfWork.Feedbacks.GetByTripId(tripId);
+		if (feedback != null)
+		{
+			_unitOfWork.Feedbacks.Delete(feedback);
+			await _unitOfWork.SaveAsync();
+		}
 	}
 }
