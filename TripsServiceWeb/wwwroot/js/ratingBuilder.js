@@ -24,10 +24,14 @@ function setRatingValueContainerColor(rating, ratingContainer) {
 	$(ratingContainer).css("background-color", `rgb(${255 - 51 * rating}, ${51 * rating}, 0)`);
 }
 
-$(".rating-container").each(function () {
-	const ratingValueContainer = $(this).find(".rating-value")
-	const starContainer = $(this).find(".star-container");
+function applyRatingToElement(element) {
+	const ratingValueContainer = $(element).find(".rating-value");
+	const starContainer = $(element).find(".star-container");
 	const rating = getRatingValueFromContainer(ratingValueContainer);
 	buildRating(rating, starContainer);
 	setRatingValueContainerColor(rating, ratingValueContainer);
+}
+
+$(".rating-container").each(function () {
+	applyRatingToElement(this);
 });

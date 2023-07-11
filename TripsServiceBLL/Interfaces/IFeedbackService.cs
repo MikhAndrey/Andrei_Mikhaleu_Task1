@@ -4,6 +4,8 @@ namespace TripsServiceBLL.Interfaces;
 
 public interface IFeedbackService
 {
-	Task AddAsync(CreateFeedbackDTO feedback);
+	Task<ReadFeedbackDTO> AddAsync(CreateFeedbackDTO feedback);
 	Task DeleteByTripIdAsync(int tripId);
+	Task DeleteAsync(int id);
+	Task UpdateAsync(UpdateFeedbackDTO dto);
 }

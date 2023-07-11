@@ -47,22 +47,24 @@ public class TripMapper : Profile
 			.ForMember(dest => dest.UtcFinishTimeZone, opt => opt.MapFrom
 			(src => string.Concat(src.EndTime.AddSeconds(src.FinishTimeZoneOffset).ToString("dd.MM.yyyy HH:mm"),
 				$" UTC{src.FinishTimeZoneOffset / 3600:+#;-#;+0}")))
-			.ForMember(dest => dest.IsNeedToBeRated,
-				opt => opt.MapFrom((src, dest) => src.DriverId != null && src.Feedback == null && dest.IsPast))
-			.ForMember(dest => dest.Rating,
-				opt => opt.MapFrom((src, dest) =>
-				{
-					return src.DriverId != null && src.Feedback == null && dest.IsPast
-						? null
-						: src.Feedback?.Rating;
-				}));
-		CreateMap<Trip, ReadTripDTOExtended>()
-			.IncludeBase<Trip, ReadTripDTO>()
-			.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
-		CreateMap<Trip, TripDetailsDTO>()
-			.IncludeBase<Trip, ReadTripDTO>()
-			.ForMember(dest => dest.Duration, opt => opt.MapFrom(src =>
-				UtilDateTimeFunctions.GetTimeSpanString(src.EndTime - src.StartTime)))
-			.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.MapFrom(currentUserTripResolver));
-	}
+				.ForMember(dest => dest.IsNeedToBeRated, opt => opt.MapFrom((src, dest) => src.DriverId != null && src.Feedback == null && dest.IsPast))
+				.ForMember(dest => dest.Rating, opt => opt.MapFrom((src, dest) =>
+					UtilTripFunctions.IsTripPastAndHasFeedback(src, dest) ? null : (src.Feedback?.Rating)
+				));
+			CreateMap<Trip, ReadTripDTOExtended>()
+				.IncludeBase<Trip, ReadTripDTO>()
+				.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
+			CreateMap<Trip, TripDetailsDTO>()
+				.IncludeBase<Trip, ReadTripDTO>()
+				.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.Ignore())
+				.ForMember(dest => dest.Duration, opt => opt.MapFrom(src =>
+					UtilDateTimeFunctions.GetTimeSpanString(src.EndTime - src.StartTime)))
+				.ForMember(dest => dest.IsCurrentUserTrip, opt => opt.MapFrom(currentUserTripResolver))
+				.ForMember(dest => dest.FeedbackText, opt => opt.MapFrom((src, dest) =>
+					UtilTripFunctions.IsTripPastAndHasFeedback(src, dest) ? null : (src.Feedback?.Text)
+				))
+				.ForMember(dest => dest.FeedbackId, opt => opt.MapFrom((src, dest) =>				
+					UtilTripFunctions.IsTripPastAndHasFeedback(src, dest) ? null : (src.Feedback?.Id)
+				));
+    }
 }
