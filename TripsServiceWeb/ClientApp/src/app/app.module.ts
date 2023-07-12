@@ -11,6 +11,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import {RegisterFormComponent} from "./register-form/register-form.component";
 import {LoginFormComponent} from "./login-form/login-form.component";
+import {UserGreetingsComponent} from "./user-greetings/user-greetings.component";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {LoginFormComponent} from "./login-form/login-form.component";
     CounterComponent,
     FetchDataComponent,
     RegisterFormComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    UserGreetingsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

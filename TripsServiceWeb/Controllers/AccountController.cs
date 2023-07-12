@@ -64,6 +64,12 @@ public class AccountController : ControllerBase
 
         return BadRequest(ModelState);
     }
+    
+    [HttpGet("username")]
+    public ActionResult<string?> GetUserName()
+    {
+        return Ok(new { UserName = HttpContext?.User?.Identity?.Name});
+    }
 
     [HttpGet]
     public IActionResult Logout()
