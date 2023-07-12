@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {DurationInMonth} from "../../models/statistics";
 import {ChartType, Row} from "angular-google-charts";
+import {formatDuration} from "../../utils/formatDuration";
 
 @Component({
   selector: 'app-duration-statistics',
@@ -12,16 +13,16 @@ export class DurationStatisticsComponent implements OnInit {
   selectedYear?: number;
   yearsOfTrips: number[] = [];
 
-  options = {
+  chartOptions = {
     title: 'Monthly trip durations',
     hAxis: {title: 'Month'},
     vAxis: {title: 'Total duration (hours)'},
     tooltip: {isHtml: true}
   };
 
-  columnNames = ['Month', 'Total duration'];
+  chartColumnNames = ['Month', 'Total duration', { type: 'string', role: 'tooltip', 'p': { 'html': true } }];
   chartName = 'Monthly trip durations';
-  type: ChartType = ChartType.ColumnChart;
+  chartType: ChartType = ChartType.ColumnChart;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
@@ -44,7 +45,11 @@ export class DurationStatisticsComponent implements OnInit {
     this.http.get<DurationInMonth[]>(this.baseUrl + 'api/statistics/durations?year=' + this.selectedYear).subscribe(
       (response) => {
         this.durationData = response.map(el => {
-          return [el.month, el.totalDuration];
+          return [el.month, el.totalDuration, `
+            <div style="font-weight: bold;">${el.month}:</div>
+            </br>
+            <div>${formatDuration(el.totalDuration)}</div>
+          `];
         });
       }
     );

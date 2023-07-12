@@ -5,11 +5,11 @@
     <option *ngFor="let value of yearsOfTrips" [value]="value">{{value}}</option>
   </select>
   <google-chart
-                [title]='chartName'
-                [type]="type"
-                [data]="durationData"
-                [columns]="columnNames"
-                [options]="options"
-                style="height:600px; width:100%">
+    [title]='chartName'
+    [type]="chartType"
+    [data]="durationData"
+    [columns]="chartColumnNames"
+    [options]="chartOptions"
+    style="height:600px; width:100%">
   </google-chart>
 </div>
