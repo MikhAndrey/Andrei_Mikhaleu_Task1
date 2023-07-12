@@ -46,8 +46,8 @@ public class AccountController : ControllerBase
         return BadRequest(ModelState);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Login(UserLoginDTO user, string? returnUrl = null)
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(UserLoginDTO user)
     {
         if (ModelState.IsValid)
         {

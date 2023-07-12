@@ -19,7 +19,7 @@ export class RegisterFormComponent {
         window.location.href = this.baseUrl;
       },
       (error) => {
-        this.validationErrors = error.error.errors;
+        this.validationErrors = error.error.errors || error.error;
       }
     );
   }

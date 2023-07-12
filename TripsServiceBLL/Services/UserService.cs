@@ -103,6 +103,6 @@ public class UserService : IUserService
 			return tokenHandler.WriteToken(token);
 		}
 
-		throw new ValidationException(UtilConstants.InvalidCredentialsMessage, "");
+		throw new ValidationException(UtilConstants.InvalidCredentialsMessage, "Model");
 	}
 }

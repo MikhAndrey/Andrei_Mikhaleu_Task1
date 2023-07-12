@@ -1,0 +1,24 @@
+<div class="tp-form">
+
+  <h2 class = "tp-label">Login</h2>
+  <div *ngIf="validationErrors.Model" class = "text-danger">{{validationErrors.Model}}</div>
+
+  <div class="form-group tp-form-group">
+    <label for="userName" class="tp-label">Username</label>
+    <input type="text" id="userName" [(ngModel)]="user.UserName" name="userName" class="form-control tp-text-input" required>
+    <span class="text-danger" *ngIf="validationErrors.UserName">{{validationErrors.UserName}}</span>
+  </div>
+
+  <div class="form-group tp-form-group">
+    <label for="password" class="tp-label">Password</label>
+    <input type="password" id="password" [(ngModel)]="user.Password" name="password" class="form-control tp-text-input" required>
+    <span class="text-danger" *ngIf="validationErrors.Password">{{validationErrors.Password}}</span>
+  </div>
+
+  <div class = "form-group tp-form-group">
+    <input type = "checkbox" [(ngModel)]="user.RememberMe">
+    <label class = "tp-label ml-1">Stay signed in</label>
+  </div>
+
+  <button type = "submit" (click)="login()" class = "btn btn-primary mt-3">Login</button>
+</div>
