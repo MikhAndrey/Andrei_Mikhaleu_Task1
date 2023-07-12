@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using TripsServiceBLL.DTO.Statistics;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Interfaces;
 using TripsServiceBLL.Utils;
@@ -136,15 +135,11 @@ public class TripService : ITripService
 		return mappedTrips;
 	}
 
-	public YearsStatisticsDTO GetYearsOfCurrentUserTrips()
+	public IEnumerable<int> GetYearsOfCurrentUserTrips()
 	{
 		int userId = _userService.GetCurrentUserId();
-		IQueryable<int> years = _unitOfWork.Trips.GetYearsOfUserTrips(userId);
-		return new YearsStatisticsDTO
-		{
-			Years = years,
-			SelectedYear = years.FirstOrDefault()
-		};
+		IEnumerable<int> years = _unitOfWork.Trips.GetYearsOfUserTrips(userId);
+		return years;
 	}
 
 	public async Task<List<UtilDurationInMonth>> GetTotalDurationByMonthsAsync(int year)

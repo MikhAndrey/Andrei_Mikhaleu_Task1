@@ -12,6 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import {RegisterFormComponent} from "./register-form/register-form.component";
 import {LoginFormComponent} from "./login-form/login-form.component";
 import {UserGreetingsComponent} from "./user-greetings/user-greetings.component";
+import {HeatmapStatisticsComponent} from "./heatmap-statistics/heatmap-statistics.component";
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {UserGreetingsComponent} from "./user-greetings/user-greetings.component"
     FetchDataComponent,
     RegisterFormComponent,
     LoginFormComponent,
-    UserGreetingsComponent
+    UserGreetingsComponent,
+    HeatmapStatisticsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -34,6 +36,7 @@ import {UserGreetingsComponent} from "./user-greetings/user-greetings.component"
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'register', component: RegisterFormComponent },
       { path: 'login', component: LoginFormComponent },
+      { path: 'heatmap', component: HeatmapStatisticsComponent },
     ])
   ],
   providers: [],

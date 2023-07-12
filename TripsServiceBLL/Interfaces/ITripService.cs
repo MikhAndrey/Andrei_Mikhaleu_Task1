@@ -1,5 +1,4 @@
-﻿using TripsServiceBLL.DTO.Statistics;
-using TripsServiceBLL.DTO.Trips;
+﻿using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 
@@ -19,7 +18,7 @@ public interface ITripService
 	IEnumerable<ReadTripDTOExtended> GetOthersPublicTrips();
 	IEnumerable<ReadTripDTO> GetCurrentUserHistoryOfTrips();
 	IEnumerable<ReadTripDTO> GetCurrentUserTrips();
-	YearsStatisticsDTO GetYearsOfCurrentUserTrips();
+	IEnumerable<int> GetYearsOfCurrentUserTrips();
 	Task<List<UtilDurationInMonth>> GetTotalDurationByMonthsAsync(int year);
 	Task<EditPastTripDTO> GetPastTripForEditingAsync(int id);
 }
