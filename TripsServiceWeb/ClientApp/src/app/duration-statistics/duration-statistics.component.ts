@@ -1,20 +1,27 @@
-/// <reference types="@types/google.maps" />
 import {Component, Inject, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {RoutePointsDTO} from "../../models/statistics";
-import {HeatmapData} from "@angular/google-maps";
+import {DurationInMonth} from "../../models/statistics";
+import {ChartType, Row} from "angular-google-charts";
 
 @Component({
-  selector: 'app-heatmap-statistics',
-  templateUrl: './heatmap-statistics.component.html',
+  selector: 'app-duration-statistics',
+  templateUrl: './duration-statistics.component.html',
 })
-export class HeatmapStatisticsComponent implements OnInit {
-  heatmapData: HeatmapData = [];
-  heatMapOptions = {
-    radius: 40
-  };
+export class DurationStatisticsComponent implements OnInit {
+  durationData: Row[] = [];
   selectedYear?: number;
   yearsOfTrips: number[] = [];
+
+  options = {
+    title: 'Monthly trip durations',
+    hAxis: {title: 'Month'},
+    vAxis: {title: 'Total duration (hours)'},
+    tooltip: {isHtml: true}
+  };
+
+  columnNames = ['Month', 'Total duration'];
+  chartName = 'Monthly trip durations';
+  type: ChartType = ChartType.ColumnChart;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
@@ -34,10 +41,10 @@ export class HeatmapStatisticsComponent implements OnInit {
   }
 
   onYearChange(): void {
-    this.http.get<RoutePointsDTO[]>(this.baseUrl + 'api/statistics/heatmap?year=' + this.selectedYear).subscribe(
+    this.http.get<DurationInMonth[]>(this.baseUrl + 'api/statistics/durations?year=' + this.selectedYear).subscribe(
       (response) => {
-        this.heatmapData = response.map(el => {
-          return {lat: el.latitude, lng: el.longitude};
+        this.durationData = response.map(el => {
+          return [el.month, el.totalDuration];
         });
       }
     );

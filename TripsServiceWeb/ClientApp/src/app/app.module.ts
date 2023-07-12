@@ -12,8 +12,10 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import {RegisterFormComponent} from "./register-form/register-form.component";
 import {LoginFormComponent} from "./login-form/login-form.component";
-import {UserAccountOptionsComponent} from "./user-greetings/user-account-options.component";
+import {UserAccountOptionsComponent} from "./user-account-options/user-account-options.component";
 import {HeatmapStatisticsComponent} from "./heatmap-statistics/heatmap-statistics.component";
+import {GoogleChartsModule} from "angular-google-charts";
+import {DurationStatisticsComponent} from "./duration-statistics/duration-statistics.component";
 
 @NgModule({
   declarations: [
@@ -25,11 +27,13 @@ import {HeatmapStatisticsComponent} from "./heatmap-statistics/heatmap-statistic
     RegisterFormComponent,
     LoginFormComponent,
     UserAccountOptionsComponent,
-    HeatmapStatisticsComponent
+    HeatmapStatisticsComponent,
+    DurationStatisticsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     GoogleMapsModule,
+    GoogleChartsModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
@@ -39,6 +43,7 @@ import {HeatmapStatisticsComponent} from "./heatmap-statistics/heatmap-statistic
       { path: 'register', component: RegisterFormComponent },
       { path: 'login', component: LoginFormComponent },
       { path: 'heatmap', component: HeatmapStatisticsComponent },
+      { path: 'tripdurations', component: DurationStatisticsComponent },
     ])
   ],
   providers: [],

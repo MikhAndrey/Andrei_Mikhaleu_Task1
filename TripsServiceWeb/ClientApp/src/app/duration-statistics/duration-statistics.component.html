@@ -1,0 +1,15 @@
+<h4 class = "tp-label" id = "no-content">You have no trips yet</h4>
+<div id = "main-content" class = "tp-form">
+  <h5 class = "tp-label">Select year for displaying statistics:</h5>
+  <select [(ngModel)]="selectedYear" (change)="onYearChange()">
+    <option *ngFor="let value of yearsOfTrips" [value]="value">{{value}}</option>
+  </select>
+  <google-chart
+                [title]='chartName'
+                [type]="type"
+                [data]="durationData"
+                [columns]="columnNames"
+                [options]="options"
+                style="height:600px; width:100%">
+  </google-chart>
+</div>
