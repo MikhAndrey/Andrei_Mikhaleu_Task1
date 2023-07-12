@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "TripServiceFrontEnd": {
+    "Andrei_Mikhaleu_Task1": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "TripServiceFrontEnd:build:production"
+              "browserTarget": "Andrei_Mikhaleu_Task1:build:production"
             },
             "development": {
-              "browserTarget": "TripServiceFrontEnd:build:development",
+              "browserTarget": "Andrei_Mikhaleu_Task1:build:development",
               "proxyConfig": "proxy.conf.js"
             }
           },
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "TripServiceFrontEnd:build"
+            "browserTarget": "Andrei_Mikhaleu_Task1:build"
           }
         },
         "test": {
@@ -132,5 +132,5 @@
       }
     }
   },
-  "defaultProject": "TripServiceFrontEnd"
+  "defaultProject": "Andrei_Mikhaleu_Task1"
 }

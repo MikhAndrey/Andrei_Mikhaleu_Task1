@@ -1,14 +1,14 @@
 {
-  "name": "tripservicefrontend",
+  "name": "andrei_mikhaleu_task1",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "prestart": "node aspnetcore-https",
     "start": "run-script-os",
-    "start:windows": "ng serve --port 44480 --ssl --ssl-cert \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.pem\" --ssl-key \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.key\"",
-    "start:default": "ng serve --port 44480 --ssl --ssl-cert \"$HOME/.aspnet/https/${npm_package_name}.pem\" --ssl-key \"$HOME/.aspnet/https/${npm_package_name}.key\"",
+    "start:windows": "ng serve --port 44402 --ssl --ssl-cert \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.pem\" --ssl-key \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.key\"",
+    "start:default": "ng serve --port 44402 --ssl --ssl-cert \"$HOME/.aspnet/https/${npm_package_name}.pem\" --ssl-key \"$HOME/.aspnet/https/${npm_package_name}.key\"",
     "build": "ng build",
-    "build:ssr": "ng run TripServiceFrontEnd:server:dev",
+    "build:ssr": "ng run Andrei_Mikhaleu_Task1:server:dev",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

@@ -1,6 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
-
-/* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
 }
@@ -17,4 +14,166 @@ code {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background: url("../img/back.jpg");
+  background-size: cover;
+}
+
+#map {
+  height: 400px;
+  width: 100%;
+}
+
+.tp-form-group {
+  margin-bottom: 20px;
+}
+
+.tp-form {
+  background: linear-gradient(to bottom, #d0e5f2, #cfc4dd);
+  padding: 25px;
+}
+
+.tp-label {
+  font-weight: bold;
+  color: #550c87;
+}
+
+.tp-text-input {
+  border-radius: 0;
+  border-color: #e5e5e5;
+}
+
+
+.tp-datetime-input::-webkit-datetime-edit-ampm-field {
+  display: none;
+}
+
+.tp-datetime-input {
+  border-radius: 0;
+  border-color: #e5e5e5;
+}
+
+.tp-input-desc {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #634c81;
+}
+
+.tp-file-upload {
+  padding: 3px 10px;
+  color: #550c87;
+}
+
+.tp-submit-btn {
+  border-radius: 0;
+}
+
+.tp-gradient-standard {
+  background: linear-gradient(to top, #f8f8ff, #cfc4dd);
+}
+
+.footer {
+  padding-left: 30px;
+  text-align: left;
+}
+
+.tp-gradient-reverse {
+  background: linear-gradient(to bottom, #d0e5f2, #cfc4dd);
+}
+
+.br-20 {
+  border-radius: 0px 0px 20px 20px;
+}
+
+.mr-50 {
+  margin-right: 50px;
+}
+
+.rating-value {
+  display: inline-block;
+  width: 60px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.star {
+  display: inline-block;
+  position: relative;
+  font-size: 24px;
+  color: #ccc;
+  width: 20px;
+  height: 20px;
+}
+
+.star-filled {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  background-image: url('../img/filled-star.png');
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  background-size: auto 100%;
+  transition: width 0.5s ease-in-out;
+}
+
+.star-outline {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/blank-star.png');
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  background-size: auto 100%;
+}
+
+.star-hovered {
+  transform: scale(1.3);
+}
+
+.star-hovered:hover {
+  cursor: pointer;
+}
+
+.driver-button {
+  border: 3px solid #550c87;
+  border-radius: 35px;
+}
+
+.driver-button:hover {
+  cursor: pointer;
+}
+
+.active-driver-button {
+  border-color: #138226;
+  border-radius: 35px;
 }

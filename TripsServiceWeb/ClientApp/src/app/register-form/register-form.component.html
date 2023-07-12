@@ -1,0 +1,23 @@
+<div class="tp-form">
+  <h2 class="tp-label">Sign up</h2>
+
+  <div class="form-group tp-form-group">
+    <label for="userName" class="tp-label">Username</label>
+    <input type="text" id="userName" [(ngModel)]="user.UserName" name="userName" class="form-control tp-text-input" required>
+    <span class="text-danger" *ngIf="validationErrors.UserName">{{validationErrors.UserName}}</span>
+  </div>
+
+  <div class="form-group tp-form-group">
+    <label for="password" class="tp-label">Password</label>
+    <input type="password" id="password" [(ngModel)]="user.Password" name="password" class="form-control tp-text-input" required>
+    <span class="text-danger" *ngIf="validationErrors.Password">{{validationErrors.Password}}</span>
+  </div>
+
+  <div class="form-group tp-form-group">
+    <label for="email" class="tp-label">Email</label>
+    <input type="email" id="email" [(ngModel)]="user.Email" name="email" class="form-control tp-text-input" required>
+    <span class="text-danger" *ngIf="validationErrors.Email">{{validationErrors.Email}}</span>
+  </div>
+
+  <button type="button" (click)="register()" class="btn btn-primary mt-3">Register</button>
+</div>
