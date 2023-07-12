@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { GoogleMapsModule } from '@angular/google-maps'
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -11,7 +12,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import {RegisterFormComponent} from "./register-form/register-form.component";
 import {LoginFormComponent} from "./login-form/login-form.component";
-import {UserGreetingsComponent} from "./user-greetings/user-greetings.component";
+import {UserAccountOptionsComponent} from "./user-greetings/user-account-options.component";
 import {HeatmapStatisticsComponent} from "./heatmap-statistics/heatmap-statistics.component";
 
 @NgModule({
@@ -23,11 +24,12 @@ import {HeatmapStatisticsComponent} from "./heatmap-statistics/heatmap-statistic
     FetchDataComponent,
     RegisterFormComponent,
     LoginFormComponent,
-    UserGreetingsComponent,
+    UserAccountOptionsComponent,
     HeatmapStatisticsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    GoogleMapsModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([

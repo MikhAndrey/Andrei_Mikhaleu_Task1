@@ -1,5 +1,10 @@
-<div>
+<h4 class = "tp-label" id = "no-content">You have no trips yet</h4>
+<div id = "main-content" class = "tp-form">
+  <h5 class = "tp-label">Select year for displaying statistics:</h5>
   <select [(ngModel)]="selectedYear" (change)="onYearChange()">
     <option *ngFor="let value of yearsOfTrips" [value]="value">{{value}}</option>
   </select>
+  <google-map height="600px" width="100%" [center]="{lat: 51.5085, lng: 0}" [zoom]="5">
+    <map-heatmap-layer [data]="heatmapData" [options]="heatMapOptions"></map-heatmap-layer>
+  </google-map>
 </div>

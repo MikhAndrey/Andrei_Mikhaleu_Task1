@@ -32,18 +32,8 @@
               >Heatmap</a
             >
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/register']"
-              >Sign up</a
-            >
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/login']"
-            >Login</a
-            >
-          </li>
+          <app-user-account-options></app-user-account-options>
         </ul>
-        <app-user-greetings></app-user-greetings>
       </div>
     </div>
   </nav>

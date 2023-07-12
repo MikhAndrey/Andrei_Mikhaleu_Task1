@@ -71,7 +71,7 @@ public class AccountController : ControllerBase
         return Ok(new { UserName = HttpContext?.User?.Identity?.Name});
     }
 
-    [HttpGet]
+    [HttpGet("logout")]
     public IActionResult Logout()
     {
         HttpContext.Response.Cookies.Delete(UtilConstants.JwtTokenCookiesAlias);

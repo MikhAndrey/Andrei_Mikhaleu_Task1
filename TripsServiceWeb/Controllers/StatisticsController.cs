@@ -21,25 +21,25 @@ public class StatisticsController : ControllerBase
 
     [HttpGet("durations")]
     [Authorize]
-    public async Task<List<UtilDurationInMonth>> TotalDurationData(int year)
+    public async Task<ActionResult<List<UtilDurationInMonth>>> TotalDurationData(int year)
     {
         List<UtilDurationInMonth> durations = await _tripService.GetTotalDurationByMonthsAsync(year);
-        return durations;
+        return Ok(durations);
     }
 
     [HttpGet("heatmap")]
     [Authorize]
-    public IEnumerable<RoutePointCoordinatesDTO> HeatMapData(int year)
+    public ActionResult<IEnumerable<RoutePointCoordinatesDTO>> HeatMapData(int year)
     {
         IEnumerable<RoutePointCoordinatesDTO> result = _routePointService.GetRoutePointsByYear(year);
-        return result;
+        return Ok(result);
     }
 
     [HttpGet("years")]
     [Authorize]
-    public IEnumerable<int> GetDistinctYearsModel()
+    public ActionResult<IEnumerable<int>> GetDistinctYearsModel()
     {
         IEnumerable<int> result = _tripService.GetYearsOfCurrentUserTrips();
-        return result;
+        return Ok(result);
     }
 }
