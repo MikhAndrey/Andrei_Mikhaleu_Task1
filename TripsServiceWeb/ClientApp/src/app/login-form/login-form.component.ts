@@ -1,6 +1,6 @@
-import {Component, Inject} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {Component} from '@angular/core';
 import {LoginValidationErrors, UserLoginDTO} from "../../models/login";
+import {AccountService} from "../../services/account.service";
 
 @Component({
   selector: 'app-login-form',
@@ -10,18 +10,18 @@ export class LoginFormComponent {
   user: UserLoginDTO = {};
   validationErrors: LoginValidationErrors = {};
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
+  constructor(private accountService: AccountService) {
   }
 
   login() {
-    this.http.post(this.baseUrl + 'api/account/login', this.user).subscribe(
-      (response) => {
-        window.location.href = this.baseUrl;
+    this.accountService.login(this.user).subscribe({
+      next: () => {
+        this.accountService.returnToHomePage();
       },
-      (error) => {
+      error: (error) => {
         this.validationErrors = error.error.errors || error.error;
       }
-    );
+    });
   }
 }
 

@@ -1,5 +1,5 @@
-import {Component, Inject, Injectable, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {Component, Injectable, OnInit} from '@angular/core';
+import {AccountService, UserNameResponse} from "../../services/account.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,27 +14,29 @@ import {HttpClient} from "@angular/common/http";
       <a class="nav-link text-dark" [routerLink]="['/login']">Login</a>
     </li>
     <li *ngIf="userName" class="nav-item">
-        <div>Welcome back, {{ userName }}</div>
+      <div>Welcome back, {{ userName }}</div>
     </li>
     <li *ngIf="userName" class="nav-item">
-        <a class="nav-link text-dark" (click)="logout()">Log out</a>
+      <a class="nav-link text-dark" (click)="logout()">Log out</a>
     </li>
   `
 })
 export class UserAccountOptionsComponent implements OnInit {
   userName?: string;
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
+
+  constructor(private accountService: AccountService) {
+  }
 
   ngOnInit(): void {
-    this.http.get(this.baseUrl + 'api/account/username').subscribe(
-      (response: any) => {
+    this.accountService.getUserName().subscribe(
+      (response: UserNameResponse) => {
         this.userName = response.userName
       }
     );
   }
 
   logout(): void {
-    this.http.get(this.baseUrl + 'api/account/logout').subscribe(
+    this.accountService.logout().subscribe(
       () => {
         this.userName = undefined;
       }

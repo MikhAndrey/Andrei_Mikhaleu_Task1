@@ -16,7 +16,7 @@ export class DurationStatisticsComponent extends YearStatisticsCore implements O
     tooltip: {isHtml: true}
   };
 
-  chartColumnNames = ['Month', 'Total duration', { type: 'string', role: 'tooltip', 'p': { 'html': true } }];
+  chartColumnNames = ['Month', 'Total duration', {type: 'string', role: 'tooltip', 'p': {'html': true}}];
   chartName = 'Monthly trip durations';
   chartType: ChartType = ChartType.ColumnChart;
 

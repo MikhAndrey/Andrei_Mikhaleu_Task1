@@ -1,6 +1,6 @@
-import {Component, Inject} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {Component} from '@angular/core';
 import {SignupValidationErrors, UserSignupDTO} from "../../models/signup";
+import {AccountService} from "../../services/account.service";
 
 @Component({
   selector: 'app-register-form',
@@ -10,18 +10,18 @@ export class RegisterFormComponent {
   user: UserSignupDTO = {};
   validationErrors: SignupValidationErrors = {};
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
+  constructor(private accountService: AccountService) {
   }
 
   register() {
-    this.http.post(this.baseUrl + 'api/account/register', this.user).subscribe(
-      () => {
-        window.location.href = this.baseUrl;
+    this.accountService.signup(this.user).subscribe({
+      next: () => {
+        this.accountService.returnToHomePage();
       },
-      (error) => {
+      error: (error) => {
         this.validationErrors = error.error.errors || error.error;
       }
-    );
+    });
   }
 }
 
