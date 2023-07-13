@@ -1,0 +1,14 @@
+﻿.modal-dialog{
+  max-width: 60%;
+}
+.image-container{
+  width: 30%;
+}
+.driver-photo{
+  width:100%;
+  height:auto;
+  border-radius:50%;
+}
+.main-driver-info{
+  flex-grow:1;
+}

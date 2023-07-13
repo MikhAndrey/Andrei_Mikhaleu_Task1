@@ -1,14 +1,14 @@
 ﻿export class DriverInfoDTO {
-   Id: number;
-   Name: string;
-   PhotoLink?: string;
-   Experience: number;
-   AverageRating: number;
+   id: number;
+   name: string;
+   photoLink?: string;
+   experience: number;
+   averageRating: number;
 
    constructor() {
-     this.Id = 0;
-     this.Name = '';
-     this.Experience = 0;
-     this.AverageRating = 0;
+     this.id = 0;
+     this.name = '';
+     this.experience = 0;
+     this.averageRating = 0;
    }
 }

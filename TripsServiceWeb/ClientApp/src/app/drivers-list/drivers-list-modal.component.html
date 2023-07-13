@@ -1,0 +1,33 @@
+﻿<div class="modal fade" id="driverListModal" tabindex="-1" aria-labelledby="driverListModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content tp-form">
+      <div class="modal-header">
+        <h5 class="modal-title tp-label" id="exampleModalLabel">Click on a driver you want to select for a trip</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Select later"></button>
+      </div>
+      <div class="modal-body" id="drivers-container">
+        <div class="row row-cols-2" id="drivers-table">
+          <div class="col mb-4" *ngFor="let driver of drivers">
+            <div class="card h-100 tp-gradient-standard driver-button d-flex flex-row align-items-center" [attr.data-driver-id]=driver.id>
+              <div class="mr-3 image-container">
+                <img class="driver-photo" src="{{driver.photoLink}}" alt="Driver Photo">
+              </div>
+              <div class="main-driver-info">
+                <h5 class="tp-label mr-2 d-inline-block">{{driver.name}}</h5>
+                <span class="rating-value text-light mt-2">{{driver.averageRating}}</span>
+                <p class="tp-label">Experience: {{driver.experience}} years</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="select-driver-later-button" data-bs-dismiss="modal">
+          Select later
+        </button>
+        <button type="button" class="btn btn-primary" id="select-driver-button">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>

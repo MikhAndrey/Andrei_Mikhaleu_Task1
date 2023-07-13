@@ -28,10 +28,10 @@
     <div class = "tp-input-desc">Enter a couple of phrases describing your trip</div>
   </div>
   <div class = "tp-label">Click on the map to place trip points</div>
-  <div id = "map" class = "form-group tp-form-group"></div>
+  <google-map height="600px" width="100%" [center]="{lat: 51.5085, lng: 0}" [zoom]="5"></google-map>
   <div class = "tp-label mt-2 mb-2">
     Trip's distance:
-    <span id = "route-length-view">0</span>&nbsp km
+    <span id = "route-length-view">0</span> km
   </div>
   <div class = "tp-label mt-2 mb-2">
     Trip's duration:
