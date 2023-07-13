@@ -6,7 +6,7 @@
   FinishTimeZoneOffset: number;
   DriverId?: number;
   RoutePointsAsString: string;
-  ImagesAsFiles?: File[];
+  ImagesAsFiles?: { file: File, url: string }[];
   Name: string;
   Public: boolean;
   Description?: string;

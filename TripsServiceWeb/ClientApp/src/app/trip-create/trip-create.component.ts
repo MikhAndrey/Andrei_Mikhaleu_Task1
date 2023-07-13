@@ -15,4 +15,7 @@ export class TripCreateComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  handleFilesChanged(files: { file: File, url: string }[]) {
+    this.trip.ImagesAsFiles = files;
+  }
 }

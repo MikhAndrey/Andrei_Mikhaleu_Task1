@@ -41,12 +41,7 @@
   <input type = "hidden" name = "Distance" [(ngModel)]="trip.Distance"/>
   <input type = "hidden" name = "StartTimeZoneOffset" [(ngModel)]="trip.StartTimeZoneOffset"/>
   <input type = "hidden" name = "FinishTimeZoneOffset" [(ngModel)]="trip.FinishTimeZoneOffset"/>
-  <div class = "form-group tp-form-group">
-    <label for = "imageUpload" class = "tp-label">Upload your images here:</label>
-    <input class = "form-control-file tp-file-upload" type = "file" id = "imageUpload" name = "images" accept = "image/*" multiple/>
-    <div class = "tp-input-desc">Upload photos of your trip</div>
-  </div>
-  <div id = "imagesList"></div>
+  <app-image-upload (filesChanged)="handleFilesChanged($event)"></app-image-upload>
   <div class = "tp-label mt-2 mb-2">
     Trip's driver:
     <span id = "trip-driver-name"></span>

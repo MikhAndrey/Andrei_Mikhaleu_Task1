@@ -18,6 +18,7 @@ import {GoogleChartsModule} from "angular-google-charts";
 import {DurationStatisticsComponent} from "./duration-statistics/duration-statistics.component";
 import {TripCreateComponent} from "./trip-create/trip-create.component";
 import {DriversListModalComponent} from "./drivers-list/drivers-list-modal.component";
+import {ImageUploadComponent} from "./image-upload/image-upload.component";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {DriversListModalComponent} from "./drivers-list/drivers-list-modal.compo
     HeatmapStatisticsComponent,
     DurationStatisticsComponent,
     TripCreateComponent,
-    DriversListModalComponent
+    DriversListModalComponent,
+    ImageUploadComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
