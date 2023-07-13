@@ -16,6 +16,7 @@ import {UserAccountOptionsComponent} from "./user-account-options/user-account-o
 import {HeatmapStatisticsComponent} from "./heatmap-statistics/heatmap-statistics.component";
 import {GoogleChartsModule} from "angular-google-charts";
 import {DurationStatisticsComponent} from "./duration-statistics/duration-statistics.component";
+import {TripCreateComponent} from "./trip-create/trip-create.component";
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {DurationStatisticsComponent} from "./duration-statistics/duration-statis
     LoginFormComponent,
     UserAccountOptionsComponent,
     HeatmapStatisticsComponent,
-    DurationStatisticsComponent
+    DurationStatisticsComponent,
+    TripCreateComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -42,8 +44,9 @@ import {DurationStatisticsComponent} from "./duration-statistics/duration-statis
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'register', component: RegisterFormComponent },
       { path: 'login', component: LoginFormComponent },
-      { path: 'heatmap', component: HeatmapStatisticsComponent },
-      { path: 'tripdurations', component: DurationStatisticsComponent },
+      { path: 'statistics/heatmap', component: HeatmapStatisticsComponent },
+      { path: 'statistics/durations', component: DurationStatisticsComponent },
+      { path: 'trips/create', component: TripCreateComponent }
     ])
   ],
   providers: [],

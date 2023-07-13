@@ -7,7 +7,7 @@ import {AccountService} from "../../services/account.service";
   templateUrl: './login-form.component.html'
 })
 export class LoginFormComponent {
-  user: UserLoginDTO = {};
+  user: UserLoginDTO = new UserLoginDTO();
   validationErrors: LoginValidationErrors = {};
 
   constructor(private accountService: AccountService) {

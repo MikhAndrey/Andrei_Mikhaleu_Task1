@@ -28,12 +28,15 @@
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/heatmap']"
+            <a class="nav-link text-dark" [routerLink]="['/trips/create']">Create trip</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/statistics/heatmap']"
               >Heatmap</a
             >
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/tripdurations']"
+            <a class="nav-link text-dark" [routerLink]="['/statistics/durations']"
             >Trips duration statistics</a
             >
           </li>

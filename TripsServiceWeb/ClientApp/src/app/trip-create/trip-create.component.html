@@ -1,0 +1,61 @@
+<div class = "bootstrap-form tp-form" id = "main-form">
+  <div class = "form-group tp-form-group">
+    <label for = "nameInput" class = "tp-label">Your trip name:</label>
+    <input class = "form-control tp-text-input" type = "text" [(ngModel)]="trip.Name" id = "nameInput"/>
+    <div class = "tp-input-desc">Enter name of your trip</div>
+    <span class="text-danger" *ngIf="validationErrors.Name">{{validationErrors.Name}}</span>
+  </div>
+  <div class = "form-group tp-form-group">
+    <label for = "startTimeInput" class = "tp-label">Departure Time:</label>
+    <input class = "form-control tp-datetime-input" type = "datetime-local" [(ngModel)]="trip.StartTime" id = "startTimeInput"/>
+    <div class = "tp-input-desc">Select the start time of your trip in terms of start point timezone</div>
+    <span class="text-danger" *ngIf="validationErrors.StartTime">{{validationErrors.StartTime}}</span>
+  </div>
+  <div class = "form-group tp-form-group">
+    <label for = "endTimeInput" class = "tp-label">Arrival Time:</label>
+    <input class = "form-control tp-datetime-input" type = "datetime-local" [(ngModel)]="trip.EndTime" readonly id = "endTimeInput"/>
+    <div class = "tp-input-desc">End time of your trip will be calculated automatically</div>
+    <span class="text-danger" *ngIf="validationErrors.EndTime">{{validationErrors.EndTime}}</span>
+  </div>
+  <div class = "form-check tp-form-check">
+    <input class = "form-check-input tp-check-input" type = "checkbox" [(ngModel)]="trip.Public" id = "publicCheck"/>
+    <label class = "form-check-label tp-label" for = "publicCheck">Public</label>
+    <div class = "tp-input-desc">Make your trip visible to everyone</div>
+  </div>
+  <div class = "form-group tp-form-group">
+    <label for = "descriptionInput" class = "tp-label">Description:</label>
+    <textarea class="form-control tp-textarea" [(ngModel)]="trip.Description" id="descriptionInput"></textarea>
+    <div class = "tp-input-desc">Enter a couple of phrases describing your trip</div>
+  </div>
+  <div class = "tp-label">Click on the map to place trip points</div>
+  <div id = "map" class = "form-group tp-form-group"></div>
+  <div class = "tp-label mt-2 mb-2">
+    Trip's distance:
+    <span id = "route-length-view">0</span>&nbsp km
+  </div>
+  <div class = "tp-label mt-2 mb-2">
+    Trip's duration:
+    <span id = "route-duration-view">0 minutes</span>
+  </div>
+  <input type = "hidden" name = "RoutePointsAsString" [(ngModel)]="trip.RoutePointsAsString"/>
+  <input type = "hidden" name = "Distance" [(ngModel)]="trip.Distance"/>
+  <input type = "hidden" name = "StartTimeZoneOffset" [(ngModel)]="trip.StartTimeZoneOffset"/>
+  <input type = "hidden" name = "FinishTimeZoneOffset" [(ngModel)]="trip.FinishTimeZoneOffset"/>
+  <div class = "form-group tp-form-group">
+    <label for = "imageUpload" class = "tp-label">Upload your images here:</label>
+    <input class = "form-control-file tp-file-upload" type = "file" id = "imageUpload" name = "images" accept = "image/*" multiple/>
+    <div class = "tp-input-desc">Upload photos of your trip</div>
+  </div>
+  <div id = "imagesList"></div>
+  <div class = "tp-label mt-2 mb-2">
+    Trip's driver:
+    <span id = "trip-driver-name"></span>
+  </div>
+  <input type = "hidden" id = "DriverId" name = "DriverId" [(ngModel)]="trip.DriverId"/>
+  <div>
+    <button type = "button" class = "btn btn-primary mt-2 mb-3 drivers-invoker" data-bs-toggle = "modal" data-bs-target = "#driverListModal">Select driver</button>
+  </div>
+  <div>
+    <button class = "btn btn-success tp-submit-btn mt-3" type = "submit">Create trip</button>
+  </div>
+</div>
