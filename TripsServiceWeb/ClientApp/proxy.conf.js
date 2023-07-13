@@ -9,7 +9,8 @@ const PROXY_CONFIG = [
       "/weatherforecast",
       "/api/account",
       "/api/statistics",
-      "/api/drivers"
+      "/api/drivers",
+      "/images/"
    ],
     target: target,
     secure: false,

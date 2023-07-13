@@ -17,6 +17,7 @@ export class DriversListModalComponent implements OnInit {
     this.driverService.getAll().subscribe({
       next: (drivers) => {
         this.drivers = drivers;
+        this.driverService.mapLinks(this.drivers);
       },
       error: (error) => {
         alert("Impossible to load drivers list. Try later");

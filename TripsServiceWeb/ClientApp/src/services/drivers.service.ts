@@ -15,4 +15,8 @@ export class DriversService {
   getAll(): Observable<DriverInfoDTO[]> {
     return this.http.get<DriverInfoDTO[]>(this.apiUrl + '/list');
   }
+
+  mapLinks(drivers: DriverInfoDTO[]): void{
+    drivers.forEach(driver => driver.photoLink = this.baseUrl + driver.photoLink);
+  }
 }

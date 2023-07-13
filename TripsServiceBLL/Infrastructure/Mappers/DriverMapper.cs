@@ -12,7 +12,7 @@ public class DriverMapper : Profile
 		CreateMap<Driver, ReadDriverDTO>()
 			.ForMember(dest => dest.PhotoLink, opt => opt.MapFrom(src =>
 				src.Photos.Any() ?
-				$"/{UtilConstants.ImagesFolderName}/{UtilConstants.DriversFolderName}/{src.Id}/{src.Photos.FirstOrDefault().Link}" :
+				$"{UtilConstants.ImagesFolderName}/{UtilConstants.DriversFolderName}/{src.Id}/{src.Photos.FirstOrDefault().Link}" :
 				null
 			));
 		CreateMap<Driver, DriverDetailsDTO>()
