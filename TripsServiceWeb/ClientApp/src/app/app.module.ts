@@ -17,6 +17,7 @@ import {HeatmapStatisticsComponent} from "./heatmap-statistics/heatmap-statistic
 import {GoogleChartsModule} from "angular-google-charts";
 import {DurationStatisticsComponent} from "./duration-statistics/duration-statistics.component";
 import {TripCreateComponent} from "./trip-create/trip-create.component";
+import {DriversListModalComponent} from "./drivers-list/drivers-list-modal.component";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {TripCreateComponent} from "./trip-create/trip-create.component";
     UserAccountOptionsComponent,
     HeatmapStatisticsComponent,
     DurationStatisticsComponent,
-    TripCreateComponent
+    TripCreateComponent,
+    DriversListModalComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
