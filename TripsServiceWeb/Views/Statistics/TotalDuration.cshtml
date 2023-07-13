@@ -1,0 +1,91 @@
+﻿@model TripsServiceBLL.DTO.Statistics.YearsStatisticsDTO
+
+<h4 class = "tp-label" id = "no-content">You have no trips yet</h4>
+<div id = "main-content" class = "tp-form">
+	<h5 class = "tp-label">Select year for displaying statistics:</h5>
+	@Html.DropDownListFor(m => m.SelectedYear, new SelectList(Model.Years), new {@class = "form-control tp-form-group"})
+	<div id = "totalDurationDiagram" style = "width:100%; height: 500px"></div>
+</div>
+
+@section Scripts {
+	<script>
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+
+        $("#no-content").hide();
+        $("#main-content").hide();
+
+        function loadDataForProperYear() {
+            const year = $('#SelectedYear').val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("TotalDurationData", "Statistics")',
+                data: { year: year },
+                success: function (data) {
+                    drawDiagram(data);
+                },
+                error: function () {
+                    alert("Unexpected error occured while building statistics on trips duration. Please, try later.")
+                }
+            });
+        }
+
+        $('#SelectedYear').change(function () {
+            loadDataForProperYear();
+        });
+
+        function formatDuration(durationInHours){
+            const SECONDS_IN_YEAR = 31536000;
+            const SECONDS_IN_MONTH = 2592000;
+            const SECONDS_IN_DAY = 86400;
+            const SECONDS_IN_HOUR = 3600;
+            const SECONDS_IN_MINUTE = 60;
+
+            const duration = Math.floor(durationInHours * SECONDS_IN_HOUR);
+
+            const years = Math.floor(duration / SECONDS_IN_YEAR);
+            const months = Math.floor((duration % SECONDS_IN_YEAR) / SECONDS_IN_MONTH);
+            const days = Math.floor((duration % SECONDS_IN_MONTH) / SECONDS_IN_DAY);
+            const hours = Math.floor((duration % SECONDS_IN_DAY) / SECONDS_IN_HOUR);
+            const minutes = Math.floor((duration % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE);
+
+            const yearsText = years > 0 ? years + " years " : "";
+            const monthsText = months > 0 ? months + " months " : "";
+            const daysText = days > 0 ? days + " days " : "";
+            const hoursText = hours > 0 ? hours + " hours " : "";
+            const minutesText = minutes + " mins";
+            return yearsText + monthsText + daysText + hoursText + minutesText;
+        };
+
+
+        function drawDiagram(data){
+            if (data.length == 0){
+                $("#no-content").show();
+                $("#main-content").hide();
+            } else {
+                $("#main-content").show();
+                const dataTable = new google.visualization.DataTable();
+                dataTable.addColumn('string', 'Month');
+                dataTable.addColumn('number', 'Total duration');
+                dataTable.addRows(data.length);
+
+                for (let i = 0; i < data.length; i++) {
+                    dataTable.setCell(i, 0, data[i].month);
+                    dataTable.setCell(i, 1, data[i].totalDuration);
+                    dataTable.setFormattedValue(i, 1, formatDuration(data[i].totalDuration));
+                }
+
+                const options = {
+                    title: 'Monthly trip durations',
+                    hAxis: {title: 'Month'},
+                    vAxis: {title: 'Total duration (hours)'},
+                    tooltip: {isHtml: true}
+                };
+
+                const chart = new google.visualization.ColumnChart(document.getElementById('totalDurationDiagram'));
+                chart.draw(dataTable, options);                
+            }
+        };
+
+        window.onload = loadDataForProperYear;
+    </script>
+}

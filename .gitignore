@@ -366,3 +366,6 @@ FodyWeavers.xsd
 wwwroot/images/
 /wwwroot/img
 /Migrations
+/TripsServiceWeb/wwwroot/images
+/TripsServiceDAL/Migrations
+.editorConfig
