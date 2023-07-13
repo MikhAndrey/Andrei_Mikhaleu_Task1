@@ -19,6 +19,7 @@ import {DurationStatisticsComponent} from "./duration-statistics/duration-statis
 import {TripCreateComponent} from "./trip-create/trip-create.component";
 import {DriversListModalComponent} from "./drivers-list/drivers-list-modal.component";
 import {ImageUploadComponent} from "./image-upload/image-upload.component";
+import {RouteMapComponent} from "./route-map/route-map.component";
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import {ImageUploadComponent} from "./image-upload/image-upload.component";
     DurationStatisticsComponent,
     TripCreateComponent,
     DriversListModalComponent,
-    ImageUploadComponent
+    ImageUploadComponent,
+    RouteMapComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
