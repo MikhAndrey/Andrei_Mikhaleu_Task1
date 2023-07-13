@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {LoginValidationErrors, UserLoginDTO} from "../../models/login";
 import {AccountService} from "../../services/account.service";
+import {RedirectService} from "../../services/redirect.service";
 
 @Component({
   selector: 'app-login-form',
@@ -10,13 +11,13 @@ export class LoginFormComponent {
   user: UserLoginDTO = new UserLoginDTO();
   validationErrors: LoginValidationErrors = {};
 
-  constructor(private accountService: AccountService) {
+  constructor(private accountService: AccountService, private redirectService: RedirectService) {
   }
 
   login() {
     this.accountService.login(this.user).subscribe({
       next: () => {
-        this.accountService.returnToHomePage();
+        this.redirectService.redirectToAddress("");
       },
       error: (error) => {
         this.validationErrors = error.error.errors || error.error;

@@ -1,5 +1,6 @@
 import {Component, Injectable, OnInit} from '@angular/core';
 import {AccountService, UserNameResponse} from "../../services/account.service";
+import {RedirectService} from "../../services/redirect.service";
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ import {AccountService, UserNameResponse} from "../../services/account.service";
 export class UserAccountOptionsComponent implements OnInit {
   userName?: string;
 
-  constructor(private accountService: AccountService) {
+  constructor(private accountService: AccountService, private redirectionService: RedirectService) {
   }
 
   ngOnInit(): void {
@@ -39,6 +40,7 @@ export class UserAccountOptionsComponent implements OnInit {
     this.accountService.logout().subscribe(
       () => {
         this.userName = undefined;
+        this.redirectionService.redirectToAddress("");
       }
     );
   }

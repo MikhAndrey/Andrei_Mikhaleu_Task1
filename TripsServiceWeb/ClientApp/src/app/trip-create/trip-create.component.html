@@ -51,7 +51,7 @@
     <button type = "button" class = "btn btn-primary mt-2 mb-3 drivers-invoker" data-bs-toggle = "modal" data-bs-target = "#driverListModal">Select driver</button>
   </div>
   <div>
-    <button class = "btn btn-success tp-submit-btn mt-3" type = "submit">Create trip</button>
+    <button class = "btn btn-success tp-submit-btn mt-3" (click)="submit()">Create trip</button>
   </div>
 </div>
 <app-drivers-list-modal></app-drivers-list-modal>

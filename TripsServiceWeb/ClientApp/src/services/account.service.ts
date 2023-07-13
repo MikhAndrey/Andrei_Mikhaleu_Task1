@@ -32,8 +32,4 @@ export class AccountService {
   getUserName(): Observable<UserNameResponse>{
     return this.http.get<UserNameResponse>(this.apiUrl + '/username');
   }
-
-  returnToHomePage(): void{
-    window.location.href = this.baseUrl;
-  }
 }

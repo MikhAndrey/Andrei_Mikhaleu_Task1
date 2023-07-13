@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {SignupValidationErrors, UserSignupDTO} from "../../models/signup";
 import {AccountService} from "../../services/account.service";
+import {RedirectService} from "../../services/redirect.service";
 
 @Component({
   selector: 'app-register-form',
@@ -10,13 +11,13 @@ export class RegisterFormComponent {
   user: UserSignupDTO = new UserSignupDTO();
   validationErrors: SignupValidationErrors = {};
 
-  constructor(private accountService: AccountService) {
+  constructor(private accountService: AccountService, private redirectService: RedirectService) {
   }
 
   register() {
     this.accountService.signup(this.user).subscribe({
       next: () => {
-        this.accountService.returnToHomePage();
+        this.redirectService.redirectToAddress("");
       },
       error: (error) => {
         this.validationErrors = error.error.errors || error.error;
