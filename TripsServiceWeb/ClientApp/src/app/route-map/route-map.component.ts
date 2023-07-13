@@ -1,32 +1,36 @@
-﻿import { Component, OnInit } from '@angular/core';
-import {MapDirectionsService, MapMarker} from '@angular/google-maps';
-import { map, Observable } from 'rxjs';
+﻿import {Component} from '@angular/core';
+import {MapDirectionsService} from '@angular/google-maps';
+import {map, Observable} from 'rxjs';
 
 @Component({
   selector: 'app-route-map',
   templateUrl: './route-map.component.html',
 })
-export class RouteMapComponent implements OnInit {
-  ngOnInit(): void {}
-
+export class RouteMapComponent {
   center: google.maps.LatLngLiteral = {
     lat: 51.5805,
     lng: 0
   };
+  zoom: number = 8;
 
-  zoom = 8;
   directionsResults: Observable <google.maps.DirectionsResult | undefined> | undefined;
 
   markerOptions: google.maps.MarkerOptions = {
     draggable: true,
-    clickable: true
+    clickable: true,
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      fillColor: "#ff0000",
+      fillOpacity: 1,
+      strokeColor: "#000000",
+      strokeWeight: 1,
+      scale: 7,
+      labelOrigin: new google.maps.Point(0, 3),
+    }
   };
 
-  origin: google.maps.LatLngLiteral = {lat: 0, lng: 0};
-  destination: google.maps.LatLngLiteral = {lat: 0, lng: 0};
-  waypoints: google.maps.DirectionsWaypoint[] = [];
-
   markerPositions: google.maps.LatLngLiteral[] = [];
+  markersCount: number = 0;
 
   mapDirectionsService: MapDirectionsService;
   constructor(mapDirectionsService: MapDirectionsService) {
@@ -35,49 +39,50 @@ export class RouteMapComponent implements OnInit {
 
   buildRoute(){
     const request: google.maps.DirectionsRequest = {
-      destination: this.destination,
-      origin: this.origin,
-      waypoints: this.waypoints,
+      destination: this.markerPositions[this.markersCount - 1],
+      origin: this.markerPositions[0],
+      waypoints: this.markerPositions.slice(1, -1).map(el => {
+       return {
+         location: el,
+         stopover: true
+       }
+      }),
       travelMode: google.maps.TravelMode.DRIVING
     };
-    this.directionsResults = this.mapDirectionsService.route(request).pipe(map(response => response.result));
+    this.directionsResults = this.mapDirectionsService.route(request).pipe(
+      map(response => {
+        if (response.status !== "OK") {
+          alert("Imposssible to build such root!");
+          this.removeMarker(this.markersCount - 1);
+        }
+        return response.result
+      })
+    );
   }
 
-  addMarker(event: google.maps.MapMouseEvent){
+  addMarker(event: google.maps.MapMouseEvent): void{
     if (event.latLng != null) {
       this.markerPositions.push(event.latLng.toJSON());
-      this.waypoints.push({
-        location: event.latLng,
-        stopover: true
-      });
-      this.destination = this.markerPositions[this.markerPositions.length - 1];
-      this.origin = this.markerPositions[0];
-      this.buildRoute();
+      this.markersCount ++;
+      if (this.markersCount > 1)
+        this.buildRoute();
     }
   }
 
-  onMarkerClick(index: number){
+  removeMarker(index: number): void{
     this.markerPositions.splice(index, 1);
-    this.waypoints.splice(index, 1);
-    this.destination = this.markerPositions[this.markerPositions.length - 1];
-    this.origin = this.markerPositions[0];
-    this.buildRoute();
+    this.markersCount--;
+    if (this.markersCount > 1)
+      this.buildRoute();
+    else
+      this.directionsResults = undefined;
   }
 
-  onMarkerDragEnd(event: DragEvent, index: number) {
-    const googleEvent = event as unknown as google.maps.MapMouseEvent;
-    if (googleEvent.latLng != null) {
-      const newLatLng = googleEvent.latLng.toJSON();
-
-      // Обновить позицию маркера в массиве
-      this.markerPositions[index] = newLatLng;
-
-      // Построить маршрут
-      this.buildRoute();
-
-      // Вывести индекс и новые координаты маркера
-      console.log('Индекс маркера:', index);
-      console.log('Новые координаты маркера:', newLatLng);
+ moveMarker(event: google.maps.MapMouseEvent, index: number) {
+    if (event.latLng != null) {
+      this.markerPositions[index] = event.latLng.toJSON();
+      if (this.markersCount > 1)
+        this.buildRoute();
     }
   }
 }
