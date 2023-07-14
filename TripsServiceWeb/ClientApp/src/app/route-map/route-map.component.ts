@@ -135,10 +135,11 @@ export class RouteMapComponent {
       this.finishTime = new Date(startTimeDate.getTime() + 1000 * (duration - this._startTimeZoneOffset! + this._finishTimeZoneOffset!));
     }
 
-    this.routePoints = JSON.stringify(this.markerPositions.map(el => {
+    this.routePoints = JSON.stringify(this.markerPositions.map((el, index) => {
       return {
         latitude: el.lat,
-        longitude: el.lng
+        longitude: el.lng,
+        ordinal: index
       }
     }));
   }

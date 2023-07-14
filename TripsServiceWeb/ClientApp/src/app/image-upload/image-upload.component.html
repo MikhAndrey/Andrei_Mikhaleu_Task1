@@ -1,7 +1,7 @@
 ﻿<div class = "form-group tp-form-group">
   <label for = "imageUpload" class = "tp-label">Upload your images here:</label>
   <div class = "tp-input-desc">Upload photos of your trip</div>
-  <input class = "form-control-file tp-file-upload" type = "file" id = "imageUpload" name = "images" accept = "image/*" multiple #fileInput (change)="handleFileChange(fileInput.files)">
+  <input class = "form-control-file tp-file-upload" type = "file" id = "imageUpload" accept = "image/*" multiple #fileInput (change)="handleFileChange(fileInput.files)">
   <div id="imagesList" class="row">
     <div *ngFor="let file of loadedFiles" class="col-4 mb-3">
       <img [src]="file.url" alt="Uploaded image" class="img-fluid d-block">

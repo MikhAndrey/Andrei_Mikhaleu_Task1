@@ -18,8 +18,9 @@ export class TripCreateComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  submit(): void {
-    this.tripService.add(this.trip).subscribe({
+  submit(form: HTMLFormElement): void {
+    const formData: FormData = new FormData(form);
+    this.tripService.add(this.trip, formData).subscribe({
       next: () => {
         this.redirectService.redirectToAddress("trips/");
       },

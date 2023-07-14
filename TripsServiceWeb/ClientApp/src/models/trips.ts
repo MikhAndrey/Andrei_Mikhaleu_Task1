@@ -1,6 +1,6 @@
 ﻿export class TripCreateDTO {
   StartTime: Date;
-  EndTime?: Date;
+  EndTime: Date;
   Distance: number;
   StartTimeZoneOffset: number;
   FinishTimeZoneOffset: number;
@@ -13,6 +13,7 @@
 
   constructor() {
     this.StartTime = new Date();
+    this.EndTime = new Date();
     this.Distance = 0;
     this.StartTimeZoneOffset = 0;
     this.FinishTimeZoneOffset = 0;

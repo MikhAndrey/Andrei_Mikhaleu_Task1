@@ -35,7 +35,7 @@ public class TripsController : ControllerBase
 	}
 	
 	[HttpPost("create")]
-	public async Task<IActionResult> Create(CreateTripDTO trip)
+	public async Task<IActionResult> Create([FromForm] CreateTripDTO trip)
 	{
 		if (ModelState.IsValid)
 		{
