@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {DurationInMonth, RoutePointsDTO} from "../models/statistics";
 import {Row} from "angular-google-charts";
-import {formatDuration} from "../utils/formatDuration";
+import {formatDurationInHours} from "../utils/formatDuration";
 
 @Injectable({ providedIn: 'root' })
 export class StatisticsService {
@@ -31,7 +31,7 @@ export class StatisticsService {
       return [el.month, el.totalDuration, `
             <div style="font-weight: bold;">${el.month}:</div>
             </br>
-            <div>${formatDuration(el.totalDuration)}</div>
+            <div>${formatDurationInHours(el.totalDuration)}</div>
           `];
     });
   }

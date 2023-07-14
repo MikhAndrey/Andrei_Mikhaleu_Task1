@@ -1,6 +1,7 @@
-﻿import {Component} from '@angular/core';
+﻿import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MapDirectionsService} from '@angular/google-maps';
 import {map, Observable} from 'rxjs';
+import {formatDurationInSeconds} from "../../utils/formatDuration";
 
 @Component({
   selector: 'app-route-map',
@@ -11,7 +12,7 @@ export class RouteMapComponent {
     lat: 51.5805,
     lng: 0
   };
-  zoom: number = 8;
+  zoom: number = 5;
 
   directionsResults: Observable <google.maps.DirectionsResult | undefined> | undefined;
 
@@ -30,14 +31,23 @@ export class RouteMapComponent {
   };
 
   markerPositions: google.maps.LatLngLiteral[] = [];
-  markersCount: number = 0;
+  private markersCount: number = 0;
 
-  mapDirectionsService: MapDirectionsService;
+  private mapDirectionsService: MapDirectionsService;
   constructor(mapDirectionsService: MapDirectionsService) {
     this.mapDirectionsService = mapDirectionsService;
   }
 
-  buildRoute(){
+  @Output() durationTextChanged: EventEmitter<string> = new EventEmitter();
+  private _durationText?: string;
+  set durationText(value: string){
+    this._durationText = value;
+    this.durationTextChanged.emit(this._durationText);
+  }
+
+  @Input() startTime?: Date;
+
+  private buildRoute(){
     const request: google.maps.DirectionsRequest = {
       destination: this.markerPositions[this.markersCount - 1],
       origin: this.markerPositions[0],
@@ -55,9 +65,18 @@ export class RouteMapComponent {
           alert("Imposssible to build such root!");
           this.removeMarker(this.markersCount - 1);
         }
+        this.calculateRouteDates(response.result);
         return response.result
       })
     );
+  }
+
+  private calculateRouteDates(routeData?: google.maps.DirectionsResult | undefined){
+    const duration = routeData?.routes[0].legs.reduce((acc: number, el) => {
+      acc += el.duration!.value;
+      return acc;
+    }, 0)!;
+    this.durationText = formatDurationInSeconds(duration);
   }
 
   addMarker(event: google.maps.MapMouseEvent): void{

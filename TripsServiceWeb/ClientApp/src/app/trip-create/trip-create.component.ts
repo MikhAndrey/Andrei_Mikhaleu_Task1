@@ -10,15 +10,12 @@ import {RedirectService} from "../../services/redirect.service";
 })
 export class TripCreateComponent implements OnInit {
   trip: TripCreateDTO = new TripCreateDTO();
+  durationText?: string;
   validationErrors: TripCreateValidationErrors = {};
 
   constructor(private tripService: TripsService, private redirectService: RedirectService) { }
 
   ngOnInit(): void {
-  }
-
-  handleFilesChanged(files: { file: File, url: string }[]) {
-    this.trip.ImagesAsFiles = files;
   }
 
   submit(): void {
@@ -30,5 +27,13 @@ export class TripCreateComponent implements OnInit {
         this.validationErrors = error.error.errors || error.error;
       }
     });
+  }
+
+  handleFilesChanged(files: { file: File, url: string }[]): void {
+    this.trip.ImagesAsFiles = files;
+  }
+
+  handleDurationTextChanged(durationText?: string): void {
+    this.durationText = durationText;
   }
 }

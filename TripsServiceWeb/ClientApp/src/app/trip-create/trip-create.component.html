@@ -28,14 +28,17 @@
     <div class = "tp-input-desc">Enter a couple of phrases describing your trip</div>
   </div>
   <div class = "tp-label">Click on the map to place trip points</div>
-  <app-route-map></app-route-map>
+  <app-route-map
+    (durationTextChanged)="handleDurationTextChanged($event)"
+    [startTime]="trip.StartTime"
+  ></app-route-map>
   <div class = "tp-label mt-2 mb-2">
     Trip's distance:
     <span id = "route-length-view">0</span> km
   </div>
   <div class = "tp-label mt-2 mb-2">
     Trip's duration:
-    <span id = "route-duration-view">0 minutes</span>
+    <span id = "route-duration-view">{{durationText}}</span>
   </div>
   <input type = "hidden" name = "RoutePointsAsString" [(ngModel)]="trip.RoutePointsAsString"/>
   <input type = "hidden" name = "Distance" [(ngModel)]="trip.Distance"/>
