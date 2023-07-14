@@ -12,7 +12,6 @@ export class ImageUploadComponent {
 
   handleFileChange(files: FileList | null) {
     if (files != null) {
-      const imagesList = document.getElementById('imagesList');
       Array.from(files).forEach(file => {
         if (file.type.startsWith('image/')) {
           const reader = new FileReader();

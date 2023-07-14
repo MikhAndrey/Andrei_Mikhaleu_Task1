@@ -12,9 +12,9 @@
     <span class="text-danger" *ngIf="validationErrors.StartTime">{{validationErrors.StartTime}}</span>
   </div>
   <div class = "form-group tp-form-group">
-    <label for = "endTimeInput" class = "tp-label">Arrival Time:</label>
-    <input class = "form-control tp-datetime-input" type = "datetime-local" [(ngModel)]="trip.EndTime" readonly id = "endTimeInput"/>
-    <div class = "tp-input-desc">End time of your trip will be calculated automatically</div>
+    <label class = "tp-label">Arrival Time:</label>
+    <span class="tp-label" *ngIf="trip.EndTime">{{trip.EndTime.toLocaleDateString()}} {{trip.EndTime.toLocaleTimeString()}}</span>
+    <div class = "tp-input-desc">Your arrival time will be calculated automatically</div>
     <span class="text-danger" *ngIf="validationErrors.EndTime">{{validationErrors.EndTime}}</span>
   </div>
   <div class = "form-check tp-form-check">
@@ -30,20 +30,21 @@
   <div class = "tp-label">Click on the map to place trip points</div>
   <app-route-map
     (durationTextChanged)="handleDurationTextChanged($event)"
+    (startTimeZoneOffsetChanged)="handleStartTimeZoneChanged($event)"
+    (finishTimeZoneOffsetChanged)="handleFinishTimeZoneOffsetChanged($event)"
+    (finishTimeChanged)="handleFinishTimeChanged($event)"
+    (distanceChanged)="handleDistanceChanged($event)"
+    (routePointsChanged)="handleRoutePointsChanged($event)"
     [startTime]="trip.StartTime"
   ></app-route-map>
   <div class = "tp-label mt-2 mb-2">
     Trip's distance:
-    <span id = "route-length-view">0</span> km
+    <span id = "route-length-view">{{trip.Distance}}</span> km
   </div>
   <div class = "tp-label mt-2 mb-2">
     Trip's duration:
     <span id = "route-duration-view">{{durationText}}</span>
   </div>
-  <input type = "hidden" name = "RoutePointsAsString" [(ngModel)]="trip.RoutePointsAsString"/>
-  <input type = "hidden" name = "Distance" [(ngModel)]="trip.Distance"/>
-  <input type = "hidden" name = "StartTimeZoneOffset" [(ngModel)]="trip.StartTimeZoneOffset"/>
-  <input type = "hidden" name = "FinishTimeZoneOffset" [(ngModel)]="trip.FinishTimeZoneOffset"/>
   <app-image-upload (filesChanged)="handleFilesChanged($event)"></app-image-upload>
   <div class = "tp-label mt-2 mb-2">
     Trip's driver:

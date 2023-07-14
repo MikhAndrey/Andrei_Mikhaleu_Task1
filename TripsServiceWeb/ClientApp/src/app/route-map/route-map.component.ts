@@ -2,6 +2,7 @@
 import {MapDirectionsService} from '@angular/google-maps';
 import {map, Observable} from 'rxjs';
 import {formatDurationInSeconds} from "../../utils/formatDuration";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-route-map',
@@ -40,9 +41,49 @@ export class RouteMapComponent {
 
   @Output() durationTextChanged: EventEmitter<string> = new EventEmitter();
   private _durationText?: string;
+
+  @Output() distanceChanged: EventEmitter<number> = new EventEmitter();
+  private _distance: number = 0;
+
+  @Output() startTimeZoneOffsetChanged: EventEmitter<number> = new EventEmitter();
+  private _startTimeZoneOffset?: number;
+
+  @Output() finishTimeZoneOffsetChanged: EventEmitter<number> = new EventEmitter();
+  private _finishTimeZoneOffset?: number;
+
+  @Output() finishTimeChanged: EventEmitter<Date> = new EventEmitter();
+  @Input() private _finishTime?: Date;
+
+  @Output() routePointsChanged: EventEmitter<string> = new EventEmitter();
+  @Input() private _routePoints?: string;
   set durationText(value: string){
     this._durationText = value;
     this.durationTextChanged.emit(this._durationText);
+  }
+
+  set startTimeZoneOffset(value: number){
+    this._startTimeZoneOffset = value;
+    this.startTimeZoneOffsetChanged.emit(this._startTimeZoneOffset);
+  }
+
+  set finishTimeZoneOffset(value: number){
+    this._finishTimeZoneOffset = value;
+    this.finishTimeZoneOffsetChanged.emit(this._finishTimeZoneOffset);
+  }
+
+  set finishTime(value: Date){
+    this._finishTime = value;
+    this.finishTimeChanged.emit(this._finishTime);
+  }
+
+  set distance(value: number){
+    this._distance = value;
+    this.distanceChanged.emit(this._distance);
+  }
+
+  set routePoints(value: string){
+    this._routePoints = value;
+    this.routePointsChanged.emit(this._routePoints);
   }
 
   @Input() startTime?: Date;
@@ -65,18 +106,41 @@ export class RouteMapComponent {
           alert("Imposssible to build such root!");
           this.removeMarker(this.markersCount - 1);
         }
-        this.calculateRouteDates(response.result);
+        this.getRouteData(response.result);
         return response.result
       })
     );
   }
 
-  private calculateRouteDates(routeData?: google.maps.DirectionsResult | undefined){
+  private async getRouteData(routeData?: google.maps.DirectionsResult | undefined){
     const duration = routeData?.routes[0].legs.reduce((acc: number, el) => {
       acc += el.duration!.value;
       return acc;
     }, 0)!;
     this.durationText = formatDurationInSeconds(duration);
+
+    this.distance = routeData?.routes[0].legs.reduce((acc: number, el) => {
+      acc += el.distance!.value;
+      return acc;
+    }, 0)!/1000;
+
+    const startTimeZoneInfo: {dstOffset: number, rawOffset: number} = await this.getTimeZoneInfo(this.markerPositions[0]);
+    this.startTimeZoneOffset = startTimeZoneInfo.dstOffset + startTimeZoneInfo.rawOffset;
+
+    const finishTimeZoneInfo: {dstOffset: number, rawOffset: number} = await this.getTimeZoneInfo(this.markerPositions[this.markersCount - 1]);
+    this.finishTimeZoneOffset = finishTimeZoneInfo.dstOffset + finishTimeZoneInfo.rawOffset;
+
+    if (this.startTime) {
+      const startTimeDate = new Date(this.startTime);
+      this.finishTime = new Date(startTimeDate.getTime() + 1000 * (duration - this._startTimeZoneOffset! + this._finishTimeZoneOffset!));
+    }
+
+    this.routePoints = JSON.stringify(this.markerPositions.map(el => {
+      return {
+        latitude: el.lat,
+        longitude: el.lng
+      }
+    }));
   }
 
   addMarker(event: google.maps.MapMouseEvent): void{
@@ -97,11 +161,25 @@ export class RouteMapComponent {
       this.directionsResults = undefined;
   }
 
- moveMarker(event: google.maps.MapMouseEvent, index: number) {
+  moveMarker(event: google.maps.MapMouseEvent, index: number) {
     if (event.latLng != null) {
       this.markerPositions[index] = event.latLng.toJSON();
       if (this.markersCount > 1)
         this.buildRoute();
+    }
+  }
+
+  private async getTimeZoneInfo(coordinates: google.maps.LatLngLiteral): Promise<any> {
+    const apiKey: string = environment.GOOGLE_MAPS_API_KEY;
+    const timestamp = Math.floor(new Date().getTime() / 1000);
+
+    let requestUrl = `https://maps.googleapis.com/maps/api/timezone/json?location=${coordinates.lat},${coordinates.lng}&timestamp=${timestamp}&key=${apiKey}`;
+
+    try {
+      const response = await fetch(requestUrl);
+      return response.json();
+    } catch (error) {
+      alert("Failed to retrieve timezone information: " + error);
     }
   }
 }
