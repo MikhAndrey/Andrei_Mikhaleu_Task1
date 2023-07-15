@@ -1,0 +1,8 @@
+﻿<form (submit)="addComment()">
+  <div class = "form-group tp-form-group">
+    <label for = "comment" class = "tp-label">Your comment:</label>
+    <textarea class="form-control" id="comment" [(ngModel)]="comment.Message" rows="3"></textarea>
+    <span class="text-danger" *ngIf="validationErrors.Message">{{validationErrors.Message}}</span>
+  </div>
+  <button type = "submit" class = "btn btn-primary">Add comment</button>
+</form>

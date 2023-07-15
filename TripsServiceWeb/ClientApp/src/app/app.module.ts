@@ -22,6 +22,7 @@ import {ImageUploadComponent} from "./image-upload/image-upload.component";
 import {RouteMapComponent} from "./route-map/route-map.component";
 import {TripDeleteComponent} from "./trip-delete/trip-delete.component";
 import {TripRatingComponent} from "./trip-rating/trip-rating.component";
+import {CommentAddComponent} from "./comment-add/comment-add.component";
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import {TripRatingComponent} from "./trip-rating/trip-rating.component";
     ImageUploadComponent,
     RouteMapComponent,
     TripDeleteComponent,
-    TripRatingComponent
+    TripRatingComponent,
+    CommentAddComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
