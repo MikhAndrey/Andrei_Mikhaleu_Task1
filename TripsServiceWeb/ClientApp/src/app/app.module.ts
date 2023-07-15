@@ -20,6 +20,7 @@ import {TripCreateComponent} from "./trip-create/trip-create.component";
 import {DriversListModalComponent} from "./drivers-list/drivers-list-modal.component";
 import {ImageUploadComponent} from "./image-upload/image-upload.component";
 import {RouteMapComponent} from "./route-map/route-map.component";
+import {TripDeleteComponent} from "./trip-delete/trip-delete.component";
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import {RouteMapComponent} from "./route-map/route-map.component";
     TripCreateComponent,
     DriversListModalComponent,
     ImageUploadComponent,
-    RouteMapComponent
+    RouteMapComponent,
+    TripDeleteComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

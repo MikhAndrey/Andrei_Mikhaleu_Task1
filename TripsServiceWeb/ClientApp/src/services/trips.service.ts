@@ -6,7 +6,7 @@ import {TripCreateDTO} from "../models/trips";
 @Injectable({ providedIn: 'root' })
 export class TripsService {
 
-  private apiUrl: string;
+  private readonly apiUrl: string;
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string)
   {
     this.apiUrl = baseUrl + "api/trips";
@@ -22,5 +22,9 @@ export class TripsService {
     formData.set("RoutePointsAsString", trip.RoutePointsAsString);
     formData.set("Public", trip.Public.toString());
     return this.http.post<TripCreateDTO>(this.apiUrl + '/create', formData);
+  }
+
+  delete(tripId: number): Observable<number>{
+    return this.http.delete<number>(this.apiUrl + `/delete/${tripId}`);
   }
 }
