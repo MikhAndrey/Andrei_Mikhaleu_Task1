@@ -12,7 +12,8 @@ const PROXY_CONFIG = [
       "/api/drivers",
       "/images/",
       "/api/trips",
-      "/api/comments"
+      "/api/comments",
+      "/api/feedbacks"
    ],
     target: target,
     secure: false,

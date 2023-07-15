@@ -23,6 +23,7 @@ import {RouteMapComponent} from "./route-map/route-map.component";
 import {TripDeleteComponent} from "./trip-delete/trip-delete.component";
 import {TripRatingComponent} from "./trip-rating/trip-rating.component";
 import {CommentAddComponent} from "./comment-add/comment-add.component";
+import {FeedbackAddComponent} from "./feedback-add/feedback-add.component";
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import {CommentAddComponent} from "./comment-add/comment-add.component";
     RouteMapComponent,
     TripDeleteComponent,
     TripRatingComponent,
-    CommentAddComponent
+    CommentAddComponent,
+    FeedbackAddComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
