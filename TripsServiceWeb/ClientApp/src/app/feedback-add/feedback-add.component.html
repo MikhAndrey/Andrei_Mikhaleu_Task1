@@ -9,29 +9,29 @@
         <form id = "trip-rating-form" (submit)="addFeedback()">
           <div class = "form-group tp-form-group">
             <label for = "feedback-text" class = "tp-label">Describe driver's work in a couple of words:</label>
-            <textarea class="form-control" id="feedback-text" [(ngModel)]="feedback.Text" rows="3"></textarea>
+            <textarea class="form-control" name="Text" id="feedback-text" [(ngModel)]="feedback.Text" rows="3"></textarea>
             <div class = "mt-2">
               <label class = "tp-label">Rate driver of your trip:</label>
               <span class = "rating-container">
 								<span class = "star-container">
-									<span class = "star" *ngFor="let index of [0,1,2,3,4]" #star
-                        (mouseenter)="starMouseEnter(star, index)"
-                        (mouseleave)="starMouseLeave(star, index)"
-                        (click)="starMouseClick(index)"
+									<span class = "star" *ngFor="let star of starsCount; let i = index" #stars
+                        (mouseenter)="starMouseEnter(i)"
+                        (mouseleave)="starMouseLeave(i)"
+                        (click)="starMouseClick(i)"
                   >
-										<span class = "star-filled" style = "width: 0%; transition: none;"></span>
+										<span class = "star-filled" #filledStars style = "width: 0%; transition: none;"></span>
 										<span class = "star-outline"></span>
 									</span>
 								</span>
 							</span>
             </div>
           </div>
-          <button type = "submit" hidden="hidden" id = "rate-driver-hidden" class = "btn btn-primary"></button>
+          <button type = "submit" hidden="hidden" class = "btn btn-primary"></button>
         </form>
       </div>
       <div class = "modal-footer">
         <button type = "button" class = "btn btn-secondary" data-bs-dismiss = "modal">Rate later</button>
-        <button type = "button" id = "rate-driver-visible" class = "btn btn-primary">Rate</button>
+        <button type = "button" class = "btn btn-primary" #closeModalButton >Rate</button>
       </div>
     </div>
   </div>

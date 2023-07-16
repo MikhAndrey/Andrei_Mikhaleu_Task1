@@ -1,22 +1,36 @@
-﻿import {Component, Input} from '@angular/core';
+﻿import {Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {FeedbackCreateDTO} from "../../models/feedbacks";
 import {FeedbacksService} from "../../services/feedback.service";
+import {TripIdService} from "../../services/tripId.service";
+import {Subscription} from "rxjs";
+import {maxRating} from "../appConstants";
 
 @Component({
   selector: 'app-feedback-add-modal',
   templateUrl: './feedback-add.component.html'
 })
-export class FeedbackAddComponent {
+export class FeedbackAddComponent implements OnInit, OnDestroy {
   feedback: FeedbackCreateDTO = new FeedbackCreateDTO();
 
-  @Input() tripId: number = 0;
+  tripId: number;
+  private tripIdSubscription: Subscription;
 
-  private formStars: NodeListOf<HTMLElement> = document.querySelectorAll("form .star") as NodeListOf<HTMLElement>;
-  private filledStars: NodeListOf<HTMLElement> = document.querySelectorAll(".star-filled") as NodeListOf<HTMLElement>;
+  starsCount: any[] = new Array(maxRating);
+
+  @ViewChildren('stars') stars: QueryList<ElementRef>;
+  @ViewChildren('filledStars') filledStars: QueryList<ElementRef>;
+  @ViewChild('closeModalButton') closeModalButton: ElementRef;
 
   private starsNeedReset: boolean = true;
 
-  constructor(private feedbackService: FeedbacksService) {
+  constructor(private feedbackService: FeedbacksService, private tripIdService: TripIdService) {
+  }
+
+  ngOnInit() {
+    this.tripIdSubscription = this.tripIdService.tripId$.subscribe((tripId) => this.tripId = tripId);
+  }
+  ngOnDestroy(): void {
+    this.tripIdSubscription.unsubscribe();
   }
 
   addFeedback() {
@@ -24,6 +38,7 @@ export class FeedbackAddComponent {
       this.feedback.TripId = this.tripId;
       this.feedbackService.add(this.feedback).subscribe({
         next: () => {
+          this.closeModalButton.nativeElement.click();
           //Insert new feedback data to the parent page
         },
         error: (error) => {
@@ -33,23 +48,23 @@ export class FeedbackAddComponent {
     }
   }
 
-  starMouseEnter(starElement: HTMLElement, index: number){
+  starMouseEnter(index: number){
     for (let i = 0; i <= index; i++){
-      starElement.classList.add('star-hovered');
-      this.filledStars[i].style.width = '100%';
+      this.stars.get(i)!.nativeElement.classList.add('star-hovered');
+      this.filledStars.get(i)!.nativeElement.style.width = '100%';
     }
     for (let i = index + 1; i < this.filledStars.length; i++){
-      this.formStars[i].classList.remove('star-hovered');
-      this.filledStars[i].style.width = '0%';
+      this.stars.get(i)!.nativeElement.classList.remove('star-hovered');
+      this.filledStars.get(i)!.nativeElement.style.width = '0%';
     }
     this.starsNeedReset = true;
   }
 
-  starMouseLeave(starElement: HTMLElement, index: number): void {
+  starMouseLeave(index: number): void {
     if (this.starsNeedReset) {
       for (let i = 0; i <= index; i++) {
-        this.formStars[i].classList.remove('star-hovered');
-        this.filledStars[i].style.width = '0%';
+        this.stars.get(i)!.nativeElement.classList.remove('star-hovered');
+        this.filledStars.get(i)!.nativeElement.style.width = '0%';
       }
     }
   }

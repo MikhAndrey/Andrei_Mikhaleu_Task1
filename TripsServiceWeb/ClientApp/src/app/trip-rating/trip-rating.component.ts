@@ -1,39 +1,40 @@
-﻿import {Component, Input, OnInit} from '@angular/core';
+﻿import {AfterViewInit, Component, ElementRef, Input, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {maxRating} from "../appConstants";
 
 @Component({
   selector: 'app-trip-rating',
   templateUrl: './trip-rating.component.html',
 })
-export class TripRatingComponent implements OnInit{
-  private maxRating: number = 5;
+export class TripRatingComponent implements AfterViewInit{
+  starsCount: any[] = new Array(maxRating);
 
-  @Input() actualRating: number = 0;
+  @Input() actualRating: number;
 
-  ngOnInit(): void {
-    document.querySelectorAll(".rating-container")
-      .forEach(el => this.applyRatingToElement(el as HTMLElement));
+  @ViewChild('starContainer') starContainer: ElementRef;
+  @ViewChild('ratingValueContainer') ratingValueContainer: ElementRef;
+  @ViewChildren('stars') stars: QueryList<ElementRef>;
+
+  ngAfterViewInit(): void {
+    this.applyRating();
   }
 
-  buildRating(rating: number, container: HTMLElement) {
+  buildRating(rating: number): void {
     const intRating: number = Math.floor(rating);
     const fracRating: number = rating - intRating;
-    const stars: NodeListOf<HTMLElement> = container.querySelectorAll(".star-filled");
 
-    for (let i = 0; i < stars.length; i++) {
+    for (let i = 0; i < this.stars.length; i++) {
       if (i < intRating) {
-        stars[i].style.width = "100%";
+        this.stars.get(i)!.nativeElement.style.width = "100%";
       } else if (i === intRating) {
-        stars[i].style.width = `${fracRating * 100}%`;
+        this.stars.get(i)!.nativeElement.style.width = `${fracRating * 100}%`;
       } else {
-        stars[i].style.width = "0%";
+        this.stars.get(i)!.nativeElement.style.width = "0%";
       }
     }
   }
 
-  applyRatingToElement(element: HTMLElement) {
-    const starContainer: HTMLElement = element.querySelector(".star-container") as HTMLElement;
-    this.buildRating(this.actualRating, starContainer);
-    const ratingValueContainer: HTMLElement = element.querySelector(".rating-value") as HTMLElement;
-    ratingValueContainer.style.backgroundColor = `rgb(${255 - 51 * this.actualRating}, ${51 * this.actualRating}, 0)`;
+  applyRating(): void {
+    this.buildRating(this.actualRating);
+    this.ratingValueContainer.nativeElement.style.backgroundColor = `rgb(${255 - 255 / maxRating * this.actualRating}, ${255 / maxRating * this.actualRating}, 0)`;
   }
 }

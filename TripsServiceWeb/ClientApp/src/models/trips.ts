@@ -27,3 +27,31 @@ export interface TripCreateValidationErrors {
   StartTime?: string[];
   EndTime?: string[];
 }
+
+export class TripReadDTO {
+  id: number;
+  name: string;
+  description?: string;
+  startTime: Date;
+  endTime: Date;
+  isCurrent: boolean;
+  isFuture: boolean;
+  isPast: boolean;
+  utcStartTimeZone: string;
+  utcFinishTimeZone: string;
+  rating?: number;
+  isNeedToBeRated: boolean;
+
+  constructor() {
+    this.id = 0;
+    this.name = "";
+    this.startTime = new Date();
+    this.endTime = new Date();
+    this.isCurrent = false;
+    this.isFuture = false;
+    this.isPast = false;
+    this.utcStartTimeZone = "";
+    this.utcFinishTimeZone = "";
+    this.isNeedToBeRated = false;
+  }
+}

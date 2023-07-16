@@ -1,0 +1,39 @@
+﻿<h1 class = "tp-label">My Trips</h1>
+<div class = "row row-cols-2">
+  <p class = "tp-label" *ngIf="trips.length == 0">You have no trips.</p>
+  <div class = "col mb-4" *ngFor="let trip of trips">
+    <div class = "card h-100 br-20">
+      <div class = "card-header text-light tp-gradient-standard">
+        <h5 class = "card-title tp-label">{{trip.name}}</h5>
+      </div>
+      <div class = "card-body bg-light br-20">
+        <p class = "card-text tp-label probably-empty-container">{{trip.description}}</p>
+        <ul class = "list-group list-group-flush">
+          <li class = "list-group-item text-right text-muted tp-label">Departure time: {{trip.utcStartTimeZone}}</li>
+          <li class = "list-group-item text-right text-muted tp-label">Arrival time: {{trip.utcFinishTimeZone}}</li>
+          <li class = "list-group-item tp-label">
+            Status:
+            <span class = "badge badge-pill badge-info" *ngIf="trip.isCurrent">Ongoing</span>
+            <span class = "badge badge-pill badge-warning" *ngIf="trip.isFuture">Planned</span>
+            <span class = "badge badge-pill badge-success" *ngIf="trip.isPast">Completed</span>
+          </li>
+        </ul>
+        <div class = "mb-2 mt-2 probably-empty-container">
+          <div *ngIf="trip.rating">
+            <h5 class = "tp-label d-inline-block">You rated this trip as:</h5>
+            <app-trip-rating [actualRating]="trip.rating"></app-trip-rating>
+          </div>
+        </div>
+        <div class = "tp-gradient-reverse card-footer">
+          <a href = "./details" class = "btn btn-primary ml-3 mt-2 mb-3 mr-2">Details</a>
+          <a href = "./edit" class = "btn btn-secondary  mt-2 mb-3 mr-2">Edit</a>
+          <button type = "button" class = "btn btn-danger mt-2 mb-3 mr-2 delete-btn" data-bs-toggle = "modal" data-bs-target = "#tripDeleteModal" (click)="setTripId(trip.id)">Delete</button>
+          <button *ngIf="trip.isNeedToBeRated" type = "button" class = "btn btn-warning mt-2 mb-3" data-bs-toggle = "modal" data-bs-target = "#rateDriverModal" (click)="setTripId(trip.id)">Rate driver</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-feedback-add-modal></app-feedback-add-modal>
+<app-trip-delete></app-trip-delete>

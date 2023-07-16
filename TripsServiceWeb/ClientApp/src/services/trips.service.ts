@@ -1,7 +1,7 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {TripCreateDTO} from "../models/trips";
+import {TripCreateDTO, TripReadDTO} from "../models/trips";
 
 @Injectable({ providedIn: 'root' })
 export class TripsService {
@@ -26,5 +26,9 @@ export class TripsService {
 
   delete(tripId: number): Observable<number>{
     return this.http.delete<number>(this.apiUrl + `/delete/${tripId}`);
+  }
+
+  getAll(): Observable<TripReadDTO[]>{
+    return this.http.get<TripReadDTO[]>(this.apiUrl + '/index');
   }
 }

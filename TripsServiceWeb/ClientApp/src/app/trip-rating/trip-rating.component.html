@@ -1,24 +1,8 @@
 ﻿<span class = "rating-container">
-	<span class = "rating-value">{{actualRating}}</span>
-	<span class = "star-container">
-		<span class = "star">
-			<span class = "star-filled"></span>
-			<span class = "star-outline"></span>
-		</span>
-		<span class = "star">
-			<span class = "star-filled"></span>
-			<span class = "star-outline"></span>
-		</span>
-		<span class = "star">
-			<span class = "star-filled"></span>
-			<span class = "star-outline"></span>
-		</span>
-		<span class = "star">
-			<span class = "star-filled"></span>
-			<span class = "star-outline"></span>
-		</span>
-		<span class = "star">
-			<span class = "star-filled"></span>
+	<span class = "rating-value ml-2 mr-2" #ratingValueContainer>{{actualRating}}</span>
+	<span class = "star-container" #starContainer>
+		<span class = "star" *ngFor="let star of starsCount">
+			<span class = "star-filled" #stars></span>
 			<span class = "star-outline"></span>
 		</span>
 	</span>
