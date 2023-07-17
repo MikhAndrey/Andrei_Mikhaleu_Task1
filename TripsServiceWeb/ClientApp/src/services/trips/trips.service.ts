@@ -35,4 +35,8 @@ export class TripsService {
   getActivity(): Observable<TripReadDTOExtended[]>{
     return this.http.get<TripReadDTOExtended[]>(this.apiUrl + '/public');
   }
+
+  getHistory(): Observable<TripReadDTO[]>{
+    return this.http.get<TripReadDTO[]>(this.apiUrl + '/history');
+  }
 }

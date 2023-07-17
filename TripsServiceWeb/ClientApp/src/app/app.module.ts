@@ -26,6 +26,7 @@ import {CommentAddComponent} from "./comment-add/comment-add.component";
 import {FeedbackAddComponent} from "./feedback-add/feedback-add.component";
 import {TripsListComponent} from "./trips-list/trips-list.component";
 import {TripsActivityComponent} from "./trips-activity/trips-activity.component";
+import {TripsHistoryComponent} from "./trips-history/trips-history.component";
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import {TripsActivityComponent} from "./trips-activity/trips-activity.component"
     CommentAddComponent,
     FeedbackAddComponent,
     TripsListComponent,
-    TripsActivityComponent
+    TripsActivityComponent,
+    TripsHistoryComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -66,7 +68,8 @@ import {TripsActivityComponent} from "./trips-activity/trips-activity.component"
       { path: 'statistics/durations', component: DurationStatisticsComponent },
       { path: 'trips/create', component: TripCreateComponent },
       { path: 'trips', component: TripsListComponent },
-      { path: 'trips/activity', component: TripsActivityComponent }
+      { path: 'trips/activity', component: TripsActivityComponent },
+      { path: 'trips/history', component: TripsHistoryComponent }
     ])
   ],
   providers: [],
