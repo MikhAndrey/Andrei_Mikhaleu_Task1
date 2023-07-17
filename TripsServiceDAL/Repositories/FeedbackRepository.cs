@@ -11,10 +11,9 @@ internal class FeedbackRepository : EFGenericRepository<Feedback>, IFeedbackRepo
 	{
 	}
 
-	public async Task<Feedback> GetByTripId(int tripId)
+	public async Task<Feedback?> GetByTripId(int tripId)
 	{
 		Feedback? feedback = await _dbSet.FirstOrDefaultAsync(f => f.TripId == tripId);
-		ThrowErrorIfEntityIsNull(feedback);
 		return feedback;
 	}
 }
