@@ -8,8 +8,7 @@ import {TripFeedbackAddService} from "../../services/trips/tripFeedbackAdd.servi
 
 @Component({
   selector: 'app-trips-list',
-  templateUrl: './trips-list.component.html',
-  styleUrls: ['./trips-list.component.css']
+  templateUrl: './trips-list.component.html'
 })
 export class TripsListComponent implements OnInit, OnDestroy{
   trips: TripReadDTO[] = [];
@@ -29,7 +28,7 @@ export class TripsListComponent implements OnInit, OnDestroy{
         this.trips = response;
       },
       error: (error) => {
-        alert(error);
+        alert(error.error);
       }
     });
     this.tripIdToDeleteSubscription = this.tripDeleteService.tripIdToDelete$.subscribe(

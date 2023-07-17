@@ -1,7 +1,7 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {TripCreateDTO, TripReadDTO} from "../../models/trips";
+import {TripCreateDTO, TripReadDTO, TripReadDTOExtended} from "../../models/trips";
 
 @Injectable({ providedIn: 'root' })
 export class TripsService {
@@ -30,5 +30,9 @@ export class TripsService {
 
   getAll(): Observable<TripReadDTO[]>{
     return this.http.get<TripReadDTO[]>(this.apiUrl + '/index');
+  }
+
+  getActivity(): Observable<TripReadDTOExtended[]>{
+    return this.http.get<TripReadDTOExtended[]>(this.apiUrl + '/public');
   }
 }

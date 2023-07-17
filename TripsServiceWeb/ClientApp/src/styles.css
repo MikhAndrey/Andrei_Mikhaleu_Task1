@@ -177,3 +177,7 @@ body {
   border-color: #138226;
   border-radius: 35px;
 }
+
+.probably-empty-container {
+  min-height: 26px;
+}

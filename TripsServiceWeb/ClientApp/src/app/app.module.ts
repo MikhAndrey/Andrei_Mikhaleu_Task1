@@ -25,6 +25,7 @@ import {TripRatingComponent} from "./trip-rating/trip-rating.component";
 import {CommentAddComponent} from "./comment-add/comment-add.component";
 import {FeedbackAddComponent} from "./feedback-add/feedback-add.component";
 import {TripsListComponent} from "./trips-list/trips-list.component";
+import {TripsActivityComponent} from "./trips-activity/trips-activity.component";
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import {TripsListComponent} from "./trips-list/trips-list.component";
     TripRatingComponent,
     CommentAddComponent,
     FeedbackAddComponent,
-    TripsListComponent
+    TripsListComponent,
+    TripsActivityComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -63,7 +65,8 @@ import {TripsListComponent} from "./trips-list/trips-list.component";
       { path: 'statistics/heatmap', component: HeatmapStatisticsComponent },
       { path: 'statistics/durations', component: DurationStatisticsComponent },
       { path: 'trips/create', component: TripCreateComponent },
-      { path: 'trips', component: TripsListComponent }
+      { path: 'trips', component: TripsListComponent },
+      { path: 'trips/activity', component: TripsActivityComponent }
     ])
   ],
   providers: [],

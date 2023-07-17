@@ -41,17 +41,8 @@ export class TripReadDTO {
   utcFinishTimeZone: string;
   rating?: number;
   isNeedToBeRated: boolean;
+}
 
-  constructor() {
-    this.id = 0;
-    this.name = "";
-    this.startTime = new Date();
-    this.endTime = new Date();
-    this.isCurrent = false;
-    this.isFuture = false;
-    this.isPast = false;
-    this.utcStartTimeZone = "";
-    this.utcFinishTimeZone = "";
-    this.isNeedToBeRated = false;
-  }
+export class TripReadDTOExtended extends TripReadDTO {
+  userName: string;
 }
