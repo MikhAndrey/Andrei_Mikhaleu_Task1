@@ -1,9 +1,10 @@
 ﻿import {Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {FeedbackCreateDTO} from "../../models/feedbacks";
 import {FeedbacksService} from "../../services/feedback.service";
-import {TripIdService} from "../../services/tripId.service";
+import {TripIdService} from "../../services/trips/tripId.service";
 import {Subscription} from "rxjs";
 import {maxRating} from "../appConstants";
+import {TripFeedbackAddService} from "../../services/trips/tripFeedbackAdd.service";
 
 @Component({
   selector: 'app-feedback-add-modal',
@@ -12,22 +13,24 @@ import {maxRating} from "../appConstants";
 export class FeedbackAddComponent implements OnInit, OnDestroy {
   feedback: FeedbackCreateDTO = new FeedbackCreateDTO();
 
-  tripId: number;
   private tripIdSubscription: Subscription;
 
   starsCount: any[] = new Array(maxRating);
 
   @ViewChildren('stars') stars: QueryList<ElementRef>;
   @ViewChildren('filledStars') filledStars: QueryList<ElementRef>;
-  @ViewChild('closeModalButton') closeModalButton: ElementRef;
+  @ViewChild('modalCloseButton') modalCloseButton: ElementRef;
 
   private starsNeedReset: boolean = true;
 
-  constructor(private feedbackService: FeedbacksService, private tripIdService: TripIdService) {
+  constructor(
+    private feedbackService: FeedbacksService,
+    private tripIdService: TripIdService,
+    private tripFeedbackAddService: TripFeedbackAddService) {
   }
 
   ngOnInit() {
-    this.tripIdSubscription = this.tripIdService.tripId$.subscribe((tripId) => this.tripId = tripId);
+    this.tripIdSubscription = this.tripIdService.tripId$.subscribe((tripId) => this.feedback.TripId = tripId);
   }
   ngOnDestroy(): void {
     this.tripIdSubscription.unsubscribe();
@@ -35,14 +38,13 @@ export class FeedbackAddComponent implements OnInit, OnDestroy {
 
   addFeedback() {
     if (this.feedback.Rating != 0 || confirm("You are going to rate this trip as 0 stars. Continue?")) {
-      this.feedback.TripId = this.tripId;
       this.feedbackService.add(this.feedback).subscribe({
         next: () => {
-          this.closeModalButton.nativeElement.click();
-          //Insert new feedback data to the parent page
+          this.tripFeedbackAddService.setTripIdToAddFeedback(this.feedback.TripId);
+          this.modalCloseButton.nativeElement.click();
         },
         error: (error) => {
-          alert(error);
+          alert(error.error);
         }
       });
     }

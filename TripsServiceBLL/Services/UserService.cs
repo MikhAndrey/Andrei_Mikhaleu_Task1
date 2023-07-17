@@ -38,6 +38,11 @@ public class UserService : IUserService
 		_unitOfWork.Users.ThrowErrorIfNotExists(userId);
 		return userId;
 	}
+	
+	public string? GetCurrentUserName()
+	{
+		return _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+	}
 
 	public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
 	{

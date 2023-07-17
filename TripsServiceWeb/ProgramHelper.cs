@@ -41,6 +41,7 @@ public static class ProgramHelper
 	{
 		services.AddScoped<CurrentUserTripResolver>();
 		services.AddScoped<CommentUserIdResolver>();
+		services.AddScoped<FeedbackUserResolver>();
 		services.AddScoped<NewTripUserIdResolver>();
 	}
 
@@ -65,7 +66,7 @@ public static class ProgramHelper
 				serviceProvider.GetService<NewTripUserIdResolver>()));
 			mc.AddProfile(new CommentMapper(serviceProvider.GetService<CommentUserIdResolver>()));
 			mc.AddProfile(new DriverMapper());
-			mc.AddProfile(new FeedbackMapper());
+			mc.AddProfile(new FeedbackMapper(serviceProvider.GetService<FeedbackUserResolver>()));
 			mc.AddProfile(new ImageMapper());
 			mc.AddProfile(new RoutePointMapper());
 			mc.AddProfile(new UserMapper());

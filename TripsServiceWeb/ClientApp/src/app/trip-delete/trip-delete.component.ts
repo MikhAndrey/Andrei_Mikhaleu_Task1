@@ -1,8 +1,8 @@
 ﻿import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {TripsService} from "../../services/trips.service";
-import {TripIdService} from "../../services/tripId.service";
+import {TripsService} from "../../services/trips/trips.service";
+import {TripIdService} from "../../services/trips/tripId.service";
 import {Subscription} from "rxjs";
-import {TripDeleteService} from "../../services/tripDelete.service";
+import {TripDeleteService} from "../../services/trips/tripDelete.service";
 
 @Component({
   selector: 'app-trip-delete',

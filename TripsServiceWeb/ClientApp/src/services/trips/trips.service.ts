@@ -1,7 +1,7 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {TripCreateDTO, TripReadDTO} from "../models/trips";
+import {TripCreateDTO, TripReadDTO} from "../../models/trips";
 
 @Injectable({ providedIn: 'root' })
 export class TripsService {

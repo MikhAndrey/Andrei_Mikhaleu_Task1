@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {TripCreateDTO, TripCreateValidationErrors} from "../../models/trips";
-import {TripsService} from "../../services/trips.service";
+import {TripsService} from "../../services/trips/trips.service";
 import {RedirectService} from "../../services/redirect.service";
 
 @Component({

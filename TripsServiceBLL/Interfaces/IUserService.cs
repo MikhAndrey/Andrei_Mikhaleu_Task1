@@ -11,4 +11,5 @@ public interface IUserService
 	Task TryToRegisterNewUserAsync(UserSignupDTO user);
 	Task<string> GetJWTTokenAsync(UserLoginDTO user);
 	int GetCurrentUserId();
+	public string? GetCurrentUserName();
 }

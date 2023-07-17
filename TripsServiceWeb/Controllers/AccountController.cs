@@ -68,7 +68,7 @@ public class AccountController : ControllerBase
     [HttpGet("username")]
     public ActionResult<string?> GetUserName()
     {
-        return Ok(new { UserName = HttpContext?.User?.Identity?.Name});
+        return Ok(new { UserName = _userService.GetCurrentUserName()});
     }
 
     [HttpGet("logout")]
