@@ -31,7 +31,7 @@ public class TripService : ITripService
 		trip.StartTime = DateTime.Parse(trip.StartTime.ToString("dd.MM.yyyy HH:mm"));
 	}
 
-	public async Task StartTripAsync(int tripId)
+	public async Task<TripDateChangesDTO> StartTripAsync(int tripId)
 	{
 		Trip trip = await _unitOfWork.Trips.GetByIdAsync(tripId);
 
@@ -40,6 +40,9 @@ public class TripService : ITripService
 			SetNewTimeForStartingTrip(trip);
 			await UpdateAsync(trip);
 		}
+
+		TripDateChangesDTO result = _mapper.Map<TripDateChangesDTO>(trip);
+		return result;
 	}
 
 	public void SetNewTimeForEndingTrip(Trip trip)
@@ -48,7 +51,7 @@ public class TripService : ITripService
 		trip.EndTime = DateTime.Parse(trip.EndTime.ToString("dd.MM.yyyy HH:mm"));
 	}
 
-	public async Task EndTripAsync(int tripId)
+	public async Task<TripDateChangesDTO> EndTripAsync(int tripId)
 	{
 		Trip trip = await _unitOfWork.Trips.GetByIdAsync(tripId);
 
@@ -57,6 +60,9 @@ public class TripService : ITripService
 			SetNewTimeForEndingTrip(trip);
 			await UpdateAsync(trip);
 		}
+		
+		TripDateChangesDTO result = _mapper.Map<TripDateChangesDTO>(trip);
+		return result;
 	}
 
 	public async Task UpdateAsync(Trip trip)

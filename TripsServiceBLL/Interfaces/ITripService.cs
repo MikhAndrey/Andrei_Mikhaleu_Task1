@@ -8,8 +8,8 @@ public interface ITripService
 {
 	void SetNewTimeForStartingTrip(Trip trip);
 	void SetNewTimeForEndingTrip(Trip trip);
-	Task EndTripAsync(int tripId);
-	Task StartTripAsync(int tripId);
+	Task<TripDateChangesDTO> EndTripAsync(int tripId);
+	Task<TripDateChangesDTO> StartTripAsync(int tripId);
 	Task UpdateAsync(Trip trip);
 	Task DeleteAsync(int tripId);
 	Task AddAsync(Trip trip);

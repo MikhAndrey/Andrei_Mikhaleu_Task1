@@ -58,3 +58,9 @@ export class TripDetailsDTO extends TripReadDTO {
   feedbackText: string;
   feedbackId: number;
 }
+
+export class TripDateChangesDTO {
+  newStartTimeAsString: string;
+  newFinishTimeAsString: string;
+  newDurationAsString: string;
+}

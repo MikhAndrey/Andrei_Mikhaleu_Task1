@@ -207,8 +207,8 @@ public class TripsController : ControllerBase
 	{
 		try
 		{
-			await _tripService.StartTripAsync(id);
-			return Ok();
+			TripDateChangesDTO result = await _tripService.StartTripAsync(id);
+			return Ok(result);
 		}
 		catch (EntityNotFoundException ex)
 		{
@@ -221,8 +221,8 @@ public class TripsController : ControllerBase
 	{
 		try
 		{
-			await _tripService.EndTripAsync(id);
-			return Ok();
+			TripDateChangesDTO result = await _tripService.EndTripAsync(id);
+			return Ok(result);
 		}
 		catch (EntityNotFoundException ex)
 		{

@@ -1,7 +1,7 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {TripCreateDTO, TripReadDTO, TripReadDTOExtended} from "../../models/trips";
+import {TripCreateDTO, TripDateChangesDTO, TripDetailsDTO, TripReadDTO, TripReadDTOExtended} from "../../models/trips";
 
 @Injectable({ providedIn: 'root' })
 export class TripsService {
@@ -38,5 +38,23 @@ export class TripsService {
 
   getHistory(): Observable<TripReadDTO[]>{
     return this.http.get<TripReadDTO[]>(this.apiUrl + '/history');
+  }
+
+  getDetails(tripId: number): Observable<TripDetailsDTO> {
+    return this.http.get<TripDetailsDTO>(this.apiUrl + `/details/${tripId}`);
+  }
+
+  startTrip(tripId: number): Observable<TripDateChangesDTO> {
+    return this.http.post<TripDateChangesDTO>(this.apiUrl + `/start/${tripId}`, tripId);
+  }
+
+  finishTrip(tripId: number): Observable<TripDateChangesDTO> {
+    return this.http.post<TripDateChangesDTO>(this.apiUrl + `/finish/${tripId}`, tripId);
+  }
+
+  updateTripDateInfo(trip: TripDetailsDTO, dateInfo: TripDateChangesDTO): void {
+    trip.utcStartTimeZone = dateInfo.newStartTimeAsString;
+    trip.utcFinishTimeZone = dateInfo.newFinishTimeAsString;
+    trip.duration = dateInfo.newDurationAsString;
   }
 }
