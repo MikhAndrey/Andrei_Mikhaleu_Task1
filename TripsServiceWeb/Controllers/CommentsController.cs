@@ -42,11 +42,11 @@ public class CommentsController : ControllerBase
 
     [Authorize]
     [HttpDelete("delete/{id}")]
-    public async Task<IActionResult> DeleteComment(int commentId)
+    public async Task<IActionResult> DeleteComment(int id)
     {
         try
         {
-            await _commentService.DeleteCommentAsync(commentId);
+            await _commentService.DeleteCommentAsync(id);
             return Ok();
         }
         catch (EntityNotFoundException ex)

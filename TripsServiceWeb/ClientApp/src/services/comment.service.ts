@@ -15,4 +15,8 @@ export class CommentsService {
   add(comment: CommentCreateDTO): Observable<CommentDTO> {
     return this.http.post<CommentDTO>(this.apiUrl + '/add', comment);
   }
+
+  delete(id: number): Observable<number> {
+    return this.http.delete<number>(this.apiUrl + `/delete/${id}`);
+  }
 }

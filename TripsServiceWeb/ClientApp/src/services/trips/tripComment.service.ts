@@ -5,10 +5,10 @@ import {CommentDTO} from "../../models/comments";
 @Injectable({
   providedIn: 'root',
 })
-export class TripCommentAddService {
+export class TripCommentService {
   public addedComment$: Subject<CommentDTO> = new Subject<CommentDTO>();
 
-  public addCommentForTrip(comment: CommentDTO) {
+  public addCommentForTrip(comment: CommentDTO): void {
     this.addedComment$.next(comment);
   }
 }
