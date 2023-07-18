@@ -24,8 +24,8 @@ public class CommentsController : ControllerBase
         {
             try
             {
-                await _commentService.AddCommentAsync(comment);
-                return Ok();
+                CommentDTO result = await _commentService.AddCommentAsync(comment);
+                return Ok(result);
             }
             catch (ArgumentNullException)
             {

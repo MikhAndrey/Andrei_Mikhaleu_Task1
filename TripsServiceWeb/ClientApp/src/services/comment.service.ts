@@ -1,7 +1,7 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {CommentCreateDTO} from "../models/comments";
+import {CommentCreateDTO, CommentDTO} from "../models/comments";
 
 @Injectable({ providedIn: 'root' })
 export class CommentsService {
@@ -12,7 +12,7 @@ export class CommentsService {
     this.apiUrl = baseUrl + "api/comments";
   }
 
-  add(comment: CommentCreateDTO): Observable<CommentCreateDTO> {
-    return this.http.post<CommentCreateDTO>(this.apiUrl + '/add', comment);
+  add(comment: CommentCreateDTO): Observable<CommentDTO> {
+    return this.http.post<CommentDTO>(this.apiUrl + '/add', comment);
   }
 }

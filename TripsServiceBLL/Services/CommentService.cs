@@ -11,19 +11,26 @@ public class CommentService : ICommentService
 	private readonly IMapper _mapper;
 	private readonly IUnitOfWork _unitOfWork;
 
-	public CommentService(IUnitOfWork unitOfWork, IMapper mapper)
+	private readonly IUserService _userService;
+
+	public CommentService(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
 	{
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
+		_userService = userService;
 	}
 
-	public async Task AddCommentAsync(CreateCommentDTO comment)
+	public async Task<CommentDTO> AddCommentAsync(CreateCommentDTO comment)
 	{
 		_unitOfWork.Trips.ThrowErrorIfNotExists(comment.TripId);
 
 		Comment commentToAdd = _mapper.Map<Comment>(comment);
 		await _unitOfWork.Comments.AddAsync(commentToAdd);
 		await _unitOfWork.SaveAsync();
+
+		CommentDTO result =  _mapper.Map<CommentDTO>(commentToAdd);
+		result.UserName = _userService.GetCurrentUserName();
+		return result;
 	}
 
 	public async Task DeleteCommentAsync(int commentId)
