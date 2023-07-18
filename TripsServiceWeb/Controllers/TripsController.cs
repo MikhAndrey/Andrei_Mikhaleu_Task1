@@ -183,6 +183,25 @@ public class TripsController : ControllerBase
 		return BadRequest(ModelState);
 	}
 	
+	[Authorize]
+	[HttpGet("details/{id}")]
+	public async Task<IActionResult> Details(int id)
+	{
+		try
+		{
+			TripDetailsDTO trip = await _tripService.GetTripDetailsAsync(id);
+			return Ok(trip);
+		}
+		catch (ArgumentNullException)
+		{
+			return Unauthorized();
+		}
+		catch (EntityNotFoundException ex)
+		{
+			return NotFound(ex.Message);
+		}
+	}
+	
 	[HttpPost("start/{id}")]
 	public async Task<IActionResult> StartTrip(int id)
 	{

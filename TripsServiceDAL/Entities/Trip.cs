@@ -29,7 +29,7 @@ public class Trip : IIdentifiable, ISoftDelete
 	public int FinishTimeZoneOffset { get; set; }
 	public int? DriverId { get; set; }
 	public Driver? Driver { get; set; }
-	public Feedback Feedback { get; set; }
+	public Feedback? Feedback { get; set; }
 	public int Id { get; set; }
 	public bool IsDeleted { get; set; }
 }

@@ -18,4 +18,7 @@ public class TripDetailsDTO : ReadTripDTO
 	public string Duration { get; set; }
 	public decimal Distance { get; set; }
 	public ReadDriverDTO? Driver { get; set; }
+	public string FeedbackText { get; set; }
+	public int FeedbackId { get; set; }
+	public string TimeInfo { get; set; }
 }
