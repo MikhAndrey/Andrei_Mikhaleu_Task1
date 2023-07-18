@@ -55,7 +55,7 @@ export class TripDetailsDTO extends TripReadDTO {
   distance: number;
   driver?: DriverInfoDTO;
   timeInfo: string;
-  feedbackText: string;
+  feedbackText?: string;
   feedbackId: number;
 }
 

@@ -41,6 +41,7 @@ export class FeedbackAddComponent implements OnInit, OnDestroy {
       this.feedbackService.add(this.feedback).subscribe({
         next: () => {
           this.tripFeedbackAddService.setTripIdToAddFeedback(this.feedback.TripId);
+          this.tripFeedbackAddService.setAddedFeedback(this.feedback);
           this.modalCloseButton.nativeElement.click();
         },
         error: (error) => {
