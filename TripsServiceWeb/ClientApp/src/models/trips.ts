@@ -1,4 +1,9 @@
-﻿export class TripCreateDTO {
+﻿import {RoutePointDTO} from "./routePoints";
+import {CommentDTO} from "./comments";
+import {ImageDTO} from "./images";
+import {DriverInfoDTO} from "./drivers";
+
+export class TripCreateDTO {
   StartTime: Date;
   EndTime?: Date;
   Distance: number;
@@ -10,16 +15,6 @@
   Name: string;
   Public: boolean;
   Description?: string;
-
-  constructor() {
-    this.StartTime = new Date();
-    this.Distance = 0;
-    this.StartTimeZoneOffset = 0;
-    this.FinishTimeZoneOffset = 0;
-    this.RoutePointsAsString = '';
-    this.Name = '';
-    this.Public = false;
-  }
 }
 
 export interface TripCreateValidationErrors {
@@ -45,4 +40,21 @@ export class TripReadDTO {
 
 export class TripReadDTOExtended extends TripReadDTO {
   userName: string;
+}
+
+export class TripDetailsDTO extends TripReadDTO {
+  userId: number;
+  isCurrentUserTrip: boolean;
+  public: boolean;
+  images: ImageDTO[];
+  routePoints: RoutePointDTO[];
+  comments: CommentDTO[];
+  startTimeZoneOffset: number;
+  finishTimeZoneOffset: number;
+  duration: string;
+  distance: number;
+  driver?: DriverInfoDTO;
+  timeInfo: string;
+  feedbackText: string;
+  feedbackId: number;
 }
