@@ -15,4 +15,8 @@ export class FeedbacksService {
   add(feedback: FeedbackCreateDTO): Observable<FeedbackCreateDTO> {
     return this.http.post<FeedbackCreateDTO>(this.apiUrl + '/create', feedback);
   }
+
+  delete(id: number): Observable<number> {
+    return this.http.delete<number>(this.apiUrl + `/delete/${id}`);
+  }
 }

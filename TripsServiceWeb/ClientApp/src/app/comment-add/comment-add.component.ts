@@ -1,6 +1,6 @@
 ﻿import {Component, Input} from '@angular/core';
 import {CommentCreateDTO, CommentCreateValidationErrors} from "../../models/comments";
-import {CommentsService} from "../../services/comment.service";
+import {CommentsService} from "../../services/comments.service";
 import {TripCommentService} from "../../services/trips/tripComment.service";
 
 @Component({
