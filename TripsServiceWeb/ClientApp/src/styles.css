@@ -181,3 +181,9 @@ body {
 .probably-empty-container {
   min-height: 26px;
 }
+
+.driver-avatar {
+  width:100%;
+  height:auto;
+  border-radius:50%;
+}

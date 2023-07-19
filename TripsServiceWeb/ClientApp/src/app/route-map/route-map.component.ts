@@ -1,21 +1,14 @@
 ﻿import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {MapDirectionsService} from '@angular/google-maps';
-import {map, Observable} from 'rxjs';
+import {map} from 'rxjs';
 import {formatDurationInSeconds} from "../../utils/formatDuration";
 import {environment} from "../../environments/environment";
+import {ReadonlyRouteMapComponent} from "../readonly-route-map/readonly-route-map.component";
 
 @Component({
   selector: 'app-route-map',
   templateUrl: './route-map.component.html',
 })
-export class RouteMapComponent {
-  center: google.maps.LatLngLiteral = {
-    lat: 51.5805,
-    lng: 0
-  };
-  zoom: number = 5;
-
-  directionsResults: Observable <google.maps.DirectionsResult | undefined> | undefined;
+export class RouteMapComponent extends ReadonlyRouteMapComponent {
 
   markerOptions: google.maps.MarkerOptions = {
     draggable: true,
@@ -31,12 +24,11 @@ export class RouteMapComponent {
     }
   };
 
-  markerPositions: google.maps.LatLngLiteral[] = [];
-  private markersCount: number = 0;
-
-  private mapDirectionsService: MapDirectionsService;
-  constructor(mapDirectionsService: MapDirectionsService) {
-    this.mapDirectionsService = mapDirectionsService;
+  override ngOnInit() {
+    if (this.markerPositions) {
+      this.markerPositions.forEach(position => this.addMarker(new google.maps.LatLng(position)));
+      this.buildRoute();
+    }
   }
 
   @Output() durationTextChanged: EventEmitter<string> = new EventEmitter();
@@ -88,30 +80,6 @@ export class RouteMapComponent {
 
   @Input() startTime?: Date;
 
-  private buildRoute(){
-    const request: google.maps.DirectionsRequest = {
-      destination: this.markerPositions[this.markersCount - 1],
-      origin: this.markerPositions[0],
-      waypoints: this.markerPositions.slice(1, -1).map(el => {
-       return {
-         location: el,
-         stopover: true
-       }
-      }),
-      travelMode: google.maps.TravelMode.DRIVING
-    };
-    this.directionsResults = this.mapDirectionsService.route(request).pipe(
-      map(response => {
-        if (response.status !== "OK") {
-          alert("Imposssible to build such root!");
-          this.removeMarker(this.markersCount - 1);
-        }
-        this.getRouteData(response.result);
-        return response.result
-      })
-    );
-  }
-
   private async getRouteData(routeData?: google.maps.DirectionsResult | undefined){
     const duration = routeData?.routes[0].legs.reduce((acc: number, el) => {
       acc += el.duration!.value;
@@ -127,7 +95,7 @@ export class RouteMapComponent {
     const startTimeZoneInfo: {dstOffset: number, rawOffset: number} = await this.getTimeZoneInfo(this.markerPositions[0]);
     this.startTimeZoneOffset = startTimeZoneInfo.dstOffset + startTimeZoneInfo.rawOffset;
 
-    const finishTimeZoneInfo: {dstOffset: number, rawOffset: number} = await this.getTimeZoneInfo(this.markerPositions[this.markersCount - 1]);
+    const finishTimeZoneInfo: {dstOffset: number, rawOffset: number} = await this.getTimeZoneInfo(this.markerPositions.at(-1)!);
     this.finishTimeZoneOffset = finishTimeZoneInfo.dstOffset + finishTimeZoneInfo.rawOffset;
 
     if (this.startTime) {
@@ -137,35 +105,52 @@ export class RouteMapComponent {
 
     this.routePoints = JSON.stringify(this.markerPositions.map((el, index) => {
       return {
-        latitude: el.lat,
-        longitude: el.lng,
-        ordinal: index
+        Latitude: el.lat,
+        Longitude: el.lng,
+        Ordinal: index
       }
     }));
   }
 
-  addMarker(event: google.maps.MapMouseEvent): void{
-    if (event.latLng != null) {
-      this.markerPositions.push(event.latLng.toJSON());
-      this.markersCount ++;
-      if (this.markersCount > 1)
+  override retrieveDirectionsResultsFromRequest(request: google.maps.DirectionsRequest): void {
+    this.directionsResults = this.mapDirectionsService.route(request).pipe(
+      map(response => {
+        if (response.status !== "OK") {
+          alert("Imposssible to build such root!");
+          this.removeMarker(-1);
+        }
+        this.getRouteData(response.result);
+        return response.result
+      })
+    );
+  }
+
+  addMarkerAndBuildRoute(latLng: google.maps.LatLng | null): void{
+    if (latLng != null) {
+      this.markerPositions.push(latLng.toJSON());
+      if (this.markerPositions[1])
         this.buildRoute();
+    }
+  }
+
+  addMarker(latLng: google.maps.LatLng | null): void{
+    if (latLng != null) {
+      this.markerPositions.push(latLng.toJSON());
     }
   }
 
   removeMarker(index: number): void{
     this.markerPositions.splice(index, 1);
-    this.markersCount--;
-    if (this.markersCount > 1)
+    if (this.markerPositions[1])
       this.buildRoute();
     else
       this.directionsResults = undefined;
   }
 
-  moveMarker(event: google.maps.MapMouseEvent, index: number) {
-    if (event.latLng != null) {
-      this.markerPositions[index] = event.latLng.toJSON();
-      if (this.markersCount > 1)
+  moveMarker(latLng: google.maps.LatLng | null, index: number) {
+    if (latLng != null) {
+      this.markerPositions[index] = latLng.toJSON();
+      if (this.markerPositions[1])
         this.buildRoute();
     }
   }

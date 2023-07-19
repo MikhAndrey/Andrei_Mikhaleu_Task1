@@ -1,0 +1,102 @@
+﻿<div class = "tp-form">
+  <h1 class = "mt-5 tp-label">{{trip.name}}</h1>
+
+  <h4 class = "tp-label" *ngIf="trip.description">{{trip.description}}</h4>
+
+  <div class = "tp-label">
+    Publicity:
+    <span class = "badge badge-pill badge-success">{{trip.public ? "Public" : "Private"}}</span>
+  </div>
+  <p class = "mt-3 tp-label">Distance: {{trip.distance}} km</p>
+  <p class = "tp-label">Departure time: {{trip.utcStartTimeZone}}</p>
+  <p class = "tp-label">Arrival time: {{trip.utcFinishTimeZone}}</p>
+  <p class = "tp-label">Total time of trip: {{trip.duration}}</p>
+  <p class = "tp-label" *ngIf="trip.isCurrent">Elapsed time: {{trip.timeInfo}}</p>
+  <p class = "tp-label" *ngIf="trip.isFuture">Time until trip: {{trip.timeInfo}}</p>
+  <span class = "badge badge-pill badge-success" *ngIf="trip.isPast">{{trip.timeInfo}}</span>
+
+  <app-readonly-route-map [markerPositions]="initializeTripRoute()"></app-readonly-route-map>
+
+  <button class = "btn btn-primary mt-3" *ngIf="trip.isCurrent && trip.isCurrentUserTrip" (click)="finishTrip(trip.id)">Finish trip</button>
+  <button class = "btn btn-primary mt-3" *ngIf="trip.isFuture && trip.isCurrentUserTrip" (click)="startTrip(trip.id)">Start trip</button>
+  <h3 class = "mt-5 tp-label">Trip gallery</h3>
+  <h4 class = "tp-label" *ngIf="trip.images.length === 0; else imagesList">There's nothing to see here yet</h4>
+
+  <ng-template #imagesList>
+    <div class = "row mt-3">
+      <div class = "col-md-6">
+        <div id = "carouselExampleIndicators" class = "carousel slide" data-bs-ride = "carousel">
+          <div class = "carousel-indicators">
+            <button *ngFor="let image of trip.images;let i = index" type = "button" data-bs-target = "#carouselExampleIndicators" [attr.data-bs-slide-to]="i"
+                    [attr.aria-current]="i === 0 ? 'true' : 'false'" [attr.aria-label]="'Slide ' + i" class ="{{i === 0 ? 'active' : ''}}"></button>
+          </div>
+          <div class = "carousel-inner">
+            <div class = "carousel-item {{i === 0 ? 'active' : ''}}" *ngFor="let image of trip.images;let i = index">
+            <img [src]="image.link" class = "d-block w-100 img-responsive carousel-image" alt = "Trip photo">
+          </div>
+          </div>
+          <a class = "carousel-control-prev" type = "button" data-bs-target = "#carouselExampleIndicators" [attr.data-bs-slide]="'prev'">
+            <span class = "carousel-control-prev-icon" [attr.aria-hidden]="true"></span>
+            <span class = "visually-hidden">Previous</span>
+          </a>
+          <a class = "carousel-control-next" type = "button" data-bs-target = "#carouselExampleIndicators" [attr.data-bs-slide]="'next'">
+            <span class = "carousel-control-next-icon" [attr.aria-hidden]="true"></span>
+            <span class = "visually-hidden">Next</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <div *ngIf="trip.driver">
+    <h3 class = "tp-label mb-2">Trip driver</h3>
+    <div class = "w-50 tp-gradient-standard driver-button d-flex flex-row align-items-center">
+      <div class = "mr-3 image-container">
+        <img src = "{{trip.driver.photoLink}}" alt = "Driver Photo" class="driver-avatar"/>
+      </div>
+      <div class = "main-driver-info">
+        <h5 class = "tp-label mr-2 d-inline-block">{{trip.driver.name}}</h5>
+        <div class = "rating-container d-inline-block">
+        <span class = "rating-value text-light mt-2">{{trip.driver.averageRating}}</span>
+        </div>
+        <p class = "tp-label">Experience: {{trip.driver.experience}} years</p>
+      </div>
+    </div>
+  </div>
+
+  <div class = "mt-4" *ngIf="trip.isNeedToBeRated && trip.isCurrentUserTrip">
+    <button type = "button" class = "btn btn-primary" data-trip-id = "@Model.Id" data-bs-toggle = "modal" data-bs-target = "#rateDriverModal" (click)="setTripIdForRating()">Rate driver of this trip</button>
+  </div>
+
+  <div class="mt-4" *ngIf="trip.rating">
+    <app-trip-rating [actualRating]="trip.rating"></app-trip-rating>
+    <div class="mt-2" *ngIf="trip.feedbackText">
+      <h5 class = "tp-label mb-2">Trip driver's feedback:</h5>
+      <p>{{trip.feedbackText}}</p>
+    </div>
+    <div class="mt-2">
+      <span class="mr-2">
+        <button type = "button" class = "btn btn-secondary">Edit</button>
+      </span>
+      <span>
+        <button class = "btn btn-danger" (click)="deleteFeedback(trip.feedbackId)">Delete</button>
+      </span>
+    </div>
+  </div>
+
+  <h3 class = "mt-3 tp-label">Leave a comment</h3>
+  <app-comment-add-form [tripId]="trip.id"></app-comment-add-form>
+  <h3 class = "mt-5 tp-label">Comments</h3>
+  <h4 class = "tp-label" *ngIf="trip.comments.length === 0">There's no comments here yet</h4>
+  <ul>
+    <li class = "mt-3" *ngFor="let comment of trip.comments">
+      <p>
+        <strong class = "tp-label">{{comment.userName}}</strong> - {{comment.timeAgoAsString}}
+      </p>
+      <p>{{comment.message}}</p>
+      <button class = "btn btn-danger" *ngIf="trip.isCurrentUserTrip" (click)="deleteComment(comment.id)">Delete</button>
+      <hr/>
+    </li>
+  </ul>
+</div>
+<app-feedback-add-modal></app-feedback-add-modal>

@@ -1,4 +1,4 @@
-﻿<google-map height="600px" width="100%" [center]="center" [zoom]="zoom" (mapClick)="addMarker($event)">
+﻿<google-map height="600px" width="100%" [center]="center" [zoom]="zoom" (mapClick)="addMarkerAndBuildRoute($event.latLng)">
   <map-directions-renderer *ngIf="directionsResults | async as directionsResults" [directions]="directionsResults"></map-directions-renderer>
-  <map-marker *ngFor="let markerPosition of markerPositions; let i = index" [position]="markerPosition" [options]="markerOptions" (mapClick)="removeMarker(i)" (mapDragend)="moveMarker($event, i)"></map-marker>
+  <map-marker *ngFor="let markerPosition of markerPositions; let i = index" [position]="markerPosition" [options]="markerOptions" (mapClick)="removeMarker(i)" (mapDragend)="moveMarker($event.latLng, i)"></map-marker>
 </google-map>

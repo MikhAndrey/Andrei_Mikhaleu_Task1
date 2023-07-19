@@ -15,6 +15,15 @@ export class TripCreateDTO {
   Name: string;
   Public: boolean;
   Description?: string;
+
+  constructor() {
+    this.Distance = 0;
+    this.StartTimeZoneOffset = 0;
+    this.FinishTimeZoneOffset = 0;
+    this.RoutePointsAsString = "";
+    this.Name = "";
+    this.Public = false;
+  }
 }
 
 export interface TripCreateValidationErrors {
