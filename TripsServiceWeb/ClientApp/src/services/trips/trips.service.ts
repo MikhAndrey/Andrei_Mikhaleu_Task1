@@ -14,7 +14,10 @@ export class TripsService {
 
   add(trip: TripCreateDTO, formData: FormData): Observable<TripCreateDTO> {
     trip.ImagesAsFiles?.forEach(file => formData.append("ImagesAsFiles", file, file.name));
-    formData.set("EndTime", trip.EndTime? trip.EndTime.toISOString() : "");
+    if (trip.EndTime) {
+      trip.EndTime.setTime(trip.EndTime.getTime() - trip.EndTime.getTimezoneOffset() * 60 * 1000);
+      formData.set("EndTime", new Date(trip.EndTime).toISOString());
+    }
     formData.set("Distance", trip.Distance.toLocaleString());
     formData.set("StartTimeZoneOffset", trip.StartTimeZoneOffset.toString());
     formData.set("FinishTimeZoneOffset", trip.FinishTimeZoneOffset.toString());
