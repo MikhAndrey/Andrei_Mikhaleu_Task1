@@ -137,6 +137,37 @@ public class TripsController : ControllerBase
 		}
 	}
 	
+	[Authorize]
+	[HttpGet("edit/current/{id}")]
+	public async Task<IActionResult> EditCurrent(int id)
+	{
+		try
+		{
+			EditTripDTO trip = await _tripService.GetTripForEditingAsync(id);
+			return Ok(trip);
+		}
+		catch (EntityNotFoundException ex)
+		{
+			return NotFound(ex.Message);
+		}
+	}
+	
+	[Authorize]
+	[HttpGet("edit/past/{id}")]
+	public async Task<IActionResult> EditPast(int id)
+	{
+		try
+		{
+			EditPastTripDTO trip = await _tripService.GetPastTripForEditingAsync(id);
+			return Ok(trip);
+		}
+		catch (EntityNotFoundException ex)
+		{
+			return NotFound(ex.Message);
+		}
+	}
+	
+	
 	[HttpPut("edit/current/{id}")]
 	public async Task<IActionResult> Edit(int id, EditTripDTO trip)
 	{

@@ -31,24 +31,24 @@ export class TripCreateComponent implements OnInit {
   }
 
   handleFilesChanged(files: { file: File, url: string }[]): void {
-    this.trip.ImagesAsFiles = files.map(fileInfo => fileInfo.file);
+    this.trip.imagesAsFiles = files.map(fileInfo => fileInfo.file);
   }
   handleDurationTextChanged(durationText?: string): void {
     this.durationText = durationText;
   }
   handleStartTimeZoneChanged(startTimeZoneOffset: number): void {
-    this.trip.StartTimeZoneOffset = startTimeZoneOffset;
+    this.trip.startTimeZoneOffset = startTimeZoneOffset;
   }
   handleFinishTimeZoneOffsetChanged(finishTimeZoneOffset: number): void {
-    this.trip.FinishTimeZoneOffset = finishTimeZoneOffset;
+    this.trip.finishTimeZoneOffset = finishTimeZoneOffset;
   }
   handleFinishTimeChanged(finishTime: Date): void {
-    this.trip.EndTime = finishTime;
+    this.trip.endTime = finishTime;
   }
   handleDistanceChanged(distance: number): void {
-    this.trip.Distance = distance;
+    this.trip.distance = distance;
   }
   handleRoutePointsChanged(routePoints: string): void {
-    this.trip.RoutePointsAsString = routePoints;
+    this.trip.routePointsAsString = routePoints;
   }
 }

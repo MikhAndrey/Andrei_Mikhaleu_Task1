@@ -4,25 +4,25 @@ import {ImageDTO} from "./images";
 import {DriverInfoDTO} from "./drivers";
 
 export class TripCreateDTO {
-  StartTime: Date;
-  EndTime?: Date;
-  Distance: number;
-  StartTimeZoneOffset: number;
-  FinishTimeZoneOffset: number;
-  DriverId?: number;
-  RoutePointsAsString: string;
-  ImagesAsFiles?: File[];
-  Name: string;
-  Public: boolean;
-  Description?: string;
+  startTime: Date;
+  endTime?: Date;
+  distance: number;
+  startTimeZoneOffset: number;
+  finishTimeZoneOffset: number;
+  driverId?: number;
+  routePointsAsString: string;
+  imagesAsFiles?: File[];
+  name: string;
+  public: boolean;
+  description?: string;
 
   constructor() {
-    this.Distance = 0;
-    this.StartTimeZoneOffset = 0;
-    this.FinishTimeZoneOffset = 0;
-    this.RoutePointsAsString = "";
-    this.Name = "";
-    this.Public = false;
+    this.distance = 0;
+    this.startTimeZoneOffset = 0;
+    this.finishTimeZoneOffset = 0;
+    this.routePointsAsString = "";
+    this.name = "";
+    this.public = false;
   }
 }
 
@@ -72,4 +72,15 @@ export class TripDateChangesDTO {
   newStartTimeAsString: string;
   newFinishTimeAsString: string;
   newDurationAsString: string;
+}
+
+export class TripEditDTO extends TripCreateDTO {
+  routePoints: RoutePointDTO[];
+  images: ImageDTO[];
+  id: number;
+  constructor() {
+    super();
+    this.routePoints = [];
+    this.images = [];
+  }
 }

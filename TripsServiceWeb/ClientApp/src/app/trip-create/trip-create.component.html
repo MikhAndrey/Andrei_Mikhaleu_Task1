@@ -1,30 +1,30 @@
 <form class = "bootstrap-form tp-form" #tripCreateForm id = "main-form" (submit)="submit(tripCreateForm)" enctype="multipart/form-data">
   <div class = "form-group tp-form-group">
     <label for = "nameInput" class = "tp-label">Your trip name:</label>
-    <input class = "form-control tp-text-input" type = "text" [(ngModel)]="trip.Name" name="Name" id = "nameInput"/>
+    <input class = "form-control tp-text-input" type = "text" [(ngModel)]="trip.name" name="Name" id = "nameInput"/>
     <div class = "tp-input-desc">Enter name of your trip</div>
     <span class="text-danger" *ngIf="validationErrors.Name">{{validationErrors.Name}}</span>
   </div>
   <div class = "form-group tp-form-group">
     <label for = "startTimeInput" class = "tp-label">Departure Time:</label>
-    <input class = "form-control tp-datetime-input" type = "datetime-local" [(ngModel)]="trip.StartTime" name="StartTime" id = "startTimeInput"/>
+    <input class = "form-control tp-datetime-input" type = "datetime-local" [(ngModel)]="trip.startTime" name="StartTime" id = "startTimeInput"/>
     <div class = "tp-input-desc">Select the start time of your trip in terms of start point timezone</div>
     <span class="text-danger" *ngIf="validationErrors.StartTime">{{validationErrors.StartTime}}</span>
   </div>
   <div class = "form-group tp-form-group">
     <label class = "tp-label">Arrival Time: </label>
-    <span class="tp-label" *ngIf="trip.EndTime">{{trip.EndTime.toLocaleDateString()}} {{trip.EndTime.toLocaleTimeString()}}</span>
+    <span class="tp-label" *ngIf="trip.endTime">{{trip.endTime.toLocaleDateString()}} {{trip.endTime.toLocaleTimeString()}}</span>
     <div class = "tp-input-desc">Your arrival time will be calculated automatically</div>
     <span class="text-danger" *ngIf="validationErrors.EndTime">{{validationErrors.EndTime}}</span>
   </div>
   <div class = "form-check tp-form-check">
-    <input class = "form-check-input tp-check-input" type = "checkbox" [(ngModel)]="trip.Public" name="Public" id = "publicCheck"/>
+    <input class = "form-check-input tp-check-input" type = "checkbox" [(ngModel)]="trip.public" name="Public" id = "publicCheck"/>
     <label class = "form-check-label tp-label" for = "publicCheck">Public</label>
     <div class = "tp-input-desc">Make your trip visible to everyone</div>
   </div>
   <div class = "form-group tp-form-group">
     <label for = "descriptionInput" class = "tp-label">Description:</label>
-    <textarea class="form-control tp-textarea" [(ngModel)]="trip.Description" name="Description" id="descriptionInput"></textarea>
+    <textarea class="form-control tp-textarea" [(ngModel)]="trip.description" name="Description" id="descriptionInput"></textarea>
     <div class = "tp-input-desc">Enter a couple of phrases describing your trip</div>
   </div>
   <div class = "tp-label">Click on the map to place trip points</div>
@@ -35,11 +35,11 @@
     (finishTimeChanged)="handleFinishTimeChanged($event)"
     (distanceChanged)="handleDistanceChanged($event)"
     (routePointsChanged)="handleRoutePointsChanged($event)"
-    [startTime]="trip.StartTime"
+    [startTime]="trip.startTime"
   ></app-route-map>
   <div class = "tp-label mt-2 mb-2">
     Trip's distance:
-    <span id = "route-length-view">{{trip.Distance}}</span> km
+    <span id = "route-length-view">{{trip.distance}}</span> km
   </div>
   <div class = "tp-label mt-2 mb-2">
     Trip's duration:

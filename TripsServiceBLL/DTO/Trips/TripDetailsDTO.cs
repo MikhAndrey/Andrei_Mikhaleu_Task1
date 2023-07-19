@@ -2,10 +2,11 @@
 using TripsServiceBLL.DTO.Drivers;
 using TripsServiceBLL.DTO.Images;
 using TripsServiceBLL.DTO.RoutePoints;
+using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.DTO.Trips;
 
-public class TripDetailsDTO : ReadTripDTO
+public class TripDetailsDTO : ReadTripDTO, IHasImages
 {
 	public int UserId { get; set; }
 	public bool IsCurrentUserTrip { get; set; }

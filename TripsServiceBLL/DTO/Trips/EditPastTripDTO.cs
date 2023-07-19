@@ -5,7 +5,7 @@ using TripsServiceBLL.Interfaces;
 
 namespace TripsServiceBLL.DTO.Trips;
 
-public class EditPastTripDTO : IMinimalTripChanges, IMinimalTripFactory
+public class EditPastTripDTO : IMinimalTripChanges, IMinimalTripFactory, IHasImages
 {
 	public List<IFormFile?>? ImagesAsFiles { get; set; }
 	public List<ImageDTO> Images { get; set; }

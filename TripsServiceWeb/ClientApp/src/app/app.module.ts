@@ -29,6 +29,7 @@ import {TripsActivityComponent} from "./trips-activity/trips-activity.component"
 import {TripsHistoryComponent} from "./trips-history/trips-history.component";
 import {TripDetailsComponent} from "./trip-details/trip-details.component";
 import {ReadonlyRouteMapComponent} from "./readonly-route-map/readonly-route-map.component";
+import {TripEditComponent} from "./trip-edit/trip-edit.component";
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import {ReadonlyRouteMapComponent} from "./readonly-route-map/readonly-route-map
     TripsActivityComponent,
     TripsHistoryComponent,
     TripDetailsComponent,
-    ReadonlyRouteMapComponent
+    ReadonlyRouteMapComponent,
+    TripEditComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -74,7 +76,8 @@ import {ReadonlyRouteMapComponent} from "./readonly-route-map/readonly-route-map
       { path: 'trips', component: TripsListComponent },
       { path: 'trips/activity', component: TripsActivityComponent },
       { path: 'trips/history', component: TripsHistoryComponent },
-      { path: 'trips/details/:id', component: TripDetailsComponent }
+      { path: 'trips/details/:id', component: TripDetailsComponent },
+      { path: 'trips/edit/current/:id', component: TripEditComponent }
     ])
   ],
   providers: [],

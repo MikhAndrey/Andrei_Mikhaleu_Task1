@@ -1,7 +1,14 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {TripCreateDTO, TripDateChangesDTO, TripDetailsDTO, TripReadDTO, TripReadDTOExtended} from "../../models/trips";
+import {
+  TripCreateDTO,
+  TripDateChangesDTO,
+  TripDetailsDTO,
+  TripEditDTO,
+  TripReadDTO,
+  TripReadDTOExtended
+} from "../../models/trips";
 
 @Injectable({ providedIn: 'root' })
 export class TripsService {
@@ -13,17 +20,17 @@ export class TripsService {
   }
 
   add(trip: TripCreateDTO, formData: FormData): Observable<TripCreateDTO> {
-    trip.ImagesAsFiles?.forEach(file => formData.append("ImagesAsFiles", file, file.name));
-    if (trip.EndTime) {
-      trip.EndTime.setTime(trip.EndTime.getTime() - trip.EndTime.getTimezoneOffset() * 60 * 1000);
-      formData.set("EndTime", new Date(trip.EndTime).toISOString());
+    trip.imagesAsFiles?.forEach(file => formData.append("ImagesAsFiles", file, file.name));
+    if (trip.endTime) {
+      trip.endTime.setTime(trip.endTime.getTime() - trip.endTime.getTimezoneOffset() * 60 * 1000);
+      formData.set("EndTime", new Date(trip.endTime).toISOString());
     }
-    formData.set("Distance", trip.Distance.toLocaleString());
-    formData.set("StartTimeZoneOffset", trip.StartTimeZoneOffset.toString());
-    formData.set("FinishTimeZoneOffset", trip.FinishTimeZoneOffset.toString());
-    formData.set("DriverId", trip.DriverId ? trip.DriverId!.toString() : "");
-    formData.set("RoutePointsAsString", trip.RoutePointsAsString);
-    formData.set("Public", trip.Public.toString());
+    formData.set("Distance", trip.distance.toLocaleString());
+    formData.set("StartTimeZoneOffset", trip.startTimeZoneOffset.toString());
+    formData.set("FinishTimeZoneOffset", trip.finishTimeZoneOffset.toString());
+    formData.set("DriverId", trip.driverId ? trip.driverId!.toString() : "");
+    formData.set("RoutePointsAsString", trip.routePointsAsString);
+    formData.set("Public", trip.public.toString());
     return this.http.post<TripCreateDTO>(this.apiUrl + '/create', formData);
   }
 
@@ -59,5 +66,9 @@ export class TripsService {
     trip.utcStartTimeZone = dateInfo.newStartTimeAsString;
     trip.utcFinishTimeZone = dateInfo.newFinishTimeAsString;
     trip.duration = dateInfo.newDurationAsString;
+  }
+
+  getTripForCurrentEditing(id: number): Observable<TripEditDTO> {
+    return this.http.get<TripEditDTO>(this.apiUrl + `/edit/current/${id}`);
   }
 }

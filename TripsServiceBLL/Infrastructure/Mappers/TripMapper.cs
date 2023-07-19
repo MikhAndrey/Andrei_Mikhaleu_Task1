@@ -34,7 +34,9 @@ public class TripMapper : Profile
 		CreateMap<Trip, EditTripDTO>()
 			.ForMember(dto => dto.StartTime,
 				opt => opt.MapFrom(src => src.StartTime.AddSeconds(src.StartTimeZoneOffset)))
-			.ForMember(dto => dto.EndTime, opt => opt.MapFrom(src => src.EndTime.AddSeconds(src.FinishTimeZoneOffset)));
+			.ForMember(dto => dto.EndTime, opt => opt.MapFrom(src => src.EndTime.AddSeconds(src.FinishTimeZoneOffset)))
+			.ForMember(dest => dest.Images, opt => 
+				opt.MapFrom(imageLinkResolver));
 		CreateMap<Trip, ReadTripDTO>()
 			.ForMember(dest => dest.StartTime,
 				opt => opt.MapFrom(src => src.StartTime.AddSeconds(src.StartTimeZoneOffset)))
