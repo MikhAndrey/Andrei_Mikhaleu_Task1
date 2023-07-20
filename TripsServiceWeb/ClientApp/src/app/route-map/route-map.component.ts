@@ -24,13 +24,6 @@ export class RouteMapComponent extends ReadonlyRouteMapComponent {
     }
   };
 
-  override ngOnInit() {
-    if (this.markerPositions) {
-      this.markerPositions.forEach(position => this.addMarker(new google.maps.LatLng(position)));
-      this.buildRoute();
-    }
-  }
-
   @Output() durationTextChanged: EventEmitter<string> = new EventEmitter();
   private _durationText?: string;
 

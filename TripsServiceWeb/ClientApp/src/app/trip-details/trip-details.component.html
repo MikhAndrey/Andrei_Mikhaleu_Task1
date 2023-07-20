@@ -15,7 +15,7 @@
   <p class = "tp-label" *ngIf="trip.isFuture">Time until trip: {{trip.timeInfo}}</p>
   <span class = "badge badge-pill badge-success" *ngIf="trip.isPast">{{trip.timeInfo}}</span>
 
-  <app-readonly-route-map [markerPositions]="initializeTripRoute()"></app-readonly-route-map>
+  <app-readonly-route-map></app-readonly-route-map>
 
   <button class = "btn btn-primary mt-3" *ngIf="trip.isCurrent && trip.isCurrentUserTrip" (click)="finishTrip(trip.id)">Finish trip</button>
   <button class = "btn btn-primary mt-3" *ngIf="trip.isFuture && trip.isCurrentUserTrip" (click)="startTrip(trip.id)">Start trip</button>

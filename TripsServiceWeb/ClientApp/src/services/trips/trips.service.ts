@@ -20,18 +20,14 @@ export class TripsService {
   }
 
   add(trip: TripCreateDTO, formData: FormData): Observable<TripCreateDTO> {
-    trip.imagesAsFiles?.forEach(file => formData.append("ImagesAsFiles", file, file.name));
-    if (trip.endTime) {
-      trip.endTime.setTime(trip.endTime.getTime() - trip.endTime.getTimezoneOffset() * 60 * 1000);
-      formData.set("EndTime", new Date(trip.endTime).toISOString());
-    }
-    formData.set("Distance", trip.distance.toLocaleString());
-    formData.set("StartTimeZoneOffset", trip.startTimeZoneOffset.toString());
-    formData.set("FinishTimeZoneOffset", trip.finishTimeZoneOffset.toString());
-    formData.set("DriverId", trip.driverId ? trip.driverId!.toString() : "");
-    formData.set("RoutePointsAsString", trip.routePointsAsString);
-    formData.set("Public", trip.public.toString());
+    this.initFormDataForTrip(trip, formData);
     return this.http.post<TripCreateDTO>(this.apiUrl + '/create', formData);
+  }
+
+  editCurrent(trip: TripEditDTO, formData: FormData): Observable<TripEditDTO> {
+    this.initFormDataForTrip(trip, formData);
+    formData.set("Id", trip.id.toString());
+    return this.http.put<TripEditDTO>(this.apiUrl + `/edit/current/${trip.id}`, formData);
   }
 
   delete(tripId: number): Observable<number>{
@@ -70,5 +66,19 @@ export class TripsService {
 
   getTripForCurrentEditing(id: number): Observable<TripEditDTO> {
     return this.http.get<TripEditDTO>(this.apiUrl + `/edit/current/${id}`);
+  }
+
+  private initFormDataForTrip(trip: TripCreateDTO, formData: FormData){
+    trip.imagesAsFiles?.forEach(file => formData.append("ImagesAsFiles", file, file.name));
+    if (trip.endTime) {
+      trip.endTime.setTime(trip.endTime.getTime() - trip.endTime.getTimezoneOffset() * 60 * 1000);
+      formData.set("EndTime", new Date(trip.endTime).toISOString());
+    }
+    formData.set("Distance", trip.distance.toLocaleString());
+    formData.set("StartTimeZoneOffset", trip.startTimeZoneOffset.toString());
+    formData.set("FinishTimeZoneOffset", trip.finishTimeZoneOffset.toString());
+    formData.set("DriverId", trip.driverId ? trip.driverId!.toString() : "");
+    formData.set("RoutePointsAsString", trip.routePointsAsString);
+    formData.set("Public", trip.public.toString());
   }
 }

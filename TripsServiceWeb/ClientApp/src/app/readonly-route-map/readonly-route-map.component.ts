@@ -1,12 +1,13 @@
-﻿import {Component, Input, OnInit} from '@angular/core';
+﻿import {Component, OnDestroy} from '@angular/core';
 import {MapDirectionsService} from '@angular/google-maps';
-import {map, Observable} from 'rxjs';
+import {map, Observable, Subscription} from 'rxjs';
+import {MapInitService} from "../../services/mapInit.service";
 
 @Component({
   selector: 'app-readonly-route-map',
   templateUrl: './readonly-route-map.component.html',
 })
-export class ReadonlyRouteMapComponent implements OnInit {
+export class ReadonlyRouteMapComponent implements OnDestroy {
   center: google.maps.LatLngLiteral = {
     lat: 51.5805,
     lng: 0
@@ -15,17 +16,19 @@ export class ReadonlyRouteMapComponent implements OnInit {
 
   directionsResults: Observable <google.maps.DirectionsResult | undefined> | undefined;
 
-  @Input() markerPositions: google.maps.LatLngLiteral[] = [];
+  markerPositions: google.maps.LatLngLiteral[] = [];
+  protected markerPositionsSubscription: Subscription;
 
   protected mapDirectionsService: MapDirectionsService;
-  constructor(mapDirectionsService: MapDirectionsService) {
+
+  constructor(mapDirectionsService: MapDirectionsService, protected mapInitService: MapInitService) {
     this.mapDirectionsService = mapDirectionsService;
+    this.markerPositionsSubscription = this.mapInitService.markerPositions$.subscribe((markerPositions) => this.initializeMapWithMarkerPositions(markerPositions));
   }
 
-  ngOnInit() {
-    if (this.markerPositions) {
-      this.buildRoute();
-    }
+  private initializeMapWithMarkerPositions(markerPositions: google.maps.LatLngLiteral[]){
+    this.markerPositions = markerPositions;
+    this.buildRoute();
   }
 
   protected buildRoute(){
@@ -33,10 +36,10 @@ export class ReadonlyRouteMapComponent implements OnInit {
       destination: this.markerPositions.at(-1)!,
       origin: this.markerPositions[0],
       waypoints: this.markerPositions.slice(1, -1).map(el => {
-       return {
-         location: el,
-         stopover: true
-       }
+        return {
+          location: el,
+          stopover: true
+        }
       }),
       travelMode: google.maps.TravelMode.DRIVING
     };
@@ -52,5 +55,9 @@ export class ReadonlyRouteMapComponent implements OnInit {
         return response.result
       })
     );
+  }
+
+  ngOnDestroy() {
+    this.markerPositionsSubscription.unsubscribe();
   }
 }

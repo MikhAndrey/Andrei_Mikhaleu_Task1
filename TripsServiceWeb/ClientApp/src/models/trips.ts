@@ -23,6 +23,7 @@ export class TripCreateDTO {
     this.routePointsAsString = "";
     this.name = "";
     this.public = false;
+    this.imagesAsFiles = [];
   }
 }
 
@@ -66,6 +67,13 @@ export class TripDetailsDTO extends TripReadDTO {
   timeInfo: string;
   feedbackText?: string;
   feedbackId: number;
+
+  constructor() {
+    super();
+    this.images = [];
+    this.comments = [];
+    this.routePoints = [];
+  }
 }
 
 export class TripDateChangesDTO {

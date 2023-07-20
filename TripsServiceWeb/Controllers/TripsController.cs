@@ -169,7 +169,7 @@ public class TripsController : ControllerBase
 	
 	
 	[HttpPut("edit/current/{id}")]
-	public async Task<IActionResult> Edit(int id, EditTripDTO trip)
+	public async Task<IActionResult> Edit(int id, [FromForm] EditTripDTO trip)
 	{
 		if (ModelState.IsValid)
 		{

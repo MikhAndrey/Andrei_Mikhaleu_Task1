@@ -9,6 +9,7 @@ import {TripIdService} from "../../services/trips/tripId.service";
 import {TripFeedbackAddService} from "../../services/trips/tripFeedbackAdd.service";
 import {CommentsService} from "../../services/comments.service";
 import {FeedbacksService} from "../../services/feedback.service";
+import {MapInitService} from "../../services/mapInit.service";
 
 @Component({
   selector: 'app-trip-details',
@@ -30,7 +31,8 @@ export class TripDetailsComponent implements OnInit, OnDestroy {
     private tripIdService: TripIdService,
     private tripFeedbackAddService: TripFeedbackAddService,
     private commentService: CommentsService,
-    private feedbackService: FeedbacksService
+    private feedbackService: FeedbacksService,
+    private mapInitService: MapInitService
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +40,8 @@ export class TripDetailsComponent implements OnInit, OnDestroy {
     this.tripService.getDetails(id).subscribe({
       next: (response) => {
         this.trip = response;
+        const markerPositions: google.maps.LatLngLiteral[] = this.routesService.mapRoutePointsToCoordinates(this.trip.routePoints);
+        this.mapInitService.setMarkerPositions(markerPositions);
       },
       error: (error) => {
         alert(error.error);
@@ -100,9 +104,5 @@ export class TripDetailsComponent implements OnInit, OnDestroy {
 
   setTripIdForRating(): void {
     this.tripIdService.setTripId(this.trip.id);
-  }
-
-  initializeTripRoute(): google.maps.LatLngLiteral[] {
-    return this.routesService.mapRoutePointsToCoordinates(this.trip.routePoints);
   }
 }
