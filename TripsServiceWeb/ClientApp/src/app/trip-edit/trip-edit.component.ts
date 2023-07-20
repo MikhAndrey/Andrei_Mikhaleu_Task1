@@ -44,7 +44,6 @@ export class TripEditComponent implements OnInit {
         this.redirectService.redirectToAddress("trips/");
       },
       error: (error) => {
-        console.log(error.error);
         this.validationErrors = error.error.errors || error.error;
       }
     });

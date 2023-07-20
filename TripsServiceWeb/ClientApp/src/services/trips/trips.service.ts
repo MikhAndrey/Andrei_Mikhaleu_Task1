@@ -2,6 +2,7 @@
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {
+  PastTripEditDTO,
   TripCreateDTO,
   TripDateChangesDTO,
   TripDetailsDTO,
@@ -28,6 +29,13 @@ export class TripsService {
     this.initFormDataForTrip(trip, formData);
     formData.set("Id", trip.id.toString());
     return this.http.put<TripEditDTO>(this.apiUrl + `/edit/current/${trip.id}`, formData);
+  }
+
+  editPast(trip: PastTripEditDTO, formData: FormData): Observable<PastTripEditDTO> {
+    trip.imagesAsFiles?.forEach(file => formData.append("ImagesAsFiles", file, file.name));
+    formData.set("Public", trip.public.toString());
+    formData.set("Id", trip.id.toString());
+    return this.http.put<PastTripEditDTO>(this.apiUrl + `/edit/past/${trip.id}`, formData);
   }
 
   delete(tripId: number): Observable<number>{
@@ -66,6 +74,10 @@ export class TripsService {
 
   getTripForCurrentEditing(id: number): Observable<TripEditDTO> {
     return this.http.get<TripEditDTO>(this.apiUrl + `/edit/current/${id}`);
+  }
+
+  getTripForPastEditing(id: number): Observable<PastTripEditDTO> {
+    return this.http.get<PastTripEditDTO>(this.apiUrl + `/edit/past/${id}`);
   }
 
   private initFormDataForTrip(trip: TripCreateDTO, formData: FormData){

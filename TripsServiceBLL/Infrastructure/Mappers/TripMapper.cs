@@ -15,7 +15,9 @@ public class TripMapper : Profile
 	{
 		CreateMap<Trip, ReadTripDTO>();
 		CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
-		CreateMap<Trip, EditPastTripDTO>();
+		CreateMap<Trip, EditPastTripDTO>()
+			.ForMember(dest => dest.Images, opt => 
+				opt.MapFrom(imageLinkResolver));
 		CreateMap<EditPastTripDTO, Trip>()
 			.ForMember(trip => trip.Id, opt => opt.Ignore())
 			.ForMember(trip => trip.UserId, opt => opt.Ignore())

@@ -192,7 +192,7 @@ public class TripsController : ControllerBase
 	}
 
 	[HttpPut("edit/past/{id}")]
-	public async Task<IActionResult> EditPast(int id, EditPastTripDTO trip)
+	public async Task<IActionResult> EditPast(int id, [FromForm] EditPastTripDTO trip)
 	{
 		if (ModelState.IsValid)
 		{

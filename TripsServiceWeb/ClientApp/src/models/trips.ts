@@ -92,3 +92,20 @@ export class TripEditDTO extends TripCreateDTO {
     this.images = [];
   }
 }
+
+export class PastTripEditDTO {
+  images: ImageDTO[];
+  imagesAsFiles?: File[];
+  name: string;
+  public: boolean;
+  description?: string;
+  id: number;
+  constructor() {
+    this.imagesAsFiles = [];
+    this.images = [];
+  }
+}
+
+export interface PastTripEditValidationErrors {
+  Name?: string[];
+}
