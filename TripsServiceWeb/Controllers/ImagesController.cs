@@ -17,7 +17,7 @@ public class ImagesController : ControllerBase
     }
     
     [Authorize]
-    [HttpDelete("delete")]
+    [HttpDelete("delete/{imageId}/{tripId}")]
     public async Task<IActionResult> DeleteImage(int imageId, int tripId)
     {
         try
