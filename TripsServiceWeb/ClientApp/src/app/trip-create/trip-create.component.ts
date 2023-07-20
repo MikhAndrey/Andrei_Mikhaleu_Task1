@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {TripCreateDTO, TripCreateValidationErrors} from "../../models/trips";
 import {TripsService} from "../../services/trips/trips.service";
 import {RedirectService} from "../../services/redirect.service";
+import {DriverInfoDTO} from "../../models/drivers";
 
 @Component({
   selector: 'app-trip-create',
@@ -11,6 +12,7 @@ import {RedirectService} from "../../services/redirect.service";
 export class TripCreateComponent implements OnInit {
   trip: TripCreateDTO = new TripCreateDTO();
   durationText?: string;
+  driverName?: string;
   validationErrors: TripCreateValidationErrors = {};
 
   constructor(private tripService: TripsService, private redirectService: RedirectService) { }
@@ -50,5 +52,10 @@ export class TripCreateComponent implements OnInit {
   }
   handleRoutePointsChanged(routePoints: string): void {
     this.trip.routePointsAsString = routePoints;
+  }
+
+  handleSelectedDriverChanged(driver: DriverInfoDTO): void {
+    this.trip.driverId = driver.id;
+    this.driverName = driver.name;
   }
 }

@@ -1,4 +1,4 @@
-﻿import {Component, OnInit} from '@angular/core';
+﻿import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {DriversService} from "../../services/drivers.service";
 import {DriverInfoDTO} from "../../models/drivers";
 
@@ -9,6 +9,9 @@ import {DriverInfoDTO} from "../../models/drivers";
 })
 export class DriversListModalComponent implements OnInit {
   drivers: DriverInfoDTO[] = [];
+  selectedDriver: DriverInfoDTO;
+
+  @Output() driverSelected: EventEmitter<DriverInfoDTO> = new EventEmitter();
 
   constructor(private driverService: DriversService) {
   }
@@ -23,5 +26,15 @@ export class DriversListModalComponent implements OnInit {
         alert("Impossible to load drivers list. Try later");
       }
     });
+  }
+
+  selectDriver(driver: DriverInfoDTO): void {
+    this.selectedDriver = driver;
+    this.driverSelected.emit(this.selectedDriver);
+  }
+
+  resetDriverSelection(){
+    this.selectedDriver = new DriverInfoDTO();
+    this.driverSelected.emit(this.selectedDriver);
   }
 }

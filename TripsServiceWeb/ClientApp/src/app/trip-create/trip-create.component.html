@@ -48,7 +48,7 @@
   <app-image-upload (filesChanged)="handleFilesChanged($event)"></app-image-upload>
   <div class = "tp-label mt-2 mb-2">
     Trip's driver:
-    <span id = "trip-driver-name"></span>
+    <span id = "trip-driver-name">{{driverName}}</span>
   </div>
   <div>
     <button type = "button" class = "btn btn-primary mt-2 mb-3 drivers-invoker" data-bs-toggle = "modal" data-bs-target = "#driverListModal">Select driver</button>
@@ -57,4 +57,4 @@
     <button class = "btn btn-success tp-submit-btn mt-3" type="submit">Create trip</button>
   </div>
 </form>
-<app-drivers-list-modal></app-drivers-list-modal>
+<app-drivers-list-modal (driverSelected)="handleSelectedDriverChanged($event)"></app-drivers-list-modal>
