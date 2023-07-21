@@ -9,7 +9,7 @@
       <div class="modal-body" id="drivers-container">
         <div class="row row-cols-2">
           <div class="col mb-4" *ngFor="let driver of drivers" (click)="selectDriver(driver)">
-            <div class="card h-100 tp-gradient-standard driver-button d-flex flex-row align-items-center" [class.active-driver-button]="driver === selectedDriver">
+            <div class="card h-100 tp-gradient-standard driver-button d-flex flex-row align-items-center" [class.active-driver-button]="driver.id === selectedDriverId">
               <div class="mr-3 image-container">
                 <img class="driver-photo" src="{{driver.photoLink}}" alt="Driver Photo">
               </div>

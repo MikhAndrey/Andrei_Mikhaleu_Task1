@@ -6,6 +6,8 @@ import {RoutesService} from "../../services/routes.service";
 import {ActivatedRoute} from "@angular/router";
 import {ImagesService} from "../../services/images.service";
 import {MapInitService} from "../../services/mapInit.service";
+import {DriverInfoDTO} from "../../models/drivers";
+import {DriverIdService} from "../../services/driverId.service";
 
 @Component({
   selector: 'app-trip-edit',
@@ -14,6 +16,7 @@ import {MapInitService} from "../../services/mapInit.service";
 export class TripEditComponent implements OnInit {
   trip: TripEditDTO = new TripEditDTO();
   durationText?: string;
+  driverName?: string;
   validationErrors: TripCreateValidationErrors = {};
 
   constructor(
@@ -22,13 +25,15 @@ export class TripEditComponent implements OnInit {
     private routesService: RoutesService,
     private route: ActivatedRoute,
     private imagesService: ImagesService,
-    private mapInitService: MapInitService) { }
+    private mapInitService: MapInitService,
+    private driverIdService: DriverIdService) { }
 
   ngOnInit(): void {
     const id: number = parseInt(this.route.snapshot.paramMap.get('id')!);
     this.tripService.getTripForCurrentEditing(id).subscribe({
       next: (response) => {
         this.trip = response;
+        this.driverIdService.setDriverId(this.trip.driverId);
         this.trip.endTime = new Date(this.trip.endTime!);
         const markerPositions: google.maps.LatLngLiteral[] = this.routesService.mapRoutePointsToCoordinates(this.trip.routePoints);
         this.mapInitService.setMarkerPositions(markerPositions);
@@ -76,5 +81,10 @@ export class TripEditComponent implements OnInit {
       next: () => this.trip.images = this.trip.images.filter(image => image.id !== id),
       error: (error) => alert(error.error)
     })
+  }
+
+  handleSelectedDriverChanged(driver: DriverInfoDTO): void {
+    this.trip.driverId = driver.id;
+    this.driverName = driver.name;
   }
 }
