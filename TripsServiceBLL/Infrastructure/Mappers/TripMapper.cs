@@ -11,13 +11,13 @@ public class TripMapper : Profile
 	public TripMapper(
 		CurrentUserTripResolver currentUserTripResolver, 
 		NewTripUserIdResolver newTripUserIdResolver,
-		ImageLinkResolver imageLinkResolver)
+		TripImageLinkResolver tripImageLinkResolver)
 	{
 		CreateMap<Trip, ReadTripDTO>();
 		CreateMap<List<ReadTripDTO>, IQueryable<Trip>>();
 		CreateMap<Trip, EditPastTripDTO>()
 			.ForMember(dest => dest.Images, opt => 
-				opt.MapFrom(imageLinkResolver));
+				opt.MapFrom(tripImageLinkResolver));
 		CreateMap<EditPastTripDTO, Trip>()
 			.ForMember(trip => trip.Id, opt => opt.Ignore())
 			.ForMember(trip => trip.UserId, opt => opt.Ignore())
@@ -38,7 +38,7 @@ public class TripMapper : Profile
 				opt => opt.MapFrom(src => src.StartTime.AddSeconds(src.StartTimeZoneOffset)))
 			.ForMember(dto => dto.EndTime, opt => opt.MapFrom(src => src.EndTime.AddSeconds(src.FinishTimeZoneOffset)))
 			.ForMember(dest => dest.Images, opt => 
-				opt.MapFrom(imageLinkResolver));
+				opt.MapFrom(tripImageLinkResolver));
 		CreateMap<Trip, ReadTripDTO>()
 			.ForMember(dest => dest.StartTime,
 				opt => opt.MapFrom(src => src.StartTime.AddSeconds(src.StartTimeZoneOffset)))
@@ -89,7 +89,7 @@ public class TripMapper : Profile
 					return "Completed";
 				}))
 			.ForMember(dest => dest.Images, opt => 
-				opt.MapFrom(imageLinkResolver));
+				opt.MapFrom(tripImageLinkResolver));
 		CreateMap<Trip, TripDateChangesDTO>()
 			.ForMember(dest => dest.NewStartTimeAsString,
 				opt => opt.MapFrom(src => string.Concat(

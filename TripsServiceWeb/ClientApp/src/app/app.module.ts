@@ -30,6 +30,7 @@ import {ReadonlyRouteMapComponent} from "./readonly-route-map/readonly-route-map
 import {TripEditComponent} from "./trip-edit/trip-edit.component";
 import {TripEditPastComponent} from "./trip-edit-past/trip-edit-past.component";
 import {DriversListComponent} from "./drivers-list/drivers-list.component";
+import {DriverDetailsComponent} from "./driver-details/driver-details.component";
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import {DriversListComponent} from "./drivers-list/drivers-list.component";
     ReadonlyRouteMapComponent,
     TripEditComponent,
     TripEditPastComponent,
-    DriversListComponent
+    DriversListComponent,
+    DriverDetailsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -77,7 +79,8 @@ import {DriversListComponent} from "./drivers-list/drivers-list.component";
       { path: 'trips/details/:id', component: TripDetailsComponent },
       { path: 'trips/edit/current/:id', component: TripEditComponent },
       { path: 'trips/edit/past/:id', component: TripEditPastComponent },
-      { path: 'drivers', component: DriversListComponent }
+      { path: 'drivers', component: DriversListComponent },
+      { path: 'drivers/details/:id', component: DriverDetailsComponent },
     ])
   ],
   providers: [],

@@ -9,5 +9,6 @@ public class ImageMapper : Profile
 	public ImageMapper()
 	{
 		CreateMap<Image, ImageDTO>();
+		CreateMap<DriverPhoto, ImageDTO>();
 	}
 }

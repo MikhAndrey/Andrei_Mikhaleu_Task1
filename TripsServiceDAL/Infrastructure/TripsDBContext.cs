@@ -86,7 +86,7 @@ public class TripsDBContext : DbContext
 
 		modelBuilder.Entity<DriverPhoto>()
 			.HasOne(dp => dp.Driver)
-			.WithMany(d => d.Photos)
+			.WithMany(d => d.Images)
 			.HasForeignKey(dp => dp.DriverId)
 			.OnDelete(DeleteBehavior.Restrict);
 

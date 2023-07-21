@@ -21,7 +21,7 @@ public class TripRepository : EFGenericRepository<Trip>, ITripRepository
 			.Include(t => t.User)
 			.Include(t => t.Feedback)
 			.Include(t => t.Driver)
-			.ThenInclude(d => d.Photos)
+			.ThenInclude(d => d.Images)
 			.Include(t => t.Driver)
 			.ThenInclude(d => d.Trips)
 			.ThenInclude(t => t.Feedback)

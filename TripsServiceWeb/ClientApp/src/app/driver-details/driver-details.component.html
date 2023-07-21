@@ -1,0 +1,47 @@
+﻿<h1 class = "tp-label">Driver details</h1>
+<div class = "tp-form">
+  <div class = "row">
+    <div class = "col-md-6">
+      <div id = "carouselExampleIndicators" class = "carousel slide" data-bs-ride = "carousel">
+        <div class = "carousel-indicators">
+          <button *ngFor="let image of driver.images;let i = index" type = "button" data-bs-target = "#carouselExampleIndicators" [attr.data-bs-slide-to]="i"
+                  [attr.aria-current]="i === 0 ? 'true' : 'false'" [attr.aria-label]="'Slide ' + i" class ="{{i === 0 ? 'active' : ''}}"></button>
+        </div>
+        <div class = "carousel-inner">
+          <div class = "carousel-item {{i === 0 ? 'active' : ''}}" *ngFor="let image of driver.images;let i = index">
+            <img [src]="image.link" class = "d-block w-100 img-responsive carousel-image" alt = "Trip photo">
+          </div>
+        </div>
+        <a class = "carousel-control-prev" type = "button" data-bs-target = "#carouselExampleIndicators" [attr.data-bs-slide]="'prev'">
+          <span class = "carousel-control-prev-icon" [attr.aria-hidden]="true"></span>
+          <span class = "visually-hidden">Previous</span>
+        </a>
+        <a class = "carousel-control-next" type = "button" data-bs-target = "#carouselExampleIndicators" [attr.data-bs-slide]="'next'">
+          <span class = "carousel-control-next-icon" [attr.aria-hidden]="true"></span>
+          <span class = "visually-hidden">Next</span>
+        </a>
+      </div>
+    </div>
+    <div class = "col-md-6">
+      <h2 class = "tp-label">{{driver.name}}</h2>
+      <p class = "tp-label">Experience: {{driver.experience}} years</p>
+      <app-trip-rating style = "display: flex; flex-wrap: wrap;" [actualRating]="driver.averageRating"></app-trip-rating>
+    </div>
+  </div>
+  <h2 class = "mt-5 tp-label">Feedbacks</h2>
+  <h4 *ngIf="driver.feedbacks.length === 0; else feedbacksList" class = "tp-label">There's nothing to see here yet</h4>
+  <ng-template #feedbacksList>
+    <ul id = "all-feedbacks-container">
+      <li class = "mt-3 feedback-container" data-feedback-id = "@feedback.Id" *ngFor="let feedback of driver.feedbacks">
+        <p>
+          <strong class = "tp-label">{{feedback.userName}}</strong>
+        </p>
+        <app-trip-rating [actualRating]="feedback.rating"></app-trip-rating>
+        <p class = "feedback-text">{{feedback.text}}</p>
+        <hr/>
+      </li>
+    </ul>
+  </ng-template>
+</div>
+
+

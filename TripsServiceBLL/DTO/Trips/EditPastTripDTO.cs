@@ -8,7 +8,7 @@ namespace TripsServiceBLL.DTO.Trips;
 public class EditPastTripDTO : IMinimalTripChanges, IMinimalTripFactory, IHasImages
 {
 	public List<IFormFile?>? ImagesAsFiles { get; set; }
-	public List<ImageDTO>? Images { get; set; }
+	public List<ImageDTO> Images { get; set; }
 	public int Id { get; set; }
 	[Required(ErrorMessage = "Please enter a name for your trip")]
 	public string? Name { get; set; }

@@ -6,7 +6,7 @@ namespace TripsServiceDAL.Entities;
 public class Driver : IIdentifiable, ISoftDelete
 {
 	public string Name { get; set; }
-	public List<DriverPhoto> Photos { get; set; }
+	public List<DriverPhoto> Images { get; set; }
 	public int Experience { get; set; }
 	public List<Trip> Trips { get; set; }
 

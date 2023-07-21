@@ -14,7 +14,7 @@ public class DriverRepository : EFGenericRepository<Driver>, IDriverRepository
 	public new IQueryable<Driver> GetAll()
 	{
 		return _dbSet
-			.Include(d => d.Photos)
+			.Include(d => d.Images)
 			.Include(d => d.Trips)
 			.ThenInclude(t => t.Feedback);
 	}
@@ -22,7 +22,7 @@ public class DriverRepository : EFGenericRepository<Driver>, IDriverRepository
 	public new async Task<Driver> GetByIdAsync(int id)
 	{
 		Driver? driver = await _dbSet
-			.Include(d => d.Photos)
+			.Include(d => d.Images)
 			.Include(d => d.Trips)
 			.ThenInclude(t => t.Feedback)
 			.Include(d => d.Trips)
