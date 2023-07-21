@@ -1,0 +1,23 @@
+﻿<h1 class = "tp-label">Our drivers</h1>
+<p *ngIf="drivers.length === 0" class = "tp-label">No drivers here yet.</p>
+<div class = "row row-cols-2">
+  <div *ngFor="let driver of drivers" class = "col mb-4">
+    <div class = "card h-100 br-20">
+      <div class = "card-header text-light tp-gradient-standard">
+        <h5 class = "card-title tp-label">{{driver.name}}</h5>
+      </div>
+      <div class = "card-body bg-light br-20 d-flex flex-row align-items-center">
+        <div class="mr-4 image-container">
+          <img [src]="driver.photoLink" alt = "Driver Photo" class="driver-photo"/>
+        </div>
+        <div class="main-driver-info">
+          <p class = "tp-label">Experience: {{driver.experience}} years</p>
+          <app-trip-rating class="driver-rating-info" [actualRating]="driver.averageRating"></app-trip-rating>
+        </div>
+      </div>
+      <div class = "tp-gradient-reverse br-20">
+        <a routerLink="/drivers/details/{{driver.id}}" class = "btn btn-primary ml-3 mt-2 mb-3">Details</a>
+      </div>
+    </div>
+  </div>
+</div>
