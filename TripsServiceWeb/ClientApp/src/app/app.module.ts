@@ -32,6 +32,7 @@ import {TripEditPastComponent} from "./trip-edit-past/trip-edit-past.component";
 import {DriversListComponent} from "./drivers-list/drivers-list.component";
 import {DriverDetailsComponent} from "./driver-details/driver-details.component";
 import {FeedbackUpdateComponent} from "./feedback-update/feedback-update.component";
+import {AuthGuard} from "../services/authGuard";
 
 @NgModule({
   declarations: [
@@ -72,20 +73,21 @@ import {FeedbackUpdateComponent} from "./feedback-update/feedback-update.compone
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'register', component: RegisterFormComponent },
       { path: 'login', component: LoginFormComponent },
-      { path: 'statistics/heatmap', component: HeatmapStatisticsComponent },
-      { path: 'statistics/durations', component: DurationStatisticsComponent },
-      { path: 'trips/create', component: TripCreateComponent },
-      { path: 'trips', component: TripsListComponent },
-      { path: 'trips/activity', component: TripsActivityComponent },
-      { path: 'trips/history', component: TripsHistoryComponent },
-      { path: 'trips/details/:id', component: TripDetailsComponent },
-      { path: 'trips/edit/current/:id', component: TripEditComponent },
-      { path: 'trips/edit/past/:id', component: TripEditPastComponent },
+      { path: 'statistics/heatmap', component: HeatmapStatisticsComponent, canActivate: [AuthGuard] },
+      { path: 'statistics/durations', component: DurationStatisticsComponent, canActivate: [AuthGuard] },
+      { path: 'trips/create', component: TripCreateComponent, canActivate: [AuthGuard] },
+      { path: 'trips', component: TripsListComponent, canActivate: [AuthGuard] },
+      { path: 'trips/activity', component: TripsActivityComponent, canActivate: [AuthGuard] },
+      { path: 'trips/history', component: TripsHistoryComponent, canActivate: [AuthGuard] },
+      { path: 'trips/details/:id', component: TripDetailsComponent, canActivate: [AuthGuard] },
+      { path: 'trips/edit/current/:id', component: TripEditComponent, canActivate: [AuthGuard] },
+      { path: 'trips/edit/past/:id', component: TripEditPastComponent, canActivate: [AuthGuard] },
       { path: 'drivers', component: DriversListComponent },
       { path: 'drivers/details/:id', component: DriverDetailsComponent },
     ])
   ],
-  providers: [],
+  exports: [RouterModule],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

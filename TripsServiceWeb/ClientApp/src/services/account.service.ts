@@ -12,6 +12,8 @@ export type UserNameResponse = {
 export class AccountService {
 
   private apiUrl: string;
+
+  isAuthenticated: boolean;
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string)
   {
     this.apiUrl = baseUrl + "api/account";

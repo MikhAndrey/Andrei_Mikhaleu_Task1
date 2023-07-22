@@ -31,6 +31,7 @@ export class UserAccountOptionsComponent implements OnInit {
   ngOnInit(): void {
     this.accountService.getUserName().subscribe(
       (response: UserNameResponse) => {
+        this.accountService.isAuthenticated = response.userName !== null
         this.userName = response.userName
       }
     );
@@ -40,6 +41,7 @@ export class UserAccountOptionsComponent implements OnInit {
     this.accountService.logout().subscribe(
       () => {
         this.userName = undefined;
+        this.accountService.isAuthenticated = false;
         this.redirectionService.redirectToAddress("");
       }
     );
