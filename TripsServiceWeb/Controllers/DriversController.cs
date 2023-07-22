@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.DTO.Drivers;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Infrastructure.Exceptions;
@@ -19,15 +18,13 @@ public class DriversController : ControllerBase
         _driverService = driverService;
     }
     
-    [Authorize]
     [HttpGet("list")]
     public IActionResult List()
     {
         IEnumerable<ReadDriverDTO> drivers = _driverService.GetDriversOverall();
         return Ok(drivers);
     }
-
-    [Authorize]
+    
     [HttpGet("details/{id}")]
     public async Task<IActionResult> Details(int id)
     {

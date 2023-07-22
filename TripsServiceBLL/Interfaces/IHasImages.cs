@@ -4,5 +4,5 @@ namespace TripsServiceBLL.Interfaces;
 
 public interface IHasImages
 {
-    List<ImageDTO> Images { get; set; }
+    List<ImageDTO>? Images { get; set; }
 }
