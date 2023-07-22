@@ -10,6 +10,7 @@ import {TripFeedbackAddService} from "../../services/trips/tripFeedbackAdd.servi
 import {CommentsService} from "../../services/comments.service";
 import {FeedbacksService} from "../../services/feedback.service";
 import {MapInitService} from "../../services/mapInit.service";
+import {FeedbackReadDTO} from "../../models/feedbacks";
 
 @Component({
   selector: 'app-trip-details',
@@ -51,8 +52,9 @@ export class TripDetailsComponent implements OnInit, OnDestroy {
       (comment) => this.trip.comments.unshift(comment));
     this.tripFeedbackAddSubscription = this.tripFeedbackAddService.addedFeedback$.subscribe(
       (feedback): void => {
-        this.trip.feedbackText = feedback.Text;
-        this.trip.rating = feedback.Rating;
+        this.trip.feedbackText = feedback.text;
+        this.trip.feedbackId = feedback.id;
+        this.trip.rating = feedback.rating;
         this.trip.isNeedToBeRated = false;
       });
   }
@@ -72,7 +74,10 @@ export class TripDetailsComponent implements OnInit, OnDestroy {
 
   deleteFeedback(id: number): void {
     this.feedbackService.delete(id).subscribe({
-      next: () => this.trip.rating = undefined,
+      next: () => {
+        this.trip.rating = undefined
+        this.trip.isNeedToBeRated = true
+      },
       error: (error) => {
         alert(error.error);
       }
@@ -104,5 +109,10 @@ export class TripDetailsComponent implements OnInit, OnDestroy {
 
   setTripIdForRating(): void {
     this.tripIdService.setTripId(this.trip.id);
+  }
+
+  handleFeedbackChanged(feedback: FeedbackReadDTO): void {
+    this.trip.feedbackText = feedback.text;
+    this.trip.rating = feedback.rating;
   }
 }

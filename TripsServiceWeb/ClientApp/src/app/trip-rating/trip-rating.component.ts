@@ -8,7 +8,19 @@ import {maxRating} from "../appConstants";
 export class TripRatingComponent implements AfterViewInit{
   starsCount: any[] = new Array(maxRating);
 
-  @Input() actualRating: number;
+  private _actualRating: number;
+
+  private isViewInited: boolean = false;
+  @Input() set actualRating(value: number){
+    this._actualRating = value;
+    if (this.isViewInited) {
+      this.applyRating();
+    }
+  }
+
+  get actualRating(): number {
+    return this._actualRating;
+  }
 
   @ViewChild('starContainer') starContainer: ElementRef;
   @ViewChild('ratingValueContainer') ratingValueContainer: ElementRef;
@@ -16,6 +28,7 @@ export class TripRatingComponent implements AfterViewInit{
 
   ngAfterViewInit(): void {
     this.applyRating();
+    this.isViewInited = true;
   }
 
   buildRating(rating: number): void {
@@ -34,7 +47,7 @@ export class TripRatingComponent implements AfterViewInit{
   }
 
   applyRating(): void {
-    this.buildRating(this.actualRating);
-    this.ratingValueContainer.nativeElement.style.backgroundColor = `rgb(${255 - 255 / maxRating * this.actualRating}, ${255 / maxRating * this.actualRating}, 0)`;
+    this.buildRating(this._actualRating);
+    this.ratingValueContainer.nativeElement.style.backgroundColor = `rgb(${255 - 255 / maxRating * this._actualRating}, ${255 / maxRating * this._actualRating}, 0)`;
   }
 }

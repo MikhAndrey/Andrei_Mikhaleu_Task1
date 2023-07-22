@@ -1,7 +1,7 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {FeedbackCreateDTO} from "../models/feedbacks";
+import {FeedbackCreateDTO, FeedbackReadDTO} from "../models/feedbacks";
 
 @Injectable({ providedIn: 'root' })
 export class FeedbacksService {
@@ -12,8 +12,12 @@ export class FeedbacksService {
     this.apiUrl = baseUrl + "api/feedbacks";
   }
 
-  add(feedback: FeedbackCreateDTO): Observable<FeedbackCreateDTO> {
-    return this.http.post<FeedbackCreateDTO>(this.apiUrl + '/create', feedback);
+  add(feedback: FeedbackCreateDTO): Observable<FeedbackReadDTO> {
+    return this.http.post<FeedbackReadDTO>(this.apiUrl + '/create', feedback);
+  }
+
+  update(feedback: FeedbackReadDTO): Observable<FeedbackReadDTO> {
+    return this.http.put<FeedbackReadDTO>(this.apiUrl + '/update', feedback);
   }
 
   delete(id: number): Observable<number> {

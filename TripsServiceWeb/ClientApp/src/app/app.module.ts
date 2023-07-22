@@ -31,6 +31,7 @@ import {TripEditComponent} from "./trip-edit/trip-edit.component";
 import {TripEditPastComponent} from "./trip-edit-past/trip-edit-past.component";
 import {DriversListComponent} from "./drivers-list/drivers-list.component";
 import {DriverDetailsComponent} from "./driver-details/driver-details.component";
+import {FeedbackUpdateComponent} from "./feedback-update/feedback-update.component";
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import {DriverDetailsComponent} from "./driver-details/driver-details.component"
     TripEditComponent,
     TripEditPastComponent,
     DriversListComponent,
-    DriverDetailsComponent
+    DriverDetailsComponent,
+    FeedbackUpdateComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

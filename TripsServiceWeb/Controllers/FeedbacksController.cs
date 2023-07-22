@@ -29,7 +29,7 @@ public class FeedbacksController : ControllerBase
         {
             ReadFeedbackDTO addedFeedback = await _feedbackService.AddAsync(feedback);
             await _feedbackHubContext.Clients.All.SendAsync("FeedbackCreate", addedFeedback);
-            return Ok();
+            return Ok(addedFeedback);
         }
         catch (EntityNotFoundException ex)
         {

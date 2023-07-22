@@ -1,5 +1,15 @@
-﻿import {Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {FeedbackCreateDTO} from "../../models/feedbacks";
+﻿import {
+  AfterViewInit,
+  Component,
+  ElementRef, EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit, Output,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
+import {FeedbackCreateDTO, FeedbackReadDTO} from "../../models/feedbacks";
 import {FeedbacksService} from "../../services/feedback.service";
 import {TripIdService} from "../../services/trips/tripId.service";
 import {Subscription} from "rxjs";
@@ -7,13 +17,13 @@ import {maxRating} from "../appConstants";
 import {TripFeedbackAddService} from "../../services/trips/tripFeedbackAdd.service";
 
 @Component({
-  selector: 'app-feedback-add-modal',
-  templateUrl: './feedback-add.component.html'
+  selector: 'app-feedback-update-modal',
+  templateUrl: './feedback-update.component.html'
 })
-export class FeedbackAddComponent implements OnInit, OnDestroy {
-  feedback: FeedbackCreateDTO = new FeedbackCreateDTO();
+export class FeedbackUpdateComponent implements AfterViewInit {
 
-  private tripIdSubscription: Subscription;
+  @Input() feedback: FeedbackReadDTO = new FeedbackReadDTO();
+  @Output() feedbackChanged: EventEmitter<FeedbackReadDTO> = new EventEmitter();
 
   starsCount: any[] = new Array(maxRating);
 
@@ -21,27 +31,24 @@ export class FeedbackAddComponent implements OnInit, OnDestroy {
   @ViewChildren('filledStars') filledStars: QueryList<ElementRef>;
   @ViewChild('modalCloseButton') modalCloseButton: ElementRef;
 
-  private starsNeedReset: boolean = true;
+  private starsNeedReset: boolean = false;
 
   constructor(
-    private feedbackService: FeedbacksService,
-    private tripIdService: TripIdService,
-    private tripFeedbackAddService: TripFeedbackAddService) {
+    private feedbackService: FeedbacksService) {
   }
 
-  ngOnInit() {
-    this.tripIdSubscription = this.tripIdService.tripId$.subscribe((tripId) => this.feedback.TripId = tripId);
+  ngAfterViewInit() {
+    this.starMouseEnter(this.feedback.rating - 1);
   }
   ngOnDestroy(): void {
-    this.tripIdSubscription.unsubscribe();
+
   }
 
-  addFeedback() {
-    if (this.feedback.Rating != 0 || confirm("You are going to rate this trip as 0 stars. Continue?")) {
-      this.feedbackService.add(this.feedback).subscribe({
-        next: (response) => {
-          this.tripFeedbackAddService.setTripIdToAddFeedback(this.feedback.TripId);
-          this.tripFeedbackAddService.setAddedFeedback(response);
+  updateFeedback() {
+    if (this.feedback.rating != 0 || confirm("You are going to rate this trip as 0 stars. Continue?")) {
+      this.feedbackService.update(this.feedback).subscribe({
+        next: () => {
+          this.feedbackChanged.emit(this.feedback);
           this.modalCloseButton.nativeElement.click();
         },
         error: (error) => {
@@ -73,7 +80,7 @@ export class FeedbackAddComponent implements OnInit, OnDestroy {
   }
 
   starMouseClick(index: number): void {
-    this.feedback.Rating = index + 1;
+    this.feedback.rating = index + 1;
     this.starsNeedReset = false;
   }
 }

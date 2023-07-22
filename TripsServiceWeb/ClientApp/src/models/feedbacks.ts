@@ -8,5 +8,5 @@ export class FeedbackReadDTO {
   id: number;
   text?: string;
   rating: number;
-  userName: string;
+  userName?: string;
 }

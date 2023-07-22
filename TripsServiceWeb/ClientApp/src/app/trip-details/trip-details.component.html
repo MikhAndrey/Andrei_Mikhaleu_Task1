@@ -65,7 +65,7 @@
   </div>
 
   <div class = "mt-4" *ngIf="trip.isNeedToBeRated && trip.isCurrentUserTrip">
-    <button type = "button" class = "btn btn-primary" data-trip-id = "@Model.Id" data-bs-toggle = "modal" data-bs-target = "#rateDriverModal" (click)="setTripIdForRating()">Rate driver of this trip</button>
+    <button type = "button" class = "btn btn-primary" data-bs-toggle = "modal" data-bs-target = "#rateDriverModal" (click)="setTripIdForRating()">Rate driver of this trip</button>
   </div>
 
   <div class="mt-4" *ngIf="trip.rating">
@@ -76,7 +76,7 @@
     </div>
     <div class="mt-2">
       <span class="mr-2">
-        <button type = "button" class = "btn btn-secondary">Edit</button>
+        <button type = "button" class = "btn btn-secondary" data-bs-toggle = "modal" data-bs-target = "#updateFeedbackModal">Edit</button>
       </span>
       <span>
         <button class = "btn btn-danger" (click)="deleteFeedback(trip.feedbackId)">Delete</button>
@@ -99,4 +99,10 @@
     </li>
   </ul>
 </div>
-<app-feedback-add-modal></app-feedback-add-modal>
+<app-feedback-add-modal *ngIf="!trip.rating"></app-feedback-add-modal>
+<app-feedback-update-modal *ngIf="trip.rating" [feedback]="{
+id: this.trip.feedbackId,
+rating: this.trip.rating,
+text: this.trip.feedbackText
+}"
+(feedbackChanged)="handleFeedbackChanged($event)"></app-feedback-update-modal>
