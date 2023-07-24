@@ -42,6 +42,7 @@ export class DriversListModalComponent implements OnInit, OnDestroy {
   }
 
   selectDriver(driver: DriverInfoDTO): void {
+    this.selectedDriverId = driver.id;
     this.driverSelected.emit(driver);
   }
 
