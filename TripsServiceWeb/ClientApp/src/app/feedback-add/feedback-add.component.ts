@@ -1,4 +1,14 @@
-﻿import {Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+﻿import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import {FeedbackCreateDTO} from "../../models/feedbacks";
 import {FeedbacksService} from "../../services/feedback.service";
 import {TripIdService} from "../../services/trips/tripId.service";
@@ -20,6 +30,8 @@ export class FeedbackAddComponent implements OnInit, OnDestroy {
   @ViewChildren('stars') stars: QueryList<ElementRef>;
   @ViewChildren('filledStars') filledStars: QueryList<ElementRef>;
   @ViewChild('modalCloseButton') modalCloseButton: ElementRef;
+
+  @Output() ratingChanged: EventEmitter<{ tripId: number, rating: number }> = new EventEmitter();
 
   private starsNeedReset: boolean = true;
 
@@ -43,6 +55,7 @@ export class FeedbackAddComponent implements OnInit, OnDestroy {
           this.tripFeedbackAddService.setTripIdToAddFeedback(this.feedback.TripId);
           this.tripFeedbackAddService.setAddedFeedback(response);
           this.modalCloseButton.nativeElement.click();
+          this.ratingChanged.emit({tripId: this.feedback.TripId, rating: this.feedback.Rating});
         },
         error: (error) => {
           alert(error.error);

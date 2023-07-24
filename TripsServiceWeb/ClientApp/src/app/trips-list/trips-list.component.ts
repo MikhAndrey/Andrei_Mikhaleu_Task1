@@ -50,4 +50,12 @@ export class TripsListComponent implements OnInit, OnDestroy{
     this.tripIdService.setTripId(tripId);
   }
 
+  handleRatingChange( ratingOptions: {tripId: number, rating: number }): void {
+    const tripWithRequiredId: TripReadDTO | undefined = this.trips.find(trip => trip.id === ratingOptions.tripId);
+    if (tripWithRequiredId) {
+      tripWithRequiredId.rating = ratingOptions.rating;
+      tripWithRequiredId.isNeedToBeRated = false;
+    }
+  }
+
 }
