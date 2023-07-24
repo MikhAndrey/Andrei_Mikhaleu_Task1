@@ -17,7 +17,6 @@ export class LoginFormComponent {
   login() {
     this.accountService.login(this.user).subscribe({
       next: () => {
-        this.accountService.isAuthenticated = true;
         this.redirectService.redirectToAddress("");
       },
       error: (error) => {

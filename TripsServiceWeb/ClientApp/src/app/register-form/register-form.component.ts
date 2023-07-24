@@ -17,7 +17,6 @@ export class RegisterFormComponent {
   register() {
     this.accountService.signup(this.user).subscribe({
       next: () => {
-        this.accountService.isAuthenticated = true;
         this.redirectService.redirectToAddress("");
       },
       error: (error) => {

@@ -71,6 +71,12 @@ public class AccountController : ControllerBase
         return Ok(new { UserName = _userService.GetCurrentUserName()});
     }
 
+    [HttpGet("isAuthenticated")]
+    public ActionResult IsAuthenticated()
+    {
+        return Ok(HttpContext?.User?.Identity?.IsAuthenticated);
+    }
+
     [HttpGet("logout")]
     public IActionResult Logout()
     {

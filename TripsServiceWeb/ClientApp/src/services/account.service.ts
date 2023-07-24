@@ -11,9 +11,8 @@ export type UserNameResponse = {
 @Injectable({ providedIn: 'root' })
 export class AccountService {
 
-  private apiUrl: string;
+  private readonly apiUrl: string;
 
-  isAuthenticated: boolean;
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string)
   {
     this.apiUrl = baseUrl + "api/account";
@@ -33,5 +32,9 @@ export class AccountService {
 
   getUserName(): Observable<UserNameResponse>{
     return this.http.get<UserNameResponse>(this.apiUrl + '/username');
+  }
+
+  isAuthenticated(): Observable<boolean> {
+    return this.http.get<boolean>(this.apiUrl + '/isAuthenticated');
   }
 }
