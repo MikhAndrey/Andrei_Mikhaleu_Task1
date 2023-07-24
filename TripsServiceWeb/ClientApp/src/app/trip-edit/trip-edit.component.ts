@@ -18,6 +18,7 @@ export class TripEditComponent implements OnInit {
   durationText?: string;
   driverName?: string;
   validationErrors: TripCreateValidationErrors = {};
+  localEndTimeWithoutSeconds: string;
 
   constructor(
     private tripService: TripsService,
@@ -68,6 +69,8 @@ export class TripEditComponent implements OnInit {
   }
   handleFinishTimeChanged(finishTime: Date): void {
     this.trip.endTime = finishTime;
+    const options: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric' };
+    this.localEndTimeWithoutSeconds = `${this.trip.endTime.toLocaleDateString()} ${this.trip.endTime.toLocaleTimeString([], options)}`;
   }
   handleDistanceChanged(distance: number): void {
     this.trip.distance = distance;

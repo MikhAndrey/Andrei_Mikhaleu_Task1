@@ -13,7 +13,7 @@
   </div>
   <div class = "form-group tp-form-group">
     <label class = "tp-label">Arrival Time: </label>
-    <span class="tp-label" *ngIf="trip.endTime">{{trip.endTime.toLocaleDateString()}} {{trip.endTime.toLocaleTimeString()}}</span>
+    <span class="tp-label" *ngIf="trip.endTime"> {{localEndTimeWithoutSeconds}}</span>
     <div class = "tp-input-desc">Your arrival time will be calculated automatically</div>
     <span class="text-danger" *ngIf="validationErrors.EndTime">{{validationErrors.EndTime}}</span>
   </div>
