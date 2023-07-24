@@ -6,9 +6,9 @@ using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Infrastructure.ValueResolvers;
 
-public class TripImageLinkResolver : IValueResolver<Trip, IHasImages, List<ImageDTO>>
+public class TripImageLinkResolver : IValueResolver<Trip, IHasImages, List<ImageDTO>?>
 {
-    public List<ImageDTO> Resolve(Trip trip, IHasImages dto, List<ImageDTO> images, ResolutionContext context)
+    public List<ImageDTO>? Resolve(Trip trip, IHasImages dto, List<ImageDTO>? images, ResolutionContext context)
     {
         return trip.Images.Select(image => new ImageDTO()
         {

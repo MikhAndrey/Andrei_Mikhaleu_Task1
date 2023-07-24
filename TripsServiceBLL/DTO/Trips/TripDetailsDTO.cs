@@ -11,7 +11,7 @@ public class TripDetailsDTO : ReadTripDTO, IHasImages
 	public int UserId { get; set; }
 	public bool IsCurrentUserTrip { get; set; }
 	public bool Public { get; set; }
-	public List<ImageDTO> Images { get; set; }
+	public List<ImageDTO>? Images { get; set; }
 	public List<RoutePointDTO> RoutePoints { get; set; }
 	public List<CommentDTO> Comments { get; set; }
 	public int StartTimeZoneOffset { get; set; }

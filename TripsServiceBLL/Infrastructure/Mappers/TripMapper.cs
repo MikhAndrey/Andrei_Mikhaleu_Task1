@@ -45,9 +45,9 @@ public class TripMapper : Profile
 			.ForMember(dest => dest.EndTime,
 				opt => opt.MapFrom(src => src.EndTime.AddSeconds(src.FinishTimeZoneOffset)))
 			.ForMember(dest => dest.IsCurrent,
-				opt => opt.MapFrom(src => DateTime.UtcNow >= src.StartTime && DateTime.UtcNow <= src.EndTime))
-			.ForMember(dest => dest.IsFuture, opt => opt.MapFrom(src => DateTime.UtcNow < src.StartTime))
-			.ForMember(dest => dest.IsPast, opt => opt.MapFrom(src => DateTime.UtcNow > src.EndTime))
+				opt => opt.MapFrom(src => UtilTripFunctions.IsCurrent(src)))
+			.ForMember(dest => dest.IsFuture, opt => opt.MapFrom(src => UtilTripFunctions.IsFuture(src)))
+			.ForMember(dest => dest.IsPast, opt => opt.MapFrom(src => UtilTripFunctions.IsPast(src)))
 			.ForMember(dest => dest.UtcStartTimeZone, opt => opt.MapFrom
 			(src => string.Concat(src.StartTime.AddSeconds(src.StartTimeZoneOffset).ToString("dd.MM.yyyy HH:mm"),
 				$" UTC{src.StartTimeZoneOffset / 3600:+#;-#;+0}")))
@@ -80,10 +80,10 @@ public class TripMapper : Profile
 			.ForMember(dest => dest.TimeInfo, opt =>
 				opt.MapFrom((src, dest) =>
 				{
-					if (dest.IsCurrent)
+					if (UtilTripFunctions.IsCurrent(src))
 						return UtilDateTimeFunctions.GetTimeSpanString(DateTime.UtcNow
 							.AddSeconds(src.StartTimeZoneOffset).Subtract(src.StartTime));
-					if (dest.IsFuture)
+					if (UtilTripFunctions.IsFuture(src))
 						return UtilDateTimeFunctions.GetTimeSpanString(src.StartTime
 							.AddSeconds(-src.StartTimeZoneOffset).Subtract(DateTime.UtcNow));
 					return "Completed";
