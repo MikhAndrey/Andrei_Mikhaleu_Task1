@@ -10,7 +10,6 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import {RegisterFormComponent} from "./register-form/register-form.component";
 import {LoginFormComponent} from "./login-form/login-form.component";
-import {UserAccountOptionsComponent} from "./user-account-options/user-account-options.component";
 import {HeatmapStatisticsComponent} from "./heatmap-statistics/heatmap-statistics.component";
 import {GoogleChartsModule} from "angular-google-charts";
 import {DurationStatisticsComponent} from "./duration-statistics/duration-statistics.component";
@@ -41,7 +40,6 @@ import {AuthInterceptor} from "../services/authInterceptor.service";
     HomeComponent,
     RegisterFormComponent,
     LoginFormComponent,
-    UserAccountOptionsComponent,
     HeatmapStatisticsComponent,
     DurationStatisticsComponent,
     TripCreateComponent,

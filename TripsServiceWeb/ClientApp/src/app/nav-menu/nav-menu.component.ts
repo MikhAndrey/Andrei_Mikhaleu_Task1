@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {AccountService, UserNameResponse} from "../../services/account.service";
+import {RedirectService} from "../../services/redirect.service";
 
 @Component({
   selector: 'app-nav-menu',
@@ -6,13 +8,25 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
-  isExpanded = false;
+  userName?: string;
 
-  collapse() {
-    this.isExpanded = false;
+  constructor(private accountService: AccountService, private redirectionService: RedirectService) {
   }
 
-  toggle() {
-    this.isExpanded = !this.isExpanded;
+  ngOnInit(): void {
+    this.accountService.getUserName().subscribe(
+      (response: UserNameResponse) => {
+        this.userName = response.userName
+      }
+    );
+  }
+
+  logout(): void {
+    this.accountService.logout().subscribe(
+      () => {
+        this.userName = undefined;
+        this.redirectionService.redirectToAddress("");
+      }
+    );
   }
 }
