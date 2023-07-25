@@ -36,7 +36,6 @@ app.UseRouting();
 app.UseCors("AllowAll");
 
 ProgramHelper.AddJwtTokenToRequests(app);
-ProgramHelper.AddUnauthorizedStateRedirection(app);
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Text;
+﻿using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -113,20 +112,6 @@ public static class ProgramHelper
 			}
 
 			await next();
-		});
-	}
-
-	public static void AddUnauthorizedStateRedirection(WebApplication app)
-	{
-		app.UseStatusCodePages(async context =>
-		{
-			HttpRequest request = context.HttpContext.Request;
-			HttpResponse response = context.HttpContext.Response;
-
-			if (response.StatusCode == (int) HttpStatusCode.Unauthorized)
-			{
-				response.Redirect("/Account/Login");
-			}
 		});
 	}
 }
