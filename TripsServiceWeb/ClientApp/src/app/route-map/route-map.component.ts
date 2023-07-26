@@ -25,25 +25,16 @@ export class RouteMapComponent extends ReadonlyRouteMapComponent {
   };
 
   @Output() durationTextChanged: EventEmitter<string> = new EventEmitter();
-  private _durationText?: string;
-
   @Output() distanceChanged: EventEmitter<number> = new EventEmitter();
-  private _distance: number = 0;
-
   @Output() startTimeZoneOffsetChanged: EventEmitter<number> = new EventEmitter();
   private _startTimeZoneOffset?: number;
-
   @Output() finishTimeZoneOffsetChanged: EventEmitter<number> = new EventEmitter();
   private _finishTimeZoneOffset?: number;
-
   @Output() finishTimeChanged: EventEmitter<Date> = new EventEmitter();
-  @Input() private _finishTime?: Date;
-
   @Output() routePointsChanged: EventEmitter<string> = new EventEmitter();
-  @Input() private _routePoints?: string;
+
   set durationText(value: string){
-    this._durationText = value;
-    this.durationTextChanged.emit(this._durationText);
+    this.durationTextChanged.emit(value);
   }
 
   set startTimeZoneOffset(value: number){
@@ -57,18 +48,15 @@ export class RouteMapComponent extends ReadonlyRouteMapComponent {
   }
 
   set finishTime(value: Date){
-    this._finishTime = value;
-    this.finishTimeChanged.emit(this._finishTime);
+    this.finishTimeChanged.emit(value);
   }
 
   set distance(value: number){
-    this._distance = value;
-    this.distanceChanged.emit(this._distance);
+    this.distanceChanged.emit(value);
   }
 
   set routePoints(value: string){
-    this._routePoints = value;
-    this.routePointsChanged.emit(this._routePoints);
+    this.routePointsChanged.emit(value);
   }
 
   @Input() startTime?: Date;

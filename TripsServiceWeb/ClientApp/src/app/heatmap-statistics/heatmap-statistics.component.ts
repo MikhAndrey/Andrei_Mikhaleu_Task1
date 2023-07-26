@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HeatmapData} from "@angular/google-maps";
 import {YearStatisticsCore} from "../../models/statistics";
+import {heatMapOptions, mapCenter, mapZoom} from "../appConstants";
 
 @Component({
   selector: 'app-heatmap-statistics',
@@ -8,9 +9,9 @@ import {YearStatisticsCore} from "../../models/statistics";
 })
 export class HeatmapStatisticsComponent extends YearStatisticsCore implements OnInit {
   heatmapData: HeatmapData = [];
-  heatMapOptions = {
-    radius: 40
-  };
+  heatMapOptions = heatMapOptions;
+  center: google.maps.LatLngLiteral = mapCenter;
+  zoom: number = mapZoom;
 
   onYearChange(): void {
     this.statisticsService.getRoutePointsByYear(this.selectedYear).subscribe(

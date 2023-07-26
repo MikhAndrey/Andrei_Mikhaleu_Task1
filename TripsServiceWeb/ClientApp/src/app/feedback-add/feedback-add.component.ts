@@ -44,6 +44,7 @@ export class FeedbackAddComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.tripIdSubscription = this.tripIdService.tripId$.subscribe((tripId) => this.feedback.TripId = tripId);
   }
+
   ngOnDestroy(): void {
     this.tripIdSubscription.unsubscribe();
   }
@@ -64,12 +65,12 @@ export class FeedbackAddComponent implements OnInit, OnDestroy {
     }
   }
 
-  starMouseEnter(index: number){
-    for (let i = 0; i <= index; i++){
+  starMouseEnter(index: number) {
+    for (let i = 0; i <= index; i++) {
       this.stars.get(i)!.nativeElement.classList.add('star-hovered');
       this.filledStars.get(i)!.nativeElement.style.width = '100%';
     }
-    for (let i = index + 1; i < this.filledStars.length; i++){
+    for (let i = index + 1; i < this.filledStars.length; i++) {
       this.stars.get(i)!.nativeElement.classList.remove('star-hovered');
       this.filledStars.get(i)!.nativeElement.style.width = '0%';
     }

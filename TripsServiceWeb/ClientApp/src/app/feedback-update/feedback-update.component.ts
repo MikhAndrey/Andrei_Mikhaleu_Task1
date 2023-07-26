@@ -3,18 +3,14 @@
   Component,
   ElementRef, EventEmitter,
   Input,
-  OnDestroy,
-  OnInit, Output,
+  Output,
   QueryList,
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import {FeedbackCreateDTO, FeedbackReadDTO} from "../../models/feedbacks";
+import {FeedbackReadDTO} from "../../models/feedbacks";
 import {FeedbacksService} from "../../services/feedback.service";
-import {TripIdService} from "../../services/trips/tripId.service";
-import {Subscription} from "rxjs";
 import {maxRating} from "../appConstants";
-import {TripFeedbackAddService} from "../../services/trips/tripFeedbackAdd.service";
 
 @Component({
   selector: 'app-feedback-update-modal',
@@ -40,6 +36,7 @@ export class FeedbackUpdateComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.starMouseEnter(this.feedback.rating - 1);
   }
+
   ngOnDestroy(): void {
 
   }
@@ -58,12 +55,12 @@ export class FeedbackUpdateComponent implements AfterViewInit {
     }
   }
 
-  starMouseEnter(index: number){
-    for (let i = 0; i <= index; i++){
+  starMouseEnter(index: number) {
+    for (let i = 0; i <= index; i++) {
       this.stars.get(i)!.nativeElement.classList.add('star-hovered');
       this.filledStars.get(i)!.nativeElement.style.width = '100%';
     }
-    for (let i = index + 1; i < this.filledStars.length; i++){
+    for (let i = index + 1; i < this.filledStars.length; i++) {
       this.stars.get(i)!.nativeElement.classList.remove('star-hovered');
       this.filledStars.get(i)!.nativeElement.style.width = '0%';
     }

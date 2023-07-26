@@ -2,19 +2,17 @@
 import {MapDirectionsService} from '@angular/google-maps';
 import {map, Observable, Subscription} from 'rxjs';
 import {MapInitService} from "../../services/mapInit.service";
+import {mapCenter, mapZoom} from "../appConstants";
 
 @Component({
   selector: 'app-readonly-route-map',
   templateUrl: './readonly-route-map.component.html',
 })
 export class ReadonlyRouteMapComponent implements OnDestroy {
-  center: google.maps.LatLngLiteral = {
-    lat: 51.5805,
-    lng: 0
-  };
-  zoom: number = 5;
+  center: google.maps.LatLngLiteral = mapCenter;
+  zoom: number = mapZoom;
 
-  directionsResults: Observable <google.maps.DirectionsResult | undefined> | undefined;
+  directionsResults: Observable<google.maps.DirectionsResult | undefined> | undefined;
 
   markerPositions: google.maps.LatLngLiteral[] = [];
   protected markerPositionsSubscription: Subscription;
@@ -26,12 +24,12 @@ export class ReadonlyRouteMapComponent implements OnDestroy {
     this.markerPositionsSubscription = this.mapInitService.markerPositions$.subscribe((markerPositions) => this.initializeMapWithMarkerPositions(markerPositions));
   }
 
-  private initializeMapWithMarkerPositions(markerPositions: google.maps.LatLngLiteral[]){
+  private initializeMapWithMarkerPositions(markerPositions: google.maps.LatLngLiteral[]) {
     this.markerPositions = markerPositions;
     this.buildRoute();
   }
 
-  protected buildRoute(){
+  protected buildRoute() {
     const request: google.maps.DirectionsRequest = {
       destination: this.markerPositions.at(-1)!,
       origin: this.markerPositions[0],

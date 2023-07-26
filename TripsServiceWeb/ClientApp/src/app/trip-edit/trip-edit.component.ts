@@ -8,6 +8,7 @@ import {ImagesService} from "../../services/images.service";
 import {MapInitService} from "../../services/mapInit.service";
 import {DriverInfoDTO} from "../../models/drivers";
 import {DriverIdService} from "../../services/driverId.service";
+import {ImageFile} from "../../models/images";
 
 @Component({
   selector: 'app-trip-edit',
@@ -55,7 +56,7 @@ export class TripEditComponent implements OnInit {
     });
   }
 
-  handleFilesChanged(files: { file: File, url: string }[]): void {
+  handleFilesChanged(files: ImageFile[]): void {
     this.trip.imagesAsFiles = files.map(fileInfo => fileInfo.file);
   }
   handleDurationTextChanged(durationText?: string): void {

@@ -14,7 +14,8 @@ export class DriverDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private driversService: DriversService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     const id = parseInt(this.route.snapshot.paramMap.get('id')!);

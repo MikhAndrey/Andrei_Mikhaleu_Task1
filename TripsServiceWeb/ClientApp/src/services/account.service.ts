@@ -33,8 +33,4 @@ export class AccountService {
   getUserName(): Observable<UserNameResponse>{
     return this.http.get<UserNameResponse>(this.apiUrl + '/username');
   }
-
-  isAuthenticated(): Observable<boolean> {
-    return this.http.get<boolean>(this.apiUrl + '/isAuthenticated');
-  }
 }

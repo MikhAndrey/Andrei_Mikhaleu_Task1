@@ -7,6 +7,7 @@ import {TripsService} from "../../services/trips/trips.service";
 import {RedirectService} from "../../services/redirect.service";
 import {ActivatedRoute} from "@angular/router";
 import {ImagesService} from "../../services/images.service";
+import {ImageFile} from "../../models/images";
 
 @Component({
   selector: 'app-trip-edit-past',
@@ -44,7 +45,7 @@ export class TripEditPastComponent implements OnInit {
     });
   }
 
-  handleFilesChanged(files: { file: File, url: string }[]): void {
+  handleFilesChanged(files: ImageFile[]): void {
     this.trip.imagesAsFiles = files.map(fileInfo => fileInfo.file);
   }
 

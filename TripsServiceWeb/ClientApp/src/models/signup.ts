@@ -2,12 +2,6 @@
     UserName: string;
     Email: string;
     Password: string;
-
-    constructor() {
-      this.UserName = '';
-      this.Email = '';
-      this.Password = '';
-    }
 }
 
 export interface SignupValidationErrors {

@@ -1,7 +1,7 @@
 ﻿import {StatisticsService} from "../services/statistics.service";
 import {Directive, OnInit} from "@angular/core";
 
-export interface RoutePointsDTO {
+export interface RoutePointCoordinatesDTO {
   latitude: number,
   longitude: number
 }
@@ -24,8 +24,6 @@ export class YearStatisticsCore implements OnInit {
       (response: any) => {
         this.yearsOfTrips = response;
         const userHasTrips: boolean = this.yearsOfTrips.length > 0;
-        document.getElementById("main-content")!.hidden = !userHasTrips;
-        document.getElementById("no-content")!.hidden = userHasTrips;
         if (userHasTrips) {
           this.selectedYear = this.yearsOfTrips[0];
           this.onYearChange();

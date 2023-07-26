@@ -3,6 +3,7 @@ import {TripCreateDTO, TripCreateValidationErrors} from "../../models/trips";
 import {TripsService} from "../../services/trips/trips.service";
 import {RedirectService} from "../../services/redirect.service";
 import {DriverInfoDTO} from "../../models/drivers";
+import {ImageFile} from "../../models/images";
 
 @Component({
   selector: 'app-trip-create',
@@ -33,7 +34,7 @@ export class TripCreateComponent implements OnInit {
     });
   }
 
-  handleFilesChanged(files: { file: File, url: string }[]): void {
+  handleFilesChanged(files: ImageFile[]): void {
     this.trip.imagesAsFiles = files.map(fileInfo => fileInfo.file);
   }
   handleDurationTextChanged(durationText?: string): void {

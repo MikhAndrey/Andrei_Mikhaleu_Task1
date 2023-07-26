@@ -31,7 +31,9 @@ import {TripEditPastComponent} from "./trip-edit-past/trip-edit-past.component";
 import {DriversListComponent} from "./drivers-list/drivers-list.component";
 import {DriverDetailsComponent} from "./driver-details/driver-details.component";
 import {FeedbackUpdateComponent} from "./feedback-update/feedback-update.component";
-import {AuthInterceptor} from "../services/authInterceptor.service";
+import {ImagesCarouselComponent} from "./images-carousel/images-carousel.component";
+import {TripsListBaseComponent} from "./trips-list-base/trips-list-base.component";
+import {AuthInterceptor} from "../utils/authInterceptor";
 
 @NgModule({
   declarations: [
@@ -50,6 +52,7 @@ import {AuthInterceptor} from "../services/authInterceptor.service";
     TripRatingComponent,
     CommentAddComponent,
     FeedbackAddComponent,
+    TripsListBaseComponent,
     TripsListComponent,
     TripsActivityComponent,
     TripsHistoryComponent,
@@ -60,6 +63,7 @@ import {AuthInterceptor} from "../services/authInterceptor.service";
     DriversListComponent,
     DriverDetailsComponent,
     FeedbackUpdateComponent,
+    ImagesCarouselComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

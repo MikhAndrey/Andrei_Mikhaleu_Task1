@@ -1,6 +1,6 @@
-﻿<h1 class = "tp-label">My history of trips</h1>
+﻿<h1 class = "tp-label">{{pageHeader}}</h1>
 <div class = "row row-cols-2">
-  <p class = "tp-label" *ngIf="trips.length == 0">You have no completed trips.</p>
+  <p class = "tp-label" *ngIf="trips.length == 0">No trips here yet.</p>
   <div class = "col mb-4" *ngFor="let trip of trips">
     <div class = "card h-100 br-20">
       <div class = "card-header text-light tp-gradient-standard">
@@ -11,6 +11,12 @@
         <ul class = "list-group list-group-flush">
           <li class = "list-group-item text-right text-muted tp-label">Departure time: {{trip.utcStartTimeZone}}</li>
           <li class = "list-group-item text-right text-muted tp-label">Arrival time: {{trip.utcFinishTimeZone}}</li>
+          <li class = "list-group-item tp-label">
+            Status:
+            <span class = "badge badge-pill badge-info" *ngIf="trip.isCurrent">Ongoing</span>
+            <span class = "badge badge-pill badge-warning" *ngIf="trip.isFuture">Planned</span>
+            <span class = "badge badge-pill badge-success" *ngIf="trip.isPast">Completed</span>
+          </li>
         </ul>
         <div class = "mb-2 mt-2 probably-empty-container">
           <div *ngIf="trip.rating">
