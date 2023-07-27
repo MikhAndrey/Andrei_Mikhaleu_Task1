@@ -5,7 +5,7 @@ namespace TripsServiceBLL.Interfaces;
 
 public interface IUserService
 {
-	Task<int?> GetUserIdForLoginAsync(UserLoginDTO user);
+	Task<User?> GetUserForLoginAsync(UserLoginDTO user);
 	Task AddAsync(User user);
 	bool Exists(int id);
 	Task TryToRegisterNewUserAsync(UserSignupDTO user);

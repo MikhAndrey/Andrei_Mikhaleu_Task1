@@ -13,7 +13,8 @@ public class UserRepository : EFGenericRepository<User>, IUserRepository
 
 	public async Task<User?> GetByUsernameAsync(string username)
 	{
-		return await _dbSet.FirstOrDefaultAsync(u => u.UserName == username);
+		return await _dbSet.Include(u => u.Role)
+			.FirstOrDefaultAsync(u => u.UserName == username);
 	}
 
 	public async Task<User?> GetByEmailAsync(string email)

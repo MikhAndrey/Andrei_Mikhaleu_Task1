@@ -20,6 +20,7 @@ public class TripsDBContext : DbContext
 	public DbSet<Driver> Drivers { get; set; }
 	public DbSet<DriverPhoto> DriverPhotos { get; set; }
 	public DbSet<Feedback> Feedbacks { get; set; }
+	public DbSet<Role> Roles { get; set; }
 
 	public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
@@ -88,6 +89,11 @@ public class TripsDBContext : DbContext
 			.HasOne(dp => dp.Driver)
 			.WithMany(d => d.Images)
 			.HasForeignKey(dp => dp.DriverId)
+			.OnDelete(DeleteBehavior.Restrict);
+		
+		modelBuilder.Entity<User>()
+			.HasOne(u => u.Role)
+			.WithMany(r => r.Users)
 			.OnDelete(DeleteBehavior.Restrict);
 
 		modelBuilder.Entity<Comment>().HasQueryFilter(item => !item.IsDeleted);
