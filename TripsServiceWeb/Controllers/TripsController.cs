@@ -79,6 +79,25 @@ public class TripsController : ControllerBase
 			return NotFound(ex.Message);
 		}
 	}
+	
+	[Authorize(Roles = "Admin")]
+	[HttpGet("all")]
+	public IActionResult List()
+	{
+		try
+		{
+			IEnumerable<ReadTripDTOExtended> trips = _tripService.GetAllTrips();
+			return Ok(trips);
+		}
+		catch (ArgumentNullException)
+		{
+			return Unauthorized();
+		}
+		catch (EntityNotFoundException ex)
+		{
+			return NotFound(ex.Message);
+		}
+	}
 
 	[Authorize]
 	[HttpGet("history")]

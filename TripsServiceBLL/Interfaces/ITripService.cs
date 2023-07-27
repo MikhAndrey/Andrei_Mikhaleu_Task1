@@ -18,6 +18,7 @@ public interface ITripService
 	IEnumerable<ReadTripDTOExtended> GetOthersPublicTrips();
 	IEnumerable<ReadTripDTO> GetCurrentUserHistoryOfTrips();
 	IEnumerable<ReadTripDTO> GetCurrentUserTrips();
+	IEnumerable<ReadTripDTOExtended> GetAllTrips();
 	IEnumerable<int> GetYearsOfCurrentUserTrips();
 	Task<List<UtilDurationInMonth>> GetTotalDurationByMonthsAsync(int year);
 	Task<EditPastTripDTO> GetPastTripForEditingAsync(int id);

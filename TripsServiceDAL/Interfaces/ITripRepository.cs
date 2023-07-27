@@ -13,4 +13,5 @@ public interface ITripRepository : IGenericRepository<Trip>
 	Task<Trip> GetByIdForEditingAsync(int id);
 	Task<Trip> GetByIdForDetailsAsync(int id);
 	Task<Trip> GetByIdWithImagesAsync(int id);
+	IQueryable<Trip> GetAllWithUserInfo();
 }

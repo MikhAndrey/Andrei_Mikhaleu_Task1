@@ -1,17 +1,23 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {UserLoginDTO} from "../models/login";
 import {UserSignupDTO} from "../models/signup";
 
 export type UserNameResponse = {
-  userName: string
+  userName?: string,
+  role?: string
 }
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
 
   private readonly apiUrl: string;
+
+  currentUserInfo$: Subject<UserNameResponse> = new Subject<UserNameResponse>();
+  public setCurrentUserInfo(userInfo: UserNameResponse) {
+    this.currentUserInfo$.next(userInfo);
+  }
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string)
   {
@@ -26,11 +32,17 @@ export class AccountService {
     return this.http.post(this.apiUrl + '/login', user);
   }
 
-  logout(): Observable<Object>{
-    return this.http.get(this.apiUrl + '/logout');
+  logout(): void{
+    this.http.get(this.apiUrl + '/logout').subscribe({
+      next: () => this.setCurrentUserInfo({userName: undefined, role: undefined})
+    });
   }
 
-  getUserName(): Observable<UserNameResponse>{
-    return this.http.get<UserNameResponse>(this.apiUrl + '/username');
+  getUserInfo(): void{
+    this.http.get<UserNameResponse>(this.apiUrl + '/userinfo').subscribe({
+      next: value => {
+        this.setCurrentUserInfo(value);
+      }
+    });
   }
 }

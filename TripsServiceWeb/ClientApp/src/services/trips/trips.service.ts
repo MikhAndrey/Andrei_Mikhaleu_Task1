@@ -46,6 +46,10 @@ export class TripsService {
     return this.http.get<TripReadDTO[]>(this.apiUrl + '/index');
   }
 
+  getAllUsersTrips(): Observable<TripReadDTOExtended[]>{
+    return this.http.get<TripReadDTOExtended[]>(this.apiUrl + '/all');
+  }
+
   getActivity(): Observable<TripReadDTOExtended[]>{
     return this.http.get<TripReadDTOExtended[]>(this.apiUrl + '/public');
   }

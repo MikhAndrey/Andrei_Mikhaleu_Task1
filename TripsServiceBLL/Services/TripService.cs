@@ -140,6 +140,17 @@ public class TripService : ITripService
 		});
 		return mappedTrips;
 	}
+	
+	public IEnumerable<ReadTripDTOExtended> GetAllTrips()
+	{
+		IEnumerable<Trip> rawTrips = _unitOfWork.Trips.GetAllWithUserInfo();
+		IEnumerable<ReadTripDTOExtended> mappedTrips = rawTrips.Select(el =>
+		{
+			ReadTripDTOExtended mappedTrip = _mapper.Map<ReadTripDTOExtended>(el);
+			return mappedTrip;
+		});
+		return mappedTrips;
+	}
 
 	public IEnumerable<int> GetYearsOfCurrentUserTrips()
 	{

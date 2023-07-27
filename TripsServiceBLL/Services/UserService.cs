@@ -43,6 +43,18 @@ public class UserService : IUserService
 	{
 		return _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
 	}
+	
+	public string? GetCurrentUserRole()
+	{
+		try
+		{
+			return _httpContextAccessor?.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+		}
+		catch
+		{
+			return null;
+		}
+	}
 
 	public async Task<User?> GetUserForLoginAsync(UserLoginDTO user)
 	{
