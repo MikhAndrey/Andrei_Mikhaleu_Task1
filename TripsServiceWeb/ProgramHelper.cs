@@ -34,6 +34,7 @@ public static class ProgramHelper
 		services.AddScoped<ITripService, TripService>();
 		services.AddScoped<IDriverService, DriverService>();
 		services.AddScoped<IFeedbackService, FeedbackService>();
+		services.AddScoped<IRoleService, RoleService>();
 	}
 
 	public static void AddValueResolvers(IServiceCollection services)
@@ -44,6 +45,7 @@ public static class ProgramHelper
 		services.AddScoped<NewTripUserIdResolver>();
 		services.AddScoped<TripImageLinkResolver>();
 		services.AddScoped<DriverImageLinkResolver>();
+		services.AddScoped<NewUserRoleIdResolver>();
 	}
 
 	public static void AddCommands(IServiceCollection services)
@@ -71,7 +73,7 @@ public static class ProgramHelper
 			mc.AddProfile(new FeedbackMapper(serviceProvider.GetService<FeedbackUserResolver>()));
 			mc.AddProfile(new ImageMapper());
 			mc.AddProfile(new RoutePointMapper());
-			mc.AddProfile(new UserMapper());
+			mc.AddProfile(new UserMapper(serviceProvider.GetService<NewUserRoleIdResolver>()));
 		});
 
 		IMapper mapper = mapperConfig.CreateMapper();
