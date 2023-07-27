@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable, Subject} from "rxjs";
 import {UserLoginDTO} from "../models/login";
 import {UserSignupDTO} from "../models/signup";
+import {RedirectService} from "./redirect.service";
 
 export type UserNameResponse = {
   userName?: string,
@@ -19,7 +20,10 @@ export class AccountService {
     this.currentUserInfo$.next(userInfo);
   }
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string)
+  constructor(
+    private http: HttpClient,
+    @Inject('BASE_URL') private baseUrl: string,
+    private redirectService: RedirectService)
   {
     this.apiUrl = baseUrl + "api/account";
   }
@@ -34,7 +38,10 @@ export class AccountService {
 
   logout(): void{
     this.http.get(this.apiUrl + '/logout').subscribe({
-      next: () => this.setCurrentUserInfo({userName: undefined, role: undefined})
+      next: () => {
+        this.setCurrentUserInfo({userName: undefined, role: undefined});
+        this.redirectService.redirectToAddress("");
+      }
     });
   }
 
