@@ -60,6 +60,33 @@ public class TripsController : ControllerBase
 
 		return BadRequest(ModelState);
 	}
+	
+	[HttpPost("admin/create")]
+	public async Task<IActionResult> AdminCreate([FromForm] AdminCreateTripDTO trip)
+	{
+		if (ModelState.IsValid)
+		{
+			try
+			{
+				await _createTripCommand.ExecuteAsync(trip);
+				return Ok();
+			}
+			catch (ArgumentNullException)
+			{
+				return Unauthorized();
+			}
+			catch (EntityNotFoundException ex)
+			{
+				return NotFound(ex.Message);
+			}
+			catch (DbOperationException ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		return BadRequest(ModelState);
+	}
 
 	[Authorize]
 	[HttpGet("index")]

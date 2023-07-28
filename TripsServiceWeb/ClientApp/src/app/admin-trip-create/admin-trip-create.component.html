@@ -1,7 +1,7 @@
 <form class = "bootstrap-form tp-form" #tripCreateForm id = "main-form" (submit)="submit(tripCreateForm)" enctype="multipart/form-data">
   <div class="form-group tp-form-group">
-    <label for="userSelect" class="tp-label">Trip's user:</label>
-    <select [(ngModel)]="trip.userId" class="form-select" id="userSelect">
+    <label for="userIdSelect" class="tp-label">Trip's user:</label>
+    <select [(ngModel)]="trip.userId" class="form-select" id="userIdSelect" name="userIdSelect">
       <option *ngFor="let user of users; let i = index;" [attr.selected]="i === 0" [value]="user.id">{{user.userName}} ({{user.role}})</option>
     </select>
   </div>

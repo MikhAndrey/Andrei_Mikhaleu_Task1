@@ -30,6 +30,9 @@ public class TripMapper : Profile
 			.ForMember(trip => trip.RoutePoints, opt => opt.Ignore())
 			.ForMember(trip => trip.Images, opt => opt.Ignore())
 			.ForMember(trip => trip.UserId, opt => opt.MapFrom(newTripUserIdResolver));
+		CreateMap<AdminCreateTripDTO, Trip>()
+			.IncludeBase<CreateTripDTO, Trip>()
+			.ForMember(trip => trip.UserId, opt => opt.MapFrom(src => src.UserId));
 		CreateMap<EditTripDTO, Trip>()
 			.IncludeBase<CreateTripDTO, Trip>()
 			.ForMember(trip => trip.Id, opt => opt.Ignore());

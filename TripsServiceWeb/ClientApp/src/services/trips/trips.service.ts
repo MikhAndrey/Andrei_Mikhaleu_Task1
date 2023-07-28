@@ -2,6 +2,7 @@
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {
+  AdminTripCreateDTO,
   PastTripEditDTO,
   TripCreateDTO,
   TripDateChangesDTO,
@@ -22,7 +23,10 @@ export class TripsService {
 
   add(trip: TripCreateDTO, formData: FormData): Observable<TripCreateDTO> {
     this.initFormDataForTrip(trip, formData);
-    return this.http.post<TripCreateDTO>(this.apiUrl + '/create', formData);
+    if (trip instanceof AdminTripCreateDTO)
+      return this.http.post<AdminTripCreateDTO>(this.apiUrl + '/admin/create', formData);
+    else
+      return this.http.post<TripCreateDTO>(this.apiUrl + '/create', formData);
   }
 
   editCurrent(trip: TripEditDTO, formData: FormData): Observable<TripEditDTO> {
@@ -85,6 +89,8 @@ export class TripsService {
   }
 
   private initFormDataForTrip(trip: TripCreateDTO, formData: FormData){
+    if (trip instanceof AdminTripCreateDTO)
+      formData.set("UserId", (trip as AdminTripCreateDTO).userId.toString());
     trip.imagesAsFiles?.forEach(file => formData.append("ImagesAsFiles", file, file.name));
     if (trip.endTime) {
       trip.endTime.setTime(trip.endTime.getTime() - trip.endTime.getTimezoneOffset() * 60 * 1000);

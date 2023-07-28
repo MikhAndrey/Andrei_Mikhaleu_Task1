@@ -35,7 +35,7 @@ public class CreateTripCommandAsync : ICommandAsync<CreateTripDTO>
 
 	public async Task ExecuteAsync(CreateTripDTO dto)
 	{
-		Trip trip = _mapper.Map<Trip>(dto);
+		Trip trip = dto is AdminCreateTripDTO adminCreateTripDto ? _mapper.Map<Trip>(adminCreateTripDto) : _mapper.Map<Trip>(dto);
 
 		using IDbContextTransaction transaction = _unitOfWork.BeginTransaction();
 		try
