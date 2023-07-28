@@ -16,15 +16,17 @@ import {
 export class TripsService {
 
   private readonly apiUrl: string;
+  private readonly adminApiUrl: string;
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string)
   {
     this.apiUrl = baseUrl + "api/trips";
+    this.adminApiUrl = baseUrl + "api/admin/trips";
   }
 
   add(trip: TripCreateDTO, formData: FormData): Observable<TripCreateDTO> {
     this.initFormDataForTrip(trip, formData);
     if (trip instanceof AdminTripCreateDTO)
-      return this.http.post<AdminTripCreateDTO>(this.apiUrl + '/admin/create', formData);
+      return this.http.post<AdminTripCreateDTO>(this.adminApiUrl + '/create', formData);
     else
       return this.http.post<TripCreateDTO>(this.apiUrl + '/create', formData);
   }
@@ -51,7 +53,7 @@ export class TripsService {
   }
 
   getAllUsersTrips(): Observable<TripReadDTOExtended[]>{
-    return this.http.get<TripReadDTOExtended[]>(this.apiUrl + '/all');
+    return this.http.get<TripReadDTOExtended[]>(this.adminApiUrl + '/index');
   }
 
   getActivity(): Observable<TripReadDTOExtended[]>{
