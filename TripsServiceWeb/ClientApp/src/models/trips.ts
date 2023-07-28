@@ -100,6 +100,13 @@ export class TripEditDTO extends TripCreateDTO {
   }
 }
 
+export class AdminTripEditDTO extends TripEditDTO {
+  userId: number;
+  constructor() {
+    super();
+  }
+}
+
 export class PastTripEditDTO {
   images: ImageDTO[];
   imagesAsFiles?: File[];

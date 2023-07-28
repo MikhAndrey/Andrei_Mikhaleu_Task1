@@ -15,6 +15,7 @@ public interface ITripService
 	Task AddAsync(Trip trip);
 	Task<TripDetailsDTO> GetTripDetailsAsync(int tripId);
 	Task<EditTripDTO> GetTripForEditingAsync(int tripId);
+	Task<AdminEditTripDTO> GetTripForEditingByAdminAsync(int tripId);
 	IEnumerable<ReadTripDTOExtended> GetOthersPublicTrips();
 	IEnumerable<ReadTripDTO> GetCurrentUserHistoryOfTrips();
 	IEnumerable<ReadTripDTO> GetCurrentUserTrips();

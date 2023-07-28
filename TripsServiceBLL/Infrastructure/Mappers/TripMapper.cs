@@ -36,12 +36,17 @@ public class TripMapper : Profile
 		CreateMap<EditTripDTO, Trip>()
 			.IncludeBase<CreateTripDTO, Trip>()
 			.ForMember(trip => trip.Id, opt => opt.Ignore());
+		CreateMap<AdminEditTripDTO, Trip>()
+			.IncludeBase<EditTripDTO, Trip>()
+			.ForMember(trip => trip.UserId, opt => opt.MapFrom(src => src.UserId));
 		CreateMap<Trip, EditTripDTO>()
 			.ForMember(dto => dto.StartTime,
 				opt => opt.MapFrom(src => src.StartTime.AddSeconds(src.StartTimeZoneOffset)))
 			.ForMember(dto => dto.EndTime, opt => opt.MapFrom(src => src.EndTime.AddSeconds(src.FinishTimeZoneOffset)))
 			.ForMember(dest => dest.Images, opt => 
 				opt.MapFrom(tripImageLinkResolver));
+		CreateMap<Trip, AdminEditTripDTO>()
+			.IncludeBase<Trip, EditTripDTO>();
 		CreateMap<Trip, ReadTripDTO>()
 			.ForMember(dest => dest.StartTime,
 				opt => opt.MapFrom(src => src.StartTime.AddSeconds(src.StartTimeZoneOffset)))

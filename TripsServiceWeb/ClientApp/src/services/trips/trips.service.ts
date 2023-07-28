@@ -2,7 +2,7 @@
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {
-  AdminTripCreateDTO,
+  AdminTripCreateDTO, AdminTripEditDTO,
   PastTripEditDTO,
   TripCreateDTO,
   TripDateChangesDTO,
@@ -34,7 +34,11 @@ export class TripsService {
   editCurrent(trip: TripEditDTO, formData: FormData): Observable<TripEditDTO> {
     this.initFormDataForTrip(trip, formData);
     formData.set("Id", trip.id.toString());
-    return this.http.put<TripEditDTO>(this.apiUrl + `/edit/current/${trip.id}`, formData);
+    if (trip instanceof AdminTripEditDTO) {
+      return this.http.put<AdminTripEditDTO>(this.adminApiUrl + `/edit/${trip.id}`, formData);
+    }
+    else
+      return this.http.put<TripEditDTO>(this.apiUrl + `/edit/current/${trip.id}`, formData);
   }
 
   editPast(trip: PastTripEditDTO, formData: FormData): Observable<PastTripEditDTO> {
@@ -86,6 +90,10 @@ export class TripsService {
     return this.http.get<TripEditDTO>(this.apiUrl + `/edit/current/${id}`);
   }
 
+  getTripForAdminEditing(id: number): Observable<AdminTripEditDTO> {
+    return this.http.get<AdminTripEditDTO>(this.adminApiUrl + `/edit/${id}`);
+  }
+
   getTripForPastEditing(id: number): Observable<PastTripEditDTO> {
     return this.http.get<PastTripEditDTO>(this.apiUrl + `/edit/past/${id}`);
   }
@@ -93,6 +101,8 @@ export class TripsService {
   private initFormDataForTrip(trip: TripCreateDTO, formData: FormData){
     if (trip instanceof AdminTripCreateDTO)
       formData.set("UserId", (trip as AdminTripCreateDTO).userId.toString());
+    if (trip instanceof AdminTripEditDTO)
+      formData.set("UserId", (trip as AdminTripEditDTO).userId.toString());
     trip.imagesAsFiles?.forEach(file => formData.append("ImagesAsFiles", file, file.name));
     if (trip.endTime) {
       trip.endTime.setTime(trip.endTime.getTime() - trip.endTime.getTimezoneOffset() * 60 * 1000);

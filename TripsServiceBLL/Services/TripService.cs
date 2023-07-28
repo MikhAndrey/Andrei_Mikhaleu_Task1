@@ -97,6 +97,13 @@ public class TripService : ITripService
 		EditTripDTO dto = _mapper.Map<EditTripDTO>(trip);
 		return dto;
 	}
+	
+	public async Task<AdminEditTripDTO> GetTripForEditingByAdminAsync(int tripId)
+	{
+		Trip trip = await _unitOfWork.Trips.GetByIdForEditingAsync(tripId);
+		AdminEditTripDTO dto = _mapper.Map<AdminEditTripDTO>(trip);
+		return dto;
+	}
 
 	public async Task<EditPastTripDTO> GetPastTripForEditingAsync(int tripId)
 	{

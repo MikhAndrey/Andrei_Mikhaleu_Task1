@@ -26,8 +26,7 @@
         </div>
         <div class = "tp-gradient-reverse card-footer">
           <a routerLink="/trips/details/{{trip.id}}" class = "btn btn-primary ml-3 mt-2 mb-3 mr-2">Details</a>
-          <a routerLink="/trips/edit/current/{{trip.id}}" class = "btn btn-secondary  mt-2 mb-3 mr-2" *ngIf="trip.isFuture">Edit</a>
-          <a routerLink="/trips/edit/past/{{trip.id}}" class = "btn btn-secondary  mt-2 mb-3 mr-2" *ngIf="!trip.isFuture">Edit</a>
+          <a routerLink="/admin/trips/edit/{{trip.id}}" class = "btn btn-secondary  mt-2 mb-3 mr-2">Edit</a>
           <button type = "button" class = "btn btn-danger mt-2 mb-3 mr-2 delete-btn" data-bs-toggle = "modal" data-bs-target = "#tripDeleteModal" (click)="setTripId(trip.id)">Delete</button>
           <button *ngIf="trip.isNeedToBeRated" type = "button" class = "btn btn-warning mt-2 mb-3" data-bs-toggle = "modal" data-bs-target = "#rateDriverModal" (click)="setTripId(trip.id)">Rate driver</button>
         </div>

@@ -22,23 +22,19 @@ export class TripEditComponent implements OnInit {
   localEndTimeWithoutSeconds: string;
 
   constructor(
-    private tripService: TripsService,
-    private redirectService: RedirectService,
-    private routesService: RoutesService,
-    private route: ActivatedRoute,
-    private imagesService: ImagesService,
-    private mapInitService: MapInitService,
-    private driverIdService: DriverIdService) { }
+    protected tripService: TripsService,
+    protected redirectService: RedirectService,
+    protected routesService: RoutesService,
+    protected route: ActivatedRoute,
+    protected imagesService: ImagesService,
+    protected mapInitService: MapInitService,
+    protected driverIdService: DriverIdService) { }
 
   ngOnInit(): void {
     const id: number = parseInt(this.route.snapshot.paramMap.get('id')!);
     this.tripService.getTripForCurrentEditing(id).subscribe({
       next: (response) => {
-        this.trip = response;
-        this.driverIdService.setDriverId(this.trip.driverId);
-        this.trip.endTime = new Date(this.trip.endTime!);
-        const markerPositions: google.maps.LatLngLiteral[] = this.routesService.mapRoutePointsToCoordinates(this.trip.routePoints);
-        this.mapInitService.setMarkerPositions(markerPositions);
+        this.parseIncomingTripData(response);
       },
       error: (error) => alert(error.error)
     });
@@ -54,6 +50,14 @@ export class TripEditComponent implements OnInit {
         this.validationErrors = error.error.errors || error.error;
       }
     });
+  }
+
+  protected parseIncomingTripData(trip: TripEditDTO){
+    this.trip = trip;
+    this.driverIdService.setDriverId(trip.driverId);
+    this.trip.endTime = new Date(trip.endTime!);
+    const markerPositions: google.maps.LatLngLiteral[] = this.routesService.mapRoutePointsToCoordinates(trip.routePoints);
+    this.mapInitService.setMarkerPositions(markerPositions);
   }
 
   handleFilesChanged(files: ImageFile[]): void {
