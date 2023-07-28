@@ -91,6 +91,6 @@ public class TripRepository : EFGenericRepository<Trip>, ITripRepository
 
 	public IQueryable<Trip> GetAllWithUserInfo()
 	{
-		return _dbSet.Include(t => t.User);
+		return _dbSet.Include(t => t.User).Include(t => t.Feedback);
 	}
 }
