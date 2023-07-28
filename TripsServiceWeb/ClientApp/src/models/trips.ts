@@ -27,6 +27,13 @@ export class TripCreateDTO {
   }
 }
 
+export class AdminTripCreateDTO extends TripCreateDTO {
+  userId: number;
+  constructor() {
+    super();
+  }
+}
+
 export interface TripCreateValidationErrors {
   Name?: string[];
   StartTime?: string[];

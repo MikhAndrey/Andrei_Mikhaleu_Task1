@@ -17,7 +17,7 @@ export class TripCreateComponent implements OnInit {
   validationErrors: TripCreateValidationErrors = {};
   localEndTimeWithoutSeconds: string;
 
-  constructor(private tripService: TripsService, private redirectService: RedirectService) { }
+  constructor(protected tripService: TripsService, protected redirectService: RedirectService) { }
 
   ngOnInit(): void {
   }

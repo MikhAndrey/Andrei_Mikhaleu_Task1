@@ -15,5 +15,7 @@ public class UserMapper : Profile
 		CreateMap<UserSignupDTO, User>()
 			.ForMember(user => user.Password, opt => opt.MapFrom(src => UtilEncryptor.Encrypt(src.Password)))
 			.ForMember(user => user.RoleId, opt => opt.MapFrom(userRoleIdResolver));
+		CreateMap<User, UserListDTO>()
+			.ForMember(user => user.Role, opt => opt.MapFrom(src => src.Role.Name));
 	}
 }

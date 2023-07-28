@@ -55,7 +55,13 @@
             <a class = "nav-link dropdown-toggle fs-5" href = "#" id = "navbarDropdownAdmin" role = "button" data-bs-toggle = "dropdown" aria-expanded = "false">Admin Menu</a>
             <ul class = "dropdown-menu tp-gradient-standard fs-5" aria-labelledby = "navbarDropdownAdmin">
               <li [routerLinkActive]="['link-active']">
-                <a class="dropdown-item" [routerLink]="['/trips/all']">Trips of all users</a>
+                <a class="dropdown-item" [routerLink]="['/admin/trips']">Trips of all users</a>
+              </li>
+              <li>
+                <hr class = "dropdown-divider">
+              </li>
+              <li [routerLinkActive]="['link-active']">
+                <a class="dropdown-item" [routerLink]="['/admin/trips/create']">Create a trip</a>
               </li>
             </ul>
           </li>

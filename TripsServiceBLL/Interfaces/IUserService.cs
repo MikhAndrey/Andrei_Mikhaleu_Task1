@@ -13,4 +13,5 @@ public interface IUserService
 	int GetCurrentUserId();
 	string? GetCurrentUserName();
 	string? GetCurrentUserRole();
+	IEnumerable<UserListDTO> GetAllNamesWithRoles();
 }

@@ -21,4 +21,9 @@ public class UserRepository : EFGenericRepository<User>, IUserRepository
 	{
 		return await _dbSet.FirstOrDefaultAsync(u => u.Email == email);
 	}
+
+	public IQueryable<User> GetAllWithRoles()
+	{
+		return _dbSet.Include(u => u.Role);
+	}
 }

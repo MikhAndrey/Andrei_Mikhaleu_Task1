@@ -123,4 +123,15 @@ public class UserService : IUserService
 
 		throw new ValidationException(UtilConstants.InvalidCredentialsMessage, "Model");
 	}
+
+	public IEnumerable<UserListDTO> GetAllNamesWithRoles()
+	{
+		IEnumerable<User> rawUsers = _unitOfWork.Users.GetAllWithRoles();
+		IEnumerable<UserListDTO> mappedUsers = rawUsers.Select(el =>
+		{
+			UserListDTO mappedUser = _mapper.Map<UserListDTO>(el);
+			return mappedUser;
+		});
+		return mappedUsers;
+	}
 }

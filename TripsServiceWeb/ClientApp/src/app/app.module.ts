@@ -35,6 +35,7 @@ import {ImagesCarouselComponent} from "./images-carousel/images-carousel.compone
 import {TripsListBaseComponent} from "./trips-list-base/trips-list-base.component";
 import {AuthInterceptor} from "../utils/authInterceptor";
 import {AdminTripsListComponent} from "./admin-trips-list/admin-trips-list.component";
+import {AdminTripCreateComponent} from "./admin-trip-create/admin-trip-create.component";
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import {AdminTripsListComponent} from "./admin-trips-list/admin-trips-list.compo
     DriverDetailsComponent,
     FeedbackUpdateComponent,
     ImagesCarouselComponent,
-    AdminTripsListComponent
+    AdminTripsListComponent,
+    AdminTripCreateComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -81,7 +83,8 @@ import {AdminTripsListComponent} from "./admin-trips-list/admin-trips-list.compo
       { path: 'statistics/durations', component: DurationStatisticsComponent},
       { path: 'trips/create', component: TripCreateComponent},
       { path: 'trips', component: TripsListComponent},
-      { path: 'trips/all', component: AdminTripsListComponent},
+      { path: 'admin/trips', component: AdminTripsListComponent},
+      { path: 'admin/trips/create', component: AdminTripCreateComponent},
       { path: 'trips/activity', component: TripsActivityComponent},
       { path: 'trips/history', component: TripsHistoryComponent},
       { path: 'trips/details/:id', component: TripDetailsComponent},
