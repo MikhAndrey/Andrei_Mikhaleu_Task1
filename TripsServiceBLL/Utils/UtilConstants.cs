@@ -20,4 +20,5 @@ public static class UtilConstants
 	public static UtilDelegates.StringMapperDelegate GetExistingCredentialMessage =
 		credential => $"This {credential} is already taken";
 	public static string SignupDefaultRoleName = "User";
+	public static string AdminRoleName = "Admin";
 }
