@@ -1,38 +1,39 @@
-import { Component, OnInit } from '@angular/core';
-import {TripCreateValidationErrors, TripEditDTO} from "../../models/trips";
+import {Component, OnInit} from '@angular/core';
+import {TripEditDTO} from "../../models/trips";
 import {TripsService} from "../../services/trips/trips.service";
 import {RedirectService} from "../../services/redirect.service";
 import {RoutesService} from "../../services/routes.service";
 import {ActivatedRoute} from "@angular/router";
 import {ImagesService} from "../../services/images.service";
 import {MapInitService} from "../../services/mapInit.service";
-import {DriverInfoDTO} from "../../models/drivers";
 import {DriverIdService} from "../../services/driverId.service";
-import {ImageFile} from "../../models/images";
+import {TripCreateComponent} from "../trip-create/trip-create.component";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-trip-edit',
   templateUrl: './trip-edit.component.html',
 })
-export class TripEditComponent implements OnInit {
+export class TripEditComponent extends TripCreateComponent implements OnInit {
   trip: TripEditDTO = new TripEditDTO();
-  durationText?: string;
-  driverName?: string;
-  validationErrors: TripCreateValidationErrors = {};
-  localEndTimeWithoutSeconds: string;
+  protected tripInitMethod: Observable<TripEditDTO>;
+  declare tripSubmitMethod: Observable<TripEditDTO>;
 
   constructor(
     protected tripService: TripsService,
     protected redirectService: RedirectService,
     protected routesService: RoutesService,
-    protected route: ActivatedRoute,
+    route: ActivatedRoute,
     protected imagesService: ImagesService,
     protected mapInitService: MapInitService,
-    protected driverIdService: DriverIdService) { }
+    protected driverIdService: DriverIdService) {
+    super(tripService, redirectService);
+    const id: number = parseInt(route.snapshot.paramMap.get('id')!)
+    this.tripInitMethod = this.tripService.getTripForCurrentEditing(id);
+  }
 
-  ngOnInit(): void {
-    const id: number = parseInt(this.route.snapshot.paramMap.get('id')!);
-    this.tripService.getTripForCurrentEditing(id).subscribe({
+  override ngOnInit(): void {
+    this.tripInitMethod.subscribe({
       next: (response) => {
         this.parseIncomingTripData(response);
       },
@@ -40,19 +41,12 @@ export class TripEditComponent implements OnInit {
     });
   }
 
-  submit(form: HTMLFormElement): void {
+  override setTripSubmitMethod(form: HTMLFormElement) {
     const formData: FormData = new FormData(form);
-    this.tripService.editCurrent(this.trip, formData).subscribe({
-      next: () => {
-        this.redirectService.redirectToAddress("trips/");
-      },
-      error: (error) => {
-        this.validationErrors = error.error.errors || error.error;
-      }
-    });
+    this.tripSubmitMethod = this.tripService.editCurrent(this.trip, formData);
   }
 
-  protected parseIncomingTripData(trip: TripEditDTO){
+  protected parseIncomingTripData(trip: TripEditDTO) {
     this.trip = trip;
     this.driverIdService.setDriverId(trip.driverId);
     this.trip.endTime = new Date(trip.endTime!);
@@ -60,39 +54,10 @@ export class TripEditComponent implements OnInit {
     this.mapInitService.setMarkerPositions(markerPositions);
   }
 
-  handleFilesChanged(files: ImageFile[]): void {
-    this.trip.imagesAsFiles = files.map(fileInfo => fileInfo.file);
-  }
-  handleDurationTextChanged(durationText?: string): void {
-    this.durationText = durationText;
-  }
-  handleStartTimeZoneChanged(startTimeZoneOffset: number): void {
-    this.trip.startTimeZoneOffset = startTimeZoneOffset;
-  }
-  handleFinishTimeZoneOffsetChanged(finishTimeZoneOffset: number): void {
-    this.trip.finishTimeZoneOffset = finishTimeZoneOffset;
-  }
-  handleFinishTimeChanged(finishTime: Date): void {
-    this.trip.endTime = finishTime;
-    const options: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric' };
-    this.localEndTimeWithoutSeconds = `${this.trip.endTime.toLocaleDateString()} ${this.trip.endTime.toLocaleTimeString([], options)}`;
-  }
-  handleDistanceChanged(distance: number): void {
-    this.trip.distance = distance;
-  }
-  handleRoutePointsChanged(routePoints: string): void {
-    this.trip.routePointsAsString = routePoints;
-  }
-
   deleteTripImage(id: number): void {
     this.imagesService.delete(id, this.trip.id).subscribe({
       next: () => this.trip.images = this.trip.images.filter(image => image.id !== id),
       error: (error) => alert(error.error)
     })
-  }
-
-  handleSelectedDriverChanged(driver: DriverInfoDTO): void {
-    this.trip.driverId = driver.id;
-    this.driverName = driver.name;
   }
 }

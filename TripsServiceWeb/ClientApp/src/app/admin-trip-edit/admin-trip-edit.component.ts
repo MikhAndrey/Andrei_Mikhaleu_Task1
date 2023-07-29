@@ -10,6 +10,7 @@ import {DriverIdService} from "../../services/driverId.service";
 import {TripEditComponent} from "../trip-edit/trip-edit.component";
 import {UsersService} from "../../services/users.Service";
 import {UserListDTO} from "../../models/users";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-admin-trip-edit',
@@ -19,29 +20,33 @@ export class AdminTripEditComponent extends TripEditComponent implements OnInit 
   trip: AdminTripEditDTO = new AdminTripEditDTO();
   users: UserListDTO[];
 
+  tripInitMethod: Observable<AdminTripEditDTO>
+  declare tripSubmitMethod: Observable<AdminTripEditDTO>;
+
   constructor(
     protected tripService: TripsService,
     protected redirectService: RedirectService,
     protected routesService: RoutesService,
-    protected route: ActivatedRoute,
+    route: ActivatedRoute,
     protected imagesService: ImagesService,
     protected mapInitService: MapInitService,
     protected driverIdService: DriverIdService,
     protected usersService: UsersService) {
     super(tripService, redirectService, routesService, route, imagesService, mapInitService, driverIdService);
+    const id: number = parseInt(route.snapshot.paramMap.get('id')!)
+    this.tripInitMethod = this.tripService.getTripForAdminEditing(id);
   }
 
   override ngOnInit(): void {
-    const id: number = parseInt(this.route.snapshot.paramMap.get('id')!);
-    this.tripService.getTripForAdminEditing(id).subscribe({
-      next: (response) => {
-        this.parseIncomingTripData(response);
-      },
-      error: (error) => alert(error.error)
-    });
+    super.ngOnInit();
     this.usersService.getAll().subscribe({
       next: value => this.users = value,
       error: err => alert(err.error)
     });
+  }
+
+  override setTripSubmitMethod(form: HTMLFormElement){
+    const formData: FormData = new FormData(form);
+    this.tripSubmitMethod = this.tripService.adminEdit(this.trip, formData);
   }
 }

@@ -25,20 +25,26 @@ export class TripsService {
 
   add(trip: TripCreateDTO, formData: FormData): Observable<TripCreateDTO> {
     this.initFormDataForTrip(trip, formData);
-    if (trip instanceof AdminTripCreateDTO)
-      return this.http.post<AdminTripCreateDTO>(this.adminApiUrl + '/create', formData);
-    else
-      return this.http.post<TripCreateDTO>(this.apiUrl + '/create', formData);
+    return this.http.post<TripCreateDTO>(this.apiUrl + '/create', formData);
+  }
+
+  adminAdd(trip: AdminTripCreateDTO, formData: FormData): Observable<AdminTripCreateDTO> {
+    this.initFormDataForTrip(trip, formData);
+    formData.set("UserId", trip.userId.toString());
+    return this.http.post<AdminTripCreateDTO>(this.adminApiUrl + '/create', formData);
   }
 
   editCurrent(trip: TripEditDTO, formData: FormData): Observable<TripEditDTO> {
     this.initFormDataForTrip(trip, formData);
     formData.set("Id", trip.id.toString());
-    if (trip instanceof AdminTripEditDTO) {
-      return this.http.put<AdminTripEditDTO>(this.adminApiUrl + `/edit/${trip.id}`, formData);
-    }
-    else
-      return this.http.put<TripEditDTO>(this.apiUrl + `/edit/current/${trip.id}`, formData);
+    return this.http.put<TripEditDTO>(this.apiUrl + `/edit/current/${trip.id}`, formData);
+  }
+
+  adminEdit(trip: AdminTripEditDTO, formData: FormData): Observable<AdminTripEditDTO> {
+    this.initFormDataForTrip(trip, formData);
+    formData.set("Id", trip.id.toString());
+    formData.set("UserId", trip.userId.toString());
+    return this.http.put<AdminTripEditDTO>(this.adminApiUrl + `/edit/${trip.id}`, formData);
   }
 
   editPast(trip: PastTripEditDTO, formData: FormData): Observable<PastTripEditDTO> {
@@ -99,10 +105,6 @@ export class TripsService {
   }
 
   private initFormDataForTrip(trip: TripCreateDTO, formData: FormData){
-    if (trip instanceof AdminTripCreateDTO)
-      formData.set("UserId", (trip as AdminTripCreateDTO).userId.toString());
-    if (trip instanceof AdminTripEditDTO)
-      formData.set("UserId", (trip as AdminTripEditDTO).userId.toString());
     trip.imagesAsFiles?.forEach(file => formData.append("ImagesAsFiles", file, file.name));
     if (trip.endTime) {
       trip.endTime.setTime(trip.endTime.getTime() - trip.endTime.getTimezoneOffset() * 60 * 1000);
