@@ -40,7 +40,7 @@ public class EditPastTripCommandAsync : ICommandAsync<EditPastTripDTO>
 		try
 		{
 			await _tripService.UpdateAsync(trip);
-			await _imageService.SaveTripImagesAsync(trip.Id, dto.ImagesAsFiles);
+			await _imageService.SaveTripImagesAsync(trip.Id, trip.UserId, dto.ImagesAsFiles);
 			await transaction.CommitAsync();
 		}
 		catch (Exception)

@@ -89,11 +89,9 @@ public class TripMapper : Profile
 				opt.MapFrom((src, dest) =>
 				{
 					if (UtilTripFunctions.IsCurrent(src))
-						return UtilDateTimeFunctions.GetTimeSpanString(DateTime.UtcNow
-							.AddSeconds(src.StartTimeZoneOffset).Subtract(src.StartTime));
+						return UtilDateTimeFunctions.GetTimeSpanString(DateTime.UtcNow.Subtract(src.StartTime));
 					if (UtilTripFunctions.IsFuture(src))
-						return UtilDateTimeFunctions.GetTimeSpanString(src.StartTime
-							.AddSeconds(-src.StartTimeZoneOffset).Subtract(DateTime.UtcNow));
+						return UtilDateTimeFunctions.GetTimeSpanString(src.StartTime.Subtract(DateTime.UtcNow));
 					return "Completed";
 				}))
 			.ForMember(dest => dest.Images, opt => 
