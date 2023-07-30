@@ -89,7 +89,7 @@ export class TripsService {
   updateTripDateInfo(trip: TripDetailsDTO, dateInfo: TripDateChangesDTO): void {
     trip.utcStartTimeZone = dateInfo.newStartTimeAsString;
     trip.utcFinishTimeZone = dateInfo.newFinishTimeAsString;
-    trip.duration = dateInfo.newDurationAsString;
+    trip.timeInfo = dateInfo.newTimeInfo;
   }
 
   getTripForCurrentEditing(id: number): Observable<TripEditDTO> {

@@ -86,7 +86,7 @@ export class TripDetailsDTO extends TripReadDTO {
 export class TripDateChangesDTO {
   newStartTimeAsString: string;
   newFinishTimeAsString: string;
-  newDurationAsString: string;
+  newTimeInfo: string;
 }
 
 export class TripEditDTO extends TripCreateDTO {
