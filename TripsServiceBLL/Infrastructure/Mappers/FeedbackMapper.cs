@@ -12,6 +12,7 @@ public class FeedbackMapper : Profile
 		CreateMap<Trip, ReadFeedbackDTO>()
 			.ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Feedback.Text))
 			.ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Feedback.Rating))
+			.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Feedback.Id))
 			.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
 		CreateMap<CreateFeedbackDTO, Feedback>();
 		CreateMap<CreateFeedbackDTO, ReadFeedbackDTO>()

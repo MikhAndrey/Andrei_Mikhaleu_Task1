@@ -15,6 +15,18 @@ builder.Services.AddControllersWithViews();
 ProgramHelper.AddAuthentication(builder.Services);
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendHostCorsPolicy", policyBuilder =>
+    {
+        policyBuilder
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins("https://localhost:44402");
+    });
+});
+
 builder.Services.AddSignalR();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -33,7 +45,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors("AllowAll");
+app.UseCors("FrontendHostCorsPolicy");
 
 ProgramHelper.AddJwtTokenToRequests(app);
 

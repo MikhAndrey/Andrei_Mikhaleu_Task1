@@ -10,3 +10,9 @@ export class FeedbackReadDTO {
   rating: number;
   userName?: string;
 }
+
+export class FeedbackUpdateDTO {
+  id: number;
+  text?: string;
+  rating: number;
+}
