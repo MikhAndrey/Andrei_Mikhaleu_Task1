@@ -4,5 +4,5 @@ public class TripDateChangesDTO
 {
     public string? NewStartTimeAsString { get; set; }
     public string? NewFinishTimeAsString { get; set; }
-    public string? NewDurationAsString { get; set; }
+    public string? NewTimeInfo { get; set; }
 }

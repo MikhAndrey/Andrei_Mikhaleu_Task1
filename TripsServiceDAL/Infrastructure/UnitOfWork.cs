@@ -15,6 +15,7 @@ public class UnitOfWork : IDisposable, IUnitOfWork
 	private IRoutePointRepository _routePointRepository;
 	private ITripRepository _tripRepository;
 	private IUserRepository _userRepository;
+	private IRoleRepository _roleRepository;
 
 	private bool disposed;
 
@@ -71,6 +72,15 @@ public class UnitOfWork : IDisposable, IUnitOfWork
 		{
 			_userRepository ??= new UserRepository(_context);
 			return _userRepository;
+		}
+	}
+	
+	public IRoleRepository Roles
+	{
+		get
+		{
+			_roleRepository ??= new RoleRepository(_context);
+			return _roleRepository;
 		}
 	}
 

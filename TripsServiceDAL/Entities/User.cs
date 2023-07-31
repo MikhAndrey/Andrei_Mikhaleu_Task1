@@ -17,4 +17,6 @@ public class User : IIdentifiable, ISoftDelete
 	public List<Comment> Comments { get; set; }
 	public int Id { get; set; }
 	public bool IsDeleted { get; set; }
+	public int RoleId { get; set; }
+	public Role Role { get; set; }
 }

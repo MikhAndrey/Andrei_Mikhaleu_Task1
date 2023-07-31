@@ -4,6 +4,7 @@ import {TripsService} from "../../services/trips/trips.service";
 import {RedirectService} from "../../services/redirect.service";
 import {DriverInfoDTO} from "../../models/drivers";
 import {ImageFile} from "../../models/images";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-trip-create',
@@ -16,15 +17,21 @@ export class TripCreateComponent implements OnInit {
   driverName?: string;
   validationErrors: TripCreateValidationErrors = {};
   localEndTimeWithoutSeconds: string;
+  protected tripSubmitMethod: Observable<TripCreateDTO>;
 
-  constructor(private tripService: TripsService, private redirectService: RedirectService) { }
+  constructor(protected tripService: TripsService, protected redirectService: RedirectService) { }
 
   ngOnInit(): void {
   }
 
-  submit(form: HTMLFormElement): void {
+  protected setTripSubmitMethod(form: HTMLFormElement){
     const formData: FormData = new FormData(form);
-    this.tripService.add(this.trip, formData).subscribe({
+    this.tripSubmitMethod = this.tripService.add(this.trip, formData);
+  }
+
+  submit(form: HTMLFormElement): void {
+    this.setTripSubmitMethod(form);
+    this.tripSubmitMethod.subscribe({
       next: () => {
         this.redirectService.redirectToAddress("trips/");
       },

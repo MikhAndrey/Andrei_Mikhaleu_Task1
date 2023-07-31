@@ -1,32 +1,32 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountService, UserNameResponse} from "../../services/account.service";
-import {RedirectService} from "../../services/redirect.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.css']
 })
-export class NavMenuComponent {
-  userName?: string;
+export class NavMenuComponent implements OnInit, OnDestroy{
 
-  constructor(private accountService: AccountService, private redirectionService: RedirectService) {
+  userInfo: UserNameResponse = {};
+  userInfoSubscription: Subscription;
+
+  constructor(private accountService: AccountService) {
   }
 
   ngOnInit(): void {
-    this.accountService.getUserName().subscribe(
-      (response: UserNameResponse) => {
-        this.userName = response.userName
-      }
-    );
+    this.userInfoSubscription = this.accountService.currentUserInfo$.subscribe((userInfo) => {
+      this.userInfo = userInfo
+    });
+    this.accountService.getUserInfo();
   }
 
   logout(): void {
-    this.accountService.logout().subscribe(
-      () => {
-        this.userName = undefined;
-        this.redirectionService.redirectToAddress("");
-      }
-    );
+    this.accountService.logout();
+  }
+
+  ngOnDestroy() {
+    this.userInfoSubscription.unsubscribe();
   }
 }

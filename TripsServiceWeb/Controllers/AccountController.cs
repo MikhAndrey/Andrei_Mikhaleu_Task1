@@ -65,10 +65,14 @@ public class AccountController : ControllerBase
         return BadRequest(ModelState);
     }
     
-    [HttpGet("username")]
-    public ActionResult<string?> GetUserName()
+    [HttpGet("userinfo")]
+    public ActionResult<string?> GetUserInfo()
     {
-        return Ok(new { UserName = _userService.GetCurrentUserName()});
+        return Ok(new
+        {
+            UserName = _userService.GetCurrentUserName(),
+            Role = _userService.GetCurrentUserRole()
+        });
     }
 
     [HttpGet("isAuthenticated")]

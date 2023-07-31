@@ -11,6 +11,7 @@ public interface IUnitOfWork
 	IUserRepository Users { get; }
 	IDriverRepository Drivers { get; }
 	IFeedbackRepository Feedbacks { get; }
+	IRoleRepository Roles { get; }
 	Task SaveAsync();
 	IDbContextTransaction BeginTransaction();
 }

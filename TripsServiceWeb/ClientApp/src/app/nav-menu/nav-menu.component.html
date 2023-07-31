@@ -51,12 +51,26 @@
               </li>
             </ul>
           </li>
+          <li *ngIf="userInfo.role === 'Admin'" class = "nav-item dropdown">
+            <a class = "nav-link dropdown-toggle fs-5" href = "#" id = "navbarDropdownAdmin" role = "button" data-bs-toggle = "dropdown" aria-expanded = "false">Admin Menu</a>
+            <ul class = "dropdown-menu tp-gradient-standard fs-5" aria-labelledby = "navbarDropdownAdmin">
+              <li [routerLinkActive]="['link-active']">
+                <a class="dropdown-item" [routerLink]="['/admin/trips']">Trips of all users</a>
+              </li>
+              <li>
+                <hr class = "dropdown-divider">
+              </li>
+              <li [routerLinkActive]="['link-active']">
+                <a class="dropdown-item" [routerLink]="['/admin/trips/create']">Create a trip</a>
+              </li>
+            </ul>
+          </li>
           <li class=" fs-5 nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link" [routerLink]="['/drivers']">Our drivers</a>
           </li>
         </ul>
-        <div class = "nav-item dropdown mr-50 fs-5" *ngIf="userName; else authUserMenu">
-          <a class = "nav-link dropdown-toggle" href = "#" id = "navbarUserDropdown" role = "button" data-bs-toggle = "dropdown" aria-expanded = "false">Welcome back, {{ userName }}</a>
+        <div class = "nav-item dropdown mr-50 fs-5" *ngIf="userInfo.userName; else authUserMenu">
+          <a class = "nav-link dropdown-toggle" href = "#" id = "navbarUserDropdown" role = "button" data-bs-toggle = "dropdown" aria-expanded = "false">Welcome back, {{ userInfo.userName }}</a>
           <ul class = "dropdown-menu tp-gradient-standard" aria-labelledby = "navbarUserDropdown">
             <li>
               <a class = "dropdown-item" (click)="logout()">Log out</a>

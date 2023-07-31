@@ -97,6 +97,13 @@ public class TripService : ITripService
 		EditTripDTO dto = _mapper.Map<EditTripDTO>(trip);
 		return dto;
 	}
+	
+	public async Task<AdminEditTripDTO> GetTripForEditingByAdminAsync(int tripId)
+	{
+		Trip trip = await _unitOfWork.Trips.GetByIdForEditingAsync(tripId);
+		AdminEditTripDTO dto = _mapper.Map<AdminEditTripDTO>(trip);
+		return dto;
+	}
 
 	public async Task<EditPastTripDTO> GetPastTripForEditingAsync(int tripId)
 	{
@@ -136,6 +143,17 @@ public class TripService : ITripService
 		IEnumerable<ReadTripDTO> mappedTrips = rawTrips.Select(el =>
 		{
 			ReadTripDTO mappedTrip = _mapper.Map<ReadTripDTO>(el);
+			return mappedTrip;
+		});
+		return mappedTrips;
+	}
+	
+	public IEnumerable<ReadTripDTOExtended> GetAllTrips()
+	{
+		IEnumerable<Trip> rawTrips = _unitOfWork.Trips.GetAllWithUserInfo();
+		IEnumerable<ReadTripDTOExtended> mappedTrips = rawTrips.Select(el =>
+		{
+			ReadTripDTOExtended mappedTrip = _mapper.Map<ReadTripDTOExtended>(el);
 			return mappedTrip;
 		});
 		return mappedTrips;

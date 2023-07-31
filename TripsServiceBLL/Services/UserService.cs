@@ -43,12 +43,24 @@ public class UserService : IUserService
 	{
 		return _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
 	}
+	
+	public string? GetCurrentUserRole()
+	{
+		try
+		{
+			return _httpContextAccessor?.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+		}
+		catch
+		{
+			return null;
+		}
+	}
 
-	public async Task<int?> GetUserIdForLoginAsync(UserLoginDTO user)
+	public async Task<User?> GetUserForLoginAsync(UserLoginDTO user)
 	{
 		User? userFromDB = await _unitOfWork.Users.GetByUsernameAsync(user.UserName);
 		return userFromDB != null && userFromDB.Password == UtilEncryptor.Encrypt(user.Password)
-			? userFromDB.Id
+			? userFromDB
 			: null;
 	}
 
@@ -83,8 +95,8 @@ public class UserService : IUserService
 
 	public async Task<string> GetJWTTokenAsync(UserLoginDTO user)
 	{
-		int? idOfUserFromDb = await GetUserIdForLoginAsync(user);
-		if (idOfUserFromDb != null)
+		User? UserFromDb = await GetUserForLoginAsync(user);
+		if (UserFromDb != null)
 		{
 			DateTime jwtExpiresUTC = user.RememberMe
 				? DateTime.UtcNow.AddDays(UtilConstants.AuthorizationExpirationInDays)
@@ -96,7 +108,8 @@ public class UserService : IUserService
 				Subject = new ClaimsIdentity(new[]
 				{
 					new(ClaimTypes.Name, user.UserName),
-					new Claim(UtilConstants.UserIdClaimName, idOfUserFromDb.ToString())
+					new Claim(UtilConstants.UserIdClaimName, UserFromDb.Id.ToString()),
+					new Claim(ClaimTypes.Role, UserFromDb.Role.Name)
 				}),
 				Audience = UtilConstants.JwtIssuer,
 				Issuer = UtilConstants.JwtIssuer,
@@ -109,5 +122,16 @@ public class UserService : IUserService
 		}
 
 		throw new ValidationException(UtilConstants.InvalidCredentialsMessage, "Model");
+	}
+
+	public IEnumerable<UserListDTO> GetAllNamesWithRoles()
+	{
+		IEnumerable<User> rawUsers = _unitOfWork.Users.GetAllWithRoles();
+		IEnumerable<UserListDTO> mappedUsers = rawUsers.Select(el =>
+		{
+			UserListDTO mappedUser = _mapper.Map<UserListDTO>(el);
+			return mappedUser;
+		});
+		return mappedUsers;
 	}
 }

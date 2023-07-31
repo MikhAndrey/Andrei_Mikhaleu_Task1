@@ -35,11 +35,11 @@ public class ImageService : IImageService
 		DeleteTripImagesFiles(tripId);
 	}
 
-	public async Task SaveTripImagesAsync(int tripId, List<IFormFile?>? images)
+	public async Task SaveTripImagesAsync(int tripId, int userId, List<IFormFile?>? images)
 	{
 		List<string> fileNames = GenerateImagesFileNames(images);
 		await AddTripImagesAsync(fileNames, tripId);
-		await SaveTripImagesFilesAsync(tripId, fileNames, images);
+		await SaveTripImagesFilesAsync(tripId, userId, fileNames, images);
 	}
 
 	public async Task DeleteByIdAsync(int imageId, int tripId)
@@ -103,9 +103,8 @@ public class ImageService : IImageService
 		await _unitOfWork.SaveAsync();
 	}
 
-	private async Task SaveTripImagesFilesAsync(int tripId, List<string> fileNames, List<IFormFile?>? images)
+	private async Task SaveTripImagesFilesAsync(int tripId, int userId, List<string> fileNames, List<IFormFile?>? images)
 	{
-		int userId = _userService.GetCurrentUserId();
 		if (images != null)
 		{
 			int imagesCount = images.Count;
