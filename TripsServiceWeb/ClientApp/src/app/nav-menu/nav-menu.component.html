@@ -68,6 +68,9 @@
           <li class=" fs-5 nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link" [routerLink]="['/drivers']">Our drivers</a>
           </li>
+          <li class=" fs-5 nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link" [routerLink]="['/chats']">Chats</a>
+          </li>
         </ul>
         <div class = "nav-item dropdown mr-50 fs-5" *ngIf="userInfo.userName; else authUserMenu">
           <a class = "nav-link dropdown-toggle" href = "#" id = "navbarUserDropdown" role = "button" data-bs-toggle = "dropdown" aria-expanded = "false">Welcome back, {{ userInfo.userName }}</a>

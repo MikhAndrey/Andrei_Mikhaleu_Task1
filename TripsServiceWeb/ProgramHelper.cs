@@ -35,6 +35,7 @@ public static class ProgramHelper
 		services.AddScoped<IDriverService, DriverService>();
 		services.AddScoped<IFeedbackService, FeedbackService>();
 		services.AddScoped<IRoleService, RoleService>();
+		services.AddScoped<IChatService, ChatService>();
 	}
 
 	public static void AddValueResolvers(IServiceCollection services)
@@ -74,6 +75,7 @@ public static class ProgramHelper
 			mc.AddProfile(new ImageMapper());
 			mc.AddProfile(new RoutePointMapper());
 			mc.AddProfile(new UserMapper(serviceProvider.GetService<NewUserRoleIdResolver>()));
+			mc.AddProfile(new ChatMapper());
 		});
 
 		IMapper mapper = mapperConfig.CreateMapper();

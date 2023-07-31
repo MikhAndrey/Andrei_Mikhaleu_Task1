@@ -37,6 +37,7 @@ import {AuthInterceptor} from "../utils/authInterceptor";
 import {AdminTripsListComponent} from "./admin-trips-list/admin-trips-list.component";
 import {AdminTripCreateComponent} from "./admin-trip-create/admin-trip-create.component";
 import {AdminTripEditComponent} from "./admin-trip-edit/admin-trip-edit.component";
+import {ChatsListComponent} from "./chats-list/chats-list.component";
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import {AdminTripEditComponent} from "./admin-trip-edit/admin-trip-edit.componen
     ImagesCarouselComponent,
     AdminTripsListComponent,
     AdminTripCreateComponent,
-    AdminTripEditComponent
+    AdminTripEditComponent,
+    ChatsListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -95,6 +97,7 @@ import {AdminTripEditComponent} from "./admin-trip-edit/admin-trip-edit.componen
       { path: 'trips/edit/past/:id', component: TripEditPastComponent},
       { path: 'drivers', component: DriversListComponent },
       { path: 'drivers/details/:id', component: DriverDetailsComponent },
+      { path: 'chats', component: ChatsListComponent },
     ])
   ],
   exports: [RouterModule],
