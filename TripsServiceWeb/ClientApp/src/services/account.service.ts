@@ -1,6 +1,6 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {Observable, Subject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {UserLoginDTO} from "../models/login";
 import {UserSignupDTO} from "../models/signup";
 import {RedirectService} from "./redirect.service";
@@ -15,7 +15,7 @@ export class AccountService {
 
   private readonly apiUrl: string;
 
-  currentUserInfo$: Subject<UserNameResponse> = new Subject<UserNameResponse>();
+  currentUserInfo$: BehaviorSubject<UserNameResponse> = new BehaviorSubject<UserNameResponse>({});
   public setCurrentUserInfo(userInfo: UserNameResponse) {
     this.currentUserInfo$.next(userInfo);
   }
@@ -26,6 +26,8 @@ export class AccountService {
     private redirectService: RedirectService)
   {
     this.apiUrl = baseUrl + "api/account";
+    if (Object.keys(this.currentUserInfo$.getValue()).length === 0)
+      this.getUserInfo();
   }
 
   signup(user: UserSignupDTO): Observable<Object>{

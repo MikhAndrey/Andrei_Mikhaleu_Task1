@@ -2,6 +2,7 @@
 import {ChatCreateDTO, ChatListDTO} from "../../models/chats";
 import {ChatsService} from "../../services/chats.service";
 import {AccountService} from "../../services/account.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-chats-list',
@@ -9,9 +10,11 @@ import {AccountService} from "../../services/account.service";
 })
 export class ChatsListComponent implements OnInit {
   chats: ChatListDTO[] = [];
-  isUserAdmin: boolean = false;
   chatToAdd: ChatCreateDTO = new ChatCreateDTO();
   validationErrors: {Name?: string[]} = {};
+
+  isUserAdmin: boolean = false;
+  userInfoSubscription: Subscription;
 
   constructor(private chatsService: ChatsService, private accountService: AccountService) {
   }
@@ -25,8 +28,8 @@ export class ChatsListComponent implements OnInit {
         alert("Impossible to load chats list. Try later");
       }
     });
-    this.accountService.currentUserInfo$.subscribe({
-      next: value => this.isUserAdmin = value.role === "Admin"
+    this.userInfoSubscription = this.accountService.currentUserInfo$.subscribe((userInfo) => {
+      this.isUserAdmin = userInfo.role === "Admin";
     });
   }
 

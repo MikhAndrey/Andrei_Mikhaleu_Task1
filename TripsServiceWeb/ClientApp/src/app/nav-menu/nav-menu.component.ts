@@ -19,7 +19,6 @@ export class NavMenuComponent implements OnInit, OnDestroy{
     this.userInfoSubscription = this.accountService.currentUserInfo$.subscribe((userInfo) => {
       this.userInfo = userInfo
     });
-    this.accountService.getUserInfo();
   }
 
   logout(): void {
