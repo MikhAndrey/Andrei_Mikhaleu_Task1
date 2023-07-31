@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  GOOGLE_MAPS_API_KEY: "AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI"
+  GOOGLE_MAPS_API_KEY: "AIzaSyAFD93X-nfhki6P2iGKcBv142KWS6SPrjI",
+  BASE_API_URL: "https://localhost:7030/"
 };
 
 /*
