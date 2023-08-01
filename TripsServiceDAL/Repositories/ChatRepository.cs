@@ -11,12 +11,14 @@ public class ChatRepository : EFGenericRepository<Chat>, IChatRepository
     {
     }
 
-    public new Task<Chat> GetByIdAsync(int id)
+    public new async Task<Chat> GetByIdAsync(int id)
     {
-        return _dbSet
+        Chat? chat = await _dbSet
             .Include(c => c.ChatParticipations)
             .ThenInclude(chp => chp.User)
+            .ThenInclude(u => u.Role)
             .Include(c => c.ChatParticipations)
             .ThenInclude(chp => chp.ChatMessages).FirstOrDefaultAsync(c => c.Id == id);
+        return chat;
     }
 }

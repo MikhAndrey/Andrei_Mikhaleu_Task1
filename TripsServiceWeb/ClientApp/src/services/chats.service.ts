@@ -1,7 +1,7 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ChatCreateDTO, ChatListDTO} from "../models/chats";
+import {ChatCreateDTO, ChatDetailsDTO, ChatListDTO} from "../models/chats";
 
 @Injectable({ providedIn: 'root' })
 export class ChatsService {
@@ -21,5 +21,9 @@ export class ChatsService {
 
   add(chat: ChatCreateDTO): Observable<ChatListDTO> {
     return this.http.post<ChatListDTO>(this.apiUrl + '/create', chat);
+  }
+
+  getById(id: number): Observable<ChatDetailsDTO> {
+    return this.http.get<ChatDetailsDTO>(this.apiUrl + `/${id}`);
   }
 }

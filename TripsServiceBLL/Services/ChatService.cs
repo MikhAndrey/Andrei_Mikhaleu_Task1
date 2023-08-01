@@ -37,4 +37,11 @@ public class ChatService : IChatService
         });
         return mappedChats;
     }
+
+    public async Task<ChatDetailsDTO> GetById(int id)
+    {
+        Chat? chat = await _unitOfWork.Chats.GetByIdAsync(id);
+        ChatDetailsDTO chatDetails = _mapper.Map<ChatDetailsDTO>(chat);
+        return chatDetails;
+    }
 }

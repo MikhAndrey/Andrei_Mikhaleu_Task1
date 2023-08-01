@@ -38,6 +38,7 @@ import {AdminTripsListComponent} from "./admin-trips-list/admin-trips-list.compo
 import {AdminTripCreateComponent} from "./admin-trip-create/admin-trip-create.component";
 import {AdminTripEditComponent} from "./admin-trip-edit/admin-trip-edit.component";
 import {ChatsListComponent} from "./chats-list/chats-list.component";
+import {ChatComponent} from "./chat/chat.component";
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import {ChatsListComponent} from "./chats-list/chats-list.component";
     AdminTripsListComponent,
     AdminTripCreateComponent,
     AdminTripEditComponent,
-    ChatsListComponent
+    ChatsListComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -98,6 +100,7 @@ import {ChatsListComponent} from "./chats-list/chats-list.component";
       { path: 'drivers', component: DriversListComponent },
       { path: 'drivers/details/:id', component: DriverDetailsComponent },
       { path: 'chats', component: ChatsListComponent },
+      { path: 'chats/:id', component: ChatComponent },
     ])
   ],
   exports: [RouterModule],

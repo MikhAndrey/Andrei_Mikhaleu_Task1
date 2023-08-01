@@ -35,5 +35,12 @@ public class ChatsController : ControllerBase
         IEnumerable<ChatListDTO> chats = _chatService.GetAll();
         return Ok(chats);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        ChatDetailsDTO chatDetails = await _chatService.GetById(id);
+        return Ok(chatDetails);
+    }
 }
 

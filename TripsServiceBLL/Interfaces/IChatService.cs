@@ -6,4 +6,5 @@ public interface IChatService
 {
     Task<ChatListDTO> AddAsync(ChatCreateDTO chat);
     IEnumerable<ChatListDTO> GetAll();
+    Task<ChatDetailsDTO> GetById(int id);
 }
