@@ -8,7 +8,8 @@ import {ActivatedRoute} from "@angular/router";
   templateUrl: './chat.component.html'
 })
 export class ChatComponent implements OnInit {
-  chat: ChatDetailsDTO;
+  chat: ChatDetailsDTO = new ChatDetailsDTO();
+  messageText: string;
 
   constructor(private chatsService: ChatsService, private route: ActivatedRoute) {
   }
@@ -23,5 +24,12 @@ export class ChatComponent implements OnInit {
         alert("Impossible to load chat data. Try later");
       }
     });
+  }
+
+  joinChat(): void {
+    this.chatsService.addUserToChat(this.chat.id).subscribe({
+      next: () => this.chat.isCurrentUserInChat = true,
+      error: (error) => alert(error.error)
+    })
   }
 }

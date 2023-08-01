@@ -12,10 +12,13 @@ public class ChatService : IChatService
 
     private readonly IUnitOfWork _unitOfWork;
 
-    public ChatService(IMapper mapper, IUnitOfWork unitOfWork)
+    private readonly IUserService _userService;
+
+    public ChatService(IMapper mapper, IUnitOfWork unitOfWork, IUserService userService)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _userService = userService;
     }
 
     public async Task<ChatListDTO> AddAsync(ChatCreateDTO chat)
@@ -43,5 +46,18 @@ public class ChatService : IChatService
         Chat? chat = await _unitOfWork.Chats.GetByIdAsync(id);
         ChatDetailsDTO chatDetails = _mapper.Map<ChatDetailsDTO>(chat);
         return chatDetails;
+    }
+
+    public async Task AddUser(int chatId)
+    {
+        _unitOfWork.Chats.ThrowErrorIfNotExists(chatId);
+        int userId = _userService.GetCurrentUserId();
+        ChatParticipation participation = new()
+        {
+            ChatId = chatId,
+            UserId = userId
+        };
+        await _unitOfWork.ChatParticipations.AddAsync(participation);
+        await _unitOfWork.SaveAsync();
     }
 }

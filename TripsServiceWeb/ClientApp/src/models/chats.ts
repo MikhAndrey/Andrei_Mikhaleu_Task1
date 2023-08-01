@@ -1,4 +1,4 @@
-﻿import {UserChatDTO} from "./users";
+﻿import {UserListDTO} from "./users";
 
 export class ChatListDTO {
   id: number;
@@ -12,10 +12,12 @@ export class ChatCreateDTO {
 export class ChatMessageDTO {
   id: number;
   text: string;
-  participationId: number;
+  user: UserListDTO;
 }
 
 export class ChatDetailsDTO {
+  id: number;
   name: string;
-  users: UserChatDTO[];
+  messages: ChatMessageDTO[];
+  isCurrentUserInChat: boolean;
 }

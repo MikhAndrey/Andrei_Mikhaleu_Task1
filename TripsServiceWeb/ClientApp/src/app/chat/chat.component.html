@@ -1,1 +1,12 @@
-﻿<div></div>
+﻿<h5 class="text-center tp-label">{{chat.name}}</h5>
+<div class="tp-form">
+  <div class="message-container" *ngFor="let message of chat.messages">
+    <h5>{{message.user.userName}}</h5>
+    <div>{{message.text}}</div>
+  </div>
+  <div *ngIf="chat.isCurrentUserInChat" class="d-flex align-items-center">
+    <textarea [(ngModel)]="messageText" class="form-control"></textarea>
+    <button class="btn btn-primary ml-2">Send</button>
+  </div>
+  <button class="btn btn-primary form-control" *ngIf="!chat.isCurrentUserInChat" (click)="joinChat()">Join</button>
+</div>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.DTO.Chats;
 using TripsServiceBLL.Interfaces;
+using TripsServiceDAL.Infrastructure.Exceptions;
 
 namespace Andrei_Mikhaleu_Task1.Controllers;
 
@@ -39,8 +40,33 @@ public class ChatsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        ChatDetailsDTO chatDetails = await _chatService.GetById(id);
-        return Ok(chatDetails);
+        try
+        {
+            ChatDetailsDTO chatDetails = await _chatService.GetById(id);
+            return Ok(chatDetails);
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+
+    [HttpPost("join/{id}")]
+    public async Task<IActionResult> AddUser(int id)
+    {
+        try
+        {
+            await _chatService.AddUser(id);
+            return Ok();
+        }
+        catch (ArgumentNullException)
+        {
+            return Unauthorized();
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 }
 

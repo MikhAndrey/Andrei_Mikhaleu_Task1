@@ -21,4 +21,13 @@ public class ChatRepository : EFGenericRepository<Chat>, IChatRepository
             .ThenInclude(chp => chp.ChatMessages).FirstOrDefaultAsync(c => c.Id == id);
         return chat;
     }
+
+    public async Task<Chat> GetByIdForAddingUserAsync(int chatId)
+    {
+        Chat? chat = await _dbSet
+            .Include(c => c.ChatParticipations)
+            .FirstOrDefaultAsync(c => c.Id == chatId);
+        ThrowErrorIfEntityIsNull(chat);
+        return chat;
+    }
 }

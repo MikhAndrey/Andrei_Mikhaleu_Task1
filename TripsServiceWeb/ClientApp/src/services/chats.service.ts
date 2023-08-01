@@ -26,4 +26,8 @@ export class ChatsService {
   getById(id: number): Observable<ChatDetailsDTO> {
     return this.http.get<ChatDetailsDTO>(this.apiUrl + `/${id}`);
   }
+
+  addUserToChat(chatId: number): Observable<Object> {
+    return this.http.post(this.apiUrl + `/join/${chatId}`, chatId);
+  }
 }

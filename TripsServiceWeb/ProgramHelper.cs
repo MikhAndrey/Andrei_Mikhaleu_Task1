@@ -47,6 +47,7 @@ public static class ProgramHelper
 		services.AddScoped<TripImageLinkResolver>();
 		services.AddScoped<DriverImageLinkResolver>();
 		services.AddScoped<NewUserRoleIdResolver>();
+		services.AddScoped<CurrentUserChatResolver>();
 	}
 
 	public static void AddCommands(IServiceCollection services)
@@ -75,7 +76,7 @@ public static class ProgramHelper
 			mc.AddProfile(new ImageMapper());
 			mc.AddProfile(new RoutePointMapper());
 			mc.AddProfile(new UserMapper(serviceProvider.GetService<NewUserRoleIdResolver>()));
-			mc.AddProfile(new ChatMapper());
+			mc.AddProfile(new ChatMapper(serviceProvider.GetService<CurrentUserChatResolver>()));
 		});
 
 		IMapper mapper = mapperConfig.CreateMapper();
