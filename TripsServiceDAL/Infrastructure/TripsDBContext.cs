@@ -102,6 +102,11 @@ public class TripsDBContext : DbContext
 			.HasOne(chp => chp.Chat)
 			.WithMany(ch => ch.ChatParticipations)
 			.OnDelete(DeleteBehavior.Restrict);
+		modelBuilder.Entity<ChatParticipation>()
+			.HasOne(chp => chp.User)
+			.WithMany(u => u.ChatParticipations)
+			.OnDelete(DeleteBehavior.Restrict)
+			.IsRequired(false);
 		modelBuilder.Entity<ChatMessage>()
 			.HasOne(chm => chm.ChatParticipation)
 			.WithMany(chp => chp.ChatMessages)

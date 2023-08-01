@@ -21,4 +21,5 @@ public static class UtilConstants
 		credential => $"This {credential} is already taken";
 	public static string SignupDefaultRoleName = "User";
 	public static string AdminRoleName = "Admin";
+	public static readonly Func<string?, string> ChatJoiningMessage = userName => $"User {userName} joins the chat";
 }

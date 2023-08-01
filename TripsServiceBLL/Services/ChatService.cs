@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TripsServiceBLL.DTO.Chats;
 using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 using TripsServiceDAL.Interfaces;
 
@@ -21,15 +22,24 @@ public class ChatService : IChatService
         _userService = userService;
     }
 
-    public async Task<ChatListDTO> AddAsync(ChatCreateDTO chat)
+    public async Task AddChatAsync(Chat chat)
     {
-        Chat chatToAdd = _mapper.Map<Chat>(chat);
-        await _unitOfWork.Chats.AddAsync(chatToAdd);
+        await _unitOfWork.Chats.AddAsync(chat);
         await _unitOfWork.SaveAsync();
-        ChatListDTO chatToReturn = _mapper.Map<ChatListDTO>(chatToAdd);
-        return chatToReturn;
     }
-
+    
+    public async Task AddChatParticipationAsync(ChatParticipation chatParticipation)
+    {
+        await _unitOfWork.ChatParticipations.AddAsync(chatParticipation);
+        await _unitOfWork.SaveAsync();
+    }
+    
+    public async Task AddChatMessageAsync(ChatMessage chatMessage)
+    {
+        await _unitOfWork.ChatMessages.AddAsync(chatMessage);
+        await _unitOfWork.SaveAsync();
+    }
+    
     public IEnumerable<ChatListDTO> GetAll()
     {
         IEnumerable <Chat> rawChats = _unitOfWork.Chats.GetAll();
@@ -48,16 +58,20 @@ public class ChatService : IChatService
         return chatDetails;
     }
 
-    public async Task AddUser(int chatId)
+    public async Task<int?> GetEmptyChatParticipationId(int chatId)
     {
-        _unitOfWork.Chats.ThrowErrorIfNotExists(chatId);
-        int userId = _userService.GetCurrentUserId();
-        ChatParticipation participation = new()
+        ChatParticipation? chatParticipation = await _unitOfWork.ChatParticipations.GetEmptyChatParticipation(chatId);
+        return chatParticipation?.Id;
+    }
+
+    public ChatMessage CreateMessageAboutChatJoining(int chatParticipationId)
+    {
+        string? userName = _userService.GetCurrentUserName();
+        ChatMessage messageAboutChatJoining = new()
         {
-            ChatId = chatId,
-            UserId = userId
+            ChatParticipationId = chatParticipationId,
+            Text = UtilConstants.ChatJoiningMessage(userName)
         };
-        await _unitOfWork.ChatParticipations.AddAsync(participation);
-        await _unitOfWork.SaveAsync();
+        return messageAboutChatJoining;
     }
 }

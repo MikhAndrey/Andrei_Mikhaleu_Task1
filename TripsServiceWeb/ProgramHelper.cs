@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using TripsServiceBLL.Commands.Chats;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.Commands.Users;
 using TripsServiceBLL.Infrastructure.Mappers;
@@ -57,6 +58,8 @@ public static class ProgramHelper
 		services.AddScoped<EditTripCommandAsync>();
 		services.AddScoped<EditPastTripCommandAsync>();
 		services.AddScoped<LoginUserCommand>();
+		services.AddScoped<ChatCreateCommand>();
+		services.AddScoped<ChatJoiningCommand>();
 	}
 
 	public static void AddMapper(IServiceCollection services)

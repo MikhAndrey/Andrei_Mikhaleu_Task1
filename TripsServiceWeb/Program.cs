@@ -53,6 +53,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapHub<FeedbacksHub>("/feedbackshub");
+app.MapHub<ChatHub>("/chathub");
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");

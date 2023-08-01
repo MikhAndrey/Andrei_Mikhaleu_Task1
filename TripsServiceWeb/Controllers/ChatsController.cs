@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Andrei_Mikhaleu_Task1.Hubs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using TripsServiceBLL.Commands.Chats;
 using TripsServiceBLL.DTO.Chats;
+using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Infrastructure.Exceptions;
 
@@ -12,9 +16,21 @@ public class ChatsController : ControllerBase
 {
     private readonly IChatService _chatService;
 
-    public ChatsController(IChatService chatService)
+    private readonly ChatCreateCommand _chatCreateCommand;
+    private readonly ChatJoiningCommand _chatJoiningCommand;
+
+    private readonly IHubContext<ChatHub> _chatHubContext;
+
+    public ChatsController(
+        IChatService chatService, 
+        ChatCreateCommand chatCreateCommand,
+        ChatJoiningCommand chatJoiningCommand,
+        IHubContext<ChatHub> chatHubContext)
     {
         _chatService = chatService;
+        _chatCreateCommand = chatCreateCommand;
+        _chatJoiningCommand = chatJoiningCommand;
+        _chatHubContext = chatHubContext;
     }
 
     [Authorize(Roles = "Admin")]
@@ -23,8 +39,14 @@ public class ChatsController : ControllerBase
     {
         if (ModelState.IsValid)
         {
-            ChatListDTO addedChat = await _chatService.AddAsync(dto);
-            return Ok(addedChat);
+            try
+            {
+                ChatListDTO addedChat = await _chatCreateCommand.ExecuteAsync(dto);
+                return Ok(addedChat);
+            } catch (DbOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         return BadRequest(ModelState);
@@ -56,7 +78,8 @@ public class ChatsController : ControllerBase
     {
         try
         {
-            await _chatService.AddUser(id);
+            ChatMessageDTO message = await _chatJoiningCommand.ExecuteAsync(id);
+            await _chatHubContext.Clients.All.SendAsync("BroadcastMessage", message);
             return Ok();
         }
         catch (ArgumentNullException)
@@ -66,6 +89,10 @@ public class ChatsController : ControllerBase
         catch (EntityNotFoundException ex)
         {
             return NotFound(ex.Message);
+        }
+        catch (DbOperationException ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

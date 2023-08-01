@@ -1,7 +1,7 @@
 ﻿<h5 class="text-center tp-label">{{chat.name}}</h5>
 <div class="tp-form">
   <div class="message-container" *ngFor="let message of chat.messages">
-    <h5>{{message.user.userName}}</h5>
+    <h5 *ngIf="message.user">{{message.user.userName}}</h5>
     <div>{{message.text}}</div>
   </div>
   <div *ngIf="chat.isCurrentUserInChat" class="d-flex align-items-center">
