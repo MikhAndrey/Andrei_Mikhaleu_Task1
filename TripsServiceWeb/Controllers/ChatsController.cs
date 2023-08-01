@@ -95,5 +95,26 @@ public class ChatsController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpPost("sendMessage")]
+    public async Task<IActionResult> SendMessage(ChatSendMessageDTO dto)
+    {
+        ChatMessageDTO result = await _chatService.SendMessage(dto);
+        await _chatHubContext.Clients.All.SendAsync("BroadcastMessage", result);
+        return Ok();
+    }
+
+    [HttpGet("participationId/{id}")]
+    public async Task<IActionResult> GetParticipationId(int id)
+    {
+        try
+        {
+            int currentParticipationId = await _chatService.GetCurrentChatParticipationId(id);
+            return Ok(currentParticipationId);
+        } catch (EntityNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
 }
 

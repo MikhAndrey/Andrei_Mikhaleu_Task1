@@ -21,3 +21,8 @@ export class ChatDetailsDTO {
   messages: ChatMessageDTO[];
   isCurrentUserInChat: boolean;
 }
+
+export class ChatSendMessageDTO {
+  chatParticipationId: number;
+  text: string;
+}

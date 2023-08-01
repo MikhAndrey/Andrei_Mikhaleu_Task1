@@ -13,8 +13,14 @@ public class ChatParticipationRepository : EFGenericRepository<ChatParticipation
 
     public async Task<ChatParticipation?> GetEmptyChatParticipation(int chatId)
     {
+        return await GetByChatIdAndUserId(chatId, null);
+    }
+
+    public async Task<ChatParticipation?> GetByChatIdAndUserId(int chatId, int? userId)
+    {
         ChatParticipation? chatParticipation = await _dbSet
-            .FirstOrDefaultAsync(cp => cp.ChatId == chatId && cp.UserId == null);
+            .FirstOrDefaultAsync(cp => cp.ChatId == chatId && cp.UserId == userId);
+        ThrowErrorIfEntityIsNull(chatParticipation);
         return chatParticipation;
     }
 }

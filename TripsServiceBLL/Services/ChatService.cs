@@ -74,4 +74,23 @@ public class ChatService : IChatService
         };
         return messageAboutChatJoining;
     }
+
+    public async Task<ChatMessageDTO> SendMessage(ChatSendMessageDTO dto)
+    {
+        ChatMessage messageToSend = _mapper.Map<ChatMessage>(dto);
+        await AddChatMessageAsync(messageToSend);
+        
+        ChatMessageDTO result = _mapper.Map<ChatMessageDTO>(messageToSend);
+        result.User = _userService.GetCurrentUserMainInfo();
+        return result;
+    }
+
+    public async Task<int> GetCurrentChatParticipationId(int chatId)
+    {
+        int userId = _userService.GetCurrentUserId();
+        ChatParticipation? chatParticipation = await _unitOfWork.ChatParticipations.GetByChatIdAndUserId(chatId, userId);
+        if (chatParticipation == null)
+            _unitOfWork.ChatParticipations.ThrowErrorIfEntityIsNull(chatParticipation);
+        return chatParticipation.Id;
+    }
 }

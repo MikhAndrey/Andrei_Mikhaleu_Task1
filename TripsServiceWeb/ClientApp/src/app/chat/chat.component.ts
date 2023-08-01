@@ -1,6 +1,6 @@
 ﻿import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ChatsService} from "../../services/chats.service";
-import {ChatDetailsDTO, ChatMessageDTO} from "../../models/chats";
+import {ChatDetailsDTO, ChatMessageDTO, ChatSendMessageDTO} from "../../models/chats";
 import {ActivatedRoute} from "@angular/router";
 import {ChatWebsocketService} from "../../services/chatWebsocket.service";
 
@@ -10,7 +10,7 @@ import {ChatWebsocketService} from "../../services/chatWebsocket.service";
 })
 export class ChatComponent implements OnInit, OnDestroy {
   chat: ChatDetailsDTO = new ChatDetailsDTO();
-  messageText: string;
+  messageToSend: ChatSendMessageDTO = new ChatSendMessageDTO();
 
   constructor(
     private chatsService: ChatsService,
@@ -19,8 +19,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const id = parseInt(this.route.snapshot.paramMap.get('id')!);
-    this.chatsService.getById(id).subscribe({
+    const chatId: number = parseInt(this.route.snapshot.paramMap.get('id')!);
+    this.chatsService.getById(chatId).subscribe({
       next: (chat) => {
         this.chat = chat;
       },
@@ -28,6 +28,9 @@ export class ChatComponent implements OnInit, OnDestroy {
         alert("Impossible to load chat data. Try later");
       }
     });
+
+    this.setCurrentChatParticipationId(chatId);
+
     this.chatWebsocketService.onReceiveMessage = this.messageReceiveHandler.bind(this);
     this.chatWebsocketService.startConnection();
   }
@@ -39,8 +42,21 @@ export class ChatComponent implements OnInit, OnDestroy {
   joinChat(): void {
     this.chatsService.addUserToChat(this.chat.id).subscribe({
       next: () => this.chat.isCurrentUserInChat = true,
-      error: (error) => alert(error.error)
+      error: err => alert(err.error)
     })
+  }
+
+  sendMessage(): void {
+    this.chatsService.sendMessage(this.messageToSend).subscribe({
+      next: () => this.messageToSend.text = "",
+      error: err => alert(err.error)
+    })
+  }
+
+  setCurrentChatParticipationId(chatId: number): void {
+    this.chatsService.getParticipationId(chatId).subscribe({
+      next: (response) => this.messageToSend.chatParticipationId = response
+    });
   }
 
   messageReceiveHandler(message: ChatMessageDTO) {

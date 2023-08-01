@@ -12,4 +12,6 @@ public interface IChatService
     Task<ChatDetailsDTO> GetById(int id);
     ChatMessage CreateMessageAboutChatJoining(int chatParticipationId);
     Task<int?> GetEmptyChatParticipationId(int chatId);
+    Task<int> GetCurrentChatParticipationId(int chatId);
+    Task<ChatMessageDTO> SendMessage(ChatSendMessageDTO dto);
 }

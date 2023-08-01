@@ -12,7 +12,9 @@ public class ChatMapper : Profile
     {
         CreateMap<ChatCreateDTO, Chat>();
         CreateMap<Chat, ChatListDTO>();
-        CreateMap<ChatMessage, ChatMessageDTO>();
+        CreateMap<ChatMessage, ChatMessageDTO>()
+            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.ChatParticipation.User));
+        CreateMap<ChatSendMessageDTO, ChatMessage>();
         CreateMap<ChatParticipation, UserListDTO>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.User.Role.Name))
