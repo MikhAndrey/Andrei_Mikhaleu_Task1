@@ -1,6 +1,6 @@
 ﻿<h5 class="text-center tp-label">{{chat.name}}</h5>
 <div class="tp-form tp-chat">
-  <div class="messages-container">
+  <div class="messages-container" #messagesContainer>
     <div class="message-container mt-2 mb-2"
          [ngClass]="message.chatParticipationId === messageToSend.chatParticipationId ?
          'current-user-message mr-3' :

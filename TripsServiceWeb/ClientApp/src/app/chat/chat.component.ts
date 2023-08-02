@@ -1,4 +1,4 @@
-﻿import {Component, OnDestroy, OnInit} from '@angular/core';
+﻿import {AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ChatsService} from "../../services/chats.service";
 import {ChatDetailsDTO, ChatMessageDTO, ChatSendMessageDTO} from "../../models/chats";
 import {ActivatedRoute} from "@angular/router";
@@ -9,9 +9,11 @@ import {ChatWebsocketService} from "../../services/chatWebsocket.service";
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, OnDestroy {
+export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   chat: ChatDetailsDTO = new ChatDetailsDTO();
   messageToSend: ChatSendMessageDTO = new ChatSendMessageDTO();
+
+  @ViewChild('messagesContainer') messagesContainer: ElementRef;
 
   constructor(
     private chatsService: ChatsService,
@@ -40,6 +42,10 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatWebsocketService.closeConnection();
   }
 
+  ngAfterViewChecked() {
+    this.scrollDownMessagesContainer();
+  }
+
   joinChat(): void {
     this.chatsService.addUserToChat(this.chat.id).subscribe({
       next: (participationId: number) => {
@@ -57,13 +63,20 @@ export class ChatComponent implements OnInit, OnDestroy {
     })
   }
 
-  setCurrentChatParticipationId(chatId: number): void {
+  private setCurrentChatParticipationId(chatId: number): void {
     this.chatsService.getParticipationId(chatId).subscribe({
       next: (response) => this.messageToSend.chatParticipationId = response
     });
   }
 
-  messageReceiveHandler(message: ChatMessageDTO) {
+  private messageReceiveHandler(message: ChatMessageDTO) {
     this.chat.messages.push(message);
+  }
+
+  private scrollDownMessagesContainer(){
+    this.messagesContainer.nativeElement.scrollTo({
+      top: this.messagesContainer.nativeElement.scrollHeight,
+      behavior: 'smooth'
+    });
   }
 }
