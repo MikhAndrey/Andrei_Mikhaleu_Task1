@@ -19,5 +19,6 @@ public interface IChatService
     Task<int> GetCurrentChatParticipationIdAsync(int chatId);
     Task<ChatMessageDTO> SendMessageAsync(ChatSendMessageDTO dto);
     Task<ChatMessageDTO> LeaveChatAsync(ChatLeaveDTO dto);
+    Task ActivateChatParticipationAsync(ChatParticipation chatParticipation);
     Task DeactivateChatParticipationAsync(ChatParticipation chatParticipation);
 }

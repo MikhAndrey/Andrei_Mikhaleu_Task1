@@ -71,6 +71,12 @@ public class ChatService : IChatService
         return mappedLeavingMessage;
     }
 
+    public async Task ActivateChatParticipationAsync(ChatParticipation chatParticipation)
+    {
+        chatParticipation.IsActive = true;
+        await _unitOfWork.SaveAsync();
+    }
+    
     public async Task DeactivateChatParticipationAsync(ChatParticipation chatParticipation)
     {
         chatParticipation.IsActive = false;

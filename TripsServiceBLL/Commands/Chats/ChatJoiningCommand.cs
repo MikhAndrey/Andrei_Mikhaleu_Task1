@@ -54,7 +54,7 @@ public class ChatJoiningCommand : ICommandAsync<int, ChatJoinDTO>
 			{
 				ChatParticipation? existingParticipation =
 					await _unitOfWork.ChatParticipations.GetByChatIdAndUserId(id, userId);
-				await _chatService.DeactivateChatParticipationAsync(existingParticipation);
+				await _chatService.ActivateChatParticipationAsync(existingParticipation);
 				await transaction.CommitAsync();
 				
 				return new ChatJoinDTO
