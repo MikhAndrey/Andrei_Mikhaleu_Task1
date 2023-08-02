@@ -8,7 +8,7 @@ using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Chats;
 
-public class ChatJoiningCommand : ICommandAsync<int, ChatMessageDTO>
+public class ChatJoiningCommand : ICommandAsync<int, ChatJoinDTO>
 {
 	private readonly IChatService _chatService;
 	private readonly IUserService _userService;
@@ -29,7 +29,7 @@ public class ChatJoiningCommand : ICommandAsync<int, ChatMessageDTO>
 		_mapper = mapper;
 	}
 
-	public async Task<ChatMessageDTO> ExecuteAsync(int id)
+	public async Task<ChatJoinDTO> ExecuteAsync(int id)
 	{
 		_unitOfWork.Chats.ThrowErrorIfNotExists(id);
 		
@@ -53,7 +53,12 @@ public class ChatJoiningCommand : ICommandAsync<int, ChatMessageDTO>
 				await _chatService.AddChatMessageAsync(messageAboutChatJoining);
 			}
 			await transaction.CommitAsync();
-			return _mapper.Map<ChatMessageDTO>(messageAboutChatJoining);
+			ChatMessageDTO chatMessageDto = _mapper.Map<ChatMessageDTO>(messageAboutChatJoining);
+			return new ChatJoinDTO
+			{
+				ChatParticipationId = participation.Id,
+				Message = chatMessageDto
+			};
 		}
 		catch (Exception)
 		{

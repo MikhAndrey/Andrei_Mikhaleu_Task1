@@ -6,7 +6,8 @@ import {ChatWebsocketService} from "../../services/chatWebsocket.service";
 
 @Component({
   selector: 'app-chat',
-  templateUrl: './chat.component.html'
+  templateUrl: './chat.component.html',
+  styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit, OnDestroy {
   chat: ChatDetailsDTO = new ChatDetailsDTO();
@@ -41,7 +42,10 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   joinChat(): void {
     this.chatsService.addUserToChat(this.chat.id).subscribe({
-      next: () => this.chat.isCurrentUserInChat = true,
+      next: (participationId: number) => {
+        this.messageToSend.chatParticipationId = participationId;
+        this.chat.isCurrentUserInChat = true;
+      },
       error: err => alert(err.error)
     })
   }

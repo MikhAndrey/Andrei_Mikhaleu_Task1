@@ -1,0 +1,36 @@
+﻿.tp-chat {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages-container {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.message-container {
+  width: 40%;
+  border-radius: 12px;
+  padding: 8px;
+}
+
+.message-container.current-user-message {
+  margin-left: auto;
+  background: linear-gradient(to top, #f899ff, #cfc4cc);
+}
+
+.message-container.other-user-message {
+  margin-right: auto;
+  background: linear-gradient(to bottom, #c4c7fc, #56e1df);
+}
+
+.message-text-container {
+  color: #355052;
+}
+
+.common-message {
+  margin: auto;
+  text-align: center;
+}

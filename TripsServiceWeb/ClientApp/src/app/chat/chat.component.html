@@ -1,10 +1,18 @@
 ﻿<h5 class="text-center tp-label">{{chat.name}}</h5>
-<div class="tp-form">
-  <div class="message-container" *ngFor="let message of chat.messages">
-    <h6 class="tp-label" *ngIf="message.user">{{message.user.userName}} ({{message.user.role}})</h6>
-    <div>{{message.text}}</div>
+<div class="tp-form tp-chat">
+  <div class="messages-container">
+    <div class="message-container mt-2 mb-2"
+         [ngClass]="message.chatParticipationId === messageToSend.chatParticipationId ?
+         'current-user-message mr-3' :
+         (message.user!==null ?
+         'other-user-message ml-3' :
+         'common-message')"
+         *ngFor="let message of chat.messages">
+      <h6 class="tp-label" *ngIf="message.user">{{message.user.userName}} ({{message.user.role}})</h6>
+      <div class="message-text-container">{{message.text}}</div>
+    </div>
   </div>
-  <div *ngIf="chat.isCurrentUserInChat" class="d-flex align-items-center">
+  <div *ngIf="chat.isCurrentUserInChat" class="w-100 mb-1 mt-3 d-flex align-items-center">
     <textarea [(ngModel)]="messageToSend.text" class="form-control"></textarea>
     <button class="btn btn-primary ml-2" (click)="sendMessage()" [class.disabled]="!messageToSend.text || messageToSend.text.length == 0">Send</button>
   </div>

@@ -20,7 +20,8 @@ public class ChatMapper : Profile
             .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.User.Role.Name))
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
         CreateMap<Chat, ChatDetailsDTO>()
-            .ForMember(dest => dest.Messages, opt => opt.MapFrom(src => src.ChatParticipations.SelectMany(cp => cp.ChatMessages)))
+            .ForMember(dest => dest.Messages, opt => 
+                opt.MapFrom(src => src.ChatParticipations.SelectMany(cp => cp.ChatMessages).OrderBy(m => m.Id)))
             .ForMember(dest => dest.IsCurrentUserInChat, opt => opt.MapFrom(currentUserChatResolver));
     }
 }

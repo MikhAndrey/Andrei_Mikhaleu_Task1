@@ -12,6 +12,7 @@ export class ChatCreateDTO {
 export class ChatMessageDTO {
   id: number;
   text: string;
+  chatParticipationId: number;
   user: UserListDTO;
 }
 

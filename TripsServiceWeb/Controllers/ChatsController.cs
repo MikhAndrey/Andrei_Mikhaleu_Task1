@@ -78,9 +78,9 @@ public class ChatsController : ControllerBase
     {
         try
         {
-            ChatMessageDTO message = await _chatJoiningCommand.ExecuteAsync(id);
-            await _chatHubContext.Clients.All.SendAsync("BroadcastMessage", message);
-            return Ok();
+            ChatJoinDTO chatJoinInfo = await _chatJoiningCommand.ExecuteAsync(id);
+            await _chatHubContext.Clients.All.SendAsync("BroadcastMessage", chatJoinInfo.Message);
+            return Ok(chatJoinInfo.ChatParticipationId);
         }
         catch (ArgumentNullException)
         {
