@@ -1,7 +1,7 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ChatCreateDTO, ChatDetailsDTO, ChatListDTO, ChatSendMessageDTO} from "../models/chats";
+import {ChatCreateDTO, ChatDetailsDTO, ChatLeaveDTO, ChatListDTO, ChatSendMessageDTO} from "../models/chats";
 
 @Injectable({ providedIn: 'root' })
 export class ChatsService {
@@ -29,6 +29,14 @@ export class ChatsService {
 
   addUserToChat(chatId: number): Observable<number> {
     return this.http.post<number>(this.apiUrl + `/join/${chatId}`, chatId);
+  }
+
+  leaveChat(chatId: number, participationId: number): Observable<ChatLeaveDTO> {
+    const dto: ChatLeaveDTO = {
+      chatId: chatId,
+      participationId: participationId
+    };
+    return this.http.put<ChatLeaveDTO>(this.apiUrl + `/leave`, dto);
   }
 
   sendMessage(message: ChatSendMessageDTO): Observable<any> {

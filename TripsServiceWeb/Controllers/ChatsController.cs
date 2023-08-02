@@ -96,6 +96,21 @@ public class ChatsController : ControllerBase
         }
     }
 
+    [HttpPut("leave")]
+    public async Task<IActionResult> LeaveChat(ChatLeaveDTO dto)
+    {
+        try
+        {
+            ChatMessageDTO result = await _chatService.LeaveChat(dto);
+            await _chatHubContext.Clients.All.SendAsync("BroadcastMessage", result);
+            return Ok();
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+
     [HttpPost("sendMessage")]
     public async Task<IActionResult> SendMessage(ChatSendMessageDTO dto)
     {

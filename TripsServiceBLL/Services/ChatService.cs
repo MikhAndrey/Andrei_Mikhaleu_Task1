@@ -33,6 +33,25 @@ public class ChatService : IChatService
         await _unitOfWork.ChatParticipations.AddAsync(chatParticipation);
         await _unitOfWork.SaveAsync();
     }
+
+    public async Task<ChatMessageDTO> LeaveChat(ChatLeaveDTO dto)
+    {
+        ChatParticipation chatParticipationToModify = await _unitOfWork.ChatParticipations.GetByIdAsync(dto.ParticipationId);
+        await DeactivateChatParticipation(chatParticipationToModify);
+        
+        int? emptyChatParticipationId = await GetEmptyChatParticipationId(dto.ChatId);
+        ChatMessage messageAboutChatLeaving = CreateMessageAboutChatLeaving((int)emptyChatParticipationId);
+		await AddChatMessageAsync(messageAboutChatLeaving);
+        
+        ChatMessageDTO mappedLeavingMessage = _mapper.Map<ChatMessageDTO>(messageAboutChatLeaving);
+        return mappedLeavingMessage;
+    }
+
+    public async Task DeactivateChatParticipation(ChatParticipation chatParticipation)
+    {
+        chatParticipation.IsActive = false;
+        await _unitOfWork.SaveAsync();
+    }
     
     public async Task AddChatMessageAsync(ChatMessage chatMessage)
     {
@@ -73,6 +92,17 @@ public class ChatService : IChatService
             Text = UtilConstants.ChatJoiningMessage(userName)
         };
         return messageAboutChatJoining;
+    }
+    
+    public ChatMessage CreateMessageAboutChatLeaving(int chatParticipationId)
+    {
+        string? userName = _userService.GetCurrentUserName();
+        ChatMessage messageAboutChatLeaving = new()
+        {
+            ChatParticipationId = chatParticipationId,
+            Text = UtilConstants.ChatLeavingMessage(userName)
+        };
+        return messageAboutChatLeaving;
     }
 
     public async Task<ChatMessageDTO> SendMessage(ChatSendMessageDTO dto)

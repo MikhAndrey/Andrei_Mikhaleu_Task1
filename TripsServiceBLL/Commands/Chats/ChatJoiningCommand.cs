@@ -4,6 +4,7 @@ using TripsServiceBLL.DTO.Chats;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
+using TripsServiceDAL.Infrastructure.Exceptions;
 using TripsServiceDAL.Interfaces;
 
 namespace TripsServiceBLL.Commands.Chats;
@@ -34,31 +35,52 @@ public class ChatJoiningCommand : ICommandAsync<int, ChatJoinDTO>
 		_unitOfWork.Chats.ThrowErrorIfNotExists(id);
 		
 		int userId = _userService.GetCurrentUserId();
-		ChatParticipation participation = new()
-		{
-			ChatId = id,
-			UserId = userId
-		};
-
+		
 		int? emptyChatParticipationId = await _chatService.GetEmptyChatParticipationId(id);
 
 		using IDbContextTransaction transaction = _unitOfWork.BeginTransaction();
 		try
 		{
 			ChatMessage? messageAboutChatJoining = null;
-			await _chatService.AddChatParticipationAsync(participation);
+			
 			if (emptyChatParticipationId != null)
 			{
 				messageAboutChatJoining = _chatService.CreateMessageAboutChatJoining((int)emptyChatParticipationId);
 				await _chatService.AddChatMessageAsync(messageAboutChatJoining);
 			}
-			await transaction.CommitAsync();
 			ChatMessageDTO chatMessageDto = _mapper.Map<ChatMessageDTO>(messageAboutChatJoining);
-			return new ChatJoinDTO
+
+			try
 			{
-				ChatParticipationId = participation.Id,
-				Message = chatMessageDto
-			};
+				ChatParticipation? existingParticipation =
+					await _unitOfWork.ChatParticipations.GetByChatIdAndUserId(id, userId);
+				await _chatService.DeactivateChatParticipation(existingParticipation);
+				await transaction.CommitAsync();
+				
+				return new ChatJoinDTO
+				{
+					ChatParticipationId = existingParticipation.Id,
+					Message = chatMessageDto
+				};
+			}
+			catch (EntityNotFoundException)
+			{
+				ChatParticipation participation = new()
+				{
+					ChatId = id,
+					UserId = userId,
+					IsActive = true
+				};
+
+				await _chatService.AddChatParticipationAsync(participation);
+				await transaction.CommitAsync();
+
+				return new ChatJoinDTO
+				{
+					ChatParticipationId = participation.Id,
+					Message = chatMessageDto
+				};
+			}
 		}
 		catch (Exception)
 		{

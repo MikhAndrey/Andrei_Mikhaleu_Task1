@@ -11,4 +11,5 @@ public class ChatParticipation: IIdentifiable, ISoftDelete
     public User? User { get; set; }
     public List<ChatMessage> ChatMessages { get; set; }
     public bool IsDeleted { get; set; }
+    public bool IsActive { get; set; }
 }

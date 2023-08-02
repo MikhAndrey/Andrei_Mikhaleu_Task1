@@ -11,7 +11,10 @@ public interface IChatService
     IEnumerable<ChatListDTO> GetAll();
     Task<ChatDetailsDTO> GetById(int id);
     ChatMessage CreateMessageAboutChatJoining(int chatParticipationId);
+    ChatMessage CreateMessageAboutChatLeaving(int chatParticipationId);
     Task<int?> GetEmptyChatParticipationId(int chatId);
     Task<int> GetCurrentChatParticipationId(int chatId);
     Task<ChatMessageDTO> SendMessage(ChatSendMessageDTO dto);
+    Task<ChatMessageDTO> LeaveChat(ChatLeaveDTO dto);
+    Task DeactivateChatParticipation(ChatParticipation chatParticipation);
 }

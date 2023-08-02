@@ -27,3 +27,8 @@ export class ChatSendMessageDTO {
   chatParticipationId: number;
   text: string;
 }
+
+export class ChatLeaveDTO {
+  chatId: number;
+  participationId: number;
+}

@@ -17,6 +17,6 @@ public class CurrentUserChatResolver : IValueResolver<Chat, ChatDetailsDTO, bool
     public bool Resolve(Chat chat, ChatDetailsDTO dto, bool isCurrentUserInChat, ResolutionContext context)
     {
         int userId = _userService.GetCurrentUserId();
-        return chat.ChatParticipations.Any(cp => cp.UserId == userId);
+        return chat.ChatParticipations.Any(cp => cp.UserId == userId && cp.IsActive);
     }
 }

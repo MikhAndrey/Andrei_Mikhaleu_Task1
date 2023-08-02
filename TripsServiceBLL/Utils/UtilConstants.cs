@@ -22,4 +22,5 @@ public static class UtilConstants
 	public static string SignupDefaultRoleName = "User";
 	public static string AdminRoleName = "Admin";
 	public static readonly Func<string?, string> ChatJoiningMessage = userName => $"User {userName} joins the chat";
+	public static readonly Func<string?, string> ChatLeavingMessage = userName => $"User {userName} leaves the chat";
 }

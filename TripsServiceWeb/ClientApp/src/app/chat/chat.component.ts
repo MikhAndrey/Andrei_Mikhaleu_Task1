@@ -63,9 +63,16 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     })
   }
 
+  leaveChat(): void {
+    this.chatsService.leaveChat(this.chat.id, this.messageToSend.chatParticipationId).subscribe({
+      next: () => this.chat.isCurrentUserInChat = false
+    });
+  }
+
   private setCurrentChatParticipationId(chatId: number): void {
     this.chatsService.getParticipationId(chatId).subscribe({
-      next: (response) => this.messageToSend.chatParticipationId = response
+      next: (response) => this.messageToSend.chatParticipationId = response,
+      error: () => console.log("Current user is not a chat member")
     });
   }
 
