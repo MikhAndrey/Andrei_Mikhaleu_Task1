@@ -60,6 +60,7 @@ public static class ProgramHelper
 		services.AddScoped<LoginUserCommand>();
 		services.AddScoped<ChatCreateCommand>();
 		services.AddScoped<ChatJoiningCommand>();
+		services.AddScoped<ChatDeleteCommand>();
 	}
 
 	public static void AddMapper(IServiceCollection services)

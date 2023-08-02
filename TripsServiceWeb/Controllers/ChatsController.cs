@@ -18,6 +18,7 @@ public class ChatsController : ControllerBase
 
     private readonly ChatCreateCommand _chatCreateCommand;
     private readonly ChatJoiningCommand _chatJoiningCommand;
+    private readonly ChatDeleteCommand _chatDeleteCommand;
 
     private readonly IHubContext<ChatHub> _chatHubContext;
 
@@ -25,11 +26,13 @@ public class ChatsController : ControllerBase
         IChatService chatService, 
         ChatCreateCommand chatCreateCommand,
         ChatJoiningCommand chatJoiningCommand,
+        ChatDeleteCommand chatDeleteCommand,
         IHubContext<ChatHub> chatHubContext)
     {
         _chatService = chatService;
         _chatCreateCommand = chatCreateCommand;
         _chatJoiningCommand = chatJoiningCommand;
+        _chatDeleteCommand = chatDeleteCommand;
         _chatHubContext = chatHubContext;
     }
 
@@ -51,6 +54,20 @@ public class ChatsController : ControllerBase
 
         return BadRequest(ModelState);
     }
+    
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        try
+        {
+            await _chatDeleteCommand.ExecuteAsync(id);
+            return Ok();
+        } catch (DbOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
     [HttpGet("index")]
     public IActionResult Index()
@@ -64,7 +81,7 @@ public class ChatsController : ControllerBase
     {
         try
         {
-            ChatDetailsDTO chatDetails = await _chatService.GetById(id);
+            ChatDetailsDTO chatDetails = await _chatService.GetByIdAsync(id);
             return Ok(chatDetails);
         }
         catch (EntityNotFoundException ex)
@@ -101,7 +118,7 @@ public class ChatsController : ControllerBase
     {
         try
         {
-            ChatMessageDTO result = await _chatService.LeaveChat(dto);
+            ChatMessageDTO result = await _chatService.LeaveChatAsync(dto);
             await _chatHubContext.Clients.All.SendAsync("BroadcastMessage", result);
             return Ok();
         }
@@ -114,7 +131,7 @@ public class ChatsController : ControllerBase
     [HttpPost("sendMessage")]
     public async Task<IActionResult> SendMessage(ChatSendMessageDTO dto)
     {
-        ChatMessageDTO result = await _chatService.SendMessage(dto);
+        ChatMessageDTO result = await _chatService.SendMessageAsync(dto);
         await _chatHubContext.Clients.All.SendAsync("BroadcastMessage", result);
         return Ok();
     }
@@ -124,7 +141,7 @@ public class ChatsController : ControllerBase
     {
         try
         {
-            int currentParticipationId = await _chatService.GetCurrentChatParticipationId(id);
+            int currentParticipationId = await _chatService.GetCurrentChatParticipationIdAsync(id);
             return Ok(currentParticipationId);
         } catch (EntityNotFoundException ex)
         {

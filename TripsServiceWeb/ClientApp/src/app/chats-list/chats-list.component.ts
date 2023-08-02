@@ -39,4 +39,11 @@ export class ChatsListComponent implements OnInit {
       error: (error) => this.validationErrors = error.error.errors || error.error
     });
   }
+
+  delete(id: number): void {
+    this.chatsService.delete(id).subscribe({
+      next: () => this.chats = this.chats.filter(chat => chat.id !== id),
+      error: (error) => alert(error.error)
+    })
+  }
 }

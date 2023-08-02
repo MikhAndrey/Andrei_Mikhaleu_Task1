@@ -36,7 +36,7 @@ public class ChatJoiningCommand : ICommandAsync<int, ChatJoinDTO>
 		
 		int userId = _userService.GetCurrentUserId();
 		
-		int? emptyChatParticipationId = await _chatService.GetEmptyChatParticipationId(id);
+		int? emptyChatParticipationId = await _chatService.GetEmptyChatParticipationIdAsync(id);
 
 		using IDbContextTransaction transaction = _unitOfWork.BeginTransaction();
 		try
@@ -54,7 +54,7 @@ public class ChatJoiningCommand : ICommandAsync<int, ChatJoinDTO>
 			{
 				ChatParticipation? existingParticipation =
 					await _unitOfWork.ChatParticipations.GetByChatIdAndUserId(id, userId);
-				await _chatService.DeactivateChatParticipation(existingParticipation);
+				await _chatService.DeactivateChatParticipationAsync(existingParticipation);
 				await transaction.CommitAsync();
 				
 				return new ChatJoinDTO

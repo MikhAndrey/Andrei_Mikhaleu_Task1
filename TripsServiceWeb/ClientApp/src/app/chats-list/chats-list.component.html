@@ -8,6 +8,7 @@
         </div>
         <div class = "tp-gradient-reverse br-20">
           <a routerLink="/chats/{{chat.id}}" class = "btn btn-primary ml-3 mt-2 mb-3">Open</a>
+          <button class = "btn btn-danger ml-3 mt-2 mb-3" (click)="delete(chat.id)">Delete</button>
         </div>
       </div>
     </div>

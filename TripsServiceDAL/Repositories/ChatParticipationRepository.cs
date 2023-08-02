@@ -23,4 +23,9 @@ public class ChatParticipationRepository : EFGenericRepository<ChatParticipation
         ThrowErrorIfEntityIsNull(chatParticipation);
         return chatParticipation;
     }
+
+    public IQueryable<ChatParticipation> GetByChatId(int chatId)
+    {
+        return _dbSet.Where(chp => chp.ChatId == chatId);
+    }
 }

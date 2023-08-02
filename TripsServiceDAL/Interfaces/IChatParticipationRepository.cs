@@ -6,4 +6,5 @@ public interface IChatParticipationRepository: IGenericRepository<ChatParticipat
 {
     Task<ChatParticipation?> GetEmptyChatParticipation(int chatId);
     Task<ChatParticipation?> GetByChatIdAndUserId(int chatId, int? userId);
+    IQueryable<ChatParticipation> GetByChatId(int chatId);
 }

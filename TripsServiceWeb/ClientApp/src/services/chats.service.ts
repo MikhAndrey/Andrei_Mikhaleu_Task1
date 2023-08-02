@@ -23,6 +23,10 @@ export class ChatsService {
     return this.http.post<ChatListDTO>(this.apiUrl + '/create', chat);
   }
 
+  delete(id: number): Observable<any> {
+    return this.http.delete(this.apiUrl + `/delete/${id}`);
+  }
+
   getById(id: number): Observable<ChatDetailsDTO> {
     return this.http.get<ChatDetailsDTO>(this.apiUrl + `/${id}`);
   }

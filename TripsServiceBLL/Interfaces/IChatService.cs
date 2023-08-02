@@ -6,15 +6,18 @@ namespace TripsServiceBLL.Interfaces;
 public interface IChatService
 {
     Task AddChatAsync(Chat chat);
+    Task DeleteWithoutSavingAsync(int id);
+    Task DeleteChatMessagesWithoutSavingAsync(int id);
+    Task DeleteChatParticipationsWithoutSavingAsync(int id);
     Task AddChatParticipationAsync(ChatParticipation chatParticipation);
     Task AddChatMessageAsync(ChatMessage chatMessage);
     IEnumerable<ChatListDTO> GetAll();
-    Task<ChatDetailsDTO> GetById(int id);
+    Task<ChatDetailsDTO> GetByIdAsync(int id);
     ChatMessage CreateMessageAboutChatJoining(int chatParticipationId);
     ChatMessage CreateMessageAboutChatLeaving(int chatParticipationId);
-    Task<int?> GetEmptyChatParticipationId(int chatId);
-    Task<int> GetCurrentChatParticipationId(int chatId);
-    Task<ChatMessageDTO> SendMessage(ChatSendMessageDTO dto);
-    Task<ChatMessageDTO> LeaveChat(ChatLeaveDTO dto);
-    Task DeactivateChatParticipation(ChatParticipation chatParticipation);
+    Task<int?> GetEmptyChatParticipationIdAsync(int chatId);
+    Task<int> GetCurrentChatParticipationIdAsync(int chatId);
+    Task<ChatMessageDTO> SendMessageAsync(ChatSendMessageDTO dto);
+    Task<ChatMessageDTO> LeaveChatAsync(ChatLeaveDTO dto);
+    Task DeactivateChatParticipationAsync(ChatParticipation chatParticipation);
 }
