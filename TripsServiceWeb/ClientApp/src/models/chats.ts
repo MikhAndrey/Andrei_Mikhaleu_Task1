@@ -24,6 +24,7 @@ export class ChatDetailsDTO {
 }
 
 export class ChatSendMessageDTO {
+  chatId: number;
   chatParticipationId: number;
   text: string;
 }

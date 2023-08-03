@@ -21,11 +21,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     private chatWebsocketService: ChatWebsocketService) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const chatId: number = parseInt(this.route.snapshot.paramMap.get('id')!);
     this.chatsService.getById(chatId).subscribe({
       next: (chat) => {
         this.chat = chat;
+        this.messageToSend.chatId = this.chat.id
       },
       error: () => {
         alert("Impossible to load chat data. Try later");
@@ -35,10 +36,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.setCurrentChatParticipationId(chatId);
 
     this.chatWebsocketService.onReceiveMessage = this.messageReceiveHandler.bind(this);
-    this.chatWebsocketService.startConnection();
+    await this.chatWebsocketService.startConnection();
+    await this.chatWebsocketService.addUserToChat(chatId);
   }
 
-  ngOnDestroy() {
+  async ngOnDestroy() {
+    await this.chatWebsocketService.removeUserFromChat(this.chat.id);
     this.chatWebsocketService.closeConnection();
   }
 
@@ -53,14 +56,14 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.chat.isCurrentUserInChat = true;
       },
       error: err => alert(err.error)
-    })
+    });
   }
 
   sendMessage(): void {
     this.chatsService.sendMessage(this.messageToSend).subscribe({
       next: () => this.messageToSend.text = "",
       error: err => alert(err.error)
-    })
+    });
   }
 
   leaveChat(): void {

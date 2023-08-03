@@ -19,14 +19,20 @@ export class ChatWebsocketService {
       .build();
   }
 
-  startConnection() {
-    this.hubConnection
-      .start()
-      .catch(err => console.log('Error while starting connection: ' + err));
+  async startConnection() {
+    await this.hubConnection.start();
   }
 
   set onReceiveMessage(callback: (message: ChatMessageDTO) => void){
     this.hubConnection.on('BroadcastMessage', callback);
+  }
+
+  async addUserToChat(chatId: number) {
+    await this.hubConnection.invoke("AddUserToGroup", chatId);
+  }
+
+  async removeUserFromChat(chatId: number) {
+    await this.hubConnection.invoke("RemoveUserFromGroup", chatId);
   }
 
   closeConnection(){

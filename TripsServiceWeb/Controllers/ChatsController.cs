@@ -96,7 +96,7 @@ public class ChatsController : ControllerBase
         try
         {
             ChatJoinDTO chatJoinInfo = await _chatJoiningCommand.ExecuteAsync(id);
-            await _chatHubContext.Clients.All.SendAsync("BroadcastMessage", chatJoinInfo.Message);
+            await _chatHubContext.Clients.Group(id.ToString()).SendAsync("BroadcastMessage", chatJoinInfo.Message);
             return Ok(chatJoinInfo.ChatParticipationId);
         }
         catch (ArgumentNullException)
@@ -119,7 +119,7 @@ public class ChatsController : ControllerBase
         try
         {
             ChatMessageDTO result = await _chatService.LeaveChatAsync(dto);
-            await _chatHubContext.Clients.All.SendAsync("BroadcastMessage", result);
+            await _chatHubContext.Clients.Group(dto.ChatId.ToString()).SendAsync("BroadcastMessage", result);
             return Ok();
         }
         catch (EntityNotFoundException ex)
@@ -132,7 +132,7 @@ public class ChatsController : ControllerBase
     public async Task<IActionResult> SendMessage(ChatSendMessageDTO dto)
     {
         ChatMessageDTO result = await _chatService.SendMessageAsync(dto);
-        await _chatHubContext.Clients.All.SendAsync("BroadcastMessage", result);
+        await _chatHubContext.Clients.Group(dto.ChatId.ToString()).SendAsync("BroadcastMessage", result);
         return Ok();
     }
 
