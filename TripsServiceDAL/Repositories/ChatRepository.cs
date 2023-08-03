@@ -18,7 +18,8 @@ public class ChatRepository : EFGenericRepository<Chat>, IChatRepository
             .ThenInclude(chp => chp.User)
             .ThenInclude(u => u.Role)
             .Include(c => c.ChatParticipations)
-            .ThenInclude(chp => chp.ChatMessages).FirstOrDefaultAsync(c => c.Id == id);
+            .ThenInclude(chp => chp.ChatMessages)
+            .FirstOrDefaultAsync(c => c.Id == id);
         return chat;
     }
 

@@ -8,7 +8,7 @@ namespace TripsServiceBLL.Commands.Chats;
 public class ChatDeleteCommand : ICommandAsync<int>
 {
     private readonly IChatService _chatService;
-    
+
     private readonly IUnitOfWork _unitOfWork;
 
     public ChatDeleteCommand(IChatService chatService, IUnitOfWork unitOfWork)

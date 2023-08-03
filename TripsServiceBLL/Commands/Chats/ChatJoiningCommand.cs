@@ -11,81 +11,82 @@ namespace TripsServiceBLL.Commands.Chats;
 
 public class ChatJoiningCommand : ICommandAsync<int, ChatJoinDTO>
 {
-	private readonly IChatService _chatService;
-	private readonly IUserService _userService;
+    private readonly IChatService _chatService;
+    private readonly IUserService _userService;
 
-	private readonly IUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
 
-	private readonly IMapper _mapper;
+    private readonly IMapper _mapper;
 
-	public ChatJoiningCommand(
-		IChatService chatService,
-		IUserService userService,
-		IUnitOfWork unitOfWork,
-		IMapper mapper)
-	{
-		_chatService = chatService;
-		_userService = userService;
-		_unitOfWork = unitOfWork;
-		_mapper = mapper;
-	}
+    public ChatJoiningCommand(
+        IChatService chatService,
+        IUserService userService,
+        IUnitOfWork unitOfWork,
+        IMapper mapper)
+    {
+        _chatService = chatService;
+        _userService = userService;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
 
-	public async Task<ChatJoinDTO> ExecuteAsync(int id)
-	{
-		_unitOfWork.Chats.ThrowErrorIfNotExists(id);
-		
-		int userId = _userService.GetCurrentUserId();
-		
-		int? emptyChatParticipationId = await _chatService.GetEmptyChatParticipationIdAsync(id);
+    public async Task<ChatJoinDTO> ExecuteAsync(int id)
+    {
+        _unitOfWork.Chats.ThrowErrorIfNotExists(id);
 
-		using IDbContextTransaction transaction = _unitOfWork.BeginTransaction();
-		try
-		{
-			ChatMessage? messageAboutChatJoining = null;
-			
-			if (emptyChatParticipationId != null)
-			{
-				messageAboutChatJoining = _chatService.CreateMessageAboutChatJoining((int)emptyChatParticipationId);
-				await _chatService.AddChatMessageAsync(messageAboutChatJoining);
-			}
-			ChatMessageDTO chatMessageDto = _mapper.Map<ChatMessageDTO>(messageAboutChatJoining);
+        int userId = _userService.GetCurrentUserId();
 
-			try
-			{
-				ChatParticipation? existingParticipation =
-					await _unitOfWork.ChatParticipations.GetByChatIdAndUserId(id, userId);
-				await _chatService.ActivateChatParticipationAsync(existingParticipation);
-				await transaction.CommitAsync();
-				
-				return new ChatJoinDTO
-				{
-					ChatParticipationId = existingParticipation.Id,
-					Message = chatMessageDto
-				};
-			}
-			catch (EntityNotFoundException)
-			{
-				ChatParticipation participation = new()
-				{
-					ChatId = id,
-					UserId = userId,
-					IsActive = true
-				};
+        int? emptyChatParticipationId = await _chatService.GetEmptyChatParticipationIdAsync(id);
 
-				await _chatService.AddChatParticipationAsync(participation);
-				await transaction.CommitAsync();
+        using IDbContextTransaction transaction = _unitOfWork.BeginTransaction();
+        try
+        {
+            ChatMessage? messageAboutChatJoining = null;
 
-				return new ChatJoinDTO
-				{
-					ChatParticipationId = participation.Id,
-					Message = chatMessageDto
-				};
-			}
-		}
-		catch (Exception)
-		{
-			await transaction.RollbackAsync();
-			throw new DbOperationException();
-		}
-	}
+            if (emptyChatParticipationId != null)
+            {
+                messageAboutChatJoining = _chatService.CreateMessageAboutChatJoining((int)emptyChatParticipationId);
+                await _chatService.AddChatMessageAsync(messageAboutChatJoining);
+            }
+
+            ChatMessageDTO chatMessageDto = _mapper.Map<ChatMessageDTO>(messageAboutChatJoining);
+
+            try
+            {
+                ChatParticipation? existingParticipation =
+                    await _unitOfWork.ChatParticipations.GetByChatIdAndUserId(id, userId);
+                await _chatService.ActivateChatParticipationAsync(existingParticipation);
+                await transaction.CommitAsync();
+
+                return new ChatJoinDTO
+                {
+                    ChatParticipationId = existingParticipation.Id,
+                    Message = chatMessageDto
+                };
+            }
+            catch (EntityNotFoundException)
+            {
+                ChatParticipation participation = new()
+                {
+                    ChatId = id,
+                    UserId = userId,
+                    IsActive = true
+                };
+
+                await _chatService.AddChatParticipationAsync(participation);
+                await transaction.CommitAsync();
+
+                return new ChatJoinDTO
+                {
+                    ChatParticipationId = participation.Id,
+                    Message = chatMessageDto
+                };
+            }
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw new DbOperationException();
+        }
+    }
 }
