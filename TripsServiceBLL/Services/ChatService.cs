@@ -142,16 +142,7 @@ public class ChatService : IChatService
         await AddChatMessageAsync(messageToSend);
 
         ChatMessageDTO result = _mapper.Map<ChatMessageDTO>(messageToSend);
-        result.User = _userService.GetCurrentUserMainInfo();
+        result.User = dto.User;
         return result;
-    }
-
-    public async Task<int> GetCurrentChatParticipationIdAsync(int chatId)
-    {
-        int userId = _userService.GetCurrentUserId();
-        ChatParticipation? chatParticipation =
-            await _unitOfWork.ChatParticipations.GetByChatIdAndUserId(chatId, userId);
-        _unitOfWork.ChatParticipations.ThrowErrorIfEntityIsNull(chatParticipation);
-        return chatParticipation.Id;
     }
 }

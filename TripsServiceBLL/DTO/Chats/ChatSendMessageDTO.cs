@@ -1,8 +1,10 @@
-﻿namespace TripsServiceBLL.DTO.Chats;
+﻿using TripsServiceBLL.DTO.Users;
+
+namespace TripsServiceBLL.DTO.Chats;
 
 public class ChatSendMessageDTO
 {
     public int ChatId { get; set; }
-    public int ChatParticipationId { get; set; }
+    public UserChatDTO User { get; set; }
     public string Text { get; set; }
 }

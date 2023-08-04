@@ -75,8 +75,15 @@ public class AccountController : ControllerBase
     [HttpGet("userinfo")]
     public ActionResult<string?> GetUserInfo()
     {
-        UserListDTO userInfo = _userService.GetCurrentUserMainInfo();
-        return Ok(userInfo);
+        try
+        {
+            UserListDTO userInfo = _userService.GetCurrentUserMainInfo();
+            return Ok(userInfo);
+        }
+        catch (ArgumentNullException)
+        {
+            return Unauthorized();
+        }
     }
 
     [HttpGet("isAuthenticated")]
@@ -95,7 +102,14 @@ public class AccountController : ControllerBase
     [HttpGet("notifications/{userId}")]
     public IActionResult GetNotifications(string userId)
     {
-        List<ChatNotificationMessageDTO> notifications = _notificationsService.GetCurrentNotifications(userId);
-        return Ok(notifications);
+        try
+        {
+            List<ChatNotificationMessageDTO> notifications = _notificationsService.GetCurrentNotifications(userId);
+            return Ok(notifications);
+        }
+        catch (ArgumentNullException)
+        {
+            return Unauthorized();
+        }
     }
 }

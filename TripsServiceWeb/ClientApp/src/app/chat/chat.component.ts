@@ -4,6 +4,8 @@ import {ChatDetailsDTO, ChatMessageDTO, ChatNotificationMessageDTO, ChatSendMess
 import {ActivatedRoute} from "@angular/router";
 import {ChatWebsocketService} from "../../services/chatWebsocket.service";
 import {NotificationsService} from "../../services/notifications.service";
+import {AccountService} from "../../services/account.service";
+import {UserChatDTO} from "../../models/users";
 
 @Component({
   selector: 'app-chat',
@@ -21,7 +23,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     private chatsService: ChatsService,
     private route: ActivatedRoute,
     private chatWebsocketService: ChatWebsocketService,
-    private notificationsService: NotificationsService) {
+    private notificationsService: NotificationsService,
+    private accountService: AccountService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -30,8 +33,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       next: (chat) => {
         this.chat = chat;
         this.messageToSend.chatId = this.chat.id;
+
+        const currentUser: UserChatDTO | undefined = this.chat.users.find(el => el.id === this.accountService.currentUserInfo$.getValue().id);
+        if (currentUser)
+          this.messageToSend.user = currentUser;
+
         this.userIdsToNotify = this.chat.users.reduce((acc, elem) => {
-          if (elem !== null && elem.role === "Admin")
+          if (elem.role === "Admin" && this.messageToSend.user && elem.id !== this.messageToSend.user.id)
             acc.push(elem.id.toString())
           return acc;
         }, new Array<string>());
@@ -40,8 +48,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         alert("Impossible to load chat data. Try later");
       }
     });
-
-    this.setCurrentChatParticipationId(chatId);
 
     this.chatWebsocketService.onReceiveMessage = this.messageReceiveHandler.bind(this);
     await this.chatWebsocketService.startConnection();
@@ -59,8 +65,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   joinChat(): void {
     this.chatsService.addUserToChat(this.chat.id).subscribe({
-      next: (participationId: number) => {
-        this.messageToSend.chatParticipationId = participationId;
+      next: (user: UserChatDTO) => {
+        this.messageToSend.user = user;
         this.chat.isCurrentUserInChat = true;
       },
       error: err => alert(err.error)
@@ -76,22 +82,20 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     const messageToNotify: ChatNotificationMessageDTO = {
       chatName: this.chat.name,
       chatId: this.chat.id,
-      text: this.messageToSend.text
+      text: this.messageToSend.text,
+      user: this.messageToSend.user
     };
 
     await this.notificationsService.broadcastChatNotification(this.userIdsToNotify, messageToNotify);
   }
 
   leaveChat(): void {
-    this.chatsService.leaveChat(this.chat.id, this.messageToSend.chatParticipationId).subscribe({
-      next: () => this.chat.isCurrentUserInChat = false
-    });
-  }
-
-  private setCurrentChatParticipationId(chatId: number): void {
-    this.chatsService.getParticipationId(chatId).subscribe({
-      next: (response) => this.messageToSend.chatParticipationId = response,
-      error: () => console.log("Current user is not a chat member")
+    this.chatsService.leaveChat(this.chat.id, this.messageToSend.user.participationId).subscribe({
+      next: () => {
+        if (this.messageToSend.user.role === "Admin")
+          this.userIdsToNotify = this.userIdsToNotify.filter(id => id !== this.messageToSend.user.id.toString());
+        this.chat.isCurrentUserInChat = false
+      }
     });
   }
 

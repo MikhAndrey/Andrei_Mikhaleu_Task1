@@ -13,7 +13,6 @@ export class AppComponent implements OnInit, OnDestroy{
 
   async ngOnInit(): Promise<void> {
     await this.notificationsService.startConnection();
-    this.notificationsService.initUserNotifications();
   }
 
   async ngOnDestroy(): Promise<void> {

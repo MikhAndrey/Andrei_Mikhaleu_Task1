@@ -7,5 +7,5 @@ public class ChatMessageDTO
     public int Id { get; set; }
     public string Text { get; set; }
     public int ChatParticipationId { get; set; }
-    public UserListDTO User { get; set; }
+    public UserChatDTO User { get; set; }
 }

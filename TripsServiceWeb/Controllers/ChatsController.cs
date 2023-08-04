@@ -97,7 +97,7 @@ public class ChatsController : ControllerBase
         {
             ChatJoinDTO chatJoinInfo = await _chatJoiningCommand.ExecuteAsync(id);
             await _chatHubContext.Clients.Group(id.ToString()).SendAsync("BroadcastMessage", chatJoinInfo.Message);
-            return Ok(chatJoinInfo.ChatParticipationId);
+            return Ok(chatJoinInfo.User);
         }
         catch (ArgumentNullException)
         {
@@ -134,19 +134,6 @@ public class ChatsController : ControllerBase
         ChatMessageDTO result = await _chatService.SendMessageAsync(dto);
         await _chatHubContext.Clients.Group(dto.ChatId.ToString()).SendAsync("BroadcastMessage", result);
         return Ok();
-    }
-
-    [HttpGet("participationId/{id}")]
-    public async Task<IActionResult> GetParticipationId(int id)
-    {
-        try
-        {
-            int currentParticipationId = await _chatService.GetCurrentChatParticipationIdAsync(id);
-            return Ok(currentParticipationId);
-        } catch (EntityNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
     }
 }
 

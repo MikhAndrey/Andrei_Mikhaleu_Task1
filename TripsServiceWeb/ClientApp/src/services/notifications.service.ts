@@ -3,7 +3,7 @@ import * as signalR from "@microsoft/signalr";
 import {HttpTransportType} from "@microsoft/signalr";
 import {environment} from "../environments/environment";
 import {ChatNotificationMessageDTO} from "../models/chats";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subscription} from "rxjs";
 import {AccountService} from "./account.service";
 
 @Injectable({
@@ -13,8 +13,15 @@ export class NotificationsService {
   private hubConnection: signalR.HubConnection;
 
   notifications$: BehaviorSubject<ChatNotificationMessageDTO[]> = new BehaviorSubject<ChatNotificationMessageDTO[]>([]);
+  notificationsInitSubscription: Subscription;
 
   constructor(private accountService: AccountService) {
+    this.notificationsInitSubscription = this.accountService.currentUserInfo$.subscribe({
+      next: value => {
+        if (Object.keys(value).length > 0)
+          this.initUserNotifications.bind(this);
+      }
+    });
   }
 
   async startConnection() {
@@ -30,8 +37,10 @@ export class NotificationsService {
 
   initUserNotifications(): void {
     this.accountService.getUserNotifications().subscribe({
-      next: value => this.notifications$.next(value)
+      next: value => this.notifications$.next(value),
+      error: err => console.log(err)
     });
+    this.notificationsInitSubscription.unsubscribe();
   }
 
   closeConnection(): void {

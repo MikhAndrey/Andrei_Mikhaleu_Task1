@@ -8,6 +8,7 @@ import {
   ChatListDTO,
   ChatSendMessageDTO
 } from "../models/chats";
+import {UserChatDTO} from "../models/users";
 
 @Injectable({ providedIn: 'root' })
 export class ChatsService {
@@ -37,8 +38,8 @@ export class ChatsService {
     return this.http.get<ChatDetailsDTO>(this.apiUrl + `/${id}`);
   }
 
-  addUserToChat(chatId: number): Observable<number> {
-    return this.http.post<number>(this.apiUrl + `/join/${chatId}`, chatId);
+  addUserToChat(chatId: number): Observable<UserChatDTO> {
+    return this.http.post<UserChatDTO>(this.apiUrl + `/join/${chatId}`, chatId);
   }
 
   leaveChat(chatId: number, participationId: number): Observable<ChatLeaveDTO> {
@@ -51,9 +52,5 @@ export class ChatsService {
 
   sendMessage(message: ChatSendMessageDTO): Observable<any> {
     return this.http.post<any>(this.apiUrl + `/sendMessage`, message);
-  }
-
-  getParticipationId(chatId: number): Observable<number> {
-    return this.http.get<number>(this.apiUrl + `/participationId/${chatId}`);
   }
 }

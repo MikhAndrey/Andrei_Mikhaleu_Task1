@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore.Storage;
 using TripsServiceBLL.DTO.Chats;
+using TripsServiceBLL.DTO.Users;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
 using TripsServiceDAL.Entities;
@@ -35,6 +36,8 @@ public class ChatJoiningCommand : ICommandAsync<int, ChatJoinDTO>
         _unitOfWork.Chats.ThrowErrorIfNotExists(id);
 
         int userId = _userService.GetCurrentUserId();
+        UserListDTO currentUserInfo = _userService.GetCurrentUserMainInfo();
+        UserChatDTO chatUserInfo = _mapper.Map<UserChatDTO>(currentUserInfo);
 
         int? emptyChatParticipationId = await _chatService.GetEmptyChatParticipationIdAsync(id);
 
@@ -58,9 +61,10 @@ public class ChatJoiningCommand : ICommandAsync<int, ChatJoinDTO>
                 await _chatService.ActivateChatParticipationAsync(existingParticipation);
                 await transaction.CommitAsync();
 
+                chatUserInfo.ParticipationId = existingParticipation.Id;
                 return new ChatJoinDTO
                 {
-                    ChatParticipationId = existingParticipation.Id,
+                    User = chatUserInfo,
                     Message = chatMessageDto
                 };
             }
@@ -76,9 +80,10 @@ public class ChatJoiningCommand : ICommandAsync<int, ChatJoinDTO>
                 await _chatService.AddChatParticipationAsync(participation);
                 await transaction.CommitAsync();
 
+                chatUserInfo.ParticipationId = participation.Id;
                 return new ChatJoinDTO
                 {
-                    ChatParticipationId = participation.Id,
+                    User = chatUserInfo,
                     Message = chatMessageDto
                 };
             }

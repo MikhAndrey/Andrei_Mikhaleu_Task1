@@ -17,5 +17,6 @@ public class UserMapper : Profile
 			.ForMember(user => user.RoleId, opt => opt.MapFrom(userRoleIdResolver));
 		CreateMap<User, UserListDTO>()
 			.ForMember(user => user.Role, opt => opt.MapFrom(src => src.Role.Name));
+		CreateMap<UserListDTO, UserChatDTO>();
 	}
 }
