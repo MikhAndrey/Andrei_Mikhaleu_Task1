@@ -187,3 +187,16 @@ body {
   height:auto;
   border-radius:50%;
 }
+
+.notification-icon{
+  width: 48px;
+  height: 48px;
+  background-image: url("../img/bell.png");
+  position: relative;
+}
+
+.notifications-counter{
+  position: absolute;
+  right: -10px;
+  top: -5px;
+}

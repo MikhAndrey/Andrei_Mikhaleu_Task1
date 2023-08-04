@@ -22,6 +22,8 @@ public class ChatMapper : Profile
         CreateMap<Chat, ChatDetailsDTO>()
             .ForMember(dest => dest.Messages, opt => 
                 opt.MapFrom(src => src.ChatParticipations.SelectMany(cp => cp.ChatMessages).OrderBy(m => m.Id)))
+            .ForMember(dest => dest.Users, 
+                opt => opt.MapFrom(src => src.ChatParticipations.Where(chp => chp.IsActive).Select(chp => chp.User)))
             .ForMember(dest => dest.IsCurrentUserInChat, opt => opt.MapFrom(currentUserChatResolver));
     }
 }

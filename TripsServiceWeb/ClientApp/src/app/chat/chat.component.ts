@@ -1,8 +1,9 @@
 ﻿import {AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ChatsService} from "../../services/chats.service";
-import {ChatDetailsDTO, ChatMessageDTO, ChatSendMessageDTO} from "../../models/chats";
+import {ChatDetailsDTO, ChatMessageDTO, ChatNotificationMessageDTO, ChatSendMessageDTO} from "../../models/chats";
 import {ActivatedRoute} from "@angular/router";
 import {ChatWebsocketService} from "../../services/chatWebsocket.service";
+import {NotificationsService} from "../../services/notifications.service";
 
 @Component({
   selector: 'app-chat',
@@ -12,13 +13,15 @@ import {ChatWebsocketService} from "../../services/chatWebsocket.service";
 export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   chat: ChatDetailsDTO = new ChatDetailsDTO();
   messageToSend: ChatSendMessageDTO = new ChatSendMessageDTO();
+  private userIdsToNotify: string[];
 
   @ViewChild('messagesContainer') messagesContainer: ElementRef;
 
   constructor(
     private chatsService: ChatsService,
     private route: ActivatedRoute,
-    private chatWebsocketService: ChatWebsocketService) {
+    private chatWebsocketService: ChatWebsocketService,
+    private notificationsService: NotificationsService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -26,7 +29,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.chatsService.getById(chatId).subscribe({
       next: (chat) => {
         this.chat = chat;
-        this.messageToSend.chatId = this.chat.id
+        this.messageToSend.chatId = this.chat.id;
+        this.userIdsToNotify = this.chat.users.reduce((acc, elem) => {
+          if (elem !== null && elem.role === "Admin")
+            acc.push(elem.id.toString())
+          return acc;
+        }, new Array<string>());
       },
       error: () => {
         alert("Impossible to load chat data. Try later");
@@ -59,11 +67,19 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
   }
 
-  sendMessage(): void {
+  async sendMessage(): Promise<void> {
     this.chatsService.sendMessage(this.messageToSend).subscribe({
       next: () => this.messageToSend.text = "",
       error: err => alert(err.error)
     });
+
+    const messageToNotify: ChatNotificationMessageDTO = {
+      chatName: this.chat.name,
+      chatId: this.chat.id,
+      text: this.messageToSend.text
+    };
+
+    await this.notificationsService.broadcastChatNotification(this.userIdsToNotify, messageToNotify);
   }
 
   leaveChat(): void {

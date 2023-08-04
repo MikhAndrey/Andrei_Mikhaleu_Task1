@@ -19,6 +19,7 @@ export class ChatMessageDTO {
 export class ChatDetailsDTO {
   id: number;
   name: string;
+  users: UserListDTO[];
   messages: ChatMessageDTO[];
   isCurrentUserInChat: boolean;
 }
@@ -27,6 +28,12 @@ export class ChatSendMessageDTO {
   chatId: number;
   chatParticipationId: number;
   text: string;
+}
+
+export class ChatNotificationMessageDTO {
+  chatId: number;
+  text: string;
+  chatName: string;
 }
 
 export class ChatLeaveDTO {

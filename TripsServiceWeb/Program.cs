@@ -1,6 +1,8 @@
 using System.Reflection;
 using Andrei_Mikhaleu_Task1;
 using Andrei_Mikhaleu_Task1.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using TripsServiceBLL.Infrastructure.Common;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,9 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddSignalR();
+builder.Services.AddMemoryCache();
+
+builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -54,6 +59,7 @@ app.UseAuthorization();
 
 app.MapHub<FeedbacksHub>("/feedbackshub");
 app.MapHub<ChatHub>("/chathub");
+app.MapHub<NotificationHub>("/notificationhub");
 
 app.MapControllerRoute(
     name: "default",

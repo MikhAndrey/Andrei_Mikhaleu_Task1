@@ -1,7 +1,13 @@
 ﻿import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ChatCreateDTO, ChatDetailsDTO, ChatLeaveDTO, ChatListDTO, ChatSendMessageDTO} from "../models/chats";
+import {
+  ChatCreateDTO,
+  ChatDetailsDTO,
+  ChatLeaveDTO,
+  ChatListDTO,
+  ChatSendMessageDTO
+} from "../models/chats";
 
 @Injectable({ providedIn: 'root' })
 export class ChatsService {

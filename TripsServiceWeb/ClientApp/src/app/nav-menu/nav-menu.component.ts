@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountService, UserNameResponse} from "../../services/account.service";
 import {Subscription} from "rxjs";
+import {NotificationsService} from "../../services/notifications.service";
 
 @Component({
   selector: 'app-nav-menu',
@@ -12,12 +13,18 @@ export class NavMenuComponent implements OnInit, OnDestroy{
   userInfo: UserNameResponse = {};
   userInfoSubscription: Subscription;
 
-  constructor(private accountService: AccountService) {
+  notificationsCount: number = 0;
+  userNotificationsCountSubscription: Subscription;
+
+  constructor(private accountService: AccountService, private notificationsService: NotificationsService) {
   }
 
   ngOnInit(): void {
     this.userInfoSubscription = this.accountService.currentUserInfo$.subscribe((userInfo) => {
       this.userInfo = userInfo
+    });
+    this.userNotificationsCountSubscription = this.notificationsService.notifications$.subscribe((notifications) => {
+      this.notificationsCount = notifications.length;
     });
   }
 
@@ -27,5 +34,6 @@ export class NavMenuComponent implements OnInit, OnDestroy{
 
   ngOnDestroy() {
     this.userInfoSubscription.unsubscribe();
+    this.userNotificationsCountSubscription.unsubscribe();
   }
 }

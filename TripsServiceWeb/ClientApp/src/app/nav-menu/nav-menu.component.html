@@ -96,6 +96,9 @@
             </ul>
           </div>
         </ng-template>
+        <div class="notification-icon">
+          <span class="badge badge-danger notifications-counter" *ngIf="notificationsCount > 0"> {{notificationsCount}}</span>
+        </div>
       </div>
     </div>
   </nav>
