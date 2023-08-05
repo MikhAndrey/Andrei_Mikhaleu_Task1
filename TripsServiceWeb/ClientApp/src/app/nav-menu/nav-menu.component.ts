@@ -15,6 +15,7 @@ export class NavMenuComponent implements OnInit, OnDestroy{
 
   notificationsCount: number = 0;
   userNotificationsCountSubscription: Subscription;
+  initialNotificationsSubscription: Subscription;
 
   constructor(private accountService: AccountService, private notificationsService: NotificationsService) {
   }
@@ -28,6 +29,9 @@ export class NavMenuComponent implements OnInit, OnDestroy{
        this.notificationsCount++;
      }
     });
+    this.initialNotificationsSubscription = this.notificationsService.initialNotifications$.subscribe((notifications) => {
+      this.notificationsCount = notifications.length;
+    });
   }
 
   logout(): void {
@@ -37,5 +41,6 @@ export class NavMenuComponent implements OnInit, OnDestroy{
   ngOnDestroy() {
     this.userInfoSubscription.unsubscribe();
     this.userNotificationsCountSubscription.unsubscribe();
+    this.initialNotificationsSubscription.unsubscribe();
   }
 }

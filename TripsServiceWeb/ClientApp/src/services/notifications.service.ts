@@ -15,6 +15,7 @@ export class NotificationsService {
   notifications: ChatNotificationMessageDTO[] = [];
 
   incomingNotification$: BehaviorSubject<ChatNotificationMessageDTO | undefined> = new BehaviorSubject<ChatNotificationMessageDTO | undefined>(undefined);
+  initialNotifications$: BehaviorSubject<ChatNotificationMessageDTO[]> = new BehaviorSubject<ChatNotificationMessageDTO[]>([]);
   notificationsInitSubscription: Subscription;
 
   constructor(private accountService: AccountService) {
@@ -40,9 +41,7 @@ export class NotificationsService {
 
   initUserNotifications(): void {
     this.accountService.getUserNotifications().subscribe({
-      next: notifications =>{
-        notifications.forEach(el => this.addNotification(el));
-      },
+      next: notifications => this.initialNotifications$.next(notifications),
       error: err => console.log(err)
     });
     this.notificationsInitSubscription.unsubscribe();
