@@ -9,7 +9,7 @@
          'common-message')"
          *ngFor="let message of chat.messages">
       <h6 class="tp-label" *ngIf="message.user.userName !== null">{{message.user.userName}} ({{message.user.role}})</h6>
-      <div class="message-text-container">{{message.text}}</div>
+      <pre class="message-text-container">{{message.text}}</pre>
     </div>
   </div>
   <div *ngIf="chat.isCurrentUserInChat">

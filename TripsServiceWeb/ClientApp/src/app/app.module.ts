@@ -39,6 +39,7 @@ import {AdminTripCreateComponent} from "./admin-trip-create/admin-trip-create.co
 import {AdminTripEditComponent} from "./admin-trip-edit/admin-trip-edit.component";
 import {ChatsListComponent} from "./chats-list/chats-list.component";
 import {ChatComponent} from "./chat/chat.component";
+import {NotificationsComponent} from "./notifications/notifications.component";
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import {ChatComponent} from "./chat/chat.component";
     AdminTripCreateComponent,
     AdminTripEditComponent,
     ChatsListComponent,
-    ChatComponent
+    ChatComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

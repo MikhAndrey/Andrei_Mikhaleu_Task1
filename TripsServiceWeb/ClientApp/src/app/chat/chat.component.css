@@ -29,6 +29,8 @@
 
 .message-text-container {
   color: #355052;
+  white-space: pre-wrap;
+  font: inherit;
 }
 
 .common-message {

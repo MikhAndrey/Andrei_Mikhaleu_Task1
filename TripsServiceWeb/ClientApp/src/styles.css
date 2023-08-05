@@ -41,6 +41,13 @@ body {
   background-size: cover;
 }
 
+.notifications-corner {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 20%;
+}
+
 #map {
   height: 400px;
   width: 100%;

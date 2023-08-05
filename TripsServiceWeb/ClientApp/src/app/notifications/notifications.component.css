@@ -1,0 +1,15 @@
+﻿.notification-text-container {
+  color: #355052;
+  white-space: pre-wrap;
+  font: inherit;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden
+}
+
+.notification-container {
+  padding: 8px;
+  border-radius: 12px;
+  cursor: pointer;
+}
