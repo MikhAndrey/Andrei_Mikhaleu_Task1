@@ -1,6 +1,12 @@
 ﻿import {AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ChatsService} from "../../services/chats.service";
-import {ChatDetailsDTO, ChatMessageDTO, ChatNotificationMessageDTO, ChatSendMessageDTO} from "../../models/chats";
+import {
+  ChatDetailsDTO,
+  ChatJoinDTO,
+  ChatMessageDTO,
+  ChatNotificationMessageDTO,
+  ChatSendMessageDTO
+} from "../../models/chats";
 import {ActivatedRoute} from "@angular/router";
 import {ChatWebsocketService} from "../../services/chatWebsocket.service";
 import {NotificationsService} from "../../services/notifications.service";
@@ -65,9 +71,18 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   joinChat(): void {
     this.chatsService.addUserToChat(this.chat.id).subscribe({
-      next: (user: UserChatDTO) => {
-        this.messageToSend.user = user;
+      next: async(chatDTO: ChatJoinDTO) => {
+        this.messageToSend.user = chatDTO.user;
         this.chat.isCurrentUserInChat = true;
+
+        const messageToNotify: ChatNotificationMessageDTO = {
+          chatName: this.chat.name,
+          chatId: this.chat.id,
+          text: chatDTO.message.text,
+          user: undefined
+        };
+
+        await this.notificationsService.broadcastChatNotification(this.userIdsToNotify, messageToNotify);
       },
       error: err => alert(err.error)
     });
@@ -75,26 +90,34 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   async sendMessage(): Promise<void> {
     this.chatsService.sendMessage(this.messageToSend).subscribe({
-      next: () => this.messageToSend.text = "",
+      next: async() => {
+        const messageToNotify: ChatNotificationMessageDTO = {
+          chatName: this.chat.name,
+          chatId: this.chat.id,
+          text: this.messageToSend.text,
+          user: this.messageToSend.user
+        };
+        this.messageToSend.text = "";
+
+        await this.notificationsService.broadcastChatNotification(this.userIdsToNotify, messageToNotify);
+      },
       error: err => alert(err.error)
     });
-
-    const messageToNotify: ChatNotificationMessageDTO = {
-      chatName: this.chat.name,
-      chatId: this.chat.id,
-      text: this.messageToSend.text,
-      user: this.messageToSend.user
-    };
-
-    await this.notificationsService.broadcastChatNotification(this.userIdsToNotify, messageToNotify);
   }
 
   leaveChat(): void {
     this.chatsService.leaveChat(this.chat.id, this.messageToSend.user.participationId).subscribe({
-      next: () => {
-        if (this.messageToSend.user.role === "Admin")
-          this.userIdsToNotify = this.userIdsToNotify.filter(id => id !== this.messageToSend.user.id.toString());
+      next: async (message: ChatMessageDTO) => {
         this.chat.isCurrentUserInChat = false
+
+        const messageToNotify: ChatNotificationMessageDTO = {
+          chatName: this.chat.name,
+          chatId: this.chat.id,
+          text: message.text,
+          user: undefined
+        };
+
+        await this.notificationsService.broadcastChatNotification(this.userIdsToNotify, messageToNotify);
       }
     });
   }

@@ -34,10 +34,15 @@ export class ChatNotificationMessageDTO {
   chatId: number;
   text: string;
   chatName: string;
-  user: UserChatDTO;
+  user: UserChatDTO | undefined;
 }
 
 export class ChatLeaveDTO {
   chatId: number;
   participationId: number;
+}
+
+export class ChatJoinDTO {
+  message: ChatMessageDTO;
+  user: UserChatDTO;
 }

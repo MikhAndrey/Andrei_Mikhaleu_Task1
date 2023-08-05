@@ -3,12 +3,11 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {
   ChatCreateDTO,
-  ChatDetailsDTO,
+  ChatDetailsDTO, ChatJoinDTO,
   ChatLeaveDTO,
-  ChatListDTO,
+  ChatListDTO, ChatMessageDTO,
   ChatSendMessageDTO
 } from "../models/chats";
-import {UserChatDTO} from "../models/users";
 
 @Injectable({ providedIn: 'root' })
 export class ChatsService {
@@ -38,16 +37,16 @@ export class ChatsService {
     return this.http.get<ChatDetailsDTO>(this.apiUrl + `/${id}`);
   }
 
-  addUserToChat(chatId: number): Observable<UserChatDTO> {
-    return this.http.post<UserChatDTO>(this.apiUrl + `/join/${chatId}`, chatId);
+  addUserToChat(chatId: number): Observable<ChatJoinDTO> {
+    return this.http.post<ChatJoinDTO>(this.apiUrl + `/join/${chatId}`, chatId);
   }
 
-  leaveChat(chatId: number, participationId: number): Observable<ChatLeaveDTO> {
+  leaveChat(chatId: number, participationId: number): Observable<ChatMessageDTO> {
     const dto: ChatLeaveDTO = {
       chatId: chatId,
       participationId: participationId
     };
-    return this.http.put<ChatLeaveDTO>(this.apiUrl + `/leave`, dto);
+    return this.http.put<ChatMessageDTO>(this.apiUrl + `/leave`, dto);
   }
 
   sendMessage(message: ChatSendMessageDTO): Observable<any> {
