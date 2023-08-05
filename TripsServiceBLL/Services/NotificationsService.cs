@@ -7,6 +7,8 @@ namespace TripsServiceBLL.Services;
 
 public class NotificationsService : INotificationsService
 {
+    private static int _currentId;  
+    
     private readonly IMemoryCache _cache;
 
     public NotificationsService(IMemoryCache cache)
@@ -29,5 +31,28 @@ public class NotificationsService : INotificationsService
         }
         
         return new List<ChatNotificationMessageDTO>();
+    }
+
+    public void SetId(ChatNotificationMessageDTO notification)
+    {
+        _currentId++;
+        notification.Id = _currentId;
+    }
+
+    public void Delete(string userId, int id)
+    {
+        if (_cache.TryGetValue<List<ChatNotificationMessageDTO>>(UtilConstants.NotificationsCacheStorageNamePrefix + userId, out var notifications))
+        {
+            if (notifications != null)
+            {
+                ChatNotificationMessageDTO? notificationToDelete =
+                    notifications.Find(notification => notification.Id == id);
+                if (notificationToDelete != null)
+                {
+                    notifications.Remove(notificationToDelete);
+                    _cache.Set(UtilConstants.NotificationsCacheStorageNamePrefix + userId, notifications);
+                }
+            }
+        }
     }
 }

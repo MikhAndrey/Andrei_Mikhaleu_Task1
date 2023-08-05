@@ -1,5 +1,5 @@
 ﻿<div>
-  <div class="notification-container mt-2 tp-gradient-reverse" *ngFor = "let notification of notifications" (click)="notificationsService.redirectToChat(notification.chatId)">
+  <div class="notification-container mt-2 tp-gradient-reverse" *ngFor = "let notification of notifications" (click)="notificationsService.deleteAndRedirectToChat(notification.id!, notification.chatId)">
     <h5 class="tp-label">{{notification.chatName}}</h5>
     <h5 class="tp-label mt-1">{{notification.user.userName}}:</h5>
     <div class="notification-text-container">{{notification.text}}</div>

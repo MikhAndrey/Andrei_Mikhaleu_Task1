@@ -15,6 +15,7 @@ public class NotificationHub : Hub
    
    public async Task Notify(List<string> receivers, ChatNotificationMessageDTO message)
    {
+      _notificationsService.SetId(message);
       await Clients.Users(receivers).SendAsync("BroadcastChatNotification", message);
       foreach (string userId in receivers)
       {

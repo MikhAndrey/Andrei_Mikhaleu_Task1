@@ -35,4 +35,9 @@ export class NavMenuComponent implements OnInit, OnDestroy{
   toggleNotificationsExpanded() {
     this.notificationsListExpanded = !this.notificationsListExpanded;
   }
+
+  deleteNotification(event: MouseEvent, id: number){
+    event.stopPropagation();
+    this.notificationsService.deleteNotification(id);
+  }
 }

@@ -30,6 +30,7 @@ export class ChatSendMessageDTO {
 }
 
 export class ChatNotificationMessageDTO {
+  id?: number;
   chatId: number;
   text: string;
   chatName: string;

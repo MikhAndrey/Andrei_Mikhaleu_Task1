@@ -99,10 +99,11 @@
         <div class="notification-icon" (click)="toggleNotificationsExpanded()">
           <span class="badge badge-danger notifications-counter" *ngIf="notificationsService.notifications.length > 0"> {{notificationsService.notifications.length}}</span>
           <div class="notifications-dropdown" [hidden]="!notificationsListExpanded">
-            <div class="notification-container mt-2 tp-gradient-reverse" *ngFor = "let notification of notificationsService.notifications" (click)="notificationsService.redirectToChat(notification.chatId)">
+            <div class="notification-container mt-2 tp-gradient-reverse" *ngFor = "let notification of notificationsService.notifications" (click)="notificationsService.deleteAndRedirectToChat(notification.id!, notification.chatId)">
               <h5 class="tp-label">{{notification.chatName}}</h5>
               <h5 class="tp-label mt-1">{{notification.user.userName}}:</h5>
               <div class="notification-text-container">{{notification.text}}</div>
+              <span (click)="deleteNotification($event, notification.id!)" class="mt-3 tp-label">Mark as read</span>
             </div>
           </div>
         </div>
