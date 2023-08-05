@@ -2,7 +2,6 @@
 import {NotificationsService} from "../../services/notifications.service";
 import {Subscription} from "rxjs";
 import {ChatNotificationMessageDTO} from "../../models/chats";
-import {Router} from "@angular/router";
 
 type NotificationDisplayOptions = {
   displayDuration: number,
@@ -11,8 +10,7 @@ type NotificationDisplayOptions = {
 
 @Component({
   selector: 'app-notifications',
-  templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.css']
+  templateUrl: './notifications.component.html'
 })
 export class NotificationsComponent implements OnInit{
 
@@ -25,7 +23,7 @@ export class NotificationsComponent implements OnInit{
 
   timeoutIds: number[] = [];
 
-  constructor(private notificationsService: NotificationsService, private router: Router) {
+  constructor(public notificationsService: NotificationsService) {
   }
 
   ngOnInit() {
@@ -56,9 +54,5 @@ export class NotificationsComponent implements OnInit{
     if (notificationToRemoveIndex !== -1) {
       this.shiftNotificationsQueue()
     }
-  }
-
-  async redirectToChat(chatId: number){
-    await this.router.navigate([`chats/${chatId}`]);
   }
 }

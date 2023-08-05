@@ -200,10 +200,27 @@ body {
   height: 48px;
   background-image: url("../img/bell.png");
   position: relative;
+  cursor: pointer;
 }
 
 .notifications-counter{
   position: absolute;
   right: -10px;
   top: -5px;
+}
+
+.notification-text-container {
+  color: #355052;
+  white-space: pre-wrap;
+  font: inherit;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden
+}
+
+.notification-container {
+  padding: 8px;
+  border-radius: 12px;
+  cursor: pointer;
 }

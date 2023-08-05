@@ -13,24 +13,14 @@ export class NavMenuComponent implements OnInit, OnDestroy{
   userInfo: UserNameResponse = {};
   userInfoSubscription: Subscription;
 
-  notificationsCount: number = 0;
-  userNotificationsCountSubscription: Subscription;
-  initialNotificationsSubscription: Subscription;
+  notificationsListExpanded: boolean = false;
 
-  constructor(private accountService: AccountService, private notificationsService: NotificationsService) {
+  constructor(private accountService: AccountService, public notificationsService: NotificationsService) {
   }
 
   ngOnInit(): void {
     this.userInfoSubscription = this.accountService.currentUserInfo$.subscribe((userInfo) => {
       this.userInfo = userInfo
-    });
-    this.userNotificationsCountSubscription = this.notificationsService.incomingNotification$.subscribe((notification) => {
-     if (notification) {
-       this.notificationsCount++;
-     }
-    });
-    this.initialNotificationsSubscription = this.notificationsService.initialNotifications$.subscribe((notifications) => {
-      this.notificationsCount = notifications.length;
     });
   }
 
@@ -40,7 +30,9 @@ export class NavMenuComponent implements OnInit, OnDestroy{
 
   ngOnDestroy() {
     this.userInfoSubscription.unsubscribe();
-    this.userNotificationsCountSubscription.unsubscribe();
-    this.initialNotificationsSubscription.unsubscribe();
+  }
+
+  toggleNotificationsExpanded() {
+    this.notificationsListExpanded = !this.notificationsListExpanded;
   }
 }

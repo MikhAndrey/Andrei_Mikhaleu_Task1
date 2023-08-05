@@ -5,6 +5,7 @@ import {environment} from "../environments/environment";
 import {ChatNotificationMessageDTO} from "../models/chats";
 import {BehaviorSubject, Subscription} from "rxjs";
 import {AccountService} from "./account.service";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,9 @@ export class NotificationsService {
   notifications: ChatNotificationMessageDTO[] = [];
 
   incomingNotification$: BehaviorSubject<ChatNotificationMessageDTO | undefined> = new BehaviorSubject<ChatNotificationMessageDTO | undefined>(undefined);
-  initialNotifications$: BehaviorSubject<ChatNotificationMessageDTO[]> = new BehaviorSubject<ChatNotificationMessageDTO[]>([]);
   notificationsInitSubscription: Subscription;
 
-  constructor(private accountService: AccountService) {
+  constructor(private accountService: AccountService, private router: Router) {
     this.notificationsInitSubscription = this.accountService.currentUserInfo$.subscribe({
       next: value => {
         if (Object.keys(value).length > 0) {
@@ -41,7 +41,9 @@ export class NotificationsService {
 
   initUserNotifications(): void {
     this.accountService.getUserNotifications().subscribe({
-      next: notifications => this.initialNotifications$.next(notifications),
+      next: notifications => {
+        this.notifications = notifications;
+      },
       error: err => console.log(err)
     });
     this.notificationsInitSubscription.unsubscribe();
@@ -60,5 +62,9 @@ export class NotificationsService {
   addNotification(notification: ChatNotificationMessageDTO): void {
     this.incomingNotification$.next(notification);
     this.notifications.push(notification);
+  }
+
+  async redirectToChat(chatId: number){
+    await this.router.navigate([`chats/${chatId}`]);
   }
 }
