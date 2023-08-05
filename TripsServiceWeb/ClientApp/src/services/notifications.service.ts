@@ -12,7 +12,9 @@ import {AccountService} from "./account.service";
 export class NotificationsService {
   private hubConnection: signalR.HubConnection;
 
-  notifications$: BehaviorSubject<ChatNotificationMessageDTO[]> = new BehaviorSubject<ChatNotificationMessageDTO[]>([]);
+  notifications: ChatNotificationMessageDTO[];
+
+  incomingNotification$: BehaviorSubject<ChatNotificationMessageDTO | undefined> = new BehaviorSubject<ChatNotificationMessageDTO | undefined>(undefined);
   notificationsInitSubscription: Subscription;
 
   constructor(private accountService: AccountService) {
@@ -37,7 +39,9 @@ export class NotificationsService {
 
   initUserNotifications(): void {
     this.accountService.getUserNotifications().subscribe({
-      next: value => this.notifications$.next(value),
+      next: notifications =>{
+        notifications.forEach(el => this.addNotification(el));
+      },
       error: err => console.log(err)
     });
     this.notificationsInitSubscription.unsubscribe();
@@ -53,8 +57,8 @@ export class NotificationsService {
     await this.hubConnection.invoke("Notify", receivers, message);
   }
 
-  addNotification(message: ChatNotificationMessageDTO): void {
-    const updatedNotifications = [...this.notifications$.value, message];
-    this.notifications$.next(updatedNotifications);
+  addNotification(notification: ChatNotificationMessageDTO): void {
+    this.incomingNotification$.next(notification);
+    this.notifications.push(notification);
   }
 }

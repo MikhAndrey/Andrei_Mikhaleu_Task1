@@ -23,8 +23,10 @@ export class NavMenuComponent implements OnInit, OnDestroy{
     this.userInfoSubscription = this.accountService.currentUserInfo$.subscribe((userInfo) => {
       this.userInfo = userInfo
     });
-    this.userNotificationsCountSubscription = this.notificationsService.notifications$.subscribe((notifications) => {
-      this.notificationsCount = notifications.length;
+    this.userNotificationsCountSubscription = this.notificationsService.incomingNotification$.subscribe((notification) => {
+     if (notification) {
+       this.notificationsCount++;
+     }
     });
   }
 
