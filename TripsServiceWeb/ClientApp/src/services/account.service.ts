@@ -25,8 +25,7 @@ export class AccountService {
     private redirectService: RedirectService)
   {
     this.apiUrl = baseUrl + "api/account";
-    if (Object.keys(this.currentUserInfo$.getValue()).length === 0)
-      this.initUserInfo();
+    this.initUserInfo();
   }
 
   public setCurrentUserInfo(userInfo: UserNameResponse) {

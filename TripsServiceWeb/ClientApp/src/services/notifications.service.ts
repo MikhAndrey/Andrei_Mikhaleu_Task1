@@ -12,7 +12,7 @@ import {AccountService} from "./account.service";
 export class NotificationsService {
   private hubConnection: signalR.HubConnection;
 
-  notifications: ChatNotificationMessageDTO[];
+  notifications: ChatNotificationMessageDTO[] = [];
 
   incomingNotification$: BehaviorSubject<ChatNotificationMessageDTO | undefined> = new BehaviorSubject<ChatNotificationMessageDTO | undefined>(undefined);
   notificationsInitSubscription: Subscription;
@@ -20,8 +20,9 @@ export class NotificationsService {
   constructor(private accountService: AccountService) {
     this.notificationsInitSubscription = this.accountService.currentUserInfo$.subscribe({
       next: value => {
-        if (Object.keys(value).length > 0)
-          this.initUserNotifications.bind(this);
+        if (Object.keys(value).length > 0) {
+          this.initUserNotifications();
+        }
       }
     });
   }
