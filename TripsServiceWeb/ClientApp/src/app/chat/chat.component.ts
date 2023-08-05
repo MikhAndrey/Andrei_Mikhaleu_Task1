@@ -56,6 +56,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
 
     this.chatWebsocketService.onReceiveMessage = this.messageReceiveHandler.bind(this);
+    this.chatWebsocketService.onNotificationReceiverJoining = this.notificationReceiverJoiningHandler.bind(this);
+    this.chatWebsocketService.onNotificationReceiverLeaving = this.notificationReceiverLeavingHandler.bind(this);
+
     await this.chatWebsocketService.startConnection();
     await this.chatWebsocketService.addUserToChat(chatId);
   }
@@ -83,6 +86,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         };
 
         await this.notificationsService.broadcastChatNotification(this.userIdsToNotify, messageToNotify);
+        if (this.messageToSend.user.role === "Admin")
+          await this.chatWebsocketService.addUserToNotificationReceivers(this.chat.id, this.messageToSend.user.id);
       },
       error: err => alert(err.error)
     });
@@ -118,12 +123,23 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         };
 
         await this.notificationsService.broadcastChatNotification(this.userIdsToNotify, messageToNotify);
+        if (this.messageToSend.user.role === "Admin")
+          await this.chatWebsocketService.removeUserFromNotificationReceivers(this.chat.id, this.messageToSend.user.id);
       }
     });
   }
 
   private messageReceiveHandler(message: ChatMessageDTO) {
     this.chat.messages.push(message);
+  }
+
+  private notificationReceiverJoiningHandler(userId: number){
+    if (this.messageToSend.user && userId !== this.messageToSend.user.id)
+      this.userIdsToNotify.push(userId.toString());
+  }
+
+  private notificationReceiverLeavingHandler(userId: number){
+    this.userIdsToNotify = this.userIdsToNotify.filter(el => el !== userId.toString());
   }
 
   private scrollDownMessagesContainer(){

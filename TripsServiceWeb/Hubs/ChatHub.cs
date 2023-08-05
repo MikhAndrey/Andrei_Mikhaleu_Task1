@@ -9,6 +9,16 @@ public class ChatHub : Hub
     {
         await Clients.Group(chatId.ToString()).SendAsync("BroadcastMessage", message);
     }
+    
+    public async Task AddUserToNotificationReceivers(int chatId, int userId)
+    {
+        await Clients.Group(chatId.ToString()).SendAsync("BroadcastJoiningUserId", userId);
+    }
+    
+    public async Task RemoveUserFromNotificationReceivers(int chatId, int userId)
+    {
+        await Clients.Group(chatId.ToString()).SendAsync("BroadcastLeavingUserId", userId);
+    }
 
     public async Task AddUserToGroup(int chatId)
     {

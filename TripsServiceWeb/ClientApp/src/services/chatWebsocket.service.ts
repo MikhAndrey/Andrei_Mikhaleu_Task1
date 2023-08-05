@@ -27,12 +27,28 @@ export class ChatWebsocketService {
     this.hubConnection.on('BroadcastMessage', callback);
   }
 
+  set onNotificationReceiverJoining(callback: (userId: number) => void){
+    this.hubConnection.on('BroadcastJoiningUserId', callback);
+  }
+
+  set onNotificationReceiverLeaving(callback: (userId: number) => void){
+    this.hubConnection.on('BroadcastLeavingUserId', callback);
+  }
+
   async addUserToChat(chatId: number) {
     await this.hubConnection.invoke("AddUserToGroup", chatId);
   }
 
   async removeUserFromChat(chatId: number) {
     await this.hubConnection.invoke("RemoveUserFromGroup", chatId);
+  }
+
+  async addUserToNotificationReceivers(chatId: number, userId: number) {
+    await this.hubConnection.invoke("AddUserToNotificationReceivers", chatId, userId);
+  }
+
+  async removeUserFromNotificationReceivers(chatId: number, userId: number) {
+    await this.hubConnection.invoke("RemoveUserFromNotificationReceivers", chatId, userId);
   }
 
   closeConnection(){
