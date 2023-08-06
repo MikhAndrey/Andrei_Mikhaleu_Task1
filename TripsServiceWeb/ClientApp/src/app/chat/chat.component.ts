@@ -45,7 +45,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.messageToSend.user = currentUser;
 
         this.userIdsToNotify = this.chat.users.reduce((acc, elem) => {
-          if (elem.role === "Admin" && this.messageToSend.user && elem.id !== this.messageToSend.user.id)
+          if (elem.role === "Admin" && (!this.messageToSend.user || elem.id !== this.messageToSend.user.id))
             acc.push(elem.id.toString())
           return acc;
         }, new Array<string>());
