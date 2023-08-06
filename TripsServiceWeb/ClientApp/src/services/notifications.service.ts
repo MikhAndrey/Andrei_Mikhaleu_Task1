@@ -69,8 +69,10 @@ export class NotificationsService {
   }
 
   addNotification(notification: ChatNotificationMessageDTO): void {
-    this.incomingNotification$.next(notification);
-    this.notifications.push(notification);
+    if (!this.isFollowingChatOpened(notification.chatId)) {
+      this.incomingNotification$.next(notification);
+      this.notifications.push(notification);
+    }
   }
 
   deleteNotification(id: number): void {
@@ -82,5 +84,9 @@ export class NotificationsService {
   async deleteAndRedirectToChat(id: number, chatId: number){
     this.deleteNotification(id);
     await this.router.navigate([`chats/${chatId}`]);
+  }
+
+  isFollowingChatOpened(chatId: number){
+    return location.pathname === `/chats/${chatId}`
   }
 }
