@@ -26,4 +26,9 @@ public class UserRepository : EFGenericRepository<User>, IUserRepository
 	{
 		return _dbSet.Include(u => u.Role);
 	}
+
+	public IQueryable<User> GetAllWithTrips()
+	{
+		return _dbSet.Include(u => u.Trips);
+	}
 }

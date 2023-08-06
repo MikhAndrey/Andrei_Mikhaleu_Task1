@@ -23,4 +23,5 @@ public interface ITripService
 	IEnumerable<int> GetYearsOfCurrentUserTrips();
 	Task<List<UtilDurationInMonth>> GetTotalDurationByMonthsAsync(int year);
 	Task<EditPastTripDTO> GetPastTripForEditingAsync(int id);
+	IEnumerable<TripsTotalDistanceByUserDTO> GetTripsTotalDistanceByUser();
 }
