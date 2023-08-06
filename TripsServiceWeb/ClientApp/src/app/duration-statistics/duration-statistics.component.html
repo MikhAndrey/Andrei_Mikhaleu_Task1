@@ -13,5 +13,6 @@
       [options]="chartOptions"
       style="height:600px; width:100%">
     </google-chart>
+    <button *ngIf="accessToPdfFileDownloadAllowed" type="button" class="btn btn-primary mt-4" (click)="loadTripsDistanceStatistics()">Load trips total distance statistics for last 30 days</button>
   </div>
 </ng-template>

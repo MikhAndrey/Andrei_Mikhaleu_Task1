@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ChartType, Row} from "angular-google-charts";
 import {YearStatisticsCore} from "../../models/statistics";
+import {StatisticsService} from "../../services/statistics.service";
+import {FileStatisticsService} from "../../services/fileStatistics.service";
+import {AccountService} from "../../services/account.service";
 
 @Component({
   selector: 'app-duration-statistics',
@@ -20,6 +23,13 @@ export class DurationStatisticsComponent extends YearStatisticsCore implements O
   chartName = 'Monthly trip durations';
   chartType: ChartType = ChartType.ColumnChart;
 
+  constructor(
+    protected statisticsService: StatisticsService,
+    private fileStatisticsService: FileStatisticsService,
+    private accountService: AccountService) {
+    super(statisticsService);
+  }
+
   onYearChange(): void {
     this.statisticsService.getDurationsByYear(this.selectedYear).subscribe(
       (response) => {
@@ -28,4 +38,20 @@ export class DurationStatisticsComponent extends YearStatisticsCore implements O
     );
   }
 
+  loadTripsDistanceStatistics(){
+    this.fileStatisticsService.exportTripsDistanceDataToPdf().subscribe((data: Blob) => {
+      const blob: Blob = new Blob([data], { type: 'application/pdf' });
+      const url: string = window.URL.createObjectURL(blob);
+      const link: HTMLAnchorElement = document.createElement('a');
+      link.href = url;
+      link.download = 'Trips_total_distance_stats.pdf';
+      link.click();
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    });
+  }
+
+  accessToPdfFileDownloadAllowed() {
+    return this.accountService.currentUserInfo$.getValue().role === "Admin";
+  }
 }

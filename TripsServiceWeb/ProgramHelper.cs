@@ -38,6 +38,7 @@ public static class ProgramHelper
 		services.AddScoped<IRoleService, RoleService>();
 		services.AddScoped<IChatService, ChatService>();
 		services.AddSingleton<INotificationsService, NotificationsService>();
+		services.AddScoped<IFileStatisticsService, FileStatisticsService>();
 	}
 
 	public static void AddValueResolvers(IServiceCollection services)
