@@ -134,7 +134,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   private notificationReceiverJoiningHandler(userId: number){
-    if (this.messageToSend.user && userId !== this.messageToSend.user.id)
+    if (!this.messageToSend.user || userId !== this.messageToSend.user.id)
       this.userIdsToNotify.push(userId.toString());
   }
 

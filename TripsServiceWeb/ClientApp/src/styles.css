@@ -216,7 +216,13 @@ body {
   -webkit-line-clamp: 2;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  overflow: hidden
+  word-wrap: break-word;
+  overflow-y: hidden;
+}
+
+.notification-text-dropdown-container {
+  color: #355052;
+  word-wrap: break-word;
 }
 
 .notification-container {

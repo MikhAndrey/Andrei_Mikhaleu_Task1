@@ -21,6 +21,8 @@ html {
   max-height: 30vh;
   position: absolute;
   top: 60px;
-  right: -48px;
+  right: 5%;
+  width: 15%;
   overflow-y: scroll;
+  z-index: 999999;
 }
