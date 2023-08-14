@@ -13,6 +13,9 @@
       [options]="chartOptions"
       style="height:600px; width:100%">
     </google-chart>
-    <button *ngIf="accessToPdfFileDownloadAllowed()" type="button" class="btn btn-primary mt-4" (click)="loadTripsDistanceStatistics()">Load trips total distance statistics for last 30 days</button>
+    <div *ngIf="accessToFileOperationsAllowed()" class="mt-4">
+      <button type="button" class="btn btn-primary" (click)="loadTripsDistanceStatistics()">Load trips total distance statistics for last 30 days</button>
+      <button type="button" class="btn btn-primary ml-3" (click)="convertTripsDistanceStatisticsFromExcelToJson()">Convert trips total distance statistics from Excel to JSON</button>
+    </div>
   </div>
 </ng-template>

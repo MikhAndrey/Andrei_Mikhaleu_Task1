@@ -51,7 +51,11 @@ export class DurationStatisticsComponent extends YearStatisticsCore implements O
     });
   }
 
-  accessToPdfFileDownloadAllowed() {
+  convertTripsDistanceStatisticsFromExcelToJson(){
+    this.fileStatisticsService.convertTripsDistanceDataFromExcelToJson().subscribe(() => alert("Done"));
+  }
+
+  accessToFileOperationsAllowed() {
     return this.accountService.currentUserInfo$.getValue().role === "Admin";
   }
 }

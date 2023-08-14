@@ -3,9 +3,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
 using TripsServiceBLL.Commands.Chats;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.Commands.Users;
+using TripsServiceBLL.Infrastructure.Common;
 using TripsServiceBLL.Infrastructure.Mappers;
 using TripsServiceBLL.Infrastructure.ValueResolvers;
 using TripsServiceBLL.Interfaces;
@@ -39,6 +41,7 @@ public static class ProgramHelper
 		services.AddScoped<IChatService, ChatService>();
 		services.AddSingleton<INotificationsService, NotificationsService>();
 		services.AddScoped<IFileStatisticsService, FileStatisticsService>();
+		services.AddScoped<IExcelService, ExcelService>();
 	}
 
 	public static void AddValueResolvers(IServiceCollection services)
@@ -124,5 +127,25 @@ public static class ProgramHelper
 
 			await next();
 		});
+	}
+
+	public static void AddSchedulers(IServiceCollection services)
+	{
+		services.AddQuartz(q =>
+		{
+			JobKey jobKey = new("SaveToExcelJob");
+			var schedule = CronScheduleBuilder.DailyAtHourAndMinute(UtilConstants.HoursToUpdateExcelDocs, UtilConstants.MinutesToUpdateExcelDocs)
+				.WithMisfireHandlingInstructionIgnoreMisfires();
+			q.AddJob<SaveToExcelJob>(opts => opts.WithIdentity(jobKey));
+    
+			q.AddTrigger(opts => opts
+				.ForJob(jobKey)
+				.WithIdentity("SaveToExcelJob-trigger")
+				.StartNow()                           
+				.WithSchedule(schedule)
+			);
+		});
+		
+		services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 	}
 }

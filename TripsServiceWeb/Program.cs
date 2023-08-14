@@ -11,6 +11,7 @@ builder.Services.AddHttpContextAccessor();
 ProgramHelper.AddServices(builder.Services);
 ProgramHelper.AddValueResolvers(builder.Services);
 ProgramHelper.AddCommands(builder.Services);
+ProgramHelper.AddSchedulers(builder.Services);
 
 builder.Services.AddControllersWithViews();
 

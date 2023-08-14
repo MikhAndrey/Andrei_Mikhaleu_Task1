@@ -14,4 +14,8 @@ export class FileStatisticsService {
   exportTripsDistanceDataToPdf(): Observable<Blob> {
     return this.http.get(this.apiUrl + '/tripsTotalDistance', { responseType: 'blob' });
   }
+
+  convertTripsDistanceDataFromExcelToJson(): Observable<any> {
+    return this.http.get(this.apiUrl + '/convertExcelToJson');
+  }
 }
