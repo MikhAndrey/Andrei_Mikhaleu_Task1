@@ -97,6 +97,13 @@ public class TripService : ITripService
 		EditTripDTO dto = _mapper.Map<EditTripDTO>(trip);
 		return dto;
 	}
+	
+	public async Task<AdminEditTripDTO> GetTripForEditingByAdminAsync(int tripId)
+	{
+		Trip trip = await _unitOfWork.Trips.GetByIdForEditingAsync(tripId);
+		AdminEditTripDTO dto = _mapper.Map<AdminEditTripDTO>(trip);
+		return dto;
+	}
 
 	public async Task<EditPastTripDTO> GetPastTripForEditingAsync(int tripId)
 	{
@@ -140,6 +147,17 @@ public class TripService : ITripService
 		});
 		return mappedTrips;
 	}
+	
+	public IEnumerable<ReadTripDTOExtended> GetAllTrips()
+	{
+		IEnumerable<Trip> rawTrips = _unitOfWork.Trips.GetAllWithUserInfo();
+		IEnumerable<ReadTripDTOExtended> mappedTrips = rawTrips.Select(el =>
+		{
+			ReadTripDTOExtended mappedTrip = _mapper.Map<ReadTripDTOExtended>(el);
+			return mappedTrip;
+		});
+		return mappedTrips;
+	}
 
 	public IEnumerable<int> GetYearsOfCurrentUserTrips()
 	{
@@ -178,6 +196,21 @@ public class TripService : ITripService
 					.DefaultIfEmpty(0)
 					.Sum()
 			}).ToList();
+		return result;
+	}
+
+	public IEnumerable<TripsTotalDistanceByUserDTO> GetTripsTotalDistanceByUser()
+	{
+		DateTime lastMonthDate = DateTime.Now.AddMonths(-1);
+
+		IEnumerable<TripsTotalDistanceByUserDTO> result = _unitOfWork.Users.GetAllWithTrips()
+			.Select(u => new TripsTotalDistanceByUserDTO()
+			{
+				UserName = u.UserName,
+				Distance = u.Trips
+					.Where(t => t.StartTime >= lastMonthDate)
+					.Sum(t => t.Distance)
+			}).OrderByDescending(el => el.Distance);
 		return result;
 	}
 }

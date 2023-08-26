@@ -41,6 +41,13 @@ body {
   background-size: cover;
 }
 
+.notifications-corner {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 20%;
+}
+
 #map {
   height: 400px;
   width: 100%;
@@ -186,4 +193,40 @@ body {
   width:100%;
   height:auto;
   border-radius:50%;
+}
+
+.notification-icon{
+  width: 48px;
+  height: 48px;
+  background-image: url("../img/bell.png");
+  position: relative;
+  cursor: pointer;
+}
+
+.notifications-counter{
+  position: absolute;
+  right: -10px;
+  top: -5px;
+}
+
+.notification-text-container {
+  color: #355052;
+  white-space: pre-wrap;
+  font: inherit;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  overflow-y: hidden;
+}
+
+.notification-text-dropdown-container {
+  color: #355052;
+  word-wrap: break-word;
+}
+
+.notification-container {
+  padding: 8px;
+  border-radius: 12px;
+  cursor: pointer;
 }

@@ -15,6 +15,10 @@ public class UnitOfWork : IDisposable, IUnitOfWork
 	private IRoutePointRepository _routePointRepository;
 	private ITripRepository _tripRepository;
 	private IUserRepository _userRepository;
+	private IRoleRepository _roleRepository;
+	private IChatMessageRepository _chatMessageRepository;
+	private IChatRepository _chatRepository;
+	private IChatParticipationRepository _chatParticipationRepository;
 
 	private bool disposed;
 
@@ -73,6 +77,15 @@ public class UnitOfWork : IDisposable, IUnitOfWork
 			return _userRepository;
 		}
 	}
+	
+	public IRoleRepository Roles
+	{
+		get
+		{
+			_roleRepository ??= new RoleRepository(_context);
+			return _roleRepository;
+		}
+	}
 
 	public IDriverRepository Drivers
 	{
@@ -89,6 +102,33 @@ public class UnitOfWork : IDisposable, IUnitOfWork
 		{
 			_feedbackRepository ??= new FeedbackRepository(_context);
 			return _feedbackRepository;
+		}
+	}
+
+	public IChatMessageRepository ChatMessages
+	{
+		get
+		{
+			_chatMessageRepository ??= new ChatMessageRepository(_context);
+			return _chatMessageRepository;
+		}
+	}
+	
+	public IChatRepository Chats
+	{
+		get
+		{
+			_chatRepository ??= new ChatRepository(_context);
+			return _chatRepository;
+		}
+	}
+	
+	public IChatParticipationRepository ChatParticipations
+	{
+		get
+		{
+			_chatParticipationRepository ??= new ChatParticipationRepository(_context);
+			return _chatParticipationRepository;
 		}
 	}
 

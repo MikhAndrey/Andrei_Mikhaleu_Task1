@@ -1,0 +1,73 @@
+<form class = "bootstrap-form tp-form" #tripEditForm id = "main-form" (submit)="submit(tripEditForm)" enctype="multipart/form-data">
+  <div class="form-group tp-form-group">
+    <label for="userIdSelect" class="tp-label">Trip's user:</label>
+    <select [(ngModel)]="trip.userId" class="form-select" id="userIdSelect" name="userIdSelect">
+      <option *ngFor="let user of users; let i = index;" [attr.selected]="i === 0" [value]="user.id">{{user.userName}} ({{user.role}})</option>
+    </select>
+  </div>
+  <div class = "form-group tp-form-group">
+    <label for = "nameInput" class = "tp-label">Your trip name:</label>
+    <input class = "form-control tp-text-input" type = "text" [(ngModel)]="trip.name" name="Name" value="{{trip.name}}" id = "nameInput"/>
+    <div class = "tp-input-desc">Enter name of your trip</div>
+    <span class="text-danger" *ngIf="validationErrors.Name">{{validationErrors.Name}}</span>
+  </div>
+  <div class = "form-group tp-form-group">
+    <label for = "startTimeInput" class = "tp-label">Departure Time:</label>
+    <input class = "form-control tp-datetime-input" type = "datetime-local" [(ngModel)]="trip.startTime" name="StartTime" value="{{trip.startTime}}" id = "startTimeInput"/>
+    <div class = "tp-input-desc">Select the start time of your trip in terms of start point timezone</div>
+    <span class="text-danger" *ngIf="validationErrors.StartTime">{{validationErrors.StartTime}}</span>
+  </div>
+  <div class = "form-group tp-form-group">
+    <label class = "tp-label">Arrival Time: </label>
+    <span class="tp-label" *ngIf="trip.endTime"> {{localEndTimeWithoutSeconds}}</span>
+    <div class = "tp-input-desc">Your arrival time will be calculated automatically</div>
+    <span class="text-danger" *ngIf="validationErrors.EndTime">{{validationErrors.EndTime}}</span>
+  </div>
+  <div class = "form-check tp-form-check">
+    <input class = "form-check-input tp-check-input" type = "checkbox" [(ngModel)]="trip.public" name="Public" value="{{trip.public}}" id = "publicCheck"/>
+    <label class = "form-check-label tp-label" for = "publicCheck">Public</label>
+    <div class = "tp-input-desc">Make your trip visible to everyone</div>
+  </div>
+  <div class = "form-group tp-form-group">
+    <label for = "descriptionInput" class = "tp-label">Description:</label>
+    <textarea class="form-control tp-textarea" [(ngModel)]="trip.description" name="Description" value="{{trip.description}}" id="descriptionInput"></textarea>
+    <div class = "tp-input-desc">Enter a couple of phrases describing your trip</div>
+  </div>
+  <div class = "tp-label">Click on the map to place trip points</div>
+  <app-route-map
+    (durationTextChanged)="handleDurationTextChanged($event)"
+    (startTimeZoneOffsetChanged)="handleStartTimeZoneChanged($event)"
+    (finishTimeZoneOffsetChanged)="handleFinishTimeZoneOffsetChanged($event)"
+    (finishTimeChanged)="handleFinishTimeChanged($event)"
+    (distanceChanged)="handleDistanceChanged($event)"
+    (routePointsChanged)="handleRoutePointsChanged($event)"
+    [startTime]="trip.startTime"
+  ></app-route-map>
+  <div class = "tp-label mt-2 mb-2">
+    Trip's distance:
+    <span id = "route-length-view">{{trip.distance}}</span> km
+  </div>
+  <div class = "tp-label mt-2 mb-2">
+    Trip's duration:
+    <span id = "route-duration-view">{{durationText}}</span>
+  </div>
+  <app-image-upload (filesChanged)="handleFilesChanged($event)"></app-image-upload>
+  <div class = "tp-label">Previously loaded images:</div>
+  <div class = "row">
+    <div class = "col-4 mb-3 preload-image-container" *ngFor="let image of trip.images">
+      <img [src]="image.link" alt="Trip photo" class = "img-fluid d-block" style = "object-fit: cover; height: 250px"/>
+      <button type = "button" class = "btn btn-danger mt-2" (click)="deleteTripImage(image.id)">Delete</button>
+    </div>
+  </div>
+  <div class = "tp-label mt-2 mb-2">
+    Trip's driver:
+    <span id = "trip-driver-name">{{driverName}}</span>
+  </div>
+  <div>
+    <button type = "button" class = "btn btn-primary mt-2 mb-3 drivers-invoker" data-bs-toggle = "modal" data-bs-target = "#driverListModal">Select driver</button>
+  </div>
+  <div>
+    <button class = "btn btn-success tp-submit-btn mt-3" type="submit">Edit trip</button>
+  </div>
+</form>
+<app-drivers-list-modal (driverSelected)="handleSelectedDriverChanged($event)"></app-drivers-list-modal>

@@ -20,6 +20,10 @@ public class TripsDBContext : DbContext
 	public DbSet<Driver> Drivers { get; set; }
 	public DbSet<DriverPhoto> DriverPhotos { get; set; }
 	public DbSet<Feedback> Feedbacks { get; set; }
+	public DbSet<Role> Roles { get; set; }
+	public DbSet<Chat> Chats { get; set; }
+	public DbSet<ChatParticipation> ChatParticipations { get; set; }
+	public DbSet<ChatMessage> ChatMessages { get; set; }
 
 	public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
@@ -89,6 +93,24 @@ public class TripsDBContext : DbContext
 			.WithMany(d => d.Images)
 			.HasForeignKey(dp => dp.DriverId)
 			.OnDelete(DeleteBehavior.Restrict);
+		
+		modelBuilder.Entity<User>()
+			.HasOne(u => u.Role)
+			.WithMany(r => r.Users)
+			.OnDelete(DeleteBehavior.Restrict);
+		modelBuilder.Entity<ChatParticipation>()
+			.HasOne(chp => chp.Chat)
+			.WithMany(ch => ch.ChatParticipations)
+			.OnDelete(DeleteBehavior.Restrict);
+		modelBuilder.Entity<ChatParticipation>()
+			.HasOne(chp => chp.User)
+			.WithMany(u => u.ChatParticipations)
+			.OnDelete(DeleteBehavior.Restrict)
+			.IsRequired(false);
+		modelBuilder.Entity<ChatMessage>()
+			.HasOne(chm => chm.ChatParticipation)
+			.WithMany(chp => chp.ChatMessages)
+			.OnDelete(DeleteBehavior.Restrict);
 
 		modelBuilder.Entity<Comment>().HasQueryFilter(item => !item.IsDeleted);
 		modelBuilder.Entity<Driver>().HasQueryFilter(item => !item.IsDeleted);
@@ -97,5 +119,8 @@ public class TripsDBContext : DbContext
 		modelBuilder.Entity<RoutePoint>().HasQueryFilter(item => !item.IsDeleted);
 		modelBuilder.Entity<Trip>().HasQueryFilter(item => !item.IsDeleted);
 		modelBuilder.Entity<User>().HasQueryFilter(item => !item.IsDeleted);
+		modelBuilder.Entity<Chat>().HasQueryFilter(item => !item.IsDeleted);
+		modelBuilder.Entity<ChatParticipation>().HasQueryFilter(item => !item.IsDeleted);
+		modelBuilder.Entity<ChatMessage>().HasQueryFilter(item => !item.IsDeleted);
 	}
 }

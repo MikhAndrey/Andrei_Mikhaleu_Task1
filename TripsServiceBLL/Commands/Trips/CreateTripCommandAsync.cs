@@ -35,14 +35,14 @@ public class CreateTripCommandAsync : ICommandAsync<CreateTripDTO>
 
 	public async Task ExecuteAsync(CreateTripDTO dto)
 	{
-		Trip trip = _mapper.Map<Trip>(dto);
+		Trip trip = dto is AdminCreateTripDTO adminCreateTripDto ? _mapper.Map<Trip>(adminCreateTripDto) : _mapper.Map<Trip>(dto);
 
 		using IDbContextTransaction transaction = _unitOfWork.BeginTransaction();
 		try
 		{
 			await _tripService.AddAsync(trip);
 			await _routePointService.AddTripRoutePointsAsync(trip.Id, dto.RoutePointsAsString);
-			await _imageService.SaveTripImagesAsync(trip.Id, dto.ImagesAsFiles);
+			await _imageService.SaveTripImagesAsync(trip.Id, trip.UserId, dto.ImagesAsFiles);
 			await transaction.CommitAsync();
 		}
 		catch (Exception)

@@ -88,4 +88,9 @@ public class TripRepository : EFGenericRepository<Trip>, ITripRepository
 	{
 		return _dbSet.Where(t => t.UserId == userId && t.EndTime < DateTime.UtcNow).Include(t => t.Feedback);
 	}
+
+	public IQueryable<Trip> GetAllWithUserInfo()
+	{
+		return _dbSet.Include(t => t.User).Include(t => t.Feedback);
+	}
 }

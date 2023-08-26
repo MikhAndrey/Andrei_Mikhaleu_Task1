@@ -3,8 +3,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
+using TripsServiceBLL.Commands.Chats;
 using TripsServiceBLL.Commands.Trips;
 using TripsServiceBLL.Commands.Users;
+using TripsServiceBLL.Infrastructure.Common;
 using TripsServiceBLL.Infrastructure.Mappers;
 using TripsServiceBLL.Infrastructure.ValueResolvers;
 using TripsServiceBLL.Interfaces;
@@ -34,6 +37,11 @@ public static class ProgramHelper
 		services.AddScoped<ITripService, TripService>();
 		services.AddScoped<IDriverService, DriverService>();
 		services.AddScoped<IFeedbackService, FeedbackService>();
+		services.AddScoped<IRoleService, RoleService>();
+		services.AddScoped<IChatService, ChatService>();
+		services.AddSingleton<INotificationsService, NotificationsService>();
+		services.AddScoped<IFileStatisticsService, FileStatisticsService>();
+		services.AddScoped<IExcelService, ExcelService>();
 	}
 
 	public static void AddValueResolvers(IServiceCollection services)
@@ -44,6 +52,8 @@ public static class ProgramHelper
 		services.AddScoped<NewTripUserIdResolver>();
 		services.AddScoped<TripImageLinkResolver>();
 		services.AddScoped<DriverImageLinkResolver>();
+		services.AddScoped<NewUserRoleIdResolver>();
+		services.AddScoped<CurrentUserChatResolver>();
 	}
 
 	public static void AddCommands(IServiceCollection services)
@@ -53,6 +63,9 @@ public static class ProgramHelper
 		services.AddScoped<EditTripCommandAsync>();
 		services.AddScoped<EditPastTripCommandAsync>();
 		services.AddScoped<LoginUserCommand>();
+		services.AddScoped<ChatCreateCommand>();
+		services.AddScoped<ChatJoiningCommand>();
+		services.AddScoped<ChatDeleteCommand>();
 	}
 
 	public static void AddMapper(IServiceCollection services)
@@ -71,7 +84,8 @@ public static class ProgramHelper
 			mc.AddProfile(new FeedbackMapper(serviceProvider.GetService<FeedbackUserResolver>()));
 			mc.AddProfile(new ImageMapper());
 			mc.AddProfile(new RoutePointMapper());
-			mc.AddProfile(new UserMapper());
+			mc.AddProfile(new UserMapper(serviceProvider.GetService<NewUserRoleIdResolver>()));
+			mc.AddProfile(new ChatMapper(serviceProvider.GetService<CurrentUserChatResolver>()));
 		});
 
 		IMapper mapper = mapperConfig.CreateMapper();
@@ -113,5 +127,25 @@ public static class ProgramHelper
 
 			await next();
 		});
+	}
+
+	public static void AddSchedulers(IServiceCollection services)
+	{
+		services.AddQuartz(q =>
+		{
+			JobKey jobKey = new("SaveToExcelJob");
+			var schedule = CronScheduleBuilder.DailyAtHourAndMinute(UtilConstants.HoursToUpdateExcelDocs, UtilConstants.MinutesToUpdateExcelDocs)
+				.WithMisfireHandlingInstructionIgnoreMisfires();
+			q.AddJob<SaveToExcelJob>(opts => opts.WithIdentity(jobKey));
+    
+			q.AddTrigger(opts => opts
+				.ForJob(jobKey)
+				.WithIdentity("SaveToExcelJob-trigger")
+				.StartNow()                           
+				.WithSchedule(schedule)
+			);
+		});
+		
+		services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 	}
 }

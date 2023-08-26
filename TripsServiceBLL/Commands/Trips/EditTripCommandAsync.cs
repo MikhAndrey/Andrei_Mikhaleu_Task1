@@ -36,7 +36,10 @@ public class EditTripCommandAsync : ICommandAsync<EditTripDTO>
 	public async Task ExecuteAsync(EditTripDTO dto)
 	{
 		Trip trip = await _unitOfWork.Trips.GetByIdAsync(dto.Id);
-		_mapper.Map(dto, trip);
+		if (dto is AdminEditTripDTO adminDto)
+			_mapper.Map(adminDto, trip);
+		else
+			_mapper.Map(dto, trip);
 
 		using IDbContextTransaction transaction = _unitOfWork.BeginTransaction();
 		try
@@ -44,7 +47,7 @@ public class EditTripCommandAsync : ICommandAsync<EditTripDTO>
 			await _tripService.UpdateAsync(trip);
 			await _routePointService.DeleteByTripIdAsync(trip.Id);
 			await _routePointService.AddTripRoutePointsAsync(trip.Id, dto.RoutePointsAsString);
-			await _imageService.SaveTripImagesAsync(trip.Id, dto.ImagesAsFiles);
+			await _imageService.SaveTripImagesAsync(trip.Id, trip.UserId, dto.ImagesAsFiles);
 			await transaction.CommitAsync();
 		}
 		catch (Exception)

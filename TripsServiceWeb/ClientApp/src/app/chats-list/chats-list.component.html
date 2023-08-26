@@ -1,0 +1,24 @@
+﻿<h4 class="tp-label">Our chats</h4>
+<div class="tp-form">
+  <div class = "row row-cols-2">
+    <div *ngFor="let chat of chats" class = "col mb-4">
+      <div class = "card h-100 br-20">
+        <div class = "card-header text-light tp-gradient-standard">
+          <h5 class = "card-title tp-label">{{chat.name}}</h5>
+        </div>
+        <div class = "tp-gradient-reverse br-20">
+          <a routerLink="/chats/{{chat.id}}" class = "btn btn-primary ml-3 mt-2 mb-3">Open</a>
+          <button class = "btn btn-danger ml-3 mt-2 mb-3" *ngIf="isUserAdmin" (click)="delete(chat.id)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isUserAdmin" class="form-group tp-form-group">
+    <h5 class="tp-label">Create a new chat:</h5>
+    <div>
+      <input type="text" name="newChatName" class="form-control" [(ngModel)]="chatToAdd.name">
+      <span class="text-danger" *ngIf="validationErrors.Name">{{validationErrors.Name}}</span>
+    </div>
+    <button class="btn btn-primary mt-2" type="button" (click)="create()">Create</button>
+  </div>
+</div>

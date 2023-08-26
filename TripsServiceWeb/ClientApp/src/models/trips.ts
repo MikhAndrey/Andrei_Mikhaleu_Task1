@@ -27,6 +27,13 @@ export class TripCreateDTO {
   }
 }
 
+export class AdminTripCreateDTO extends TripCreateDTO {
+  userId: number;
+  constructor() {
+    super();
+  }
+}
+
 export interface TripCreateValidationErrors {
   Name?: string[];
   StartTime?: string[];
@@ -79,7 +86,7 @@ export class TripDetailsDTO extends TripReadDTO {
 export class TripDateChangesDTO {
   newStartTimeAsString: string;
   newFinishTimeAsString: string;
-  newDurationAsString: string;
+  newTimeInfo: string;
 }
 
 export class TripEditDTO extends TripCreateDTO {
@@ -90,6 +97,13 @@ export class TripEditDTO extends TripCreateDTO {
     super();
     this.routePoints = [];
     this.images = [];
+  }
+}
+
+export class AdminTripEditDTO extends TripEditDTO {
+  userId: number;
+  constructor() {
+    super();
   }
 }
 

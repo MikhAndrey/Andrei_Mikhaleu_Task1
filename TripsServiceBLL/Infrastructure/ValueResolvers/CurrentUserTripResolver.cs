@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TripsServiceBLL.DTO.Trips;
 using TripsServiceBLL.Interfaces;
+using TripsServiceBLL.Utils;
 using TripsServiceDAL.Entities;
 
 namespace TripsServiceBLL.Infrastructure.ValueResolvers;
@@ -17,6 +18,7 @@ public class CurrentUserTripResolver : IValueResolver<Trip, TripDetailsDTO, bool
 	public bool Resolve(Trip trip, TripDetailsDTO dto, bool isCurrentUserTrip, ResolutionContext context)
 	{
 		int userId = _userService.GetCurrentUserId();
-		return trip.UserId == userId;
+		string? currentUserRole = _userService.GetCurrentUserRole();
+		return trip.UserId == userId || currentUserRole == UtilConstants.AdminRoleName;
 	}
 }

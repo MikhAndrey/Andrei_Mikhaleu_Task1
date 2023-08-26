@@ -2,6 +2,7 @@
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {
+  AdminTripCreateDTO, AdminTripEditDTO,
   PastTripEditDTO,
   TripCreateDTO,
   TripDateChangesDTO,
@@ -15,9 +16,11 @@ import {
 export class TripsService {
 
   private readonly apiUrl: string;
+  private readonly adminApiUrl: string;
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string)
   {
     this.apiUrl = baseUrl + "api/trips";
+    this.adminApiUrl = baseUrl + "api/admin/trips";
   }
 
   add(trip: TripCreateDTO, formData: FormData): Observable<TripCreateDTO> {
@@ -25,10 +28,23 @@ export class TripsService {
     return this.http.post<TripCreateDTO>(this.apiUrl + '/create', formData);
   }
 
+  adminAdd(trip: AdminTripCreateDTO, formData: FormData): Observable<AdminTripCreateDTO> {
+    this.initFormDataForTrip(trip, formData);
+    formData.set("UserId", trip.userId.toString());
+    return this.http.post<AdminTripCreateDTO>(this.adminApiUrl + '/create', formData);
+  }
+
   editCurrent(trip: TripEditDTO, formData: FormData): Observable<TripEditDTO> {
     this.initFormDataForTrip(trip, formData);
     formData.set("Id", trip.id.toString());
     return this.http.put<TripEditDTO>(this.apiUrl + `/edit/current/${trip.id}`, formData);
+  }
+
+  adminEdit(trip: AdminTripEditDTO, formData: FormData): Observable<AdminTripEditDTO> {
+    this.initFormDataForTrip(trip, formData);
+    formData.set("Id", trip.id.toString());
+    formData.set("UserId", trip.userId.toString());
+    return this.http.put<AdminTripEditDTO>(this.adminApiUrl + `/edit/${trip.id}`, formData);
   }
 
   editPast(trip: PastTripEditDTO, formData: FormData): Observable<PastTripEditDTO> {
@@ -44,6 +60,10 @@ export class TripsService {
 
   getAll(): Observable<TripReadDTO[]>{
     return this.http.get<TripReadDTO[]>(this.apiUrl + '/index');
+  }
+
+  getAllUsersTrips(): Observable<TripReadDTOExtended[]>{
+    return this.http.get<TripReadDTOExtended[]>(this.adminApiUrl + '/index');
   }
 
   getActivity(): Observable<TripReadDTOExtended[]>{
@@ -69,11 +89,15 @@ export class TripsService {
   updateTripDateInfo(trip: TripDetailsDTO, dateInfo: TripDateChangesDTO): void {
     trip.utcStartTimeZone = dateInfo.newStartTimeAsString;
     trip.utcFinishTimeZone = dateInfo.newFinishTimeAsString;
-    trip.duration = dateInfo.newDurationAsString;
+    trip.timeInfo = dateInfo.newTimeInfo;
   }
 
   getTripForCurrentEditing(id: number): Observable<TripEditDTO> {
     return this.http.get<TripEditDTO>(this.apiUrl + `/edit/current/${id}`);
+  }
+
+  getTripForAdminEditing(id: number): Observable<AdminTripEditDTO> {
+    return this.http.get<AdminTripEditDTO>(this.adminApiUrl + `/edit/${id}`);
   }
 
   getTripForPastEditing(id: number): Observable<PastTripEditDTO> {
