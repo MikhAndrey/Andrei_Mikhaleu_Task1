@@ -198,4 +198,19 @@ public class TripService : ITripService
 			}).ToList();
 		return result;
 	}
+
+	public IEnumerable<TripsTotalDistanceByUserDTO> GetTripsTotalDistanceByUser()
+	{
+		DateTime lastMonthDate = DateTime.Now.AddMonths(-1);
+
+		IEnumerable<TripsTotalDistanceByUserDTO> result = _unitOfWork.Users.GetAllWithTrips()
+			.Select(u => new TripsTotalDistanceByUserDTO()
+			{
+				UserName = u.UserName,
+				Distance = u.Trips
+					.Where(t => t.StartTime >= lastMonthDate)
+					.Sum(t => t.Distance)
+			}).OrderByDescending(el => el.Distance);
+		return result;
+	}
 }

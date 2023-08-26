@@ -16,3 +16,13 @@ html {
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
+
+.notifications-dropdown {
+  max-height: 30vh;
+  position: absolute;
+  top: 60px;
+  right: 5%;
+  width: 15%;
+  overflow-y: scroll;
+  z-index: 999999;
+}

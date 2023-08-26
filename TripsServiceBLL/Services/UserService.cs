@@ -134,4 +134,14 @@ public class UserService : IUserService
 		});
 		return mappedUsers;
 	}
+
+    public UserListDTO GetCurrentUserMainInfo()
+    {
+        return new UserListDTO
+        {
+            UserName = GetCurrentUserName(),
+            Role = GetCurrentUserRole(),
+            Id = GetCurrentUserId()
+        };
+    }
 }

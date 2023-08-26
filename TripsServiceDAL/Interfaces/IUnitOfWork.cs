@@ -12,6 +12,9 @@ public interface IUnitOfWork
 	IDriverRepository Drivers { get; }
 	IFeedbackRepository Feedbacks { get; }
 	IRoleRepository Roles { get; }
+	IChatRepository Chats { get; }
+	IChatParticipationRepository ChatParticipations { get; }
+	IChatMessageRepository ChatMessages { get; }
 	Task SaveAsync();
 	IDbContextTransaction BeginTransaction();
 }

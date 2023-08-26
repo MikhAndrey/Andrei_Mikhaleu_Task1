@@ -19,6 +19,11 @@ public static class UtilConstants
 
 	public static UtilDelegates.StringMapperDelegate GetExistingCredentialMessage =
 		credential => $"This {credential} is already taken";
-	public static string SignupDefaultRoleName = "User";
-	public static string AdminRoleName = "Admin";
+	public const string SignupDefaultRoleName = "User";
+	public const string AdminRoleName = "Admin";
+	public static readonly Func<string?, string> ChatJoiningMessage = userName => $"User {userName} joins the chat";
+	public static readonly Func<string?, string> ChatLeavingMessage = userName => $"User {userName} leaves the chat";
+	public const string NotificationsCacheStorageNamePrefix = "notifications/";
+	public const int HoursToUpdateExcelDocs = 12;
+	public const int MinutesToUpdateExcelDocs = 0;
 }

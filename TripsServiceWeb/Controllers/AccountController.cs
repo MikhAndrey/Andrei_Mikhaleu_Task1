@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TripsServiceBLL.Commands.Users;
+using TripsServiceBLL.DTO.Chats;
 using TripsServiceBLL.DTO.Users;
 using TripsServiceBLL.Infrastructure.Exceptions;
 using TripsServiceBLL.Interfaces;
@@ -15,12 +16,18 @@ public class AccountController : ControllerBase
     private readonly IMapper _mapper;
 
     private readonly IUserService _userService;
+    private readonly INotificationsService _notificationsService;
 
     private readonly LoginUserCommand _loginUserCommand;
 
-    public AccountController(IUserService userService, IMapper mapper, LoginUserCommand loginUserCommand)
+    public AccountController(
+        IUserService userService, 
+        INotificationsService notificationsService, 
+        IMapper mapper, 
+        LoginUserCommand loginUserCommand)
     {
         _userService = userService;
+        _notificationsService = notificationsService;
         _mapper = mapper;
         _loginUserCommand = loginUserCommand;
     }
@@ -68,11 +75,15 @@ public class AccountController : ControllerBase
     [HttpGet("userinfo")]
     public ActionResult<string?> GetUserInfo()
     {
-        return Ok(new
+        try
         {
-            UserName = _userService.GetCurrentUserName(),
-            Role = _userService.GetCurrentUserRole()
-        });
+            UserListDTO userInfo = _userService.GetCurrentUserMainInfo();
+            return Ok(userInfo);
+        }
+        catch (ArgumentNullException)
+        {
+            return Unauthorized();
+        }
     }
 
     [HttpGet("isAuthenticated")]
@@ -86,5 +97,19 @@ public class AccountController : ControllerBase
     {
         HttpContext.Response.Cookies.Delete(UtilConstants.JwtTokenCookiesAlias);
         return Ok();
+    }
+
+    [HttpGet("notifications/{userId}")]
+    public IActionResult GetNotifications(string userId)
+    {
+        try
+        {
+            List<ChatNotificationMessageDTO> notifications = _notificationsService.GetCurrentNotifications(userId);
+            return Ok(notifications);
+        }
+        catch (ArgumentNullException)
+        {
+            return Unauthorized();
+        }
     }
 }
