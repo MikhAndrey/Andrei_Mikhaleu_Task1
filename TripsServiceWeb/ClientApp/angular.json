@@ -132,5 +132,8 @@
       }
     }
   },
-  "defaultProject": "Andrei_Mikhaleu_Task1"
+  "defaultProject": "Andrei_Mikhaleu_Task1",
+  "cli": {
+    "analytics": false
+  }
 }
